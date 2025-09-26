@@ -1,0 +1,70 @@
+version: "3.8"
+
+# -------------------------------
+# Laravel + Vue + MySQL + Nginx
+# Stable Versions (Sept 2025)
+#   PHP 8.3
+#   MySQL 8.0
+#   Node.js 20 (via container)
+#   Nginx stable
+# -------------------------------
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: sdgapp-mysql
+    restart: unless-stopped
+    ports:
+      - "3307:3306" # change if MySQL already runs locally
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: sdg_db
+      MYSQL_USER: zai
+      MYSQL_PASSWORD: password
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - sdgapp_net
+
+  php:
+    build:
+      context: ./docker/php
+      dockerfile: Dockerfile
+    container_name: sdg-php
+    volumes:
+      - ./laravel:/var/www/laravel
+    depends_on:
+      - mysql
+    networks:
+      - sdgapp_net
+
+  nginx:
+    image: nginx:stable
+    container_name: sdg-nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./laravel:/var/www/laravel
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+    networks:
+      - sdgapp_net
+
+  node:
+    image: node:20
+    container_name: sdg-node
+    working_dir: /var/www/laravel
+    volumes:
+      - ./laravel:/var/www/laravel
+    ports:
+      - "5173:5173"
+    networks:
+      - sdgapp_net
+    command: tail -f /dev/null # idle, exec into it manually
+
+networks:
+  sdgapp_net:
+
+volumes:
+  mysql_data:
