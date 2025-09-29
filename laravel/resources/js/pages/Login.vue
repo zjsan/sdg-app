@@ -1,47 +1,77 @@
 <template>
-    <div class="p-8 text-center bg-gray-50">
-        <Card className="w-full max-w-sm">
-            <CardHeader>
-                <CardTitle>Login to your account</CardTitle>
-                <CardDescription>
-                    Enter your email below to login to your account
+    <div
+        class="min-h-screen flex items-center justify-center bg-gray-100 px-4 text-gray-900"
+    >
+        <Card class="w-full max-w-md shadow-xl rounded-2xl border-none">
+            <CardHeader class="text-center pb-2">
+                <CardTitle class="text-2xl font-bold"> Welcome! </CardTitle>
+                <CardDescription class="text-gray-500 dark:text-gray-400">
+                    Please login to continue
                 </CardDescription>
-                <CardAction>
-                    <Button variant="link">Sign Up</Button>
-                </CardAction>
             </CardHeader>
+
             <CardContent>
-                <form>
-                    <div className="flex flex-col gap-6">
-                        <div className="grid gap-2">
-                            <Label htmlFor="email">Email</Label>
-                            <Input
-                                id="email"
-                                type="email"
-                                placeholder="m@example.com"
-                                required
-                            />
-                        </div>
-                        <div className="grid gap-2">
-                            <div className="flex items-center">
-                                <Label htmlFor="password">Password</Label>
-                                <a
-                                    href="#"
-                                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                                >
-                                    Forgot your password?
-                                </a>
-                            </div>
-                            <Input id="password" type="password" required />
-                        </div>
+                <form class="space-y-6">
+                    <!-- Username -->
+                    <div class="space-y-2 text-left">
+                        <Label
+                            for="username"
+                            class="text-gray-700 dark:text-gray-300"
+                            >Username</Label
+                        >
+                        <Input
+                            id="username"
+                            type="text"
+                            placeholder="Enter your username"
+                            required
+                            class="border-gray-600"
+                        />
                     </div>
+
+                    <!-- Password -->
+                    <div class="space-y-2 text-left">
+                        <div class="flex items-center justify-between">
+                            <Label
+                                for="password"
+                                class="text-gray-700 dark:text-gray-300"
+                                >Password</Label
+                            >
+                            <a
+                                href="#"
+                                class="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+                            >
+                                Forgot password?
+                            </a>
+                        </div>
+                        <Input
+                            id="password"
+                            type="password"
+                            placeholder="••••••••"
+                            required
+                            class="border-gray-600"
+                        />
+                    </div>
+
+                    <!-- Submit -->
+                    <Button
+                        type="submit"
+                        class="w-full py-2 text-lg font-medium"
+                    >
+                        Login
+                    </Button>
                 </form>
             </CardContent>
-            <CardFooter className="flex-col gap-2">
-                <Button type="submit" className="w-full"> Login </Button>
-                <Button variant="outline" className="w-full">
-                    Login with Google
-                </Button>
+
+            <CardFooter class="text-center pt-2">
+                <p class="text-sm text-gray-600 dark:text-gray-400">
+                    Don’t have an account?
+                    <a
+                        href="#"
+                        class="text-blue-600 dark:text-blue-400 hover:underline"
+                    >
+                        Sign up
+                    </a>
+                </p>
             </CardFooter>
         </Card>
     </div>
@@ -58,4 +88,5 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 </script>
