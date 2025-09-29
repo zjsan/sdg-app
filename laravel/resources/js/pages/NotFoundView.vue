@@ -14,3 +14,7 @@
         </router-link>
     </div>
 </template>
+
+<script setup>
+console.log("⚠️ NotFoundView mounted");
+</script>
