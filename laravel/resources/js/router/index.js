@@ -1,18 +1,21 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import Home from "../pages/Home.vue";
+import Login from "../pages/Login.vue";
+import NotFoundView from "../pages/NotFoundView.vue";
 
 const routes = [
     {
         path: "/",
-        redirect: "/login", // default redirect
+        redirect: { name: "Login" }, // only root redirects
     },
     {
         path: "/login",
-        name: "Home",
-        component: Home,
+        name: "Login",
+        component: Login,
     },
     // other routes...
+    // Catch-all for 404
+    { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFoundView },
 ];
 
 export default createRouter({

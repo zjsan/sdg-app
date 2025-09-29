@@ -4,9 +4,9 @@ import router from "./router";
 import "./bootstrap";
 import "../css/app.css";
 
-import Home from "./pages/Home.vue";
+import Login from "./pages/Login.vue";
 
-const app = createApp(Home);
+const app = createApp(Login);
 app.use(createPinia());
 app.use(router);
 app.mount("#app");
