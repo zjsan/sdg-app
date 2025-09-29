@@ -15,10 +15,8 @@ const routes = [
         name: "Login",
         component: Login,
     },
-    // other routes...
     // Catch-all for 404 - MUST be the last route in the array.
-    // This will correctly catch '/login/asda' (or any other invalid path)
-    // because '/login' no longer matches it.
+    // or any other invalid path
     {
         path: "/:pathMatch(.*)*",
         name: "NotFound",
