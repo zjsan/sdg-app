@@ -2,9 +2,17 @@
     <div
         class="min-h-screen flex items-center justify-center bg-gray-100 px-4 text-gray-900"
     >
+        <div>
+            <img
+                src="/public/images/sdg logo.png"
+                alt="Sustainable Development Goals Logo"
+            />
+        </div>
         <Card class="w-full max-w-md shadow-xl rounded-2xl border-none">
             <CardHeader class="text-center pb-2">
-                <CardTitle class="text-2xl font-bold"> Welcome! </CardTitle>
+                <CardTitle class="text-2xl font-bold text-blue-500">
+                    Welcome!
+                </CardTitle>
                 <CardDescription class="text-gray-500 dark:text-gray-400">
                     Please login to continue
                 </CardDescription>
@@ -14,9 +22,7 @@
                 <form class="space-y-6">
                     <!-- Username -->
                     <div class="space-y-2 text-left">
-                        <Label
-                            for="username"
-                            class="text-gray-700 dark:text-gray-300"
+                        <Label for="username" class="text-gray-400"
                             >Username</Label
                         >
                         <Input
@@ -31,9 +37,7 @@
                     <!-- Password -->
                     <div class="space-y-2 text-left">
                         <div class="flex items-center justify-between">
-                            <Label
-                                for="password"
-                                class="text-gray-700 dark:text-gray-300"
+                            <Label for="password" class="text-gray-400"
                                 >Password</Label
                             >
                             <a
@@ -55,7 +59,7 @@
                     <!-- Submit -->
                     <Button
                         type="submit"
-                        class="w-full py-2 text-lg font-medium"
+                        class="w-full py-2 text-lg font-medium bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition cursor-pointer"
                     >
                         Login
                     </Button>
