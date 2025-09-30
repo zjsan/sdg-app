@@ -9,6 +9,11 @@ export const useAuthStore = defineStore("auth", {
         error: null, // for error handling
     }),
 
+    /**
+     * 
+     * If auth.user is null → not authenticated.
+       If auth.user has data → authenticated.
+     */
     getters: {
         isAuthenticated: (state) => !!state.user,
     },
