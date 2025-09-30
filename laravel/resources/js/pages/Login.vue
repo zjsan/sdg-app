@@ -3,7 +3,7 @@
         class="min-h-screen flex items-center justify-center bg-gray-100 px-4 text-gray-900"
     >
         <div
-            class="flex flex-col items-center justify-center gap-6 sm:flex-row w-full max-w-4xl"
+            class="flex flex-col items-center justify-center gap-5 sm:flex-row w-full max-w-4xl"
         >
             <div class="max-w-sm sm:max-w-sm md:max-w-md">
                 <img
