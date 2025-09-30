@@ -50,9 +50,10 @@ export const useAuthStore = defineStore("auth", {
                 await axios.post("/login", credentials, {
                     withCredentials: true,
                 });
-
                 // Step 3: Get the user
                 await this.getUser();
+                //removed rdirect to dashboard if logged in
+                // will be handled in router index.js
             } catch (err) {
                 this.error = err.response?.data?.message || "Login failed";
             } finally {
