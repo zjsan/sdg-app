@@ -34,7 +34,7 @@
                                 type="text"
                                 placeholder="Enter your username"
                                 required
-                                class="border-blue-300 focus: border-bg-blue-800 focus: ring-2 focus: offset-2"
+                                class="border-blue-300 focus:border-blue-900 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                             />
                         </div>
 
@@ -55,7 +55,7 @@
                                 type="password"
                                 placeholder="••••••••"
                                 required
-                                class="border-blue-300 focus: border-bg-blue-800 focus: ring-2 focus- offset-2"
+                                class="border-blue-300 focus:border-blue-900 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                             />
                         </div>
 
