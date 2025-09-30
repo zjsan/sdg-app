@@ -53,11 +53,6 @@ export const useAuthStore = defineStore("auth", {
 
                 // Step 3: Get the user
                 await this.getUser();
-
-                // Redirect to dashboard
-                if (this.user && this.isAuthenticated) {
-                    router.push({ name: "Dashboard" });
-                }
             } catch (err) {
                 this.error = err.response?.data?.message || "Login failed";
             } finally {
