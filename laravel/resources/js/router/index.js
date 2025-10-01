@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Login from "../pages/Login.vue";
 import Dashboard from "../pages/Dashboard.vue";
 import NotFoundView from "../pages/NotFoundView.vue";
+import { useAuthStore } from "@/stores/auth";
 
 const routes = [
     {
@@ -33,7 +34,24 @@ const routes = [
     },
 ];
 
-export default createRouter({
+const router = createRouter({
     history: createWebHistory(),
     routes,
 });
+
+router.beforeEach(async (to, from) => {
+    const auth = useAuthStore();
+
+    // If user is unknown, try restoring session
+    if (auth.user === null) {
+        try {
+            await auth.getUser();
+            console.log("User session restored in router");
+        } catch (error) {
+            console.log("No active session");
+            console.error(error);
+        }
+    }
+});
+
+export default router;
