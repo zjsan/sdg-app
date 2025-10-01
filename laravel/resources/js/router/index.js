@@ -16,6 +16,7 @@ const routes = [
         path: "/login",
         name: "Login",
         component: Login,
+        meta: { guestOnly: true }, // logged-out users only
     },
 
     {
@@ -23,6 +24,7 @@ const routes = [
         path: "/dashboard",
         name: "Dashboard",
         component: Dashboard,
+        meta: { requiresAuth: true }, // must be logged in
     },
 
     // Catch-all for 404 - MUST be the last route in the array.
@@ -51,6 +53,18 @@ router.beforeEach(async (to, from) => {
             console.log("No active session");
             console.error(error);
         }
+    }
+
+    // Protected route
+    //if route requires auth and user is not authenticated, redirect to login
+    if (to.meta.requiresAuth && !auth.isAuthenticated) {
+        return { name: "Login" };
+    }
+
+    // Prevent logged-in users from accessing guest-only routes
+    // if logged in, stay on dashboard
+    if (to.meta.guestOnly && auth.isAuthenticated) {
+        return { name: "Dashboard" };
     }
 });
 
