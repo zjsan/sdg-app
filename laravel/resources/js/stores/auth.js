@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import axios from "axios";
+import api from "@/plugins/axios";
 import router from "@/router";
 
 export const useAuthStore = defineStore("auth", {
@@ -25,7 +26,7 @@ export const useAuthStore = defineStore("auth", {
          */
         async getCsrfCookie() {
             try {
-                await axios.get("/sanctum/csrf-cookie", {
+                await api.get("/sanctum/csrf-cookie", {
                     withCredentials: true,
                 });
                 console.log("CSRF cookie set");
@@ -47,7 +48,7 @@ export const useAuthStore = defineStore("auth", {
                 await this.getCsrfCookie();
 
                 // Step 2: Login attempt
-                await axios.post("/login", credentials, {
+                await api.post("/login", credentials, {
                     withCredentials: true,
                 });
                 // Step 3: Get the user
@@ -67,7 +68,7 @@ export const useAuthStore = defineStore("auth", {
          */
         async getUser() {
             try {
-                const { data } = await axios.get("/api/user", {
+                const { data } = await api.get("/api/user", {
                     withCredentials: true,
                 });
                 this.user = data;
@@ -82,7 +83,7 @@ export const useAuthStore = defineStore("auth", {
          */
         async logout() {
             try {
-                await axios.post("/logout", {}, { withCredentials: true });
+                await api.post("/logout", {}, { withCredentials: true });
             } finally {
                 this.user = null;
                 this.error = null;
