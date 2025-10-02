@@ -31,6 +31,7 @@
                             >
                             <Input
                                 id="username"
+                                name="username"
                                 type="text"
                                 placeholder="Enter your username"
                                 required
@@ -52,6 +53,7 @@
                             </div>
                             <Input
                                 id="password"
+                                name="password"
                                 type="password"
                                 placeholder="••••••••"
                                 required
