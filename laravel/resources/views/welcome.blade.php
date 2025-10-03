@@ -10,4 +10,4 @@
     {{-- Make sure your Vite directive is here to load the JS --}}
     @vite('resources/js/app.js')
 </body>
-</html>
+</html> 
