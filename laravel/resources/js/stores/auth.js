@@ -68,7 +68,7 @@ export const useAuthStore = defineStore("auth", {
          */
         async getUser() {
             try {
-                const { data } = await api.get("/api/user", {
+                const { data } = await api.get("/user", {
                     withCredentials: true,
                 });
                 this.user = data;
