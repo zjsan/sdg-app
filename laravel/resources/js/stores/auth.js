@@ -48,7 +48,7 @@ export const useAuthStore = defineStore("auth", {
                 await this.getCsrfCookie();
 
                 // Step 2: Login attempt
-                await api.post("/login", credentials, {
+                await api.post("/api/login", credentials, {
                     withCredentials: true,
                 });
                 // Step 3: Get the user
@@ -68,7 +68,7 @@ export const useAuthStore = defineStore("auth", {
          */
         async getUser() {
             try {
-                const { data } = await api.get("/user", {
+                const { data } = await api.get("/api/user", {
                     withCredentials: true,
                 });
                 this.user = data;
@@ -83,7 +83,7 @@ export const useAuthStore = defineStore("auth", {
          */
         async logout() {
             try {
-                await api.post("/logout", {}, { withCredentials: true });
+                await api.post("/api/logout", {}, { withCredentials: true });
             } finally {
                 this.user = null;
                 this.error = null;
