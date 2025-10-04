@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request; 
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -18,16 +20,22 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
-        if (!Auth::attempt($credentials)) {
-            return response()->json(['message' => 'Invalid credentials.'], 401);
-        }
+          // 2. Find the user by the 'username' field
+        $user = User::where('username', $credentials['username'])->first();
 
+       // if (!Auth::attempt($credentials)) {
+          //  return response()->json(['message' => 'Invalid credentials.'], 401);
+        //}
+
+        if (! $user || ! Hash::check($request->password, $user->password)) {
+        return response()->json(['message' => 'Invalid credentials'], 401);
+    }
         //$request->session()->regenerate(); // prevent session fixation
         // Get the authenticated user
         $user = Auth::user();
 
         // Create a Sanctum token
-        //$token = $user->createToken('api-token')->plainTextToken;
+        $token = $user->createToken('api-token')->plainTextToken;
 
         return response()->json(['message' => 'Logged in successfully.']);
     }
