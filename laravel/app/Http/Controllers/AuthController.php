@@ -23,16 +23,13 @@ class AuthController extends Controller
           // 2. Find the user by the 'username' field
         $user = User::where('username', $credentials['username'])->first();
 
-       // if (!Auth::attempt($credentials)) {
-          //  return response()->json(['message' => 'Invalid credentials.'], 401);
-        //}
+        if (! $user || ! Hash::check($request->password, $user->password)) 
+        {
+            return response()->json(['message' => 'Invalid credentials'], 401);
+        }
 
-        if (! $user || ! Hash::check($request->password, $user->password)) {
-        return response()->json(['message' => 'Invalid credentials'], 401);
-    }
         //$request->session()->regenerate(); // prevent session fixation
         // Get the authenticated user
-        $user = Auth::user();
 
         // Create a Sanctum token
         $token = $user->createToken('api-token')->plainTextToken;
@@ -45,10 +42,7 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
-        Auth::guard('web')->logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
+        $request->user()->currentAccessToken()->delete();
         return response()->json(['message' => 'Logged out.']);
     }
 }
