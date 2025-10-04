@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request; 
 use Illuminate\Support\Facades\Auth;
 
-
 class AuthController extends Controller
 {
 
@@ -24,6 +23,11 @@ class AuthController extends Controller
         }
 
         //$request->session()->regenerate(); // prevent session fixation
+        // Get the authenticated user
+        $user = Auth::user();
+
+        // Create a Sanctum token
+        //$token = $user->createToken('api-token')->plainTextToken;
 
         return response()->json(['message' => 'Logged in successfully.']);
     }
