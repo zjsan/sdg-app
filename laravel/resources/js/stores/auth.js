@@ -83,11 +83,14 @@ export const useAuthStore = defineStore("auth", {
          */
         async logout() {
             try {
-                await api.post("/api/logout", {}, { withCredentials: true });
+                await api.post("/api/logout");
             } finally {
                 this.user = null;
                 this.error = null;
                 this.loading = false;
+                this.token = null;
+                localStorage.removeItem("token");
+                delete api.defaults.headers.common["Authorization"];
                 router.push({ name: "Login" });
             }
         },
