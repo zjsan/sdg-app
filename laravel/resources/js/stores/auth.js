@@ -65,9 +65,7 @@ export const useAuthStore = defineStore("auth", {
                     ] = `Bearer ${this.token}`;
                 }
 
-                const { data } = await api.get("/api/user", {
-                    withCredentials: true,
-                });
+                const { data } = await api.get("/api/user");
                 this.user = data;
             } catch (error) {
                 console.error("Failed to fetch user:", error);
