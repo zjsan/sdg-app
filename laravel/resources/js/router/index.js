@@ -45,7 +45,7 @@ router.beforeEach(async (to, from) => {
     const auth = useAuthStore();
 
     // If user is unknown, try restoring session
-    if (auth.user === null) {
+    if (auth.user === null && auth.token) {
         try {
             await auth.getUser();
             console.log("User session restored in router");
