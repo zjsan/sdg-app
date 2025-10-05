@@ -7,6 +7,7 @@ export const useAuthStore = defineStore("auth", {
     state: () => ({
         user: null, // stores logged-in user object
         loading: false, // tracks async requests
+        token: localStorage.getItem("token") || null, // persist token
         error: null, // for error handling
     }),
 
@@ -21,21 +22,6 @@ export const useAuthStore = defineStore("auth", {
 
     actions: {
         /**
-         * Fetch CSRF cookie (required before login).
-         * Laravel sets `XSRF-TOKEN` and session cookie here.
-         */
-        async getCsrfCookie() {
-            try {
-                await api.get("/sanctum/csrf-cookie", {
-                    withCredentials: true,
-                });
-                console.log("CSRF cookie set");
-            } catch (error) {
-                console.error("Error initializing CSRF cookie:", error);
-            }
-        },
-
-        /**
          * Login user with credentials.
          * On success, it fetches the user and redirects.
          */
@@ -44,13 +30,18 @@ export const useAuthStore = defineStore("auth", {
             this.error = null;
 
             try {
-                // Step 1: Ensure CSRF cookie is set
-                await this.getCsrfCookie();
+                // Step 1: Login and get token
+                const { data } = await api.post("/api/login", credentials);
 
-                // Step 2: Login attempt
-                await api.post("/api/login", credentials, {
-                    withCredentials: true,
-                });
+                // Step 2: store token
+                this.token = data.token;
+                localStorage.setItem("token", data.token);
+
+                // Step 3: set token for axios instance
+                api.defaults.headers.common[
+                    "Authorization"
+                ] = `Bearer ${data.token}`;
+
                 // Step 3: Get the user
                 await this.getUser();
                 //removed rdirect to dashboard if logged in
