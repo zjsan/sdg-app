@@ -31,10 +31,14 @@ class AuthController extends Controller
         //$request->session()->regenerate(); // prevent session fixation
         // Get the authenticated user
 
-        // Create a Sanctum token
+        // Create a Sanctum token   
         $token = $user->createToken('api-token')->plainTextToken;
 
-        return response()->json(['message' => 'Logged in successfully.']);
+        return response()->json([
+        'message' => 'Logged in successfully.',
+        'token' => $token,
+        'user' => $user,
+    ]);
     }
 
      /**
