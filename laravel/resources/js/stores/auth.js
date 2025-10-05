@@ -59,12 +59,21 @@ export const useAuthStore = defineStore("auth", {
          */
         async getUser() {
             try {
+                if (this.token) {
+                    api.defaults.headers.common[
+                        "Authorization"
+                    ] = `Bearer ${this.token}`;
+                }
+
                 const { data } = await api.get("/api/user", {
                     withCredentials: true,
                 });
                 this.user = data;
-            } catch {
+            } catch (error) {
+                console.error("Failed to fetch user:", error);
                 this.user = null; // not logged in
+                this.token = null;
+                localStorage.removeItem("token");
             }
         },
 
