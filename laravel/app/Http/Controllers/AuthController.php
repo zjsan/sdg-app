@@ -28,7 +28,7 @@ class AuthController extends Controller
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
-        //$request->session()->regenerate(); // prevent session fixation
+        //$request->session()->regenerate(); // prevent session fixation    
         // Get the authenticated user
 
         // Create a Sanctum token   
