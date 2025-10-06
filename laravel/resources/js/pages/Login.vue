@@ -24,13 +24,14 @@
                 </CardHeader>
 
                 <CardContent>
-                    <form class="space-y-6">
+                    <form class="space-y-6" @submit.prevent="handleLogin">
                         <div class="space-y-2 text-left">
                             <Label for="username" class="text-gray-400"
                                 >Username</Label
                             >
                             <Input
                                 id="username"
+                                v-model="form.username"
                                 name="username"
                                 type="text"
                                 placeholder="Enter your username"
