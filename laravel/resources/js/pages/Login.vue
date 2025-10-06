@@ -54,6 +54,7 @@
                             </div>
                             <Input
                                 id="password"
+                                v-model="form.password"
                                 name="password"
                                 type="password"
                                 placeholder="••••••••"
@@ -62,11 +63,23 @@
                             />
                         </div>
 
+                        <!-- Display error message if login fails -->
+                        <p
+                            v-if="auth.error"
+                            class="text-red-500 text-sm text-center"
+                        >
+                            {{ auth.error }}
+                        </p>
+
                         <Button
                             type="submit"
                             class="w-full py-2 text-lg font-medium bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition cursor-pointer"
                         >
                             Login
+
+                            <!-- Show loading state if login is in progress -->
+                            <span v-if="auth.loading">Logging in...</span>
+                            <span v-else>Login</span>
                         </Button>
                     </form>
                 </CardContent>
@@ -87,6 +100,9 @@
     </div>
 </template>
 <script setup>
+import { reactive } from "vue";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
 import {
     Card,
     CardAction,
@@ -99,4 +115,22 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+
+const auth = useAuthStore();
+const router = useRouter();
+
+// Form state
+const form = reactive({
+    username: "",
+    password: "",
+});
+
+// Handle login submission
+const handleLogin = async () => {
+    await auth.login(form);
+
+    if (auth.isAuthenticated) {
+        router.push({ name: "Dashboard" });
+    }
+};
 </script>
