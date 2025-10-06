@@ -31,7 +31,7 @@ export const useAuthStore = defineStore("auth", {
 
             try {
                 // Step 1: Login and get token
-                const { data } = await api.post("/api/login", credentials);
+                const { data } = await api.post("/login", credentials);
 
                 // Step 2: store token
                 this.token = data.token;
@@ -65,7 +65,7 @@ export const useAuthStore = defineStore("auth", {
                     ] = `Bearer ${this.token}`;
                 }
 
-                const { data } = await api.get("/api/user");
+                const { data } = await api.get("/user");
                 this.user = data;
             } catch (error) {
                 console.error("Failed to fetch user:", error);
@@ -81,7 +81,7 @@ export const useAuthStore = defineStore("auth", {
          */
         async logout() {
             try {
-                await api.post("/api/logout");
+                await api.post("/logout");
             } catch (error) {
                 console.error("Logout failed:", error);
             } finally {

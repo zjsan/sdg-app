@@ -45,13 +45,14 @@ router.beforeEach(async (to, from) => {
     const auth = useAuthStore();
 
     // If user is unknown, try restoring session
-    if (auth.user === null && auth.token) {
+    if (!auth.user && auth.token) {
         try {
             await auth.getUser();
             console.log("User session restored in router");
         } catch (error) {
-            console.log("No active session");
-            console.error(error);
+            console.error("Session restore failed:", error);
+            auth.token = null;
+            localStorage.removeItem("token");
         }
     }
 
