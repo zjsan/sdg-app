@@ -44,8 +44,12 @@ export const useAuthStore = defineStore("auth", {
 
                 // Step 3: Get the user
                 await this.getUser();
-                //removed rdirect to dashboard if logged in
-                // will be handled in router index.js
+
+                //redirect to /dashboard once authenticated
+                //avoids manual refreshes or blank states after login.
+                if (this.user) {
+                    router.push({ name: "Dashboard" });
+                }
             } catch (err) {
                 this.error = err.response?.data?.message || "Login failed";
             } finally {
@@ -91,7 +95,9 @@ export const useAuthStore = defineStore("auth", {
                 this.error = null;
                 this.loading = false;
                 this.token = null;
-                router.push({ name: "Login" });
+                if (router.currentRoute.value.name !== "Login") {
+                    router.push({ name: "Login" });
+                }
             }
         },
     },
