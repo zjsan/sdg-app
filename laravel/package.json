@@ -24,6 +24,7 @@
         "clsx": "^2.1.1",
         "lucide-vue-next": "^0.544.0",
         "pinia": "^2.2.2",
+        "primeicons": "^7.0.0",
         "reka-ui": "^2.5.1",
         "shadcn-ui": "^0.9.5",
         "tailwind-merge": "^3.3.1",
