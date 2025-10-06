@@ -89,7 +89,7 @@ const logout = async () => {
 };
 
 const powerBiEmbedUrl = ref(
-    "https://app.powerbi.com/view?r=eyJrIjoiZDRmMDQ3NzUtZWE0NC00ZDY4LTg1MzEtYjhhM2U4OTEyZjE1IiwidCI6IjdjZmY5YzA2LThmNGQtNDAwNi1iOWQwLWU4MWRjYWJjZDU1NyIsImMiOjEwfQ%3D%3D"
+    "https://app.powerbi.com/view?r=eyJrIjoiZmRiODdmMzgtZTk2ZS00MTQ1LTgyY2YtZmEyYmU2N2RkYTA5IiwidCI6IjdjZmY5YzA2LThmNGQtNDAwNi1iOWQwLWU4MWRjYWJjZDU1NyIsImMiOjEwfQ%3D%3D"
 );
 </script>
 
