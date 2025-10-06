@@ -9,7 +9,7 @@ const routes = [
     {
         // Path should match exactly "/" and redirect to the 'Login' named route.
         path: "/",
-        redirect: { name: "Login" },
+        redirect: "/login",
     },
     {
         // Use path: "/login" without a trailing slash and with 'exact' behavior.
@@ -38,6 +38,7 @@ const routes = [
 
 const router = createRouter({
     history: createWebHistory(),
+    // @ts-ignore
     routes,
 });
 
