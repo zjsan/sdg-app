@@ -80,9 +80,30 @@
 <script setup>
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/stores/auth";
+import { ref, onMounted } from "vue";
 const auth = useAuthStore();
 
 const logout = async () => {
     await auth.logout();
 };
+
+const powerBiEmbedUrl = ref(
+    "https://app.powerbi.com/view?r=eyJrIjoiZDRmMDQ3NzUtZWE0NC00ZDY4LTg1MzEtYjhhM2U4OTEyZjE1IiwidCI6IjdjZmY5YzA2LThmNGQtNDAwNi1iOWQwLWU4MWRjYWJjZDU1NyIsImMiOjEwfQ%3D%3D"
+);
 </script>
+
+<style scoped>
+/* Ensures the main container takes the full viewport height */
+.h-screen {
+    height: 100vh;
+}
+/* Optional: Router link exact match styling */
+.router-link-active {
+    background-color: #f3f4f6; /* bg-gray-100 */
+    font-weight: 600; /* font-semibold */
+}
+/* Adjusting icon size for consistency (PrimeIcons often require an explicit size class) */
+.pi {
+    font-size: 1.25rem; /* Equivalent to Tailwind's text-xl for icons */
+}
+</style>
