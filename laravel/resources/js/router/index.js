@@ -5,6 +5,7 @@ import Dashboard from "../pages/Dashboard.vue";
 import NotFoundView from "../pages/NotFoundView.vue";
 import { useAuthStore } from "@/stores/auth";
 
+/** @type {import('vue-router').RouteRecordRaw[]} */
 const routes = [
     {
         // Path should match exactly "/" and redirect to the 'Login' named route.
