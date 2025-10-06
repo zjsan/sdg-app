@@ -45,14 +45,40 @@
                     </div>
                 </div>
 
-                <Button
-                    v-if="auth.isAuthenticated"
-                    @click="logout"
-                    class="w-full justify-center px-4 py-2 bg-red-500 text-white font-semibold rounded-lg shadow hover:bg-red-600 transition"
-                >
-                    <i class="pi pi-sign-out text-xl mr-2"></i>
-                    Logout
-                </Button>
+                <AlertDialog v-if="auth.isAuthenticated">
+                    <AlertDialogTrigger as-child>
+                        <Button
+                            class="w-full justify-center px-4 py-2 bg-red-500 text-white font-semibold rounded-lg shadow hover:bg-red-600 transition"
+                        >
+                            <i class="pi pi-sign-out text-xl mr-2"></i>
+                            Logout
+                        </Button>
+                    </AlertDialogTrigger>
+
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle
+                                >Are you sure you want to
+                                logout?</AlertDialogTitle
+                            >
+                            <AlertDialogDescription>
+                                This action will end your current session. You
+                                will need to log in again to access the
+                                dashboard.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+
+                            <AlertDialogAction
+                                @click="logout"
+                                class="bg-red-600 hover:bg-red-700"
+                            >
+                                Yes, Log me out
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
             </div>
         </aside>
 
@@ -82,6 +108,18 @@
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/stores/auth";
 import { ref, onMounted } from "vue";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
 const auth = useAuthStore();
 
 const logout = async () => {
