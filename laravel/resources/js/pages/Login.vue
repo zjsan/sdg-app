@@ -1,13 +1,13 @@
 <template>
     <div
-        class="min-h-screen flex items-center justify-center bg-white px-4 text-gray-900"
+        class="min-h-screen flex items-center justify-center bg-gray-50 px-4 text-gray-900"
     >
         <div
             class="flex flex-col items-center justify-center gap-8 sm:flex-row w-full max-w-4xl"
         >
             <div class="max-w-sm sm:max-w-sm md:max-w-md">
                 <img
-                    src="/public/images/sdg logo.png"
+                    src="/public/images/sdg_transparent_upscaled.png"
                     alt="Sustainable Development Goals Logo"
                     class="w-full h-auto"
                 />
@@ -75,8 +75,6 @@
                             type="submit"
                             class="w-full py-2 text-lg font-medium bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition cursor-pointer"
                         >
-                            Login
-
                             <!-- Show loading state if login is in progress -->
                             <span v-if="auth.loading">Logging in...</span>
                             <span v-else>Login</span>
