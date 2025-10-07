@@ -15,22 +15,24 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'login' => ['required|string|max:255' ],
-            'password' => ['required|string|min:8'],
+        $request->validate([
+            'login' => 'required|string|max:255', // can be email or username
+            'password' => 'required|string|min:8',
         ]);
 
-          // 2. Find the user by the 'username' field
-        $user = User::where('username', $credentials['username'])->first();
+
+        // Detect if input is email or username
+        $loginField = filter_var($request->login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+
+        // 2. Find the user by the 'username' field
+        $user = User::where($loginField, $request->login)->first();
 
         if (! $user || ! Hash::check($request->password, $user->password)) 
         {
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
-        //$request->session()->regenerate(); // prevent session fixation    
         // Get the authenticated user
-
         // Create a Sanctum token   
         $token = $user->createToken('api-token')->plainTextToken;
 
