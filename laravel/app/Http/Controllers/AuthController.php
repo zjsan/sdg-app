@@ -23,15 +23,16 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
+        //Step 1: validate input
         $request->validate([
             'login' => 'required|string|max:255', // can be email or username
             'password' => 'required|string|min:8',
         ]);
 
-        //generates a unique key for the login attempt  
+        //Step2: generates a unique key for the login attempt  
         $key = $this->throttleKey($request);
 
-        // Step 1: Check if blocked
+        // Step 3: Check if blocked
         //default attempt is 5 
         if (RateLimiter::tooManyAttempts($key, 5)) {
             $seconds = RateLimiter::availableIn($key);
@@ -40,20 +41,25 @@ class AuthController extends Controller
             ], 429);
         }
 
-        // Detect if input is email or username
+        // Step 4: if input is email or username
         $loginField = filter_var($request->login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
-        // 2. Find the user by the 'username' field
+        // Step 5: Find the user by the 'username' field
         $user = User::where($loginField, $request->login)->first();
 
+        // Step 6: Check password   
         if (! $user || ! Hash::check($request->password, $user->password)) 
         {
              // after failed attempt:
             RateLimiter::hit($key, 60*15); // block for 15 minutes after limit
-
-            return response()->json(['message' => 'Invalid credentials'], 401);
+            $attemptsLeft = RateLimiter::remaining($key, 5);
+            
+            return response()->json(['message' => 'Invalid credentials', 'attempts_left' => $attemptsLeft], 401);
            
         }
+
+        // successful login -> clear attempts
+        RateLimiter::clear($key);
 
         // Get the authenticated user
         // Create a Sanctum token   
