@@ -108,6 +108,7 @@
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/stores/auth";
 import { ref, onMounted } from "vue";
+import api from "@/plugins/axios";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -121,14 +122,22 @@ import {
 } from "@/components/ui/alert-dialog";
 
 const auth = useAuthStore();
+const powerBiEmbedUrl = ref("");
+
+onMounted(async () => {
+    try {
+        const { data } = await api.get("/api/powerbi-url", {
+            headers: { Authorization: `Bearer ${auth.token}` },
+        });
+        powerBiEmbedUrl.value = data.url;
+    } catch (error) {
+        console.error("Failed to load Power BI URL:", error);
+    }
+});
 
 const logout = async () => {
     await auth.logout();
 };
-
-const powerBiEmbedUrl = ref(
-    "https://app.powerbi.com/view?r=eyJrIjoiZmRiODdmMzgtZTk2ZS00MTQ1LTgyY2YtZmEyYmU2N2RkYTA5IiwidCI6IjdjZmY5YzA2LThmNGQtNDAwNi1iOWQwLWU4MWRjYWJjZDU1NyIsImMiOjEwfQ%3D%3D"
-);
 </script>
 
 <style scoped>
