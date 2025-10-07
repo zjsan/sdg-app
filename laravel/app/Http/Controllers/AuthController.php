@@ -16,8 +16,8 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'username' => ['required' ],
-            'password' => ['required'],
+            'login' => ['required|string|max:255' ],
+            'password' => ['required|string|min:8'],
         ]);
 
           // 2. Find the user by the 'username' field
