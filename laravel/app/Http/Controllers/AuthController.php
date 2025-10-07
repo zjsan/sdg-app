@@ -7,9 +7,16 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
+
+    //helper function toi track login attempts
+    protected function throttleKey(Request $request)
+    {
+        return Str::lower($request->input('login')).'|'.$request->ip();
+    }
 
     /**
      * Handle login request
@@ -21,6 +28,18 @@ class AuthController extends Controller
             'password' => 'required|string|min:8',
         ]);
 
+        //generates a unique key for the login attempt  
+        $key = $this->throttleKey($request);
+
+        // Step 1: Check if blocked
+        //default attempt is 5 
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            $seconds = RateLimiter::availableIn($key);
+            return response()->json([
+                'message' => "Too many attempts. Try again in {$seconds} seconds."
+            ], 429);
+        }
+
         // Detect if input is email or username
         $loginField = filter_var($request->login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
@@ -29,7 +48,11 @@ class AuthController extends Controller
 
         if (! $user || ! Hash::check($request->password, $user->password)) 
         {
+             // after failed attempt:
+            RateLimiter::hit($key, 60*15); // block for 15 minutes after limit
+
             return response()->json(['message' => 'Invalid credentials'], 401);
+           
         }
 
         // Get the authenticated user
