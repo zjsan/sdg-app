@@ -55,7 +55,7 @@ class AuthController extends Controller
             $attemptsLeft = RateLimiter::remaining($key, 3);
             
             return response()->json(['message' => $attemptsLeft <= 1
-                ? 'Invalid credentials. Account will be locked after one more failed attempt.'
+                ? 'Invalid credentials. Account will be locked after one more failed attempt for 10 minutes.'
                 : 'Invalid credentials.',
             'attempts_left' => $attemptsLeft], 401);
            
