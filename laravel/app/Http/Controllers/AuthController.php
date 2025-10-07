@@ -51,10 +51,13 @@ class AuthController extends Controller
         if (! $user || ! Hash::check($request->password, $user->password)) 
         {
              // after failed attempt:
-            RateLimiter::hit($key, 60*15); // block for 15 minutes after limit
+            RateLimiter::hit($key, 60*10); // block for 10 minutes after limit
             $attemptsLeft = RateLimiter::remaining($key, 5);
             
-            return response()->json(['message' => 'Invalid credentials', 'attempts_left' => $attemptsLeft], 401);
+            return response()->json(['message' => $attemptsLeft <= 1
+                ? 'Invalid credentials. Account will be locked after one more failed attempt.'
+                : 'Invalid credentials.',
+            'attempts_left' => $attemptsLeft], 401);
            
         }
 
