@@ -27,14 +27,14 @@
                     <form class="space-y-6" @submit.prevent="handleLogin">
                         <div class="space-y-2 text-left">
                             <Label for="username" class="text-gray-400"
-                                >Username</Label
+                                >Email or Username</Label
                             >
                             <Input
                                 id="login"
                                 v-model="form.login"
-                                name="username"
+                                name="login"
                                 type="text"
-                                placeholder="Enter your username"
+                                placeholder="Enter your username or email"
                                 required
                                 class="border-blue-300 focus:border-blue-900 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                             />
