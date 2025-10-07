@@ -30,8 +30,8 @@
                                 >Username</Label
                             >
                             <Input
-                                id="username"
-                                v-model="form.username"
+                                id="login"
+                                v-model="form.login"
                                 name="username"
                                 type="text"
                                 placeholder="Enter your username"
@@ -119,7 +119,7 @@ const router = useRouter();
 
 // Form state
 const form = reactive({
-    username: "",
+    login: "",
     password: "",
 });
 
