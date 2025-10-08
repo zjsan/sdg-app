@@ -52,7 +52,7 @@ class AuthController extends Controller
         {
              // after failed attempt:
             RateLimiter::hit($key, 60*10); // block for 10 minutes after limit
-            $attemptsLeft = RateLimiter::remaining($key, 3);
+            $attemptsLeft = RateLimiter::remaining($key, 5);
             
             return response()->json(['message' => $attemptsLeft <= 1
                 ? 'Invalid credentials. Account will be locked after one more failed attempt for 10 minutes.'
