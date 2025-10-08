@@ -45,12 +45,11 @@
                                 <Label for="password" class="text-gray-400"
                                     >Password</Label
                                 >
-                                <a
-                                    href="#"
+                                <RouterLink
+                                    to="/forgot-password"
                                     class="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+                                    >Forgot password?</RouterLink
                                 >
-                                    Forgot password?
-                                </a>
                             </div>
                             <Input
                                 id="password"
