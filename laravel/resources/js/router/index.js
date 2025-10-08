@@ -4,7 +4,7 @@ import Login from "../pages/Login.vue";
 import Dashboard from "../pages/Dashboard.vue";
 import NotFoundView from "../pages/NotFoundView.vue";
 import { useAuthStore } from "@/stores/auth";
-
+import ForgotPassword from "@/pages/ForgotPassword.vue";
 /** @type {import('vue-router').RouteRecordRaw[]} */
 const routes = [
     {
@@ -26,6 +26,13 @@ const routes = [
         name: "Dashboard",
         component: Dashboard,
         meta: { requiresAuth: true }, // must be logged in
+    },
+
+    {
+        path: "/forgot-password",
+        name: "ForgotPassword",
+        component: ForgotPassword,
+        meta: { guestOnly: true },
     },
 
     // Catch-all for 404 - MUST be the last route in the array.
