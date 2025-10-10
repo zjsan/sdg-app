@@ -27,16 +27,19 @@
                     <Button
                         type="submit"
                         class="w-full py-2 text-lg font-medium bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition cursor-pointer"
-                        :disabled="loading"
+                        :disabled="store.loading"
                     >
-                        {{ loading ? "Sending..." : "Send Reset Link" }}
+                        {{ store.loading ? "Sending..." : "Send Reset Link" }}
                     </Button>
 
-                    <p v-if="message" class="text-green-600 text-center mt-2">
-                        {{ message }}
+                    <p
+                        v-if="store.message"
+                        class="text-green-600 text-center mt-2"
+                    >
+                        {{ store.message }}
                     </p>
-                    <p v-if="error" class="text-red-600 text-center mt-2">
-                        {{ error }}
+                    <p v-if="store.error" class="text-red-600 text-center mt-2">
+                        {{ store.error }}
                     </p>
                 </form>
             </CardContent>
