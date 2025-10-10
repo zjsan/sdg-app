@@ -19,6 +19,7 @@ class PasswordResetController extends Controller
             'email' => 'required|email|',
         ]);
 
+        //check if email exist
         $user = User::where('email', $request->email)->first();
 
         if (! $user) {
@@ -51,7 +52,7 @@ class PasswordResetController extends Controller
             'password' => 'required|string|min:8|confirmed',
         ]);
 
-        // Find token
+        // Find email and token
         $record = DB::table('password_reset_tokens')
                     ->where('email', $request->email)
                     ->where('token', $request->token)
