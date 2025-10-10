@@ -61,7 +61,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import api from "@/plugins/axios";
 import {
@@ -80,14 +80,12 @@ const store = usePasswordResetStore();
 const route = useRoute();
 const router = useRouter();
 
-const email = ref(route.query.email || "");
-const token = ref(route.query.token || "");
 const password = ref("");
 const confirm = ref("");
 
 onMounted(() => {
-    token.value = route.query.token || "";
-    email.value = route.query.email || "";
+    store.token.value = route.query.token || "";
+    store.email.value = route.query.email || "";
 });
 
 const submitForm = async () => {
@@ -97,8 +95,8 @@ const submitForm = async () => {
     }
 
     await store.resetPassword({
-        email: email.value,
-        token: token.value,
+        email: store.email.value,
+        token: store.token.value,
         password: password.value,
         password_confirmation: confirm.value,
     });
