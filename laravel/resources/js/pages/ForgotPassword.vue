@@ -46,7 +46,6 @@
 
 <script setup>
 import { ref } from "vue";
-import api from "@/plugins/axios";
 import {
     Card,
     CardContent,
@@ -57,28 +56,12 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { usePasswordResetStore } from "@/stores/usePasswordResetStore";
 
+const store = usePasswordResetStore();
 const email = ref("");
-const message = ref("");
-const error = ref("");
-const loading = ref(false);
 
-const submitForm = async () => {
-    loading.value = true;
-    message.value = "";
-    error.value = "";
-
-    try {
-        const { data } = await api.post("/api/forgot-password", {
-            email: email.value,
-        });
-        message.value =
-            data.message || "If that email exists, a reset link has been sent.";
-    } catch (err) {
-        error.value =
-            err.response?.data?.message || "Failed to send reset link.";
-    } finally {
-        loading.value = false;
-    }
+const submitForm = () => {
+    store.requestReset(email.value);
 };
 </script>
