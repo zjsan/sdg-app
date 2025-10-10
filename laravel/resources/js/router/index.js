@@ -5,6 +5,8 @@ import Dashboard from "../pages/Dashboard.vue";
 import NotFoundView from "../pages/NotFoundView.vue";
 import { useAuthStore } from "@/stores/auth";
 import ForgotPassword from "@/pages/ForgotPassword.vue";
+import ResetPassword from "@/pages/ResetPassword.vue";
+
 /** @type {import('vue-router').RouteRecordRaw[]} */
 const routes = [
     {
@@ -32,6 +34,13 @@ const routes = [
         path: "/forgot-password",
         name: "ForgotPassword",
         component: ForgotPassword,
+        meta: { guestOnly: true },
+    },
+
+    {
+        path: "/reset-password",
+        name: "ResetPassword",
+        component: ResetPassword,
         meta: { guestOnly: true },
     },
 
