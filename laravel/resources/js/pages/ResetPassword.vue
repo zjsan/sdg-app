@@ -27,11 +27,11 @@
                     </div>
 
                     <div class="space-y-2 text-left">
-                        <Label for="confirm" class="text-gray-400"
+                        <Label for="confirmPassword" class="text-gray-400"
                             >Confirm Password</Label
                         >
                         <Input
-                            id="confirm"
+                            id="confirmPassword"
                             v-model="confirmPassword"
                             type="password"
                             required
@@ -43,7 +43,7 @@
                     <Button
                         type="submit"
                         class="w-full py-2 text-lg font-medium bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition cursor-pointer"
-                        :disabled="loading"
+                        :disabled="store.loading"
                     >
                         {{ store.loading ? "Resetting..." : "Reset Password" }}
                     </Button>
@@ -54,7 +54,7 @@
                     >
                         {{ store.message }}
                     </p>
-                    <p v-if="error" class="text-red-600 text-center mt-2">
+                    <p v-if="store.error" class="text-red-600 text-center mt-2">
                         {{ store.error }}
                     </p>
                 </form>
@@ -84,7 +84,7 @@ const route = useRoute();
 const router = useRouter();
 
 const password = ref("");
-const confirm = ref("");
+const confirmPassword = ref("");
 
 onMounted(() => {
     store.token.value = route.query.token || "";
@@ -97,7 +97,7 @@ onUnmounted(() => {
 });
 
 const submitForm = async () => {
-    if (password.value !== confirm.value) {
+    if (password.value !== confirmPassword.value) {
         store.error = "Passwords do not match.";
         return;
     }
@@ -106,7 +106,7 @@ const submitForm = async () => {
         email: store.email.value,
         token: store.token.value,
         password: password.value,
-        password_confirmation: confirm.value,
+        confirmPassword: confirmPassword.value,
     });
 
     if (!store.error) {
