@@ -87,8 +87,8 @@ const password = ref("");
 const confirmPassword = ref("");
 
 onMounted(() => {
-    store.token.value = route.query.token || "";
-    store.email.value = route.query.email || "";
+    store.token = route.query.token || "";
+    store.email = route.query.email || "";
 });
 
 // Clean sensitive info on leave
