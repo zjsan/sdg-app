@@ -45,14 +45,17 @@
                         class="w-full py-2 text-lg font-medium bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition cursor-pointer"
                         :disabled="loading"
                     >
-                        {{ loading ? "Resetting..." : "Reset Password" }}
+                        {{ store.loading ? "Resetting..." : "Reset Password" }}
                     </Button>
 
-                    <p v-if="message" class="text-green-600 text-center mt-2">
-                        {{ message }}
+                    <p
+                        v-if="store.message"
+                        class="text-green-600 text-center mt-2"
+                    >
+                        {{ store.message }}
                     </p>
                     <p v-if="error" class="text-red-600 text-center mt-2">
-                        {{ error }}
+                        {{ store.error }}
                     </p>
                 </form>
             </CardContent>
@@ -63,7 +66,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import api from "@/plugins/axios";
+
 import {
     Card,
     CardContent,
@@ -86,6 +89,11 @@ const confirm = ref("");
 onMounted(() => {
     store.token.value = route.query.token || "";
     store.email.value = route.query.email || "";
+});
+
+// Clean sensitive info on leave
+onUnmounted(() => {
+    store.$reset(); // Resets the store state to its initial values
 });
 
 const submitForm = async () => {
