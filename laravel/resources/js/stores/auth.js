@@ -63,17 +63,19 @@ export const useAuthStore = defineStore("auth", {
          */
         async getUser() {
             try {
-                if (this.token) {
-                    api.defaults.headers.common[
-                        "Authorization"
-                    ] = `Bearer ${this.token}`;
+                if (!this.token) {
+                    console.warn("No token found — skipping getUser()");
+                    return;
                 }
 
+                api.defaults.headers.common[
+                    "Authorization"
+                ] = `Bearer ${this.token}`;
                 const { data } = await api.get("/user");
                 this.user = data;
             } catch (error) {
                 console.error("Failed to fetch user:", error);
-                this.user = null; // not logged in
+                this.user = null;
                 this.token = null;
                 localStorage.removeItem("token");
             }
