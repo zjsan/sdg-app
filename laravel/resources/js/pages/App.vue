@@ -11,7 +11,7 @@ const auth = useAuthStore();
 const route = useRoute();
 
 onMounted(() => {
-    // Try to restore session
+    // Only fetch user if a token exists AND the route requires authentication
     if (auth.token && route.meta.requiresAuth) {
         auth.getUser();
     }
