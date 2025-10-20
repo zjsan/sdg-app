@@ -19,7 +19,8 @@ class UserSeeder extends Seeder
             'name' => 'Test User',
             'username' => 'testuser',   
             'email' => 'test@example.com',
-            'password' => Hash::make('password'), //newpassword123 after testing password reset
-        ]);         
+            'password' => Hash::make('password'), //newpassword123 after testing password reset - backend
+        ]);     
+
     }
 }
