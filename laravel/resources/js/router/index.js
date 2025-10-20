@@ -62,8 +62,9 @@ const router = createRouter({
 router.beforeEach(async (to, from) => {
     const auth = useAuthStore();
 
+    // Only try restoring session if route REQUIRES AUTH
     // If user is unknown, try restoring session
-    if (!auth.user && auth.token) {
+    if (to.meta.requiresAuth && !auth.user && auth.token) {
         try {
             await auth.getUser();
             console.log("User session restored in router");
