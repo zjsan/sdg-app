@@ -21,6 +21,29 @@ export const useAuthStore = defineStore("auth", {
     },
 
     actions: {
+        // Save both token and user in localStorage
+        saveUserToStorage() {
+            localStorage.setItem("user", JSON.stringify(this.user));
+            localStorage.setItem("token", this.token);
+        },
+
+        // Restore session if token exists
+        async restoreSession() {
+            if (!this.token) return;
+
+            try {
+                api.defaults.headers.common[
+                    "Authorization"
+                ] = `Bearer ${this.token}`;
+                const { data } = await api.get("/user");
+                this.user = data;
+                this.saveUserToStorage();
+                console.log("Session restored");
+            } catch (error) {
+                console.warn("Session restore failed:", error);
+                this.logout(); // clear invalid session
+            }
+        },
         /**
          * Login user with credentials.
          * On success, it fetches the user and redirects.
@@ -35,7 +58,9 @@ export const useAuthStore = defineStore("auth", {
 
                 // Step 2: store token
                 this.token = data.token;
-                localStorage.setItem("token", data.token);
+                api.defaults.headers.common[
+                    "Authorization"
+                ] = `Bearer ${this.token}`;
 
                 // Step 3: set token for axios instance
                 api.defaults.headers.common[
