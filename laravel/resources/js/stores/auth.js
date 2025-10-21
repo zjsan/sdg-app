@@ -58,17 +58,15 @@ export const useAuthStore = defineStore("auth", {
 
                 // Step 2: store token
                 this.token = data.token;
-                api.defaults.headers.common[
-                    "Authorization"
-                ] = `Bearer ${this.token}`;
 
                 // Step 3: set token for axios instance
                 api.defaults.headers.common[
                     "Authorization"
-                ] = `Bearer ${data.token}`;
+                ] = `Bearer ${this.token}`;
 
                 // Step 3: Get the user
                 await this.getUser();
+                this.saveUserToStorage(); //perssist user
 
                 //redirect to /dashboard once authenticated
                 //avoids manual refreshes or blank states after login.
@@ -100,9 +98,7 @@ export const useAuthStore = defineStore("auth", {
                 this.user = data;
             } catch (error) {
                 console.error("Failed to fetch user:", error);
-                this.user = null;
-                this.token = null;
-                localStorage.removeItem("token");
+                this.logout(); // clear invalid session
             }
         },
 
@@ -117,6 +113,7 @@ export const useAuthStore = defineStore("auth", {
                 console.error("Logout failed:", error);
             } finally {
                 localStorage.removeItem("token");
+                localStorage.removeItem("user");
                 delete api.defaults.headers.common["Authorization"];
                 this.user = null;
                 this.error = null;
