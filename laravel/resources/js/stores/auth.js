@@ -5,7 +5,7 @@ import router from "@/router";
 
 export const useAuthStore = defineStore("auth", {
     state: () => ({
-        user: null, // stores logged-in user object
+        user: JSON.parse(localStorage.getItem("user")) || null, // stores logged-in user object
         loading: false, // tracks async requests
         token: localStorage.getItem("token") || null, // persist token
         error: null, // for error handling
