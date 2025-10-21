@@ -103,8 +103,8 @@ const submitForm = async () => {
     }
 
     await store.resetPassword({
-        email: store.email.value,
-        token: store.token.value,
+        email: store.email,
+        token: store.token,
         password: password.value,
         confirmPassword: confirmPassword.value,
     });
