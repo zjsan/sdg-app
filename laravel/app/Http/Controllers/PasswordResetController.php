@@ -60,10 +60,14 @@ class PasswordResetController extends Controller
 
         if (! $record) {
             return response()->json(['message' => 'Invalid token or email.'], 400);
+
         }
 
         // Check if the token is expired (valid for 60 minutes)
         if (Carbon::parse($record->created_at)->addMinutes(60)->isPast()) {
+
+            // Delete expired token
+            DB::table('password_reset_tokens')->where('email', $request->email)->delete();
             return response()->json(['message' => 'Token has expired.'], 400);
         }
 
