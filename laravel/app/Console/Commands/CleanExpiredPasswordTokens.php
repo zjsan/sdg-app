@@ -14,7 +14,7 @@ class CleanExpiredPasswordTokens extends Command
      * @var string
      */
     //protected $signature = 'app:clean-expired-password-tokens';
-
+    protected $signature = 'password-tokens:clean-expired';
     /**
      * The console command description.
      *
@@ -29,5 +29,11 @@ class CleanExpiredPasswordTokens extends Command
     public function handle()
     {
         //      
+        $expired = Carbon::now()->subMinutes(60);
+        $deleted = DB::table('password_reset_tokens')
+            ->where('created_at', '<', $expired)
+            ->delete();
+
+        $this->info("Deleted {$deleted} expired password reset tokens.");
     }
 }
