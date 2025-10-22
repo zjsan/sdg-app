@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class CleanExpiredPasswordTokens extends Command
 {
@@ -11,20 +13,21 @@ class CleanExpiredPasswordTokens extends Command
      *
      * @var string
      */
-    protected $signature = 'app:clean-expired-password-tokens';
+    //protected $signature = 'app:clean-expired-password-tokens';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    //protected $description = 'Command description';
+    protected $description = 'Delete expired password reset tokens from the database';
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        //
+        //      
     }
 }
