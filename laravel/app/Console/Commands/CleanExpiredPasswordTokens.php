@@ -31,7 +31,7 @@ class CleanExpiredPasswordTokens extends Command
         //      
         $expired = Carbon::now()->subMinutes(60);
         $deleted = DB::table('password_reset_tokens')
-            ->where('created_at', '<', $expired)
+            ->where('created_at', '<', $expired)    
             ->delete();
 
         $this->info("Deleted {$deleted} expired password reset tokens.");
