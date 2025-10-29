@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PowerBiController;
 use App\Http\Controllers\PasswordResetController;
-use App\Http\Controllers\GoogleAuthController;
+
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -14,12 +14,6 @@ Route::get('/user', function (Request $request) {
 //auth routes
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');  
-
-
-
-Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirectToGoogle']);
-Route::get('/auth/google/callback', [GoogleAuthController::class, 'handleGoogleCallback']);
-
 
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink']);
 Route::post('/reset-password', [PasswordResetController::class, 'resetPassword']);
