@@ -27,6 +27,7 @@ class GoogleAuthController extends Controller
               // Extract the email
             $email = $googleUser->getEmail();
 
+            //check the whitelist table
             $isAllowed = DB::table('allowed_emails')
                 ->where('email', $email)
                 ->where('is_active', true)
@@ -38,15 +39,14 @@ class GoogleAuthController extends Controller
                 ], 403);
             }
 
-             $user = User::updateOrCreate(
-                ['email' => $email],
-                [
-                    'name' => $googleUser->getName(),
-                    'google_id' => $googleUser->getId(),
-                    'email_verified_at' => now(),
-                    'remember_token' => Str::random(10),
-                ]
-            );
+            //retrieve the user from Users table 
+            $user = User::where('email', $email)->first();
+
+            if(!$user){
+                return response()->json([
+                    'message' => 'User not found in the system.'
+                ], 404);
+            }
 
             // Generate Sanctum token
             $token = $user->createToken('auth_token')->plainTextToken;
