@@ -15,12 +15,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         //
-        User::create([
-            'name' => 'Test User',
-            'username' => 'testuser',   
-            'email' => 'test@example.com',
-            'password' => Hash::make('password'), //newpassword123 after testing password reset - backend
-        ]);     
-
+        // No users are manually created anymore.
+        // All users will log in through Google if their email is whitelisted
     }
 }
