@@ -13,11 +13,11 @@ class AllowedEmailsSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        //email list to be whitelisted
         DB::table('whitelisted_emails')->insert([
-            ['email' => 'test.user@gmail.com', 'is_active' => true],
-            ['email' => 'admin.company@gmail.com', 'is_active' => true],
-            ['email' => 'inactive.user@gmail.com', 'is_active' => false],
+            ['email' => 'zjsantos25@gmail.com', 'is_active' => true],
+            ['email' => 'zdsantos@mmsu.edu.ph', 'is_active' => true],
+            ['email' => 'ninanisperos519@gmail.com', 'is_active' => false],
         ]);
     }
 }
