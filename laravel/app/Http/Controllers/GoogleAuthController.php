@@ -48,7 +48,7 @@ class GoogleAuthController extends Controller
                 ], 404);
             }
 
-            // Generate Sanctum token
+            // Generate Sanctum token for authorized user
             $token = $user->createToken('auth_token')->plainTextToken;
 
             return response()->json([
