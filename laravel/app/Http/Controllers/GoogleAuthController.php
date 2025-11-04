@@ -39,14 +39,14 @@ class GoogleAuthController extends Controller
                 ], 403);
             }
 
-            //retrieve the user from Users table 
-            $user = User::where('email', $email)->first();
-
-            if(!$user){
-                return response()->json([
-                    'message' => 'User not found in the system.'
-                ], 404);
-            }
+            $user = User::firstOrCreate(
+                ['email' => $email],
+                [
+                    'name' => $googleUser->getName(),
+                    'google_id' => $googleUser->getId(),
+                    'email_verified_at' => now(),
+                ]
+            );
 
             // Update Google ID if not yet stored
             if (empty($user->google_id)) {
