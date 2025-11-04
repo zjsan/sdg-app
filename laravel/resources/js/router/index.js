@@ -6,6 +6,7 @@ import NotFoundView from "../pages/NotFoundView.vue";
 import { useAuthStore } from "@/stores/auth";
 import ForgotPassword from "@/pages/ForgotPassword.vue";
 import ResetPassword from "@/pages/ResetPassword.vue";
+import GoogleCallback from "@/pages/GoogleCallback.vue";
 
 /** @type {import('vue-router').RouteRecordRaw[]} */
 const routes = [
@@ -42,6 +43,13 @@ const routes = [
         name: "ResetPassword",
         component: ResetPassword,
         meta: { guestOnly: true },
+    },
+
+    {
+        path: "/auth/callback",
+        name: "GoogleCallback",
+        component: GoogleCallback,
+        meta: { public: true }, // no auth required here
     },
 
     // Catch-all for 404 - MUST be the last route in the array.
