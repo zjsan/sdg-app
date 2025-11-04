@@ -17,7 +17,7 @@ class AllowedEmailsSeeder extends Seeder
         DB::table('whitelisted_emails')->insert([
             ['email' => 'zjsantos25@gmail.com', 'is_active' => true],
             ['email' => 'zdsantos@mmsu.edu.ph', 'is_active' => true],
-            ['email' => 'ninanisperos519@gmail.com', 'is_active' => false],
+            ['email' => 'ninanisperos519@gmail.com', 'is_active' => true],
         ]);
     }
 }
