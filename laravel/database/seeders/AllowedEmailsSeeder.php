@@ -21,7 +21,7 @@ class AllowedEmailsSeeder extends Seeder
         ];
 
         foreach ($emails as $email) {
-            DB::table('whitelisted_emails')->updateOrInsert(
+            DB::table('allowed_emails')->updateOrInsert(
                 ['email' => $email['email']], // where condition
                 [
                     'is_active' => $email['is_active'],
