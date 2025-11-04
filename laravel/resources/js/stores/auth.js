@@ -132,13 +132,30 @@ export const useAuthStore = defineStore("auth", {
 
                 // Redirect the user to your backend route
                 // Use the VITE_ prefix if you updated the .env file
-                const baseURL =
-                    import.meta.env.VITE_API_URL || "http://localhost:8080";
+                const baseURL = import.meta.env.VITE_API_URL;
                 window.location.href = `${baseURL}/auth/google/redirect`;
             } catch (error) {
                 this.error = "Google login failed to start.";
             } finally {
                 this.loading = false;
+            }
+        },
+
+        handleGoogleCallback(token, user) {
+            try {
+                this.token = token;
+                this.user = user;
+
+                // Set token in axios for future requests
+                api.defaults.headers.common[
+                    "Authorization"
+                ] = `Bearer ${this.token}`;
+
+                this.saveUserToStorage();
+                router.push({ name: "Dashboard" });
+            } catch (error) {
+                this.error = "Failed to process Google login callback.";
+                console.error(error);
             }
         },
     },
