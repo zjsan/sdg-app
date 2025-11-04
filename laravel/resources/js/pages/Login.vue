@@ -24,61 +24,20 @@
                 </CardHeader>
 
                 <CardContent>
-                    <form class="space-y-6" @submit.prevent="handleLogin">
-                        <div class="space-y-2 text-left">
-                            <Label for="username" class="text-gray-400"
-                                >Email or Username</Label
-                            >
-                            <Input
-                                id="login"
-                                v-model="form.login"
-                                name="login"
-                                type="text"
-                                placeholder="Enter your username or email"
-                                required
-                                class="border-blue-300 focus:border-blue-900 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                            />
-                        </div>
+                    <Button
+                        @click="loginWithGoogle"
+                        class="w-full py-2 text-lg font-medium bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition cursor-pointer"
+                    >
+                        <span>Sign in with Google</span>
+                    </Button>
 
-                        <div class="space-y-2 text-left">
-                            <div class="flex items-center justify-between">
-                                <Label for="password" class="text-gray-400"
-                                    >Password</Label
-                                >
-                                <RouterLink
-                                    to="/forgot-password"
-                                    class="text-sm text-blue-600 dark:text-blue-400 hover:underline"
-                                    >Forgot password?</RouterLink
-                                >
-                            </div>
-                            <Input
-                                id="password"
-                                v-model="form.password"
-                                name="password"
-                                type="password"
-                                placeholder="••••••••"
-                                required
-                                class="border-blue-300 focus:border-blue-900 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                            />
-                        </div>
-
-                        <!-- Display error message if login fails -->
-                        <p
-                            v-if="auth.error"
-                            class="text-red-500 text-sm text-center"
-                        >
-                            {{ auth.error }}
-                        </p>
-
-                        <Button
-                            type="submit"
-                            class="w-full py-2 text-lg font-medium bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition cursor-pointer"
-                        >
-                            <!-- Show loading state if login is in progress -->
-                            <span v-if="auth.loading">Logging in...</span>
-                            <span v-else>Login</span>
-                        </Button>
-                    </form>
+                    <!-- Optional error display -->
+                    <p
+                        v-if="auth.error"
+                        class="text-red-500 text-sm text-center"
+                    >
+                        {{ auth.error }}
+                    </p>
                 </CardContent>
 
                 <CardFooter class="text-center pt-2">
