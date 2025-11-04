@@ -124,5 +124,22 @@ export const useAuthStore = defineStore("auth", {
                 }
             }
         },
+
+        async loginWithGoogle() {
+            try {
+                this.loading = true;
+                this.error = null;
+
+                // Redirect the user to your backend route
+                // Use the VITE_ prefix if you updated the .env file
+                const baseURL =
+                    import.meta.env.VITE_API_URL || "http://localhost:8080";
+                window.location.href = `${baseURL}/auth/google/redirect`;
+            } catch (error) {
+                this.error = "Google login failed to start.";
+            } finally {
+                this.loading = false;
+            }
+        },
     },
 });

@@ -68,8 +68,6 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
 const auth = useAuthStore();
@@ -81,12 +79,8 @@ const form = reactive({
     password: "",
 });
 
-// Handle login submission
-const handleLogin = async () => {
-    await auth.login(form);
-
-    if (auth.isAuthenticated) {
-        router.push({ name: "Dashboard" });
-    }
+const loginWithGoogle = () => {
+    // Redirect user to Laravel backend’s Google redirect route
+    window.location.href = "http://localhost:8080/auth/google/redirect";
 };
 </script>

@@ -10,5 +10,9 @@
         "allowJs": true,
         "checkJs": true
     },
-    "include": ["resources/js/**/*"]
+    "include": [
+        "resources/js/**/*.ts",
+        "resources/js/**/*.vue",
+        "resources/js/vite-env.d.ts"
+    ]
 }
