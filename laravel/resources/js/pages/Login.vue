@@ -73,14 +73,8 @@ import { Button } from "@/components/ui/button";
 const auth = useAuthStore();
 const router = useRouter();
 
-// Form state
-const form = reactive({
-    login: "",
-    password: "",
-});
-
 const loginWithGoogle = () => {
     // Redirect user to Laravel backend’s Google redirect route
-    window.location.href = "http://localhost:8080/auth/google/redirect";
+    auth.loginWithGoogle();
 };
 </script>

@@ -130,8 +130,7 @@ export const useAuthStore = defineStore("auth", {
                 this.loading = true;
                 this.error = null;
 
-                // Redirect the user to your backend route
-                // Use the VITE_ prefix if you updated the .env file
+                // Redirect the user to backend route
                 const baseURL = import.meta.env.VITE_API_URL;
                 window.location.href = `${baseURL}/auth/google/redirect`;
             } catch (error) {
