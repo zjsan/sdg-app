@@ -17,7 +17,11 @@ class GoogleAuthController extends Controller
      */
     public function redirectToGoogle()
     {
-        return Socialite::driver('google')->stateless()->redirect();
+        return Socialite::driver('google')
+        ->stateless()
+        // CRITICAL: Add the 'prompt' parameter to force Google to show the login/consent screen
+        ->with(['prompt' => 'select_account']) // or 'consent'
+        ->redirect();
     }
 
     public function handleGoogleCallback()
