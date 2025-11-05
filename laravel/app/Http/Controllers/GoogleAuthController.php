@@ -68,7 +68,7 @@ class GoogleAuthController extends Controller
             ], now()->addMinutes(2));
 
             // Redirect to frontend with session_id
-            return redirect()->away(env('FRONTEND_URL') . "/auth/callback?session_id={$sessionId}");
+            return redirect()->to(env('FRONTEND_URL') . "/auth/callback?session_id={$sessionId}");
        } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Google authentication failed.',
