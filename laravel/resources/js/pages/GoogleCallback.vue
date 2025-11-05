@@ -1,37 +1,49 @@
 <template>
-    <div class="flex items-center justify-center min-h-screen bg-gray-50">
-        <p class="text-gray-600 text-lg">Signing you in with Google...</p>
+    <div
+        class="flex flex-col items-center justify-center min-h-screen text-gray-700"
+    >
+        <p v-if="loading">Signing you in securely with Google...</p>
+        <p v-else-if="error" class="text-red-500">{{ error }}</p>
     </div>
 </template>
 
 <script setup>
-import { onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
+import axios from "axios";
 
 const route = useRoute();
 const router = useRouter();
 const auth = useAuthStore();
+const loading = ref(true);
+const error = ref(null);
 
 onMounted(async () => {
+    const sessionId = route.query.session_id;
+
+    if (!sessionId) {
+        error.value = "Missing session ID.";
+        loading.value = false;
+        return;
+    }
+
     try {
-        const token = route.query.token;
-        const userJson = route.query.user;
+        const { data } = await axios.get(
+            `${import.meta.env.VITE_API_URL}/auth/session/${sessionId}`
+        );
 
-        if (!token || !userJson) {
-            throw new Error("Missing authentication data");
-        }
-
-        const user = JSON.parse(decodeURIComponent(userJson));
-
-        auth.token = token;
-        auth.user = user;
+        auth.token = data.token;
+        auth.user = data.user;
         auth.saveUserToStorage();
+        await auth.getUser();
 
         router.push({ name: "Dashboard" });
-    } catch (error) {
-        console.error("Google login failed:", error);
-        router.push({ name: "Login", query: { error: "google_auth_failed" } });
+    } catch (err) {
+        error.value =
+            err.response?.data?.error || "Session expired or invalid.";
+    } finally {
+        loading.value = false;
     }
 });
 </script>
