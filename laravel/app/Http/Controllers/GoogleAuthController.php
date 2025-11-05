@@ -69,17 +69,25 @@ class GoogleAuthController extends Controller
 
             // Redirect to frontend with session_id
             return redirect()->to(env('FRONTEND_URL') . "/auth/callback?session_id={$sessionId}");
-       } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Google authentication failed.',
-                'error' => $e->getMessage(),
-            ], 500);
+       } catch (\Throwable $e) {
+
+        // Log actual error not shown to frontend
+        \Log::error('Google authentication failed', [
+            'error' => $e->getMessage(),
+            'trace' => $e->getTraceAsString(),
+        ]);
+
+        // Return safe, generic response to frontend
+        return response()->json([
+            'message' => 'Google authentication failed. Please try again later.'
+        ], 500);
         }
     }
 
     // New endpoint for frontend to fetch token securely
     public function fetchSessionData($sessionId)
     {
+        try {
         $data = Cache::pull("google_session:{$sessionId}");
 
         if (! $data) {
@@ -91,6 +99,10 @@ class GoogleAuthController extends Controller
             'token' => $data['token'],
             'user' => $data['user'],
         ]);
+    } catch (\Throwable $e) {
+        \Log::error('Session fetch failed', ['error' => $e->getMessage()]);
+        return response()->json(['error' => 'Unexpected server error.'], 500);
+    }
     }
 
 }
