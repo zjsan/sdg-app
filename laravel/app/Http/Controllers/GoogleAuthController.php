@@ -67,12 +67,30 @@ class GoogleAuthController extends Controller
                 'user' => $user,
             ], now()->addMinutes(2));
 
+            // Redirect to frontend with session_id
+            return redirect()->away(env('FRONTEND_URL') . "/auth/callback?session_id={$sessionId}");
        } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Google authentication failed.',
                 'error' => $e->getMessage(),
             ], 500);
         }
+    }
+
+    // New endpoint for frontend to fetch token securely
+    public function fetchSessionData($sessionId)
+    {
+        $data = Cache::pull("google_session:{$sessionId}");
+
+        if (! $data) {
+            return response()->json(['error' => 'Invalid or expired session.'], 404);
+        }
+
+        return response()->json([
+            'message' => 'Login successful.',
+            'token' => $data['token'],
+            'user' => $data['user'],
+        ]);
     }
 
 }
