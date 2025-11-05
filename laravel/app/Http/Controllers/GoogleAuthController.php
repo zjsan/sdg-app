@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str; 
+use Illuminate\Support\Facades\Cache;
 
 class GoogleAuthController extends Controller
 {
@@ -57,12 +58,14 @@ class GoogleAuthController extends Controller
             // Generate Sanctum token for authorized user
             $token = $user->createToken('auth_token')->plainTextToken;
 
-            //Return token + user as JSON (secure, no redirect)
-            return response()->json([
-                'message' => 'Login successful.',
+            // Generate a temporary session ID
+            $sessionId = Str::uuid()->toString();
+
+            // Store user/token pair in cache for 2 minutes
+            Cache::put("google_session:{$sessionId}", [
                 'token' => $token,
                 'user' => $user,
-            ]);
+            ], now()->addMinutes(2));
 
        } catch (\Exception $e) {
             return response()->json([
