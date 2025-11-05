@@ -1,49 +1,56 @@
 <template>
-    <div
-        class="flex flex-col items-center justify-center min-h-screen text-gray-700"
-    >
-        <p v-if="loading">Signing you in securely with Google...</p>
-        <p v-else-if="error" class="text-red-500">{{ error }}</p>
+    <div class="min-h-screen flex items-center justify-center bg-gray-50">
+        <div class="text-center space-y-4">
+            <h2 class="text-xl font-semibold text-gray-700">
+                Signing you in with Google...
+            </h2>
+            <p class="text-gray-500">
+                Please wait while we complete your authentication.
+            </p>
+
+            <!-- Error message display -->
+            <p v-if="auth.error" class="text-red-500 font-medium">
+                {{ auth.error }}
+            </p>
+        </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
-import axios from "axios";
+import api from "@/plugins/axios";
 
+const auth = useAuthStore();
 const route = useRoute();
 const router = useRouter();
-const auth = useAuthStore();
-const loading = ref(true);
-const error = ref(null);
 
 onMounted(async () => {
-    const sessionId = route.query.session_id;
-
-    if (!sessionId) {
-        error.value = "Missing session ID.";
-        loading.value = false;
-        return;
-    }
-
     try {
-        const { data } = await axios.get(
-            `${import.meta.env.VITE_API_URL}/auth/session/${sessionId}`
-        );
+        // Get the temporary "session_id" or "code" from the URL
+        const sessionId = route.query.session_id;
 
-        auth.token = data.token;
-        auth.user = data.user;
-        auth.saveUserToStorage();
-        await auth.getUser();
+        if (!sessionId) {
+            auth.error =
+                "Missing session identifier. Please try logging in again.";
+            return;
+        }
 
-        router.push({ name: "Dashboard" });
-    } catch (err) {
-        error.value =
-            err.response?.data?.error || "Session expired or invalid.";
-    } finally {
-        loading.value = false;
+        // Fetch token + user from backend
+        const { data } = await api.get(`/auth/session/${sessionId}`);
+
+        if (data?.token && data?.user) {
+            // Pass data to the Pinia store handler
+            auth.handleGoogleCallback(data.token, data.user);
+        } else {
+            auth.error = "Invalid response from authentication server.";
+        }
+    } catch (error) {
+        console.error("Google callback error:", error);
+        auth.error =
+            error.response?.data?.message ||
+            "Failed to complete Google authentication.";
     }
 });
 </script>
