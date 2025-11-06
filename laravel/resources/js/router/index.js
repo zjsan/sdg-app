@@ -17,7 +17,7 @@ const routes = [
         redirect: "/login",
     },
     {
-        // Use path: "/login" without a trailing slash and with 'exact' behavior.
+        // "/login" without a trailing slash and with 'exact' behavior.
         path: "/login",
         name: "Login",
         component: Login,
@@ -25,7 +25,6 @@ const routes = [
     },
 
     {
-        // Use path: "/login" without a trailing slash and with 'exact' behavior.
         path: "/dashboard",
         name: "Dashboard",
         component: Dashboard,
