@@ -89,10 +89,8 @@ class GoogleAuthController extends Controller
             'trace' => $e->getTraceAsString(),
         ]);
 
-        // Return safe, generic response to frontend
-        return response()->json([
-            'message' => 'Google authentication failed. Please try again later.'
-        ], 500);
+        // Return dedicated error response to frontend
+        return redirect()->away(env('FRONTEND_URL') . '/auth-error');
         }
     }
 
