@@ -11,7 +11,7 @@
 
             <button
                 @click="onActionClick"
-                class="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                class="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition cursor-pointer"
             >
                 {{ actionText }}
             </button>
