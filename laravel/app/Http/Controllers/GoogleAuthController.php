@@ -41,9 +41,8 @@ class GoogleAuthController extends Controller
                 ->exists();
 
                 if (! $isAllowed) {
-                    return response()->json([
-                        'message' => 'Access denied. Your account is not authorized to use this system.'
-                    ], 403);
+                    // Redirect the user to a frontend route
+                    return redirect()->away(env('FRONTEND_URL') . '/unauthorized');
                 }
             } catch (\Throwable $e) {
                 Log::error('Database error during whitelist check', ['error' => $e->getMessage()]);
