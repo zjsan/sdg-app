@@ -4,7 +4,6 @@
         message="Your account is not authorized to use this system. Please contact the administrator if you believe this is a mistake."
         action-text="Back to Login"
         action-route="Login"
-        title-class="text-yellow-600"
     />
 </template>
 
