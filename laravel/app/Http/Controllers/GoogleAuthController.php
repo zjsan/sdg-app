@@ -111,7 +111,8 @@ class GoogleAuthController extends Controller
         ]);
     } catch (\Throwable $e) {
         Log::error('Session fetch failed', ['error' => $e->getMessage()]);
-        return response()->json(['error' => 'Unexpected server error.'], 500);
+        return redirect()->away(env('FRONTEND_URL') . '/auth-error');
+
     }
     }
 
