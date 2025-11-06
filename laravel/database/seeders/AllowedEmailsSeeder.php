@@ -18,6 +18,7 @@ class AllowedEmailsSeeder extends Seeder
             ['email' => 'zjsantos25@gmail.com', 'is_active' => true],
             ['email' => 'zdsantos@mmsu.edu.ph', 'is_active' => true],
             ['email' => 'ninanisperos519@gmail.com', 'is_active' => true],
+            ['email' => 'sfnisperos@mmsu.edu.ph', 'is_active' => true],
         ];
 
         foreach ($emails as $email) {
