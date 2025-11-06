@@ -34,16 +34,24 @@ class GoogleAuthController extends Controller
             $email = $googleUser->getEmail();
 
             //check the whitelist table
-            $isAllowed = DB::table('allowed_emails')
+            try{
+                 $isAllowed = DB::table('allowed_emails')
                 ->where('email', $email)
                 ->where('is_active', true)
                 ->exists();
 
-            if (! $isAllowed) {
+                if (! $isAllowed) {
+                    return response()->json([
+                        'message' => 'Access denied. Your account is not authorized to use this system.'
+                    ], 403);
+                }
+            } catch (\Throwable $e) {
+                Log::error('Database error during whitelist check', ['error' => $e->getMessage()]);
                 return response()->json([
-                    'message' => 'Access denied. Your account is not authorized to use this system.'
-                ], 403);
+                    'message' => 'Something went wrong verifying your access.'
+                ], 500);
             }
+          
 
             $user = User::firstOrCreate(
                 ['email' => $email],
