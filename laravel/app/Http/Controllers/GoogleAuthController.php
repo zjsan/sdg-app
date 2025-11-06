@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str; 
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class GoogleAuthController extends Controller
 {
@@ -76,7 +77,7 @@ class GoogleAuthController extends Controller
        } catch (\Throwable $e) {
 
         // Log actual error not shown to frontend
-        \Log::error('Google authentication failed', [
+        Log::error('Google authentication failed', [
             'error' => $e->getMessage(),
             'trace' => $e->getTraceAsString(),
         ]);
@@ -104,7 +105,7 @@ class GoogleAuthController extends Controller
             'user' => $data['user'],
         ]);
     } catch (\Throwable $e) {
-        \Log::error('Session fetch failed', ['error' => $e->getMessage()]);
+        Log::error('Session fetch failed', ['error' => $e->getMessage()]);
         return response()->json(['error' => 'Unexpected server error.'], 500);
     }
     }
