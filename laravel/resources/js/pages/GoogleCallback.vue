@@ -59,6 +59,11 @@ onMounted(async () => {
             return;
         }
 
+        // Server-side error (e.g., unexpected backend issue)
+        if (status === 500) {
+            router.push({ name: "AuthError" });
+            return;
+        }
         // Otherwise, generic failure
         auth.error = message || "Failed to complete Google authentication.";
     }
