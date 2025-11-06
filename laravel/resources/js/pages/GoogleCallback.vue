@@ -27,16 +27,15 @@ const route = useRoute();
 const router = useRouter();
 
 onMounted(async () => {
+    // Get the temporary "session_id" or "code" from the URL
+    const sessionId = route.query.session_id;
+
+    if (!sessionId) {
+        auth.error = "Missing session identifier. Please try logging in again.";
+        return;
+    }
+
     try {
-        // Get the temporary "session_id" or "code" from the URL
-        const sessionId = route.query.session_id;
-
-        if (!sessionId) {
-            auth.error =
-                "Missing session identifier. Please try logging in again.";
-            return;
-        }
-
         // Fetch token + user from backend
         const { data } = await api.get(`/auth/session/${sessionId}`);
 
@@ -48,9 +47,20 @@ onMounted(async () => {
         }
     } catch (error) {
         console.error("Google callback error:", error);
-        auth.error =
-            error.response?.data?.message ||
-            "Failed to complete Google authentication.";
+
+        //get header responsestatus and message
+        const status = error.response?.status;
+        const message = error.response?.data?.message;
+
+        // If backend says 403 = Not Whitelisted
+        // redirect to not authorized page
+        if (status === 403) {
+            router.push({ name: "NotAuthorized" });
+            return;
+        }
+
+        // Otherwise, generic failure
+        auth.error = message || "Failed to complete Google authentication.";
     }
 });
 </script>

@@ -6,7 +6,7 @@
             <h1 class="text-3xl font-bold text-red-600 mb-4">Access Denied</h1>
             <p class="text-gray-700 mb-6">
                 Your Google account is not authorized to access this
-                application.
+                application!
             </p>
             <button
                 @click="goToLogin"
