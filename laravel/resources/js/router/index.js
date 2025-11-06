@@ -4,10 +4,11 @@ import Login from "../pages/Login.vue";
 import Dashboard from "../pages/Dashboard.vue";
 import NotFoundView from "../pages/NotFoundView.vue";
 import { useAuthStore } from "@/stores/auth";
-import ForgotPassword from "@/pages/ForgotPassword.vue";
-import ResetPassword from "@/pages/ResetPassword.vue";
-import GoogleCallback from "@/pages/GoogleCallback.vue";
-import Unauthorized from "@/pages/NotAuthorized.vue";
+import ForgotPassword from "../pages/ForgotPassword.vue";
+import ResetPassword from "../pages/ResetPassword.vue";
+import GoogleCallback from "../pages/GoogleCallback.vue";
+import Unauthorized from "../pages/NotAuthorized.vue";
+import AuthError from "../pages/AuthError.vue";
 
 /** @type {import('vue-router').RouteRecordRaw[]} */
 const routes = [
@@ -52,10 +53,18 @@ const routes = [
         meta: { public: true }, // no auth required here
     },
 
+    //frontend view for google authentication errors
     {
         path: "/unauthorized",
         name: "NotAuthorized",
         component: Unauthorized,
+        meta: { public: true },
+    },
+
+    {
+        path: "/auth-error",
+        name: "AuthError",
+        component: AuthError,
         meta: { public: true },
     },
 
