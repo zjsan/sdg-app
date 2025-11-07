@@ -124,7 +124,7 @@
 
         <!-- 3. RIGHT CONTENT AREA (Main view, takes up remaining space) -->
         <main class="flex-grow w-full flex flex-col">
-            <div class="flex-grow p-4 flex flex-col">
+            <div class="flex-grow p-3 flex flex-col">
                 <div
                     v-if="!powerBiEmbedUrl"
                     class="flex items-center justify-center flex-grow text-gray-500"
