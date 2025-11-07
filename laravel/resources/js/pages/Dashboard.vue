@@ -123,33 +123,22 @@
         ></div>
 
         <!-- 3. RIGHT CONTENT AREA (Main view, takes up remaining space) -->
-        <main class="flex-grow w-full overflow-y-auto">
-            <!-- Desktop Page Header (Only visible on large screens) -->
-
-            <!-- Iframe Content Area -->
-            <div
-                class="p-4"
-                :class="{
-                    // Dynamic height calculation is essential for responsive full-screen iframe
-                    // Desktop: 100vh - 4rem (h-16 header)
-                    'h-[calc(100vh-4rem)]': !isMobile,
-                    // Mobile: 100vh - 3.5rem (h-14 header)
-                    'h-[calc(100vh-3.5rem)]': isMobile,
-                }"
-            >
+        <main class="flex-grow w-full flex flex-col">
+            <div class="flex-grow p-4 flex flex-col">
                 <div
                     v-if="!powerBiEmbedUrl"
-                    class="flex items-center justify-center h-full text-gray-500"
+                    class="flex items-center justify-center flex-grow text-gray-500"
                 >
                     <i class="pi pi-spin pi-spinner text-3xl mr-2"></i> Loading
                     Dashboard securely...
                 </div>
+
                 <iframe
                     v-else
                     :src="powerBiEmbedUrl"
                     frameborder="0"
-                    allowFullScreen="true"
-                    class="w-full h-full border-2 border-gray-300 rounded-lg shadow-lg"
+                    allowfullscreen="true"
+                    class="flex-grow w-full border-2 border-gray-300 rounded-lg shadow-lg"
                     title="Embedded Power BI Report"
                 ></iframe>
             </div>
