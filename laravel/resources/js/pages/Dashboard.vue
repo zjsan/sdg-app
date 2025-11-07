@@ -127,7 +127,7 @@ const powerBiEmbedUrl = ref("");
 // Fetch Power BI embed URL on component mount
 onMounted(async () => {
     try {
-        const { data } = await api.get("/powerbi-url", {
+        const { data } = await api.get("/pbi-url", {
             headers: { Authorization: `Bearer ${auth.token}` },
         });
         powerBiEmbedUrl.value = data.url;

@@ -21,5 +21,5 @@ Route::post('/reset-password', [PasswordResetController::class, 'resetPassword']
 Route::get('/auth/session/{sessionId}', [GoogleAuthController::class, 'fetchSessionData']);
 
 // Protected route to get Power BI embed URL
-Route::middleware('auth:sanctum')->get('/powerbi-url', [PowerBiController::class, 'getEmbedUrl']);
+Route::middleware('auth:sanctum')->get('/pbi-url', [PowerBiController::class, 'getEmbedUrl']);
 
