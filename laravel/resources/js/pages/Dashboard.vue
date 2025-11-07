@@ -83,15 +83,6 @@
         </aside>
 
         <main class="flex-grow overflow-y-auto p-0">
-            <!--
-             <header
-                class="h-16 border-b border-gray-200 bg-white p-4 flex items-center"
-            >
-                <h1 class="text-lg font-medium text-gray-900">
-                    Power BI Dashboard
-                </h1>
-            </header>
-            -->
             <div class="p-2 h-full">
                 <iframe
                     :src="powerBiEmbedUrl"
