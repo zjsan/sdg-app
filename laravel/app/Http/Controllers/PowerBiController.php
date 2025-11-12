@@ -32,7 +32,7 @@ class PowerBiController extends Controller
             //Else return the Power BI embed URL for external users
             if(Str::endsWith($user->email, $domain_whitelist)){
                 //  Only authenticated users reach this point due to Sanctum middleware
-                $powerBiUrl = "https://app.powerbi.com/view?r=eyJrIjoiZDI4ZjAyOTYtMWY5ZS00YjQ4LTg2NDQtZGI2YzUwNDllN2I2IiwidCI6IjdjZmY5YzA2LThmNGQtNDAwNi1iOWQwLWU4MWRjYWJjZDU1NyIsImMiOjEwfQ%3D%3D";
+                $powerBiUrl = "https://app.powerbi.com/view?r=eyJrIjoiNjk2ZjVlYWMtNTIwOC00NmE5LTgwZTItYzM4MjY2Y2I0MTA2IiwidCI6IjdjZmY5YzA2LThmNGQtNDAwNi1iOWQwLWU4MWRjYWJjZDU1NyIsImMiOjEwfQ%3D%3D";
 
                 return response()->json([
                     'url' => $powerBiUrl,
@@ -40,7 +40,7 @@ class PowerBiController extends Controller
                 ]);
             }
             else{
-                 $powerBiUrl = "https://app.powerbi.com/view?r=eyJrIjoiZmU4ZDAwODMtZmZlYy00NjVhLWJiYjktZGJmZmJiMWViNWM0IiwidCI6IjdjZmY5YzA2LThmNGQtNDAwNi1iOWQwLWU4MWRjYWJjZDU1NyIsImMiOjEwfQ%3D%3D";
+                 $powerBiUrl = "https://app.powerbi.com/view?r=eyJrIjoiMDIzODE1NjgtOTE2MC00YzQ3LTg2Y2QtNmE2MDhkOTEwMWIwIiwidCI6IjdjZmY5YzA2LThmNGQtNDAwNi1iOWQwLWU4MWRjYWJjZDU1NyIsImMiOjEwfQ%3D%3D";
                 return response()->json([   
                     'url' => $powerBiUrl, 
                     'message' => 'External user access granted.'
