@@ -39,6 +39,14 @@
                     >
                         {{ auth.error }}
                     </p>
+
+                    <p
+                        v-if="sessionExpired"
+                        class="text-yellow-600 font-medium mb-4"
+                    >
+                        Session expired or unauthorized access. Please log in
+                        again.
+                    </p>
                 </CardContent>
 
                 <CardFooter class="text-center pt-2">
@@ -70,6 +78,10 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+const sessionExpired = route.query.sessionExpired === "true";
 
 const auth = useAuthStore();
 const router = useRouter();
