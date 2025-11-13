@@ -28,6 +28,7 @@
                         @click="loginWithGoogle"
                         class="w-full py-2 text-lg font-medium bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition cursor-pointer"
                     >
+                        <i class="pi pi-google"></i>
                         <span>Sign in with Google</span>
                     </Button>
 
