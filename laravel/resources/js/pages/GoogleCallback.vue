@@ -30,6 +30,12 @@ onMounted(async () => {
     // Get the temporary "session_id" or "code" from the URL
     const sessionId = route.query.session_id;
 
+    //if authenticated, redirect to dashboard
+    if (auth.isAuthenticated) {
+        router.replace({ name: "Dashboard" });
+        return;
+    }
+
     if (!sessionId) {
         auth.error = "Missing session identifier. Please try logging in again.";
         return;
