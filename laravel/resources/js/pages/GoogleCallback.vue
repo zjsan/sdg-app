@@ -30,7 +30,14 @@ onMounted(async () => {
     // Get the temporary "session_id" or "code" from the URL
     const sessionId = route.query.session_id;
 
-    //if authenticated, redirect to dashboard
+    // 2. IMMEDIATE HISTORY CLEANUP: Clean the history ONLY if a session ID was present
+    if (sessionId) {
+        // This replaces the URL in the browser history, removing the session_id
+        // The component keeps executing this thread with the *captured* sessionId value.
+        router.replace({ path: route.path });
+    }
+
+    // 3. SAFETY CHECK: If the user is authenticated (e.g., iframe fallback), exit safely.
     if (auth.isAuthenticated) {
         router.replace({ name: "Dashboard" });
         return;
