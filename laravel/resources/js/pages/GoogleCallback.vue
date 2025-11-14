@@ -59,7 +59,7 @@ onMounted(async () => {
             return;
         }
 
-        // Server-side error (e.g., unexpected backend issue)
+        // Server-side error (unexpected backend issue)
         if (status === 500) {
             router.push({ name: "AuthError" });
             return;
