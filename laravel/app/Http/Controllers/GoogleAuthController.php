@@ -67,8 +67,14 @@ class GoogleAuthController extends Controller
                 $user->save();
             }
 
-            // Generate Sanctum token for authorized user
-            $token = $user->createToken('auth_token')->plainTextToken;
+            // Generate Sanctum token with expiry
+            $tokenResult = $user->createToken('auth_token');
+            $token = $tokenResult->plainTextToken;
+
+            // Set token expiration (e.g., 2 hours)
+            $tokenResult->accessToken->expires_at = now()->addHours(2);
+            $tokenResult->accessToken->save();
+
 
             // Generate a temporary session ID
             $sessionId = Str::uuid()->toString();
