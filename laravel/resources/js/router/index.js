@@ -99,6 +99,12 @@ router.beforeEach(async (to, from) => {
         }
     }
 
+    // Intercept the faulty callback navigation if the user is already authenticated
+    if (to.path.startsWith("/auth/callback") && auth.isAuthenticated) {
+        // Redirect them safely to the dashboard, avoiding the broken logic.
+        return { name: "Dashboard", replace: true };
+    }
+
     // Protected route
     //if route requires auth and user is not authenticated, redirect to login
     if (to.meta.requiresAuth && !auth.isAuthenticated) {
