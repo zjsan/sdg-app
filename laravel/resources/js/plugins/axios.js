@@ -22,13 +22,26 @@ api.interceptors.response.use(
     async (error) => {
         const auth = useAuthStore();
 
-        // Handle Unauthorized (401) errors globally
-        if (error.response && error.response.status === 401) {
+        // Ignore errors with no response
+        if (!error.response) return Promise.reject(error);
+
+        const status = error.response.status;
+        const requestUrl = error.config?.url;
+
+        // IMPORTANT:
+        // Do NOT trigger global 401 handler for the logout request.
+        if (requestUrl === "/logout") {
+            return Promise.reject(error);
+        }
+
+        if (status === 401) {
             console.warn("Session expired or unauthorized access detected.");
 
-            await auth.logout();
+            // Prevent repeating logout multiple times
+            if (auth.token) {
+                await auth.logout();
+            }
 
-            // Redirect to login with query flag (optional for message display)
             if (router.currentRoute.value.name !== "Login") {
                 router.push({
                     name: "Login",

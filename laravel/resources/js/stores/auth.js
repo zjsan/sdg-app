@@ -71,7 +71,7 @@ export const useAuthStore = defineStore("auth", {
                 //redirect to /dashboard once authenticated
                 //avoids manual refreshes or blank states after login.
                 if (this.user) {
-                    router.push({ name: "Dashboard" });
+                    router.replace({ name: "Dashboard" });
                 }
             } catch (err) {
                 this.error = err.response?.data?.message || "Login failed";
