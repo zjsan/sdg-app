@@ -4,8 +4,6 @@ import Login from "../pages/Login.vue";
 import Dashboard from "../pages/Dashboard.vue";
 import NotFoundView from "../pages/NotFoundView.vue";
 import { useAuthStore } from "@/stores/auth";
-import ForgotPassword from "../pages/ForgotPassword.vue";
-import ResetPassword from "../pages/ResetPassword.vue";
 import GoogleCallback from "../pages/GoogleCallback.vue";
 import Unauthorized from "../pages/NotAuthorized.vue";
 import AuthError from "../pages/AuthError.vue";
@@ -30,20 +28,6 @@ const routes = [
         name: "Dashboard",
         component: Dashboard,
         meta: { requiresAuth: true }, // must be logged in
-    },
-
-    {
-        path: "/forgot-password",
-        name: "ForgotPassword",
-        component: ForgotPassword,
-        meta: { guestOnly: true },
-    },
-
-    {
-        path: "/reset-password",
-        name: "ResetPassword",
-        component: ResetPassword,
-        meta: { guestOnly: true },
     },
 
     {
