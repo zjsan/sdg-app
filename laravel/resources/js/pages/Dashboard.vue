@@ -187,7 +187,7 @@ const handleResize = () => {
 onMounted(async () => {
     // 1. Initial Auth Check and Data Fetch
     try {
-        const { data } = await api.get("/pbi-url", {
+        const { data } = await api.get("/pbi", {
             headers: { Authorization: `Bearer ${auth.token}` },
         });
         powerBiEmbedUrl.value = data.url;
