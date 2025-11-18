@@ -27,7 +27,7 @@ const route = useRoute();
 const router = useRouter();
 
 onMounted(async () => {
-    // Get the temporary "session_id" or "code" from the URL
+    // 1. CRITICAL: Capture the session ID (the value is preserved here)
     const sessionId = route.query.session_id;
 
     // 2. IMMEDIATE HISTORY CLEANUP: Clean the history ONLY if a session ID was present
@@ -43,11 +43,13 @@ onMounted(async () => {
         return;
     }
 
+    // 4. AUTHENTICATION CHECK: If we are here, we MUST have a sessionId to proceed.
     if (!sessionId) {
         auth.error = "Missing session identifier. Please try logging in again.";
         return;
     }
 
+    // 5. API CALL: Proceed with the captured sessionId
     try {
         // Fetch token + user from backend
         const { data } = await api.get(`/auth/session/${sessionId}`);
@@ -55,29 +57,27 @@ onMounted(async () => {
         if (data?.token && data?.user) {
             // Pass data to the Pinia store handler
             auth.handleGoogleCallback(data.token, data.user);
+            // NOTE: auth.handleGoogleCallback should use router.replace({name: 'Dashboard'})
         } else {
             auth.error = "Invalid response from authentication server.";
         }
     } catch (error) {
+        // ... (Your existing robust error handling is good) ...
         console.error("Google callback error:", error);
 
-        //get header responsestatus and message
         const status = error.response?.status;
         const message = error.response?.data?.message;
 
-        // If backend says 403 = Not Whitelisted
-        // redirect to not authorized page
         if (status === 403) {
             router.push({ name: "NotAuthorized" });
             return;
         }
 
-        // Server-side error (unexpected backend issue)
         if (status === 500) {
             router.push({ name: "AuthError" });
             return;
         }
-        // Otherwise, generic failure
+
         auth.error = message || "Failed to complete Google authentication.";
     }
 });
