@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Laravel</title>
+    <title>SDG Analytics Dashboard</title>
 </head>
 <body>
     {{--  element Vue needs to attach to --}}
