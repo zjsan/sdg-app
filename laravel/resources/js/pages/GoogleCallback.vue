@@ -30,13 +30,6 @@ onMounted(async () => {
     //  Capture the session ID (the value is preserved here)
     const sessionId = route.query.session_id;
 
-    //  Clean the history ONLY if a session ID was present
-    if (sessionId) {
-        // replaces the URL in the browser history, removing the session_id
-        // component keeps executing this thread with the captured sessionId value.
-        router.replace({ path: route.path });
-    }
-
     // If the user is authenticated (e.g., iframe fallback), exit safely.
     if (auth.isAuthenticated) {
         router.replace({ name: "Dashboard" });
@@ -57,6 +50,9 @@ onMounted(async () => {
         if (data?.token && data?.user) {
             // Pass data to the Pinia store handler
             auth.handleGoogleCallback(data.token, data.user);
+            router.replace({ name: "Dashboard" });
+
+            return;
         } else {
             auth.error = "Invalid response from authentication server.";
         }
