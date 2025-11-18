@@ -49,6 +49,10 @@ onMounted(async () => {
         return;
     }
 
+    //clearing browser state to make the dashboard as the first entry point
+    window.history.replaceState(null, "", "/dashboard"); // Replaces current entry
+    window.history.pushState(null, "", "/dashboard"); // Adds another entry, essentially clearing back history
+
     // 5. API CALL: Proceed with the captured sessionId
     try {
         // Fetch token + user from backend

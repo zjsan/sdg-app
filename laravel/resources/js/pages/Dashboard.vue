@@ -30,7 +30,7 @@
         >
             <!-- Logo/App Title Section (Visible on all screen sizes) -->
             <div
-                class="flex items-center justify-center h-16 border-b border-gray-200 p-4"
+                class="flex items-center justify-center h-17.5 border-b border-gray-200 p-4"
             >
                 <span class="text-xl font-semibold text-gray-800"
                     >SDG DASHBOARD</span
@@ -124,7 +124,7 @@
 
         <!-- 3. RIGHT CONTENT AREA (Main view, takes up remaining space) -->
         <main class="flex-grow w-full flex flex-col">
-            <div class="flex-grow p-3 flex flex-col">
+            <div class="flex-grow flex flex-col">
                 <div
                     v-if="!powerBiEmbedUrl"
                     class="flex items-center justify-center flex-grow text-gray-500"
@@ -138,7 +138,7 @@
                     :src="powerBiEmbedUrl"
                     frameborder="0"
                     allowfullscreen="true"
-                    class="flex-grow w-full border-2 border-gray-300 rounded-lg shadow-lg"
+                    class="flex-grow w-full border-gray-300 shadow-lg"
                     title="Embedded Power BI Report"
                 ></iframe>
             </div>
