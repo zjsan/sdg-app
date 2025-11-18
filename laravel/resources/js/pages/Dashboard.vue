@@ -137,8 +137,9 @@
                     v-else
                     :src="powerBiEmbedUrl"
                     frameborder="0"
-                    allowfullscreen="true"
-                    class="flex-grow w-full border-gray-300 shadow-lg"
+                    allowfullscreen
+                    allow="fullscreen"
+                    class="flex-grow w-full h-full border-0 shadow-lg"
                     title="Embedded Power BI Report"
                 ></iframe>
             </div>
