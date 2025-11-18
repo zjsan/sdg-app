@@ -151,8 +151,6 @@ export const useAuthStore = defineStore("auth", {
                 ] = `Bearer ${this.token}`;
 
                 this.saveUserToStorage();
-
-                window.history.go(-(window.history.length - 1)); // This ensures the browser's "back" function has nowhere to go but the initial entry.
                 router.replace({ name: "Dashboard" });
             } catch (error) {
                 this.error = "Failed to process Google login callback.";
