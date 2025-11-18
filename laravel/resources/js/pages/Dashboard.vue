@@ -191,6 +191,9 @@ onMounted(async () => {
             headers: { Authorization: `Bearer ${auth.token}` },
         });
         powerBiEmbedUrl.value = data.url;
+
+        // Fix the fullscreen back-redirect
+        window.history.replaceState({}, "", "/dashboard");
     } catch (error) {
         console.error("Failed to load Power BI URL:", error);
     }
