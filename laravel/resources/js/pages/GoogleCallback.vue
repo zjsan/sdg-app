@@ -30,6 +30,10 @@ onMounted(async () => {
     //  Capture the session ID (the value is preserved here)
     const sessionId = route.query.session_id;
 
+    if (window.history.state && window.history.state.back) {
+        router.replace({ name: "Dashboard" });
+    }
+
     // If the user is authenticated (e.g., iframe fallback), exit safely.
     if (auth.isAuthenticated) {
         router.replace({ name: "Dashboard" });
@@ -50,7 +54,7 @@ onMounted(async () => {
         if (data?.token && data?.user) {
             // Pass data to the Pinia store handler
             auth.handleGoogleCallback(data.token, data.user);
-            router.push({ name: "Dashboard" });
+            router.replace({ name: "Dashboard" });
 
             return;
         } else {
