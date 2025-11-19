@@ -11,7 +11,7 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 
 onMounted(() => {
-    // This runs AFTER the callback component completes its job.
+    // runs after the callback component completes its job.
     // It's the final, clean redirect.
     router.replace({ name: "Dashboard" });
 });
