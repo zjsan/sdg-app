@@ -78,6 +78,21 @@ const router = createRouter({
 
 router.beforeEach(async (to, from) => {
     const auth = useAuthStore();
+    const googleRedirectPattern = /auth\/google\/redirect/i; //url interceptor for fixing google callback when logged in and pressed the powerbi go back button
+
+    // Check if the URL is trying to navigate to the Google redirect endpoint
+    if (googleRedirectPattern.test(to.path)) {
+        console.warn(
+            "Intercepting potential faulty Google redirect. Forcing navigation reset."
+        );
+
+        // Trap the user on a harmless internal page instead of allowing the external redirect.
+        if (auth.isAuthenticated) {
+            return { name: "Dashboard", replace: true };
+        } else {
+            return { name: "Login", replace: true };
+        }
+    }
 
     // Only try restoring session if route REQUIRES AUTH
     // If user is unknown, try restoring session
