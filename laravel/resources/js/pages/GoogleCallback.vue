@@ -50,7 +50,7 @@ onMounted(async () => {
         if (data?.token && data?.user) {
             // Pass data to the Pinia store handler
             auth.handleGoogleCallback(data.token, data.user);
-            router.replace({ name: "Dashboard" });
+            router.push({ name: "SafeRedirect" });
 
             return;
         } else {
