@@ -7,6 +7,7 @@ import { useAuthStore } from "@/stores/auth";
 import GoogleCallback from "../pages/GoogleCallback.vue";
 import Unauthorized from "../pages/NotAuthorized.vue";
 import AuthError from "../pages/AuthError.vue";
+import SafeRedirect from "../pages/SafeRedirect.vue";
 
 /** @type {import('vue-router').RouteRecordRaw[]} */
 const routes = [
@@ -50,6 +51,14 @@ const routes = [
         name: "AuthError",
         component: AuthError,
         meta: { public: true },
+    },
+
+    // NEW ISOLATION ROUTE
+    {
+        path: "/safe-redirect",
+        name: "SafeRedirect",
+        component: SafeRedirect,
+        meta: { requiresAuth: true },
     },
 
     // Catch-all for 404 - MUST be the last route in the array.
