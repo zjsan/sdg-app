@@ -19,6 +19,11 @@ onMounted(() => {
     if (auth.isAuthenticated) {
         //This replaces the /safe-redirect entry with the clean /dashboard entry.
         router.replace({ name: "Dashboard" });
+    } else {
+        router.replace({ name: "Login" });
+        console.warn(
+            "SafeRedirect: User not authenticated, redirecting to Login."
+        );
     }
 });
 </script>
