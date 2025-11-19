@@ -151,7 +151,9 @@ export const useAuthStore = defineStore("auth", {
                 ] = `Bearer ${this.token}`;
 
                 this.saveUserToStorage();
-                router.replace({ name: "Dashboard" });
+
+                //Push to the intermediate page instead of the Dashboard
+                router.push({ name: "SafeRedirect" }); // adds history entry
             } catch (error) {
                 this.error = "Failed to process Google login callback.";
                 console.error(error);
