@@ -71,7 +71,7 @@ class GoogleAuthController extends Controller
             $tokenResult = $user->createToken('auth_token');
             $token = $tokenResult->plainTextToken;
 
-            // Set token expiration (e.g., 2 hours)
+            // Set token expiration (2 hours)
             $tokenResult->accessToken->expires_at = now()->addHours(2);
             $tokenResult->accessToken->save();
 
