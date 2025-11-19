@@ -87,13 +87,15 @@ router.beforeEach(async (to, from) => {
 
     // Check if the URL is trying to navigate to the Google redirect endpoint
     if (blockedAuthPatterns.some((pattern) => pattern.test(to.path))) {
-        console.warn("Blocked unintended Google OAuth redirect attempt.");
-
         if (auth.isAuthenticated) {
+            console.warn(
+                "Blocked unintended Google OAuth redirect attempt (user already authenticated)."
+            );
             return { name: "Dashboard", replace: true };
         }
 
-        return { name: "Login", replace: true };
+        // User is NOT authenticated → allow Google callback to proceed
+        return true;
     }
 
     // Only try restoring session if route REQUIRES AUTH
