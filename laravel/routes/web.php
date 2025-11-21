@@ -9,5 +9,5 @@ Route::get('/auth/google/callback', [GoogleAuthController::class, 'handleGoogleC
 
 
 Route::get('/{any}', function () {
-    return view('welcome'); 
+    return view('index'); 
 })->where('any', '.*'); 
