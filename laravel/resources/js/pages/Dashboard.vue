@@ -190,7 +190,17 @@ onMounted(async () => {
         const { data } = await api.get("/pbi", {
             headers: { Authorization: `Bearer ${auth.token}` },
         });
+        const { baseUrl, embedId, message } = data.data;
         powerBiEmbedUrl.value = data.url;
+
+        if (embedId) {
+            // Construct the final, full URL on the client side
+            const finalPowerBiUrl = `${baseUrl}${embedId}`;
+
+            // Use finalPowerBiUrl to set iframe source
+            powerBiEmbedUrl.value = finalPowerBiUrl;
+            console.log(message);
+        }
 
         // Fix the fullscreen back-redirect
         window.history.replaceState({}, "", "/dashboard");
