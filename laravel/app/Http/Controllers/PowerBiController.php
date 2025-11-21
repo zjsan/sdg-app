@@ -37,13 +37,17 @@ class PowerBiController extends Controller
             
             }
             else{
-                 $powerBiUrl = "https://https://app.powerbi.com/view?r=eyJrIjoiZGZhMjAxMDEtMGM2Mi00NGYwLWIwMzQtZmRhOGFjMGE3MDdhIiwidCI6IjdjZmY5YzA2LThmNGQtNDAwNi1iOWQwLWU4MWRjYWJjZDU1NyIsImMiOjEwfQ%3D%3D";
-                return response()->json([   
-                    'url' => $powerBiUrl, 
-                    'message' => 'External user access granted.'
-                ]);
+                $embedId = env('POWER_BI_EXTERNAL_EMBED_ID');
+                $message = 'External user access granted.';
             }
 
+            return response()->json([
+                // Sends the constant base URL part
+                'baseUrl' => env('POWER_BI_BASE_URL'),
+                // Sends only the unique, cryptic identifier
+                'embedId' => $embedId,
+                'message' => $message
+]);
         } catch (\Throwable $e) {
             Log::error('Error fetching Power BI URL', ['error' => $e->getMessage()]);
             return response()->json([
