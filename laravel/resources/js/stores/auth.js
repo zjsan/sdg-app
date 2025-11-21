@@ -151,7 +151,6 @@ export const useAuthStore = defineStore("auth", {
                 ] = `Bearer ${this.token}`;
 
                 this.saveUserToStorage();
-
                 //Push to the intermediate page instead of the Dashboard
                 //router.push({ name: "SafeRedirect" }); // adds history entry
             } catch (error) {

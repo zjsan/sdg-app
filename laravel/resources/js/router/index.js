@@ -78,24 +78,18 @@ const router = createRouter({
 
 router.beforeEach(async (to, from) => {
     const auth = useAuthStore();
-    // FIX: Prevent Power BI Fullscreen "Back" returning to Google OAuth URLs
-    const blockedAuthPatterns = [
-        /auth\/google\/redirect/i,
-        /auth\/google\/callback/i,
-        /auth\/callback/i,
-    ]; //url interceptor for fixing google callback when logged in and pressed the powerbi go back button
 
-    // Check if the URL is trying to navigate to the Google redirect endpoint
+    // FIX: Prevent Power BI Fullscreen "Back" returning to Google OAuth URLs
+    const blockedAuthPatterns = [/^\/auth\/google\/redirect$/i];
+
     if (blockedAuthPatterns.some((pattern) => pattern.test(to.path))) {
+        console.warn("Blocked unintended Google OAuth redirect attempt.");
+
         if (auth.isAuthenticated) {
-            console.warn(
-                "Blocked unintended Google OAuth redirect attempt (user already authenticated)."
-            );
             return { name: "Dashboard", replace: true };
         }
 
-        // User is NOT authenticated → allow Google callback to proceed
-        return true;
+        return { name: "Login", replace: true };
     }
 
     // Only try restoring session if route REQUIRES AUTH
