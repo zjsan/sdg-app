@@ -191,7 +191,6 @@ onMounted(async () => {
             headers: { Authorization: `Bearer ${auth.token}` },
         });
         const { baseUrl, embedId, message } = data.data;
-        powerBiEmbedUrl.value = data.url;
 
         if (embedId) {
             // Construct the final, full URL on the client side
