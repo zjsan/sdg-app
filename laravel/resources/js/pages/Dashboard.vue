@@ -187,19 +187,25 @@ const handleResize = () => {
 onMounted(async () => {
     // 1. Initial Auth Check and Data Fetch
     try {
-        const { data } = await api.get("/pbi", {
+        const response = await api.get("/pbi", {
             headers: { Authorization: `Bearer ${auth.token}` },
         });
-        console.log("Power BI API Response:", data);
-        const { baseUrl, embedId, message } = data.data;
+        const data = response.data; // Axios response data
 
-        if (embedId) {
+        console.log("Power BI API Response:", data);
+
+        // **FIXED LINE**
+        const { baseUrl, embedId, message } = data;
+
+        if (embedId && baseUrl) {
             // Construct the final, full URL on the client side
             const finalPowerBiUrl = `${baseUrl}${embedId}`;
 
             // Use finalPowerBiUrl to set iframe source
             powerBiEmbedUrl.value = finalPowerBiUrl;
             console.log(message);
+        } else {
+            console.error("Missing Power BI IDs in response.");
         }
 
         // Fix the fullscreen back-redirect
