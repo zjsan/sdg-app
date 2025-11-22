@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 
+
 class PowerBiController extends Controller
 {
     //
@@ -47,7 +48,7 @@ class PowerBiController extends Controller
                 // Sends only the unique, cryptic identifier
                 'embedId' => $embedId,
                 'message' => $message
-]);
+            ]);
         } catch (\Throwable $e) {
             Log::error('Error fetching Power BI URL', ['error' => $e->getMessage()]);
             return response()->json([

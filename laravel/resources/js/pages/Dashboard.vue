@@ -190,6 +190,7 @@ onMounted(async () => {
         const { data } = await api.get("/pbi", {
             headers: { Authorization: `Bearer ${auth.token}` },
         });
+        console.log("Power BI API Response:", data);
         const { baseUrl, embedId, message } = data.data;
 
         if (embedId) {
