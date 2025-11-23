@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class PowerBiController extends Controller
 {
@@ -45,9 +46,13 @@ class PowerBiController extends Controller
 
              // Generate one-time token
             $token = Str::uuid()->toString();
+
             
+            // Store embedId in cache for 60 seconds
+            Cache::put("pbi_embed_$token", $embedId, 60);
+
             $signedUrl = URL::signedRoute('pbi.frame', [
-                'embedId' => $embedId
+                'token' => $token
             ], now()->addSeconds(60)); //60-second validity
 
 
