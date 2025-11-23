@@ -190,9 +190,8 @@ onMounted(async () => {
         const response = await api.get("/pbi", {
             headers: { Authorization: `Bearer ${auth.token}` },
         });
-        const data = response.data; // Axios response data
 
-        console.log("Power BI API Response:", data);
+        console.log("Power BI API Response:", response.data);
 
         const { signedUrl, message } = response.data;
 
