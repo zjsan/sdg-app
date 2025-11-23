@@ -48,9 +48,10 @@ class PowerBiController extends Controller
 
             return response()->json([
                 'signedUrl' => $signedUrl,
-                'expiresIn' => 60
+                'expiresIn' => 60,
+                'message' => $message
             ]);
-            
+
         } catch (\Throwable $e) {
             Log::error('Error fetching Power BI URL', ['error' => $e->getMessage()]);
             return response()->json([
@@ -59,5 +60,17 @@ class PowerBiController extends Controller
         }
 
         
+    }
+
+    public function serveIframe(Request $request)
+    {
+        if (! $request->hasValidSignature()) {
+            abort(403, 'Signed URL expired or tampered.');
+        }
+
+        $embedId = $request->query('embedId');
+        $baseUrl = env('POWER_BI_BASE_URL');
+
+        return redirect($baseUrl . $embedId);
     }
 }
