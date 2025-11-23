@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Auth;
 
 class PowerBiController extends Controller
 {
@@ -16,7 +17,8 @@ class PowerBiController extends Controller
     public function generateSignedUrl(Request $request)
     {
         $domain_whitelist = 'mmsu.edu.ph';
-
+        $user = Auth::user();
+        
         try{
 
             //fetch email from users table
