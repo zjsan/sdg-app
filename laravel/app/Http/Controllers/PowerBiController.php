@@ -47,7 +47,6 @@ class PowerBiController extends Controller
              // Generate one-time token
             $token = Str::uuid()->toString();
 
-            
             // Store embedId in cache for 60 seconds
             Cache::put("pbi_embed_$token", $embedId, 60);
 
@@ -78,9 +77,18 @@ class PowerBiController extends Controller
             abort(403, 'Signed URL expired or tampered.');
         }
 
-        $embedId = $request->query('embedId');
-        $baseUrl = env('POWER_BI_BASE_URL');
+        $token = $request->query('token');
+        
+        // Retrieve embedId from cache
+        $embedId = Cache::get("pbi_embed_$token");
+        if (! $embedId) {
+            abort(403, 'Invalid or expired token.');
+        }
 
+        $baseUrl = env('POWER_BI_BASE_URL');
+        
+        // delete token to prevent reuse
+        Cache::forget("pbi_embed_$token");
         return redirect($baseUrl . $embedId);
     }
 }
