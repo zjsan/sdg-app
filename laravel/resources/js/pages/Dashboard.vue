@@ -147,7 +147,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, onUnmounted } from "vue";
+import { ref, onMounted, computed, onUnmounted, onBeforeUnmount } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import api from "@/plugins/axios";
 import {
@@ -185,7 +185,7 @@ const handleResize = () => {
     }
 };
 
-onMounted(async () => {
+async function loadPowerBiUrl(isRefresh = false) {
     // 1. Initial Auth Check and Data Fetch
     try {
         const response = await api.get("/pbi", {
@@ -213,12 +213,28 @@ onMounted(async () => {
     // 2. Set up responsive listeners
     window.addEventListener("resize", handleResize);
     handleResize(); // Initial call to set sidebar state and screenWidth correctly
-});
+}
 
 onUnmounted(() => {
     // Crucial cleanup to prevent memory leaks
     window.removeEventListener("resize", handleResize);
 });
+
+onMounted(async () => {
+    await loadPowerBiUrl(); // existing logic
+    startAutoRefresh();
+});
+
+onBeforeUnmount(() => {
+    if (refreshTimer) clearInterval(refreshTimer);
+});
+
+function startAutoRefresh() {
+    // Refresh every 45 seconds (before 60s expiration)
+    refreshTimer = setInterval(async () => {
+        await loadPowerBiUrl(true);
+    }, 45000);
+}
 
 const logout = async () => {
     await auth.logout();
