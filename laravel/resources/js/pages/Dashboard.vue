@@ -194,15 +194,11 @@ onMounted(async () => {
 
         console.log("Power BI API Response:", data);
 
-        // **FIXED LINE**
-        const { baseUrl, embedId, message } = data;
+        const { signedUrl, message } = response.data;
 
-        if (embedId && baseUrl) {
+        if (signedUrl) {
             // Construct the final, full URL on the client side
-            const finalPowerBiUrl = `${baseUrl}${embedId}`;
-
-            // Use finalPowerBiUrl to set iframe source
-            powerBiEmbedUrl.value = finalPowerBiUrl;
+            powerBiEmbedUrl.value = signedUrl;
             console.log(message);
         } else {
             console.error("Missing Power BI IDs in response.");
