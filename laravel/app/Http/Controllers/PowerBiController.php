@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Support\Facades\URL;
 
 class PowerBiController extends Controller
 {
@@ -42,13 +41,16 @@ class PowerBiController extends Controller
                 $message = 'External user access granted.';
             }
 
+            $signedUrl = URL::signedRoute('pbi.frame', [
+                'embedId' => $embedId
+            ], now()->addSeconds(60)); //60-second validity
+
+
             return response()->json([
-                // Sends the constant base URL part
-                'baseUrl' => env('POWER_BI_BASE_URL'),
-                // Sends only the unique, cryptic identifier
-                'embedId' => $embedId,
-                'message' => $message
+                'signedUrl' => $signedUrl,
+                'expiresIn' => 60
             ]);
+            
         } catch (\Throwable $e) {
             Log::error('Error fetching Power BI URL', ['error' => $e->getMessage()]);
             return response()->json([
