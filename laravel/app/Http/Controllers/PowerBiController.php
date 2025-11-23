@@ -18,7 +18,7 @@ class PowerBiController extends Controller
     {
         $domain_whitelist = 'mmsu.edu.ph';
         $user = Auth::user();
-        
+
         try{
 
             //fetch email from users table
@@ -43,6 +43,9 @@ class PowerBiController extends Controller
                 $message = 'External user access granted.';
             }
 
+             // Generate one-time token
+            $token = Str::uuid()->toString();
+            
             $signedUrl = URL::signedRoute('pbi.frame', [
                 'embedId' => $embedId
             ], now()->addSeconds(60)); //60-second validity
