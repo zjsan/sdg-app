@@ -167,6 +167,7 @@ const auth = useAuthStore();
 const powerBiEmbedUrl = ref(null);
 const isSidebarOpen = ref(false);
 const screenWidth = ref(window.innerWidth);
+let refreshTimer = null;
 
 // Determine if screen size is below the 'lg' breakpoint (1024px), covering mobile and tablet
 const isMobile = computed(() => screenWidth.value < 1024);
