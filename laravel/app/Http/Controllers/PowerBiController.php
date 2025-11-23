@@ -14,7 +14,7 @@ class PowerBiController extends Controller
       /**
      * Return Power BI embed URL for authenticated users.
      */
-    public function getEmbedUrl(Request $request)
+    public function generateSignedUrl(Request $request)
     {
         $domain_whitelist = 'mmsu.edu.ph';
 

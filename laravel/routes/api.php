@@ -17,5 +17,5 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 Route::get('/auth/session/{sessionId}', [GoogleAuthController::class, 'fetchSessionData']);
 
 // Protected route to get Power BI embed URL
-Route::middleware('auth:sanctum')->get('/pbi', [PowerBiController::class, 'getEmbedUrl']);
+Route::middleware('auth:sanctum')->get('/pbi', [PowerBiController::class, 'generateSignedUrl']);
 
