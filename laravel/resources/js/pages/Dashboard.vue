@@ -231,11 +231,20 @@ onBeforeUnmount(() => {
 });
 
 function startAutoRefresh() {
-    // Refresh every 45 minutes (before 1hr expiration)
+    // refresh every 45 minutes (before 1hr expiration)
     refreshTimer = setInterval(async () => {
         await loadPowerBiUrl(true);
     }, refreshInterval * 1000);
 }
+
+//when user is inactive (tab hidden), pause refresh
+document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+        clearInterval(refreshTimer);
+    } else {
+        startAutoRefresh();
+    }
+});
 
 const logout = async () => {
     await auth.logout();
