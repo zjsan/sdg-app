@@ -17,6 +17,7 @@ class PowerBiController extends Controller
     public function generateSignedUrl(Request $request)
     {
         $domain_whitelist = 'mmsu.edu.ph';
+        $urlLifespan = 3600;// 1 hour in seconds
 
         try{    
 
@@ -44,17 +45,17 @@ class PowerBiController extends Controller
              // Generate one-time token
             $token = Str::uuid()->toString();
 
-            // Store embedId in cache for 60 seconds
-            Cache::put("pbi_embed_$token", $embedId, 60);
+            // Store embedId in cache for 1 hr
+            Cache::put("pbi_embed_$token", $embedId, $urlLifespan);   
 
             $signedUrl = URL::signedRoute('pbi.frame', [
                 'token' => $token
-            ], now()->addSeconds(60)); //60-second validity
+            ], now()->addSeconds($urlLifespan)); 
 
 
             return response()->json([
                 'signedUrl' => $signedUrl,
-                'expiresIn' => 60,
+                'expiresIn' => $urlLifespan,
                 'message' => $message
             ]);
 
