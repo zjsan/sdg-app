@@ -30,7 +30,7 @@
         >
             <!-- Logo/App Title Section (Visible on all screen sizes) -->
             <div
-                class="flex items-center justify-center h-17.5 border-b border-gray-200 p-4"
+                class="flex items-center justify-center h-20 border-b border-gray-200 p-4"
             >
                 <span class="text-xl font-semibold text-gray-800"
                     >SDG DASHBOARD</span
