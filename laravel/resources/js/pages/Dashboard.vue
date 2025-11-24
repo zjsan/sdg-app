@@ -168,6 +168,7 @@ const powerBiEmbedUrl = ref(null);
 const isSidebarOpen = ref(false);
 const screenWidth = ref(window.innerWidth);
 let refreshTimer = null;
+const refreshInterval = 2700; //45 min in seconds
 
 // Determine if screen size is below the 'lg' breakpoint (1024px), covering mobile and tablet
 const isMobile = computed(() => screenWidth.value < 1024);
@@ -221,7 +222,7 @@ onUnmounted(() => {
 });
 
 onMounted(async () => {
-    await loadPowerBiUrl(); // existing logic
+    await loadPowerBiUrl();
     startAutoRefresh();
 });
 
@@ -230,10 +231,10 @@ onBeforeUnmount(() => {
 });
 
 function startAutoRefresh() {
-    // Refresh every 45 seconds (before 60s expiration)
+    // Refresh every 45 minutes (before 1hr expiration)
     refreshTimer = setInterval(async () => {
         await loadPowerBiUrl(true);
-    }, 45000);
+    }, refreshInterval * 1000);
 }
 
 const logout = async () => {
