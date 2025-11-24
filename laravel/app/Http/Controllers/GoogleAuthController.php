@@ -72,7 +72,7 @@ class GoogleAuthController extends Controller
             $token = $tokenResult->plainTextToken;
 
             // Set token expiration (2 hours)
-            $tokenResult->accessToken->expires_at = now()->addHours(2);
+            $tokenResult->accessToken->expires_at = now()->addHours(3);
             $tokenResult->accessToken->save();
 
 
