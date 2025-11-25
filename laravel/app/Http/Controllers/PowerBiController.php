@@ -18,15 +18,17 @@ class PowerBiController extends Controller
     {
         $domain_whitelist = 'mmsu.edu.ph';
         $urlLifespan = 3600;// 1 hour in seconds
-        $user = $request->user(); //fetch email from users table
-        $userID = $user->id;//fetch user id from users table
 
         try{    
+
+            $user = $request->user(); //fetch email from users table
 
             if (! $user || ! $user->email) {
                 return response()->json(['message' => 'User not authenticated.'], 401);
             }
             
+            $userID = $user->id;//fetch user id from users table
+
             //Check if email domain is in the whitelist
             //If yes, return the Power BI embed URL for mmsu users
             //Else return the Power BI embed URL for external users
