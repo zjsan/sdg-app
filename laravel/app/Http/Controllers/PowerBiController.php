@@ -18,11 +18,10 @@ class PowerBiController extends Controller
     {
         $domain_whitelist = 'mmsu.edu.ph';
         $urlLifespan = 3600;// 1 hour in seconds
+        $user = $request->user(); //fetch email from users table
+        $userID = $user->id;//fetch user id from users table
 
         try{    
-
-            //fetch email from users table
-            $user = $request->user();
 
             if (! $user || ! $user->email) {
                 return response()->json(['message' => 'User not authenticated.'], 401);
