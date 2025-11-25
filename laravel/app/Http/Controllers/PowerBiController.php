@@ -50,7 +50,7 @@ class PowerBiController extends Controller
             Cache::put("pbi_embed_$token", [
                 'embedId' => $embedId,
                 'userId' => $userID
-            ], $urlLifespan);
+            ],$urlLifespan + 30); // Extra 30 seconds buffer
    
 
             $signedUrl = URL::signedRoute('pbi.frame', [
