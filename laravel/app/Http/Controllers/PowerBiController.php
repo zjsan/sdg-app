@@ -44,8 +44,12 @@ class PowerBiController extends Controller
              // Generate one-time token
             $token = Str::uuid()->toString();
 
-            // Store embedId in cache for 1 hr
-            Cache::put("pbi_embed_$token", $embedId, $urlLifespan);   
+            // Store embedId and user id in cache for 1 hr
+            Cache::put("pbi_embed_$token", [
+                'embedId' => $embedId,
+                'userId' => $userID
+            ], $urlLifespan);
+   
 
             $signedUrl = URL::signedRoute('pbi.frame', [
                 'token' => $token
@@ -70,19 +74,20 @@ class PowerBiController extends Controller
 
     public function serveIframe(Request $request)
     {
+        $token = $request->query('token');
+        $data = Cache::get("pbi_embed_$token"); // Retrieve token payload from cache
+        $embedId = $data['embedId']; 
+        $tokenUserId = $data['userId'];
+        $baseUrl = env('POWER_BI_BASE_URL');
+
         if (! $request->hasValidSignature()) {
             abort(403, 'Signed URL expired or tampered.');
         }
 
-        $token = $request->query('token');
-        
-        // Retrieve embedId from cache
-        $embedId = Cache::get("pbi_embed_$token");
-        if (! $embedId) {
+        if (! $data) {
             abort(403, 'Invalid or expired token.');
         }
 
-        $baseUrl = env('POWER_BI_BASE_URL');
         
         // delete token to prevent reuse
         Cache::forget("pbi_embed_$token");
