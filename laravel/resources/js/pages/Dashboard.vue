@@ -136,6 +136,7 @@
                 <iframe
                     v-else
                     :src="powerBiEmbedUrl"
+                    :key="powerBiEmbedUrl"
                     frameborder="0"
                     allowfullscreen
                     class="flex-grow w-full h-full border-0 shadow-lg"
