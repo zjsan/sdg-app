@@ -32,7 +32,7 @@ class PowerBiController extends Controller
             //Check if email domain is in the whitelist
             //If yes, return the Power BI embed URL for mmsu users
             //Else return the Power BI embed URL for external users
-            if(Str::endsWith($user->email, $domain_whitelist)){
+            if(Str::endsWith($user->email, "@$domain_whitelist")){
                 //  Only authenticated users reach this point due to Sanctum middleware
                 $embedId = env('POWER_BI_MMSU_EMBED_ID');
                 $message = 'MMSU user access granted.';
