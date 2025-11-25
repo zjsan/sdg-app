@@ -204,9 +204,6 @@ async function loadPowerBiUrl(isRefresh = false) {
         } else {
             console.error("Missing Power BI IDs in response.");
         }
-
-        // Fix the fullscreen back-redirect
-        window.history.replaceState({}, "", "/dashboard");
     } catch (error) {
         console.error("Failed to load Power BI URL:", error);
     }
