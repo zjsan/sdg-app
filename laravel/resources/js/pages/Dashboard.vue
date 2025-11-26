@@ -170,6 +170,7 @@ const isSidebarOpen = ref(false);
 const screenWidth = ref(window.innerWidth);
 let refreshTimer = null;
 const refreshInterval = 2700; //45 min in seconds
+let lastActiveTime = Date.now();
 
 // Determine if screen size is below the 'lg' breakpoint (1024px), covering mobile and tablet
 const isMobile = computed(() => screenWidth.value < 1024);
@@ -229,6 +230,8 @@ onBeforeUnmount(() => {
 });
 
 function startAutoRefresh() {
+    if (refreshTimer) clearInterval(refreshTimer);
+
     // refresh every 45 minutes (before 1hr expiration)
     refreshTimer = setInterval(async () => {
         await loadPowerBiUrl(true);
@@ -238,13 +241,18 @@ function startAutoRefresh() {
 }
 
 //when user is inactive (tab hidden), pause refresh
-document.addEventListener("visibilitychange", () => {
-    let lastActiveTime = Date.now();
-
+document.addEventListener("visibilitychange", async () => {
     if (document.hidden) {
         clearInterval(refreshTimer);
         lastActiveTime = Date.now();
     } else {
+        const inactiveTime = (Date.now() - lastActiveTime) / 1000;
+
+        if (inactiveTime >= refreshInterval) {
+            // If inactive for longer than refresh interval, refresh immediately
+            powerBiEmbedUrl.value = "";
+            await loadPowerBiUrl(true);
+        }
         startAutoRefresh();
     }
 });
