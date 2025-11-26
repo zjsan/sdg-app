@@ -66,20 +66,19 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
     // ---- Tab Init ----
     async function init() {
-        // 1. Fetch the URL immediately (every tab does this once)
-        // This loads the dashboard instantly while election happens in background.
-        await fetchSignedUrl();
-
-        // 2. Start the Leader Election process
+        // 1. Ask for existing leader
         requestLeader();
 
-        // 3. Wait for leadership decision (300ms)
+        // 2. Wait briefly to see if a leader answers
         setTimeout(async () => {
-            if (!isLeader.value) {
-                // No leader responded -> become leader and start the auto-refresh loop.
-                becomeLeader();
+            if (isLeader.value) {
+                // We are leader -> fetch once
+                await refresh(); // fetch + broadcast
+                startAutoRefresh();
             }
-            // If it's a follower, it doesn't start the timer; it waits for the leader's broadcast.
+
+            // ✅ If follower: wait for broadcast
+            // no backend calls
         }, 300);
     }
 
