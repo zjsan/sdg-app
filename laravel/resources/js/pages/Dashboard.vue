@@ -234,9 +234,8 @@ function startAutoRefresh() {
 
     // refresh every 45 minutes (before 1hr expiration)
     refreshTimer = setInterval(async () => {
+        powerBiEmbedUrl.value = "";
         await loadPowerBiUrl(true);
-
-        powerBiEmbedUrl.value = powerBiEmbedUrl.value + "&r=" + Date.now(); // Force iframe refresh
     }, refreshInterval * 1000);
 }
 
