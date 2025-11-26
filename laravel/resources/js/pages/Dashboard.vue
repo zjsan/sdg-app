@@ -209,10 +209,6 @@ async function loadPowerBiUrl(isRefresh = false) {
     } catch (error) {
         console.error("Failed to load Power BI URL:", error);
     }
-
-    // 2. Set up responsive listeners
-    window.addEventListener("resize", handleResize);
-    handleResize(); // Initial call to set sidebar state and screenWidth correctly
 }
 
 onUnmounted(() => {
@@ -221,6 +217,11 @@ onUnmounted(() => {
 });
 
 onMounted(async () => {
+    // 2. Set up responsive listeners
+    window.addEventListener("resize", handleResize);
+    handleResize(); // Initial call to set sidebar state and screenWidth correctly
+
+    // 3. Load Power BI URL and start auto-refresh
     await loadPowerBiUrl();
     startAutoRefresh();
 });
