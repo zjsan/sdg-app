@@ -77,7 +77,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
                 startAutoRefresh();
             }
 
-            // ✅ If follower: wait for broadcast
+            // If follower: wait for broadcast
             // no backend calls
         }, 300);
     }
