@@ -239,8 +239,11 @@ function startAutoRefresh() {
 
 //when user is inactive (tab hidden), pause refresh
 document.addEventListener("visibilitychange", () => {
+    let lastActiveTime = Date.now();
+
     if (document.hidden) {
         clearInterval(refreshTimer);
+        lastActiveTime = Date.now();
     } else {
         startAutoRefresh();
     }
