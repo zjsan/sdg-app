@@ -150,6 +150,7 @@
 <script setup>
 import { ref, onMounted, computed, onUnmounted, onBeforeUnmount } from "vue";
 import { useAuthStore } from "@/stores/auth";
+import { usePowerBiStore } from "@/stores/powerBi";
 import api from "@/plugins/axios";
 import {
     AlertDialog,
@@ -164,13 +165,13 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 
+//Pinia stores
 const auth = useAuthStore();
-const powerBiEmbedUrl = ref(null);
+const powerBiStore = usePowerBiStore();
+
+// Component-Local State (Only UI/Responsiveness)
 const isSidebarOpen = ref(false);
 const screenWidth = ref(window.innerWidth);
-let refreshTimer = null;
-const refreshInterval = 2700; //45 min in seconds
-let lastActiveTime = Date.now();
 
 // Determine if screen size is below the 'lg' breakpoint (1024px), covering mobile and tablet
 const isMobile = computed(() => screenWidth.value < 1024);
@@ -188,29 +189,6 @@ const handleResize = () => {
     }
 };
 
-async function loadPowerBiUrl(isRefresh = false) {
-    // 1. Initial Auth Check and Data Fetch
-    try {
-        const response = await api.get("/pbi", {
-            headers: { Authorization: `Bearer ${auth.token}` },
-        });
-
-        console.log("Power BI API Response:", response.data);
-
-        const { signedUrl, message } = response.data;
-
-        if (signedUrl) {
-            // Construct the final, full URL on the client side
-            powerBiEmbedUrl.value = signedUrl;
-            console.log(message);
-        } else {
-            console.error("Missing Power BI IDs in response.");
-        }
-    } catch (error) {
-        console.error("Failed to load Power BI URL:", error);
-    }
-}
-
 onUnmounted(() => {
     // Crucial cleanup to prevent memory leaks
     window.removeEventListener("resize", handleResize);
@@ -221,25 +199,12 @@ onMounted(async () => {
     window.addEventListener("resize", handleResize);
     handleResize(); // Initial call to set sidebar state and screenWidth correctly
 
-    // 3. Load Power BI URL and start auto-refresh
-    await loadPowerBiUrl();
-    startAutoRefresh();
+    await powerBiStore.init(); // Initialize Power BI store (leader assignment, fetching of power bi link, etc.)
 });
 
 onBeforeUnmount(() => {
-    if (refreshTimer) clearInterval(refreshTimer);
+    powerBiStore.cleanup();
 });
-
-//
-function startAutoRefresh() {
-    if (refreshTimer) clearInterval(refreshTimer);
-
-    // refresh every 45 minutes (before 1hr expiration)
-    refreshTimer = setInterval(async () => {
-        powerBiEmbedUrl.value = "";
-        await loadPowerBiUrl(true);
-    }, refreshInterval * 1000);
-}
 
 //when user is inactive (tab hidden), pause refresh
 // document.addEventListener("visibilitychange", async () => {
