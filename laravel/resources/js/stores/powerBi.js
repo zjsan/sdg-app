@@ -11,7 +11,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     let leaderResponseReceived = false; // flag to track if a leader response was received
 
     let refreshTimer = null;
-    const refreshInterval = 2700; // 45 min
+    const refreshInterval = 1000; // 45 min
 
     const channel = new BroadcastChannel("pbi_refresh"); // broadcast channel setup
 
