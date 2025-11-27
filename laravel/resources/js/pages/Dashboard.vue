@@ -230,6 +230,7 @@ onBeforeUnmount(() => {
     if (refreshTimer) clearInterval(refreshTimer);
 });
 
+//
 function startAutoRefresh() {
     if (refreshTimer) clearInterval(refreshTimer);
 
@@ -241,21 +242,21 @@ function startAutoRefresh() {
 }
 
 //when user is inactive (tab hidden), pause refresh
-document.addEventListener("visibilitychange", async () => {
-    if (document.hidden) {
-        clearInterval(refreshTimer);
-        lastActiveTime = Date.now();
-    } else {
-        const inactiveTime = (Date.now() - lastActiveTime) / 1000;
+// document.addEventListener("visibilitychange", async () => {
+//     if (document.hidden) {
+//         clearInterval(refreshTimer);
+//         lastActiveTime = Date.now();
+//     } else {
+//         const inactiveTime = (Date.now() - lastActiveTime) / 1000;
 
-        if (inactiveTime >= refreshInterval) {
-            // If inactive for longer than refresh interval, refresh immediately
-            powerBiEmbedUrl.value = "";
-            await loadPowerBiUrl(true);
-        }
-        startAutoRefresh();
-    }
-});
+//         if (inactiveTime >= refreshInterval) {
+//             // If inactive for longer than refresh interval, refresh immediately
+//             powerBiEmbedUrl.value = "";
+//             await loadPowerBiUrl(true);
+//         }
+//         startAutoRefresh();
+//     }
+// });
 
 const logout = async () => {
     await auth.logout();
