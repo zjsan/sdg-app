@@ -31,6 +31,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         const msg = event.data; //receive data
 
         if (msg.type === "leader") {
+            leaderResponseReceived = true;
             isLeader.value = false; // Another tab owns leadership
         }
 
@@ -80,10 +81,9 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
         // 2. Wait briefly to see if a leader answers
         setTimeout(async () => {
-            if (!isLeader.value) {
-                // We are leader -> fetch once
-                await refresh(); // fetch + broadcast
+            if (!leaderResponseReceived) {
                 becomeLeader();
+                await refresh();
             }
 
             // If follower: wait for broadcast
