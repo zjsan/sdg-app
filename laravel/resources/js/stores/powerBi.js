@@ -52,7 +52,6 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     // ---- Refresh Logic ----
     // only leader tab fetches new signed url from backend
     async function fetchSignedUrl() {
-
         try {
             const response = await api.get("/pbi", {
                 headers: { Authorization: `Bearer ${auth.token}` },
@@ -60,43 +59,18 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
             console.log("Power BI API Response:", response.data);
             const { signedUrl, message } = response.data;
-            
+
             if (signedUrl) {
                 console.log(message);
                 powerBiEmbedUrl.value = signedUrl;
-                // Construct the final, full URL on the client side
                 lastRefresh.value = Date.now();
                 return powerBiEmbedUrl.value;
-                
             } else {
                 console.error("Missing Power BI IDs in response.");
             }
         } catch (error) {
             console.error("Failed to load Power BI URL:", error);
         }
-    });
-     
-    
-
-    // 1. Initial Auth Check and Data Fetch
-    try {
-        const response = await api.get("/pbi", {
-            headers: { Authorization: `Bearer ${auth.token}` },
-        });
-
-        console.log("Power BI API Response:", response.data);
-
-        const { signedUrl, message } = response.data;
-
-        if (signedUrl) {
-            // Construct the final, full URL on the client side
-            powerBiEmbedUrl.value = signedUrl;
-            console.log(message);
-        } else {
-            console.error("Missing Power BI IDs in response.");
-        }
-    } catch (error) {
-        console.error("Failed to load Power BI URL:", error);
     }
 
     async function refresh() {
