@@ -12,37 +12,41 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
     const channel = new BroadcastChannel("pbi_refresh"); // broadcast channel setup
 
-    // ---- Leader Election ----
+    // Request leadership from other tabs
+
+    //  Leader Election Messaging
+    function requestLeader() {
+        channel.postMessage({ type: "leader_request" });
+    }
+
     function becomeLeader() {
         isLeader.value = true;
         channel.postMessage({ type: "leader" });
         startAutoRefresh();
     }
 
-    // Request leadership from other tabs
-    function requestLeader() {
-        channel.postMessage({ type: "leader_request" });
-    }
-
-    // Listen for messages from other tabs
+    // Broacast channel message handling
     channel.onmessage = async (event) => {
-        const msg = event.data;
+        const msg = event.data; //receive data
 
         if (msg.type === "leader") {
             isLeader.value = false; // Another tab owns leadership
         }
 
+        //check if leader exists
         if (msg.type === "leader_request" && isLeader.value) {
             // Tell the new tab that a leader exists
             channel.postMessage({ type: "leader" });
         }
 
+        // leader sends new url to followers
         if (msg.type === "refresh" && !isLeader.value) {
             powerBiEmbedUrl.value = msg.url;
         }
     };
 
     // ---- Refresh Logic ----
+    // only leader tab fetches new signed url from backend
     async function fetchSignedUrl() {
         const response = await api.get("/pbi");
         powerBiEmbedUrl.value = response.data.powerBiEmbedUrl;
@@ -52,12 +56,15 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
     async function refresh() {
         const url = await fetchSignedUrl();
+
+        //broadcast new url to followers
         channel.postMessage({ type: "refresh", url });
     }
 
     function startAutoRefresh() {
         clearInterval(refreshTimer);
 
+        //refresh every refreshInterval seconds => 45 minutes
         refreshTimer = setInterval(async () => {
             if (isLeader.value) {
                 await refresh();
@@ -65,17 +72,17 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         }, refreshInterval * 1000);
     }
 
-    // ---- Tab Init ----
+    // Store initialization runs when dashboard is loaded
     async function init() {
         // 1. Ask for existing leader
         requestLeader();
 
         // 2. Wait briefly to see if a leader answers
         setTimeout(async () => {
-            if (isLeader.value) {
+            if (!isLeader.value) {
                 // We are leader -> fetch once
                 await refresh(); // fetch + broadcast
-                startAutoRefresh();
+                becomeLeader();
             }
 
             // If follower: wait for broadcast
@@ -84,6 +91,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     }
 
     // ---- Cleanup ----
+    //tab closing or navigating away
     function cleanup() {
         clearInterval(refreshTimer);
         channel.close();
