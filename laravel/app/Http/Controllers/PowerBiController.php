@@ -81,8 +81,8 @@ class PowerBiController extends Controller
             abort(403, 'Signed URL expired or tampered.');
         }
 
-        $user = $request->user();
-        $userID = $user->id;
+       // $user = $request->user();
+       // $userID = $user->id;
 
         $token = $request->query('token'); //retrive token from query parameter of url
         $data = Cache::get("pbi_embed_$token"); // Retrieve token payload from cache       
