@@ -6,10 +6,11 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     const powerBiEmbedUrl = ref(null);
     const lastRefresh = ref(Date.now());
     const isLeader = ref(false);
-    const channel = new BroadcastChannel("pbi_refresh"); // for inter-tab communication
-    let refreshTimer = null;
 
+    let refreshTimer = null;
     const refreshInterval = 2700; // 45 min
+
+    const channel = new BroadcastChannel("pbi_refresh"); // broadcast channel setup
 
     // ---- Leader Election ----
     function becomeLeader() {
