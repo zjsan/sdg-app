@@ -11,7 +11,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     let leaderResponseReceived = false; // flag to track if a leader response was received
 
     let refreshTimer = null;
-    const refreshInterval = 60; // 45 min in seconds
+    const refreshInterval = 15; // 45 min in seconds
 
     const channel = new BroadcastChannel("pbi_refresh"); // broadcast channel setup
 
@@ -25,6 +25,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     function becomeLeader() {
         isLeader.value = true;
         channel.postMessage({ type: "leader" });
+        startAutoRefresh();
     }
 
     // Broacast channel message handling
@@ -104,21 +105,27 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
     // Store initialization runs when dashboard is loaded
     async function init() {
-        // 1.loads the dashboard instantly while the election happens in the background.
-        await fetchSignedUrl();
-
-        // 2. Ask for existing leader
+        // 1. Ask for existing leader first
         requestLeader();
 
-        // 3. Wait briefly to see if a leader answers
-        setTimeout(async () => {
-            if (!leaderResponseReceived) {
-                becomeLeader();
-                await refresh();
+        // 2. Wait for election to decide role
+        await new Promise((resolve) => setTimeout(resolve, 300));
+
+        if (!leaderResponseReceived) {
+            // We won the election!
+            becomeLeader(); // Claims leadership AND starts timer.
+
+            // Perform the initial fetch and broadcast
+            const initialUrl = await fetchSignedUrl();
+
+            if (initialUrl) {
+                channel.postMessage({ type: "refresh", url: initialUrl });
             }
-            // If follower: wait for broadcast
-            // no backend calls
-        }, 300);
+        } else {
+            // We lost the election (follower).
+            // Fetch URL for immediate display (required for single-use token backend).
+            await fetchSignedUrl();
+        }
     }
 
     // ---- Cleanup ----
