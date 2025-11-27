@@ -104,27 +104,40 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     }
 
     // Store initialization runs when dashboard is loaded
+    // FINAL, CORRECTED init() LOGIC
     async function init() {
-        // 1. Ask for existing leader first
+        // 1. All tabs MUST perform an initial fetch to load the dashboard immediately.
+        // This consumes a fresh, single-use token unique to this tab.
+        await fetchSignedUrl();
+
+        // 2. Ask for existing leader
         requestLeader();
 
-        // 2. Wait for election to decide role
+        // 3. Wait for election
         await new Promise((resolve) => setTimeout(resolve, 300));
 
         if (!leaderResponseReceived) {
-            // We won the election!
-            becomeLeader(); // Claims leadership AND starts timer.
+            // --------------------
+            // I AM THE LEADER
+            // --------------------
+            becomeLeader(); // Claims leadership and STARTS THE RECURRING TIMER
 
-            // Perform the initial fetch and broadcast
-            const initialUrl = await fetchSignedUrl();
-
-            if (initialUrl) {
-                channel.postMessage({ type: "refresh", url: initialUrl });
+            // Broadcast the URL we just fetched so any other followers
+            // that opened slightly later can pick it up.
+            if (powerBiEmbedUrl.value) {
+                channel.postMessage({
+                    type: "refresh",
+                    url: powerBiEmbedUrl.value,
+                });
             }
         } else {
-            // We lost the election (follower).
-            // Fetch URL for immediate display (required for single-use token backend).
-            await fetchSignedUrl();
+            // --------------------
+            // I AM A FOLLOWER
+            // --------------------
+            console.log(
+                "Follower: Leader found, waiting for renewal broadcasts."
+            );
+            // We do nothing else. The dashboard is already loaded via the fetch in step 1.
         }
     }
 
