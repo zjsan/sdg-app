@@ -102,7 +102,6 @@ export const usePowerBiStore = defineStore("powerbi", () => {
                 becomeLeader();
                 await refresh();
             }
-
             // If follower: wait for broadcast
             // no backend calls
         }, 300);
