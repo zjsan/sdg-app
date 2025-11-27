@@ -6,6 +6,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     const powerBiEmbedUrl = ref(null);
     const lastRefresh = ref(Date.now());
     const isLeader = ref(false);
+    let leaderResponseReceived = false; // flag to track if a leader response was received
 
     let refreshTimer = null;
     const refreshInterval = 2700; // 45 min
