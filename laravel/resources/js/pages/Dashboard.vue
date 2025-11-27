@@ -126,7 +126,7 @@
         <main class="flex-grow w-full flex flex-col">
             <div class="flex-grow flex flex-col">
                 <div
-                    v-if="!powerBiEmbedUrl"
+                    v-if="!powerBiStore.powerBiEmbedUrl"
                     class="flex items-center justify-center flex-grow text-gray-500"
                 >
                     <i class="pi pi-spin pi-spinner text-3xl mr-2"></i> Loading
@@ -135,8 +135,8 @@
 
                 <iframe
                     v-else
-                    :src="powerBiEmbedUrl"
-                    :key="powerBiEmbedUrl"
+                    :src="powerBiStore.powerBiEmbedUrl"
+                    :key="powerBiStore.powerBiEmbedUrl"
                     frameborder="0"
                     allowfullscreen
                     class="flex-grow w-full h-full border-0 shadow-lg"

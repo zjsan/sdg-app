@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { api } from "@/api";
+import api from "@/plugins/axios";
 import { ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
 
@@ -11,7 +11,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     let leaderResponseReceived = false; // flag to track if a leader response was received
 
     let refreshTimer = null;
-    const refreshInterval = 1000; // 45 min
+    const refreshInterval = 2000; // 45 min
 
     const channel = new BroadcastChannel("pbi_refresh"); // broadcast channel setup
 
@@ -44,7 +44,17 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         }
 
         // leader sends new url to followers
-        if (msg.type === "refresh" && !isLeader.value) {
+        // leader sends new url to followers
+        if (msg.type === "refresh") {
+            // Leaders NEVER apply refresh from others
+            if (isLeader.value) return;
+
+            // Ignore refresh messages until election is settled
+            if (!leaderResponseReceived) {
+                console.log("Ignoring refresh during election");
+                return;
+            }
+
             powerBiEmbedUrl.value = msg.url;
         }
     };
