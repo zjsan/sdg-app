@@ -25,7 +25,6 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     function becomeLeader() {
         isLeader.value = true;
         channel.postMessage({ type: "leader" });
-        startAutoRefresh();
     }
 
     // Broacast channel message handling
@@ -85,8 +84,11 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     async function refresh() {
         const url = await fetchSignedUrl();
 
-        //broadcast new url to followers
-        channel.postMessage({ type: "refresh", url });
+        //broadcast new url to followers'
+        if (url) {
+            channel.postMessage({ type: "refresh", url });
+            console.log("Broadcasted new Power BI URL to followers.");
+        }
     }
 
     function startAutoRefresh() {
