@@ -102,10 +102,13 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
     // Store initialization runs when dashboard is loaded
     async function init() {
-        // 1. Ask for existing leader
+        // 1.loads the dashboard instantly while the election happens in the background.
+        await fetchSignedUrl();
+
+        // 2. Ask for existing leader
         requestLeader();
 
-        // 2. Wait briefly to see if a leader answers
+        // 3. Wait briefly to see if a leader answers
         setTimeout(async () => {
             if (!leaderResponseReceived) {
                 becomeLeader();
