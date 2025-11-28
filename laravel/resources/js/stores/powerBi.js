@@ -17,6 +17,8 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     const channel = new BroadcastChannel("pbi_refresh");
     let lastActiveTime = Date.now();
 
+    let initialized = false;
+
     // ---------------------------------------------------
     // BroadcastChannel Communication
     // ---------------------------------------------------
@@ -26,19 +28,18 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     }
 
     async function becomeLeader() {
-        // Must be async now
         isLeader.value = true;
-        leaderResponseReceived = true;
+        // leaderResponseReceived = true; // REMOVED (See Fix 2)
 
         console.log("BECOMING LEADER: Fetching initial token...");
 
-        // 🟢 FIX 1: Fetch and set the URL FIRST
+        // 1. Fetch and set the URL FIRST
         await fetchSignedUrl();
 
         // 2. Broadcast leadership + the NEWLY FETCHED URL
         channel.postMessage({
             type: "leader",
-            url: powerBiEmbedUrl.value, // This is now guaranteed to be non-null
+            url: powerBiEmbedUrl.value, // Guaranteed to be non-null after fetch
         });
 
         // 3. Start the recurring timer
@@ -51,9 +52,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
         console.log("Received BC message:", msg);
 
-        // -------------------------------
         // Another tab declares leadership
-        // -------------------------------
         if (msg.type === "leader") {
             console.log("Leader detected.");
 
@@ -73,10 +72,9 @@ export const usePowerBiStore = defineStore("powerbi", () => {
             return;
         }
 
-        // -------------------------------
         // Another tab requests leader
-        // -------------------------------
         if (msg.type === "leader_request") {
+            // FIX 1: Leader always responds if it exists, letting the receiver handle null URL.
             if (isLeader.value) {
                 channel.postMessage({
                     type: "leader",
@@ -86,9 +84,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
             return;
         }
 
-        // -------------------------------
         // Leader broadcasts new token URL
-        // -------------------------------
         if (msg.type === "refresh") {
             if (isLeader.value) return; // Leaders ignore refresh messages
 
@@ -175,12 +171,12 @@ export const usePowerBiStore = defineStore("powerbi", () => {
             leaderResponseReceived = false;
             requestLeader();
 
-            await new Promise((resolve) => setTimeout(resolve, 300));
+            await new Promise((resolve) => setTimeout(resolve, 800));
 
             // Only take leadership if NO leader responds
             if (!leaderResponseReceived) {
                 console.log("No leader active — taking leadership.");
-                becomeLeader();
+                await becomeLeader();
             } else {
                 console.log("Leader still active — will not take over.");
             }
@@ -203,6 +199,8 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     // ---------------------------------------------------
     function broadcastLogout() {
         channel.postMessage({ type: "logout" });
+        // Immediately do local cleanup so current tab is consistent
+        logoutHandler();
     }
 
     function logoutHandler() {
@@ -221,6 +219,8 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
     async function init() {
         console.log("PowerBI store init — requesting leader.");
+        if (initialized) return;
+        initialized = true;
 
         requestLeader();
         await new Promise((resolve) => setTimeout(resolve, 300));
@@ -242,6 +242,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     }
 
     function cleanup() {
+        initialized = false;
         clearInterval(refreshTimer);
         channel.close();
         document.removeEventListener("visibilitychange", handleVisibility);
