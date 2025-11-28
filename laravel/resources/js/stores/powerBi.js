@@ -50,7 +50,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         // Another tab declares leadership
         // -------------------------------
         if (msg.type === "leader") {
-            console.log("Leader detected. I am FOLLOWER.");
+            console.log("Leader detected.");
 
             leaderResponseReceived = true;
 
@@ -95,6 +95,12 @@ export const usePowerBiStore = defineStore("powerbi", () => {
                 lastRefresh.value = Date.now();
             }
 
+            return;
+        }
+
+        if (msg.type === "logout") {
+            console.log("Received logout broadcast.");
+            logoutHandler();
             return;
         }
     };
@@ -153,7 +159,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
     const handleVisibility = async () => {
         if (document.hidden) {
-            console.log("Tab hidden — pausing my refresh timer.");
+            console.log("Tab hidden — pausing refresh timer.");
             lastActiveTime = Date.now();
             clearInterval(refreshTimer);
             return;
@@ -190,8 +196,21 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
     document.addEventListener("visibilitychange", handleVisibility);
 
+    // ---------------------------------------------------
+    // Logout Handling
+    // ---------------------------------------------------
     const broadCastlogout = () => {
         channel.postMessage({ type: "logout" });
+    };
+
+    const logoutHandler = () => {
+        clearInterval(refreshTimer);
+        refreshTimer = null;
+        powerBiEmbedUrl.value = null;
+        isLeader.value = false;
+        leaderResponseReceived = false;
+        document.removeEventListener("visibilitychange", handleVisibility);
+        console.log("PowerBI store logged out and cleaned up.");
     };
 
     // ---------------------------------------------------
