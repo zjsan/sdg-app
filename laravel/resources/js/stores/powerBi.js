@@ -31,6 +31,8 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         console.log("Tab visible — resuming refresh checks.");
         const inactiveTime = (Date.now() - lastActiveTime) / 1000;
 
+        startAutoRefresh(); // resume auto refresh
+
         // If hidden longer than refresh interval → refresh immediately
         if (inactiveTime >= refreshInterval) {
             console.log("Inactive too long. Forcing immediate token refresh.");
@@ -47,9 +49,6 @@ export const usePowerBiStore = defineStore("powerbi", () => {
             await refresh();
             return;
         }
-
-        // resume auto refresh
-        startAutoRefresh();
     });
 
     //  Leader Election Messaging
