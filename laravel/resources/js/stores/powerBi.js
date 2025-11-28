@@ -104,10 +104,8 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     }
 
     // Store initialization runs when dashboard is loaded
-    // FINAL, CORRECTED init() LOGIC
     async function init() {
         // 1. All tabs MUST perform an initial fetch to load the dashboard immediately.
-        // This consumes a fresh, single-use token unique to this tab.
         await fetchSignedUrl();
 
         // 2. Ask for existing leader
@@ -117,27 +115,15 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         await new Promise((resolve) => setTimeout(resolve, 300));
 
         if (!leaderResponseReceived) {
-            // --------------------
-            // I AM THE LEADER
-            // --------------------
             becomeLeader(); // Claims leadership and STARTS THE RECURRING TIMER
 
-            // Broadcast the URL we just fetched so any other followers
-            // that opened slightly later can pick it up.
-            if (powerBiEmbedUrl.value) {
-                channel.postMessage({
-                    type: "refresh",
-                    url: powerBiEmbedUrl.value,
-                });
-            }
+            // REMOVE INITIAL BROADCAST HERE
+            // The first true broadcast will happen when the timer fires
         } else {
-            // --------------------
             // I AM A FOLLOWER
-            // --------------------
             console.log(
                 "Follower: Leader found, waiting for renewal broadcasts."
             );
-            // We do nothing else. The dashboard is already loaded via the fetch in step 1.
         }
     }
 
