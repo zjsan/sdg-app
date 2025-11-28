@@ -25,19 +25,24 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         channel.postMessage({ type: "leader_request" });
     }
 
-    function becomeLeader() {
+    async function becomeLeader() {
+        // Must be async now
         isLeader.value = true;
         leaderResponseReceived = true;
 
-        console.log("BECOMING LEADER");
+        console.log("BECOMING LEADER: Fetching initial token...");
 
-        // Broadcast leadership + currently known URL
+        // 🟢 FIX 1: Fetch and set the URL FIRST
+        await fetchSignedUrl();
+
+        // 2. Broadcast leadership + the NEWLY FETCHED URL
         channel.postMessage({
             type: "leader",
-            url: powerBiEmbedUrl.value ?? null,
+            url: powerBiEmbedUrl.value, // This is now guaranteed to be non-null
         });
 
-        leaderInit();
+        // 3. Start the recurring timer
+        startAutoRefresh();
     }
 
     channel.onmessage = async (event) => {
@@ -138,11 +143,6 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         }
     }
 
-    async function leaderInit() {
-        await refresh();
-        startAutoRefresh();
-    }
-
     function startAutoRefresh() {
         clearInterval(refreshTimer);
 
@@ -188,7 +188,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
             return;
         }
 
-        // Resume only if I am leader
+        // Resume only if leader
         if (isLeader.value) {
             startAutoRefresh();
         }
@@ -213,7 +213,6 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         leaderResponseReceived = false;
         document.removeEventListener("visibilitychange", handleVisibility);
         console.log("PowerBI store logged out and cleaned up.");
-        auth.logout();
     }
 
     // ---------------------------------------------------
@@ -227,10 +226,16 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         await new Promise((resolve) => setTimeout(resolve, 300));
 
         if (!leaderResponseReceived) {
-            console.log("No leader found — becoming leader.");
-            becomeLeader();
+            console.log(
+                "No leader found — becoming leader (and fetching token)."
+            );
+            await becomeLeader(); // Wait for the async function to complete
         } else {
-            console.log("Leader exists — I am follower.");
+            // Follower does NOTHING but wait for the 'leader' message handler
+            // to receive the URL from the leader and set powerBiEmbedUrl.value.
+            console.log(
+                "Leader exists — waiting for leader's initial URL broadcast."
+            );
         }
 
         setupVisibilityHandler();
