@@ -15,9 +15,42 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
     const channel = new BroadcastChannel("pbi_refresh"); // broadcast channel setup
 
-    let lastActiveTime = Date.now();
+    let lastActiveTime = Date.now(); // track last active time for inactivity
 
-    // Request leadership from other tabs
+    // Inactivity + Visibility Handler
+    document.addEventListener("visibilitychange", async () => {
+        // ========== TAB HIDDEN ==========
+        if (document.hidden) {
+            console.log("Tab hidden — pausing auto-refresh.");
+            lastActiveTime = Date.now();
+            clearInterval(refreshTimer);
+            return;
+        }
+
+        // ========== TAB VISIBLE ==========
+        console.log("Tab visible — resuming refresh checks.");
+        const inactiveTime = (Date.now() - lastActiveTime) / 1000;
+
+        // If hidden longer than refresh interval → refresh immediately
+        if (inactiveTime >= refreshInterval) {
+            console.log("Inactive too long. Forcing immediate token refresh.");
+
+            // Reset iframe to avoid showing expired URL
+            powerBiEmbedUrl.value = "";
+
+            // If follower wakes up, it must become leader
+            if (!isLeader.value) {
+                console.log("Taking leadership from inactive tab.");
+                becomeLeader();
+            }
+
+            await refresh();
+            return;
+        }
+
+        // resume auto refresh
+        startAutoRefresh();
+    });
 
     //  Leader Election Messaging
     function requestLeader() {
