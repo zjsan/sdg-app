@@ -12,7 +12,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     let leaderResponseReceived = false;
     let refreshTimer = null;
 
-    const refreshInterval = 15; // For testing; change to 2700 (45 mins)
+    const refreshInterval = 2700; // For testing 15 seconds; change to 2700 (45 mins)
 
     const channel = new BroadcastChannel("pbi_refresh");
     let lastActiveTime = Date.now();
@@ -163,7 +163,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
         console.log("Tab visible — evaluating inactivity.");
         const inactiveTime = (Date.now() - lastActiveTime) / 1000;
-        const threshold = refreshInterval * 2;
+        const threshold = refreshInterval + 10; // buffer of 10 seconds
 
         if (inactiveTime >= threshold) {
             console.log("Inactive too long. Checking leader again.");
