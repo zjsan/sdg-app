@@ -190,6 +190,10 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
     document.addEventListener("visibilitychange", handleVisibility);
 
+    const broadCastlogout = () => {
+        channel.postMessage({ type: "logout" });
+    };
+
     // ---------------------------------------------------
     // INIT — Called from component onMounted()
     // ---------------------------------------------------
