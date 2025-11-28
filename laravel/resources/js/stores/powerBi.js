@@ -15,6 +15,8 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
     const channel = new BroadcastChannel("pbi_refresh"); // broadcast channel setup
 
+    let lastActiveTime = Date.now();
+
     // Request leadership from other tabs
 
     //  Leader Election Messaging
