@@ -81,23 +81,13 @@ class PowerBiController extends Controller
             abort(403, 'Signed URL expired or tampered.');
         }
 
-       // $user = $request->user();
-       // $userID = $user->id;
-
         $token = $request->query('token'); //retrive token from query parameter of url
         $data = Cache::get("pbi_embed_$token"); // Retrieve token payload from cache       
 
         if (! $data) {
             abort(403, 'Invalid or expired token.');
         }
-
-        //$tokenUserId = $data['userId'];
-
-        //critical check that the token belongs to the current user
-       // if (!$user || $userID !== $tokenUserId) {
-         //   abort(403, 'Token does not belong to this user.');
-        //}
-
+        
         // All checks passed, proceed to redirect to Power BI embed URL
         $embedId = $data['embedId']; 
         $baseUrl = env('POWER_BI_BASE_URL');
