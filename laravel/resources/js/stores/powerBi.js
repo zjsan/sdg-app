@@ -8,108 +8,114 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     const powerBiEmbedUrl = ref(null);
     const lastRefresh = ref(Date.now());
     const isLeader = ref(false);
-    let leaderResponseReceived = false; // flag to track if a leader response was received
 
+    let leaderResponseReceived = false;
     let refreshTimer = null;
-    const refreshInterval = 15; // 45 min in seconds
 
-    const channel = new BroadcastChannel("pbi_refresh"); // broadcast channel setup
+    const refreshInterval = 15; // For testing; change to 2700 (45 mins)
 
-    let lastActiveTime = Date.now(); // track last active time for inactivity
+    const channel = new BroadcastChannel("pbi_refresh");
+    let lastActiveTime = Date.now();
 
-    // Inactivity + Visibility Handler
-    const handleVisibility = async () => {
-        // ========== TAB HIDDEN ==========
-        if (document.hidden) {
-            console.log("Tab hidden — pausing auto-refresh.");
-            lastActiveTime = Date.now();
-            clearInterval(refreshTimer);
-            return;
-        }
+    // ---------------------------------------------------
+    // BroadcastChannel Communication
+    // ---------------------------------------------------
 
-        // ========== TAB VISIBLE ==========
-        console.log("Tab visible — resuming refresh checks.");
-        const inactiveTime = (Date.now() - lastActiveTime) / 1000;
-
-        startAutoRefresh(); // resume auto refresh
-
-        // If hidden longer than refresh interval → refresh immediately
-        //run only if missed renewal
-        //added safety buffer of refreshInterval * 2
-        if (inactiveTime >= refreshInterval * 2) {
-            console.log("Inactive too long. Forcing immediate token refresh.");
-
-            // Reset iframe to avoid showing expired URL
-            powerBiEmbedUrl.value = "";
-
-            await fetchSignedUrl(); //secures a fresh token for itself immediately
-            requestLeader(); //Re-run election
-        }
-    };
-
-    function setupVisibilityHandler() {
-        document.addEventListener("visibilitychange", handleVisibility);
-    }
-
-    //  Leader Election Messaging
     function requestLeader() {
         channel.postMessage({ type: "leader_request" });
     }
 
     function becomeLeader() {
         isLeader.value = true;
-        channel.postMessage({ type: "leader" });
-        startAutoRefresh();
+        leaderResponseReceived = true;
+
+        console.log("BECOMING LEADER");
+
+        // Broadcast leadership + currently known URL
+        channel.postMessage({
+            type: "leader",
+            url: powerBiEmbedUrl.value ?? null,
+        });
+
+        leaderInit();
     }
 
-    // Broacast channel message handling
     channel.onmessage = async (event) => {
-        const msg = event.data; //receive data
+        const msg = event.data;
+        if (!msg || !msg.type) return;
 
+        console.log("Received BC message:", msg);
+
+        // -------------------------------
+        // Another tab declares leadership
+        // -------------------------------
         if (msg.type === "leader") {
+            console.log("Leader detected. I am FOLLOWER.");
+
             leaderResponseReceived = true;
-            isLeader.value = false; // Another tab owns leadership
-        }
 
-        //check if leader exists
-        if (msg.type === "leader_request" && isLeader.value) {
-            // Tell the new tab that a leader exists
-            channel.postMessage({ type: "leader" });
-        }
+            // IMPORTANT — followers must never refresh or run timers
+            isLeader.value = false;
+            clearInterval(refreshTimer);
+            refreshTimer = null;
 
-        // leader sends new url to followers
-        if (msg.type === "refresh") {
-            // Leaders NEVER apply refresh from others
-            if (isLeader.value) return;
-
-            // Ignore refresh messages until election is settled
-            if (!leaderResponseReceived) {
-                console.log("Ignoring refresh during election");
-                return;
+            // Leader may include the newest URL
+            if (msg.url) {
+                powerBiEmbedUrl.value = msg.url;
+                lastRefresh.value = Date.now();
             }
 
-            powerBiEmbedUrl.value = msg.url;
+            return;
+        }
+
+        // -------------------------------
+        // Another tab requests leader
+        // -------------------------------
+        if (msg.type === "leader_request") {
+            if (isLeader.value) {
+                channel.postMessage({
+                    type: "leader",
+                    url: powerBiEmbedUrl.value ?? null,
+                });
+            }
+            return;
+        }
+
+        // -------------------------------
+        // Leader broadcasts new token URL
+        // -------------------------------
+        if (msg.type === "refresh") {
+            if (isLeader.value) return; // Leaders ignore refresh messages
+
+            console.log("Follower received refresh URL.");
+
+            leaderResponseReceived = true;
+            if (msg.url) {
+                powerBiEmbedUrl.value = msg.url;
+                lastRefresh.value = Date.now();
+            }
+
+            return;
         }
     };
 
-    // ---- Refresh Logic ----
-    // only leader tab fetches new signed url from backend
+    // ---------------------------------------------------
+    // Token Refresh Logic (LEADER ONLY)
+    // ---------------------------------------------------
+
     async function fetchSignedUrl() {
         try {
             const response = await api.get("/pbi", {
                 headers: { Authorization: `Bearer ${auth.token}` },
             });
 
-            console.log("Power BI API Response:", response.data);
             const { signedUrl, message } = response.data;
 
             if (signedUrl) {
                 console.log(message);
                 powerBiEmbedUrl.value = signedUrl;
                 lastRefresh.value = Date.now();
-                return powerBiEmbedUrl.value;
-            } else {
-                console.error("Missing Power BI IDs in response.");
+                return signedUrl;
             }
         } catch (error) {
             console.error("Failed to load Power BI URL:", error);
@@ -117,19 +123,23 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     }
 
     async function refresh() {
-        const url = await fetchSignedUrl();
+        if (!isLeader.value) return;
 
-        //broadcast new url to followers'
+        const url = await fetchSignedUrl();
         if (url) {
+            console.log("Leader refreshed and broadcasting new URL.");
             channel.postMessage({ type: "refresh", url });
-            console.log("Broadcasted new Power BI URL to followers.");
         }
+    }
+
+    async function leaderInit() {
+        await refresh();
+        startAutoRefresh();
     }
 
     function startAutoRefresh() {
         clearInterval(refreshTimer);
 
-        //refresh every refreshInterval seconds => 45 minutes
         refreshTimer = setInterval(async () => {
             if (isLeader.value) {
                 await refresh();
@@ -137,34 +147,67 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         }, refreshInterval * 1000);
     }
 
-    // Store initialization runs when dashboard is loaded
+    // ---------------------------------------------------
+    // Visibility + Inactivity Logic
+    // ---------------------------------------------------
+
+    const handleVisibility = async () => {
+        if (document.hidden) {
+            console.log("Tab hidden — pausing my refresh timer.");
+            lastActiveTime = Date.now();
+            clearInterval(refreshTimer);
+            return;
+        }
+
+        console.log("Tab visible — evaluating inactivity.");
+        const inactiveTime = (Date.now() - lastActiveTime) / 1000;
+        const threshold = refreshInterval * 2;
+
+        if (inactiveTime >= threshold) {
+            console.log("Inactive too long. Checking leader again.");
+
+            leaderResponseReceived = false;
+            requestLeader();
+
+            await new Promise((resolve) => setTimeout(resolve, 300));
+
+            // Only take leadership if NO leader responds
+            if (!leaderResponseReceived) {
+                console.log("No leader active — taking leadership.");
+                becomeLeader();
+            } else {
+                console.log("Leader still active — will not take over.");
+            }
+
+            return;
+        }
+
+        // Resume only if I am leader
+        if (isLeader.value) {
+            startAutoRefresh();
+        }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibility);
+
+    // ---------------------------------------------------
+    // INIT — Called from component onMounted()
+    // ---------------------------------------------------
+
     async function init() {
-        // 1. All tabs MUST perform an initial fetch to load the dashboard immediately.
-        await fetchSignedUrl();
+        console.log("PowerBI store init — requesting leader.");
 
-        // 2. Ask for existing leader
         requestLeader();
-
-        // 3. Wait for election
         await new Promise((resolve) => setTimeout(resolve, 300));
 
         if (!leaderResponseReceived) {
-            becomeLeader(); // Claims leadership and STARTS THE RECURRING TIMER
-
-            // REMOVE INITIAL BROADCAST HERE
-            // The first true broadcast will happen when the timer fires
+            console.log("No leader found — becoming leader.");
+            becomeLeader();
         } else {
-            // I AM A FOLLOWER
-            console.log(
-                "Follower: Leader found, waiting for renewal broadcasts."
-            );
+            console.log("Leader exists — I am follower.");
         }
-
-        setupVisibilityHandler();
     }
 
-    // ---- Cleanup ----
-    //tab closing or navigating away
     function cleanup() {
         clearInterval(refreshTimer);
         channel.close();
