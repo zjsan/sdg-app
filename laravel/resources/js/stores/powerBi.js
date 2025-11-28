@@ -167,7 +167,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     function cleanup() {
         clearInterval(refreshTimer);
         channel.close();
-        setupVisibilityHandler();
+        document.removeEventListener("visibilitychange", handleVisibility);
     }
 
     return {
