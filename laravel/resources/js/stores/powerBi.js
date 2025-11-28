@@ -18,7 +18,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     let lastActiveTime = Date.now(); // track last active time for inactivity
 
     // Inactivity + Visibility Handler
-    document.addEventListener("visibilitychange", async () => {
+    const handleVisibility = async () => {
         // ========== TAB HIDDEN ==========
         if (document.hidden) {
             console.log("Tab hidden — pausing auto-refresh.");
@@ -34,22 +34,21 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         startAutoRefresh(); // resume auto refresh
 
         // If hidden longer than refresh interval → refresh immediately
+        //run only if missed renewal
         if (inactiveTime >= refreshInterval) {
             console.log("Inactive too long. Forcing immediate token refresh.");
 
             // Reset iframe to avoid showing expired URL
             powerBiEmbedUrl.value = "";
 
-            // If follower wakes up, it must become leader
-            if (!isLeader.value) {
-                console.log("Taking leadership from inactive tab.");
-                becomeLeader();
-            }
-
-            await refresh();
-            return;
+            await fetchSignedUrl(); //secures a fresh token for itself immediately
+            requestLeader(); //Re-run election
         }
-    });
+    };
+
+    function setupVisibilityHandler() {
+        document.addEventListener("visibilitychange", handleVisibility);
+    }
 
     //  Leader Election Messaging
     function requestLeader() {
@@ -159,6 +158,8 @@ export const usePowerBiStore = defineStore("powerbi", () => {
                 "Follower: Leader found, waiting for renewal broadcasts."
             );
         }
+
+        setupVisibilityHandler();
     }
 
     // ---- Cleanup ----
@@ -166,6 +167,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     function cleanup() {
         clearInterval(refreshTimer);
         channel.close();
+        setupVisibilityHandler();
     }
 
     return {
