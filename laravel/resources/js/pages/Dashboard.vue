@@ -49,18 +49,6 @@
                     <i class="pi pi-home text-xl mr-3"></i>
                     Dashboard
                 </router-link>
-
-                <!-- 
-                <router-link
-                    to="/settings"
-                    class="flex items-center p-3 text-gray-700 rounded-lg hover:bg-gray-100 transition duration-150"
-                    active-class="bg-gray-100 font-semibold"
-                    @click="isSidebarOpen = false"
-                >
-                    <i class="pi pi-cog text-xl mr-3"></i>
-                    Settings
-                </router-link>
-                -->
             </nav>
 
             <!-- User/Logout Section (Bottom of Sidebar) -->
