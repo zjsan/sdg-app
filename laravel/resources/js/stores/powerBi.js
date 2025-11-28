@@ -35,7 +35,8 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
         // If hidden longer than refresh interval → refresh immediately
         //run only if missed renewal
-        if (inactiveTime >= refreshInterval) {
+        //added safety buffer of refreshInterval * 2
+        if (inactiveTime >= refreshInterval * 2) {
             console.log("Inactive too long. Forcing immediate token refresh.");
 
             // Reset iframe to avoid showing expired URL
