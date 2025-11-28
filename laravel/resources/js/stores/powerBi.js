@@ -194,16 +194,18 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         }
     };
 
-    document.addEventListener("visibilitychange", handleVisibility);
+    function setupVisibilityHandler() {
+        document.addEventListener("visibilitychange", handleVisibility);
+    }
 
     // ---------------------------------------------------
     // Logout Handling
     // ---------------------------------------------------
-    const broadCastlogout = () => {
+    function broadcastLogout() {
         channel.postMessage({ type: "logout" });
-    };
+    }
 
-    const logoutHandler = () => {
+    function logoutHandler() {
         clearInterval(refreshTimer);
         refreshTimer = null;
         powerBiEmbedUrl.value = null;
@@ -211,7 +213,8 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         leaderResponseReceived = false;
         document.removeEventListener("visibilitychange", handleVisibility);
         console.log("PowerBI store logged out and cleaned up.");
-    };
+        auth.logout();
+    }
 
     // ---------------------------------------------------
     // INIT — Called from component onMounted()
@@ -229,6 +232,8 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         } else {
             console.log("Leader exists — I am follower.");
         }
+
+        setupVisibilityHandler();
     }
 
     function cleanup() {
@@ -242,5 +247,6 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         isLeader,
         init,
         cleanup,
+        broadcastLogout,
     };
 });

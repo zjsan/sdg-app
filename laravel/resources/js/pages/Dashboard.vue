@@ -206,24 +206,8 @@ onBeforeUnmount(() => {
     powerBiStore.cleanup();
 });
 
-//when user is inactive (tab hidden), pause refresh
-// document.addEventListener("visibilitychange", async () => {
-//     if (document.hidden) {
-//         clearInterval(refreshTimer);
-//         lastActiveTime = Date.now();
-//     } else {
-//         const inactiveTime = (Date.now() - lastActiveTime) / 1000;
-
-//         if (inactiveTime >= refreshInterval) {
-//             // If inactive for longer than refresh interval, refresh immediately
-//             powerBiEmbedUrl.value = "";
-//             await loadPowerBiUrl(true);
-//         }
-//         startAutoRefresh();
-//     }
-// });
-
 const logout = async () => {
+    powerBiStore.broadcastLogout();
     await auth.logout();
 };
 </script>
