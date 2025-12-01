@@ -228,6 +228,19 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         document.addEventListener("visibilitychange", handleVisibility);
     }
 
+    //listener for tab close/unload and broadcast to other tabs
+    window.addEventListener("beforeunload", () => {
+        try {
+            if (isLeader.value) {
+                channel.postMessage({
+                    type: "leader_left",
+                    tabId: TAB_ID,
+                    ts: Date.now(),
+                });
+            }
+        } catch (e) {}
+    });
+
     //listener for localStorage changes (for leader claims)
     window.addEventListener("storage", (e) => {
         if (e.key === "pbi_leader_claim") {
