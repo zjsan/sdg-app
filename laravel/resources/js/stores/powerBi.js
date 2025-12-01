@@ -54,9 +54,11 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         startAutoRefresh();
     }
 
+    //read messages from other tabs
     channel.onmessage = async (event) => {
         const msg = event.data;
         if (!msg || !msg.type) return;
+        if (msg.tabId === TAB_ID) return;
 
         console.log("Received BC message:", msg);
 
