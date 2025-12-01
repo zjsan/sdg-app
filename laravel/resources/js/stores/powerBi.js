@@ -212,7 +212,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         console.log("PowerBI store logged out and cleaned up.");
     }
 
-    // NEW HELPER FUNCTION
+    // HELPER FUNCTION
     async function challengeLeader(timeoutMs = 800) {
         leaderResponseReceived = false;
         requestLeader();
@@ -239,22 +239,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         if (initialized) return;
         initialized = true;
 
-        requestLeader();
-        await new Promise((resolve) => setTimeout(resolve, 800));
-
-        if (!leaderResponseReceived) {
-            console.log(
-                "No leader found — becoming leader (and fetching token)."
-            );
-            await becomeLeader(); // Wait for the async function to complete
-        } else {
-            // Follower does NOTHING but wait for the 'leader' message handler
-            // to receive the URL from the leader and set powerBiEmbedUrl.value.
-            console.log(
-                "Leader exists — waiting for leader's initial URL broadcast."
-            );
-        }
-
+        await challengeLeader(1000);
         setupVisibilityHandler();
     }
 
