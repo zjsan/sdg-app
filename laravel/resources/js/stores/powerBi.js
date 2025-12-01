@@ -212,6 +212,24 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         console.log("PowerBI store logged out and cleaned up.");
     }
 
+    // NEW HELPER FUNCTION
+    async function challengeLeader(timeoutMs = 800) {
+        leaderResponseReceived = false;
+        requestLeader();
+
+        // Wait for a reasonable time for an existing leader to respond.
+        await new Promise((resolve) => setTimeout(resolve, timeoutMs));
+
+        if (!leaderResponseReceived) {
+            console.log(
+                "No leader responded within the timeout — taking leadership."
+            );
+            await becomeLeader();
+        } else {
+            console.log("Existing leader responded — will follow.");
+        }
+    }
+
     // ---------------------------------------------------
     // INIT — Called from component onMounted()
     // ---------------------------------------------------
