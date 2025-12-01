@@ -255,8 +255,27 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         }
     };
 
+    //inactivity listeners
     function setupVisibilityHandler() {
         document.addEventListener("visibilitychange", handleVisibility);
+    }
+
+    function setupActivityListeners() {
+        const updateActive = () => {
+            lastActiveTime = Date.now();
+        };
+
+        const events = [
+            "mousemove",
+            "keydown",
+            "scroll",
+            "touchstart",
+            "click",
+        ];
+
+        events.forEach((evt) => {
+            window.addEventListener(evt, updateActive, { passive: true });
+        });
     }
 
     //listener for tab close/unload and broadcast to other tabs
