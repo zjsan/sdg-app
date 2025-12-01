@@ -37,20 +37,38 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
     async function becomeLeader() {
         isLeader.value = true;
-
         console.log("BECOMING LEADER: Fetching initial token...");
 
-        // 1. Fetch and set the URL FIRST
-        await fetchSignedUrl();
+        // Try to fetch with a few rapid retries
+        let signed = null;
+        const maxAttempts = 3;
+        for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+            signed = await fetchSignedUrl();
+            if (signed) break;
+            console.warn(
+                `fetchSignedUrl attempt ${attempt} failed, retrying...`
+            );
+            await new Promise((r) => setTimeout(r, 500 * attempt)); // small backoff
+        }
 
-        // 2. Broadcast leadership + the NEWLY FETCHED URL
+        if (!signed) {
+            console.error(
+                "Unable to fetch signed URL — cannot become leader right now."
+            );
+            isLeader.value = false;
+            // Optionally broadcast a 'leader_failed' message so other tabs can try
+            channel.postMessage({ type: "leader_failed", tabId: TAB_ID });
+            return;
+        }
+
+        // Broadcast leadership + the NEWLY FETCHED URL
         channel.postMessage({
             type: "leader",
+            url: powerBiEmbedUrl.value,
             tabId: TAB_ID,
-            url: powerBiEmbedUrl.value, // Guaranteed to be non-null after fetch
+            ts: Date.now(),
         });
 
-        // 3. Start the recurring timer
         startAutoRefresh();
     }
 
@@ -203,6 +221,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         document.addEventListener("visibilitychange", handleVisibility);
     }
 
+    //listener for localStorage changes (for leader claims)
     window.addEventListener("storage", (e) => {
         if (e.key === "pbi_leader_claim") {
             // parse and set leaderResponseReceived so waiting challenge functions see it
