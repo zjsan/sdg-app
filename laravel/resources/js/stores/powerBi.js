@@ -114,6 +114,37 @@ export const usePowerBiStore = defineStore("powerbi", () => {
             return;
         }
 
+        if (msg.type === "leader_failed") {
+            console.warn(
+                `Tab ${msg.tabId} reported failure to fetch token and claim leadership. Initiating re-challenge.`
+            );
+
+            // A follower should not be running the timer, but we check to be safe.
+            if (isLeader.value) return;
+
+            // Immediately run the leader challenge.
+            // This allows the current tab to skip waiting and attempt to acquire leadership
+            // or receive the token from a different leader.
+            // Use a short timeout (e.g., 500ms) since the system is already active.
+            tryClaimLeadershipWithLock(500);
+
+            return;
+        }
+
+        if (msg.type === "leader_left") {
+            console.log(
+                `Leader tab ${msg.tabId} left. Initiating a new leader challenge.`
+            );
+
+            // Check if the current tab is also currently in a leadership state (which is unlikely
+            // but possible if two tabs became leaders briefly).
+            if (isLeader.value) return;
+
+            // Force a re-challenge to speed up the election.
+            tryClaimLeadershipWithLock(500); // Use a shorter, fast-response timeout
+            return;
+        }
+
         // Leader broadcasts new token URL
         if (msg.type === "refresh") {
             if (isLeader.value) return; // Leaders ignore refresh messages
