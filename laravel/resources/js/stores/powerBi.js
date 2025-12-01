@@ -203,6 +203,18 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         document.addEventListener("visibilitychange", handleVisibility);
     }
 
+    window.addEventListener("storage", (e) => {
+        if (e.key === "pbi_leader_claim") {
+            // parse and set leaderResponseReceived so waiting challenge functions see it
+            try {
+                const parsed = JSON.parse(e.newValue);
+                if (parsed && parsed.tabId && parsed.tabId !== TAB_ID) {
+                    leaderResponseReceived = true;
+                }
+            } catch (err) {}
+        }
+    });
+
     // ---------------------------------------------------
     // Logout Handling
     // ---------------------------------------------------
