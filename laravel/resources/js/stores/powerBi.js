@@ -13,6 +13,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     let refreshTimer = null;
 
     const refreshInterval = 2700; // For testing 15 seconds; change to 2700 (45 mins)
+    let refreshInProgress = false;
 
     const channel = new BroadcastChannel("pbi_refresh");
     let lastActiveTime = Date.now();
@@ -170,10 +171,16 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
     function startAutoRefresh() {
         clearInterval(refreshTimer);
-
         refreshTimer = setInterval(async () => {
-            if (isLeader.value) {
+            if (!isLeader.value) return;
+            if (refreshInProgress) return;
+            refreshInProgress = true;
+            try {
                 await refresh();
+            } catch (err) {
+                console.error("Auto refresh error", err);
+            } finally {
+                refreshInProgress = false;
             }
         }, refreshInterval * 1000);
     }
