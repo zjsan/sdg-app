@@ -388,6 +388,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
         await tryClaimLeadershipWithLock(1000);
         setupVisibilityHandler();
+        setupActivityListeners();
     }
 
     function cleanup() {
@@ -399,6 +400,17 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         leaderResponseReceived = false;
         channel.close();
         document.removeEventListener("visibilitychange", handleVisibility);
+
+        const events = [
+            "mousemove",
+            "keydown",
+            "scroll",
+            "touchstart",
+            "click",
+        ];
+        events.forEach((evt) => {
+            window.removeEventListener(evt, updateActive);
+        });
     }
 
     return {
