@@ -243,6 +243,10 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     function cleanup() {
         initialized = false;
         clearInterval(refreshTimer);
+        refreshTimer = null;
+        powerBiEmbedUrl.value = null;
+        isLeader.value = false;
+        leaderResponseReceived = false;
         channel.close();
         document.removeEventListener("visibilitychange", handleVisibility);
     }
