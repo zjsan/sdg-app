@@ -32,7 +32,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     const TAB_ID = generateTabId();
 
     function requestLeader() {
-        channel.postMessage({ type: "leader_request" });
+        channel.postMessage({ type: "leader_request", tabId: TAB_ID });
     }
 
     async function becomeLeader() {
@@ -46,6 +46,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         // 2. Broadcast leadership + the NEWLY FETCHED URL
         channel.postMessage({
             type: "leader",
+            tabId: TAB_ID,
             url: powerBiEmbedUrl.value, // Guaranteed to be non-null after fetch
         });
 
@@ -85,6 +86,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
             if (isLeader.value) {
                 channel.postMessage({
                     type: "leader",
+                    tabId: TAB_ID,
                     url: powerBiEmbedUrl.value ?? null,
                 });
             }
@@ -142,7 +144,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         const url = await fetchSignedUrl();
         if (url) {
             console.log("Leader refreshed and broadcasting new URL.");
-            channel.postMessage({ type: "refresh", url });
+            channel.postMessage({ type: "refresh", tabId: TAB_ID, url });
         }
     }
 
@@ -203,7 +205,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     // Logout Handling
     // ---------------------------------------------------
     function broadcastLogout() {
-        channel.postMessage({ type: "logout" });
+        channel.postMessage({ type: "logout", tabId: TAB_ID });
         // Immediately do local cleanup so current tab is consistent
         logoutHandler();
     }
