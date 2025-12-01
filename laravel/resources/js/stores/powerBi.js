@@ -184,7 +184,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
             //call helper function
             // shorter timeout here as the app is already running and active tabs should respond quickly.
-            await challengeLeader(500);
+            await tryClaimLeadershipWithLock(500);
 
             // After challengeLeader, if we became the leader, becomeLeader() already started the timer.
             return;
@@ -224,18 +224,53 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
     // HELPER FUNCTION
     //centralizes the logic for requesting a leader, waiting for a response, and then taking leadership if no response is received.
-    async function challengeLeader(timeoutMs = 800) {
+    async function tryClaimLeadershipWithLock(timeoutMs = 800) {
         leaderResponseReceived = false;
         requestLeader();
 
-        // Wait for a reasonable time for an existing leader to respond.
-        await new Promise((resolve) => setTimeout(resolve, timeoutMs));
+        // small randomized delay so many tabs don't all act exactly at same time
+        const randomizedDelay = 50 + Math.floor(Math.random() * 200);
+        await new Promise((r) => setTimeout(r, randomizedDelay));
+
+        // check localStorage for an existing fresh claim
+        const claim = localStorage.getItem("pbi_leader_claim");
+        if (claim) {
+            try {
+                const parsed = JSON.parse(claim);
+                const age = Date.now() - (parsed.ts || 0);
+                if (parsed.tabId && age < 5000) {
+                    // 5s fresh claim
+                    // someone else recently claimed leadership; we'll wait to follow
+                    leaderResponseReceived = true;
+                    return;
+                }
+            } catch (e) {
+                // ignore parse error
+            }
+        }
+
+        // Wait for the remainder of the timeout for other BC responses
+        await new Promise((resolve) =>
+            setTimeout(resolve, Math.max(0, timeoutMs - randomizedDelay))
+        );
 
         if (!leaderResponseReceived) {
-            console.log(
-                "No leader responded within the timeout — taking leadership."
+            // set a quick localStorage claim (so other tabs see it immediately)
+            localStorage.setItem(
+                "pbi_leader_claim",
+                JSON.stringify({ tabId: TAB_ID, ts: Date.now() })
             );
-            await becomeLeader();
+            // small grace period to allow others to pick up the claim
+            await new Promise((r) => setTimeout(r, 50));
+            // double-check if someone else posted leader over BC
+            if (!leaderResponseReceived) {
+                console.log("Taking leadership (post-lock).");
+                await becomeLeader();
+            } else {
+                console.log(
+                    "Another leader appeared after claim; backing off."
+                );
+            }
         } else {
             console.log("Existing leader responded — will follow.");
         }
@@ -250,7 +285,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         if (initialized) return;
         initialized = true;
 
-        await challengeLeader(1000);
+        await tryClaimLeadershipWithLock(1000);
         setupVisibilityHandler();
     }
 
