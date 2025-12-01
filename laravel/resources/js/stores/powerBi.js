@@ -156,7 +156,10 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         if (document.hidden) {
             console.log("Tab hidden — pausing refresh timer.");
             lastActiveTime = Date.now();
+
+            // Leader MUST stop its timer when hidden.
             clearInterval(refreshTimer);
+            refreshTimer = null;
             return;
         }
 
@@ -167,24 +170,19 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         if (inactiveTime >= threshold) {
             console.log("Inactive too long. Checking leader again.");
 
-            leaderResponseReceived = false;
-            requestLeader();
+            //call helper function
+            // shorter timeout here as the app is already running and active tabs should respond quickly.
+            await challengeLeader(500);
 
-            await new Promise((resolve) => setTimeout(resolve, 800));
-
-            // Only take leadership if NO leader responds
-            if (!leaderResponseReceived) {
-                console.log("No leader active — taking leadership.");
-                await becomeLeader();
-            } else {
-                console.log("Leader still active — will not take over.");
-            }
-
+            // After challengeLeader, if we became the leader, becomeLeader() already started the timer.
             return;
         }
 
+        // If we are currently the leader, and we weren't inactive long enough,
+        // wresume the timer that was paused when the tab was hidden.
         // Resume only if leader
-        if (isLeader.value) {
+        if (isLeader.value && !refreshTimer) {
+            console.log("Active Leader detected. Resuming auto refresh.");
             startAutoRefresh();
         }
     };
@@ -213,6 +211,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     }
 
     // HELPER FUNCTION
+    //centralizes the logic for requesting a leader, waiting for a response, and then taking leadership if no response is received.
     async function challengeLeader(timeoutMs = 800) {
         leaderResponseReceived = false;
         requestLeader();
