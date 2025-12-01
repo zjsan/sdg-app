@@ -29,7 +29,6 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
     async function becomeLeader() {
         isLeader.value = true;
-        // leaderResponseReceived = true; // REMOVED (See Fix 2)
 
         console.log("BECOMING LEADER: Fetching initial token...");
 
