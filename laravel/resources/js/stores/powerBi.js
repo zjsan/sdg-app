@@ -308,7 +308,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     };
 
     //listener for tab close/unload and broadcast to other tabs
-    window.addEventListener("beforeunload", () => {
+    function handleBeforeUnload() {
         try {
             if (isLeader.value) {
                 channel.postMessage({
@@ -318,12 +318,11 @@ export const usePowerBiStore = defineStore("powerbi", () => {
                 });
             }
         } catch (e) {}
-    });
+    }
 
     //listener for localStorage changes (for leader claims)
-    window.addEventListener("storage", (e) => {
+    function handleStorageEvent(e) {
         if (e.key === "pbi_leader_claim") {
-            // parse and set leaderResponseReceived so waiting challenge functions see it
             try {
                 const parsed = JSON.parse(e.newValue);
                 if (parsed && parsed.tabId && parsed.tabId !== TAB_ID) {
@@ -331,7 +330,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
                 }
             } catch (err) {}
         }
-    });
+    }
 
     // ---------------------------------------------------
     // Logout Handling
