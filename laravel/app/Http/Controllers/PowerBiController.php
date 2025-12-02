@@ -82,7 +82,10 @@ class PowerBiController extends Controller
         }
 
         $token = $request->query('token'); //retrive token from query parameter of url
-        $data = Cache::get("pbi_embed_$token"); // Retrieve token payload from cache       
+
+        // Retrieve token payload from cache 
+        //this also deletes the cache entry to prevent reuse
+        $data = Cache::pull("pbi_embed_$token");       
 
         if (! $data) {
             abort(403, 'Invalid or expired token.');
@@ -92,8 +95,6 @@ class PowerBiController extends Controller
         $embedId = $data['embedId']; 
         $baseUrl = env('POWER_BI_BASE_URL');
         
-        // delete token to prevent reuse
-        Cache::forget("pbi_embed_$token");
         return redirect($baseUrl . $embedId);
     }
 }
