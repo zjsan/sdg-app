@@ -22,8 +22,10 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
     let initialized = false;
 
+    let stopAuthWatch = null;
+
     // Auth token watcher
-    watch(
+    stopAuthWatch = watch(
         () => auth.token,
         async (newToken, oldToken) => {
             if (!newToken) {
@@ -31,7 +33,6 @@ export const usePowerBiStore = defineStore("powerbi", () => {
                 cleanup();
                 return;
             }
-            // If new token and we're leader, immediately refresh the signed url
             if (isLeader.value) {
                 await refresh();
             }
@@ -76,12 +77,8 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     }
 
     //geenrate unique tab ID
-    function generateTabId() {
-        return (
-            "t_" + Math.random().toString(36).slice(2) + Date.now().toString(36)
-        );
-    }
-    const TAB_ID = generateTabId();
+    const TAB_ID =
+        crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2);
 
     // ---------------------------------------------------
     // BroadcastChannel Communication
