@@ -22,7 +22,11 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
     let initialized = false;
 
-    let stopAuthWatch = null;
+    let stopAuthWatch = null; //wathcer stopper variable
+
+    //heartbeat variables
+    let heartbeatTimer = null;
+    let lastHeartbeat = Date.now();
 
     // Auth token watcher
     stopAuthWatch = watch(
@@ -74,6 +78,27 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         events.forEach((evt) => {
             window.removeEventListener(evt, updateActive);
         });
+    }
+
+    // Heartbeat functions to detect system sleep/throttling
+    function startHeartbeat() {
+        lastHeartbeat = Date.now();
+        heartbeatTimer = setInterval(() => {
+            const now = Date.now();
+            const delta = (now - lastHeartbeat) / 1000;
+            // if gap is much larger than interval -> likely system sleep or heavy throttle
+            if (delta > refreshInterval + 20) {
+                console.log("Detected long suspension — re-evaluating leader.");
+                lastActiveTime = now;
+                tryClaimLeadershipWithLock(500);
+            }
+            lastHeartbeat = now;
+        }, 5000); // every 5s
+    }
+
+    function stopHeartbeat() {
+        clearInterval(heartbeatTimer);
+        heartbeatTimer = null;
     }
 
     //geenrate unique tab ID
@@ -407,34 +432,28 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     }
 
     function logoutHandler() {
+        if (typeof stopAuthWatch === "function") {
+            stopAuthWatch();
+            stopAuthWatch = null;
+        }
+
         clearInterval(refreshTimer);
         refreshTimer = null;
         powerBiEmbedUrl.value = null;
         isLeader.value = false;
         leaderResponseReceived = false;
         document.removeEventListener("visibilitychange", handleVisibility);
-        console.log("PowerBI store logged out and cleaned up.");
-
-        if (typeof stopAuthWatch === "function") {
-            stopAuthWatch();
-            stopAuthWatch = null;
-        }
-        cleanup();
-    }
-
-    function logoutHandler() {
-        if (typeof stopAuthWatch === "function") {
-            stopAuthWatch();
-            stopAuthWatch = null;
-        }
-        clearInterval(refreshTimer);
-        refreshTimer = null;
-        powerBiEmbedUrl.value = null;
-        isLeader.value = false;
-        leaderResponseReceived = false;
-        document.removeEventListener("visibilitychange", handleVisibility);
+        removeActivityListeners();
         clearLeaderClaimIfMine();
+
         console.log("PowerBI store logged out and cleaned up.");
+
+        if (typeof stopAuthWatch === "function") {
+            stopAuthWatch();
+            stopAuthWatch = null;
+        }
+
+        cleanup();
     }
 
     // ---------------------------------------------------
@@ -451,6 +470,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         setupActivityListeners();
         window.addEventListener("beforeunload", handleBeforeUnload);
         window.addEventListener("storage", handleStorageEvent);
+        startHeartbeat();
     }
 
     function cleanup() {
@@ -480,6 +500,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
             "click",
         ];
         removeActivityListeners();
+        stopHeartbeat();
     }
 
     return {
