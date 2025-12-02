@@ -350,6 +350,11 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         leaderResponseReceived = false;
         document.removeEventListener("visibilitychange", handleVisibility);
         console.log("PowerBI store logged out and cleaned up.");
+
+        if (typeof stopAuthWatch === "function") {
+            stopAuthWatch();
+            stopAuthWatch = null;
+        }
     }
 
     // HELPER FUNCTION
@@ -438,6 +443,11 @@ export const usePowerBiStore = defineStore("powerbi", () => {
             "click",
         ];
         removeActivityListeners();
+
+        if (typeof stopAuthWatch === "function") {
+            stopAuthWatch();
+            stopAuthWatch = null;
+        }
     }
 
     return {
