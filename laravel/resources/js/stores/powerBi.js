@@ -32,6 +32,43 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     }
     const TAB_ID = generateTabId();
 
+    //inactivity listeners
+    function updateActive() {
+        lastActiveTime = Date.now();
+    }
+
+    function setupVisibilityHandler() {
+        document.addEventListener("visibilitychange", handleVisibility);
+    }
+
+    function setupActivityListeners() {
+        const events = [
+            "mousemove",
+            "keydown",
+            "scroll",
+            "touchstart",
+            "click",
+        ];
+
+        events.forEach((evt) => {
+            window.addEventListener(evt, updateActive, { passive: true });
+        });
+    }
+
+    function removeActivityListeners() {
+        const events = [
+            "mousemove",
+            "keydown",
+            "scroll",
+            "touchstart",
+            "click",
+        ];
+
+        events.forEach((evt) => {
+            window.removeEventListener(evt, updateActive);
+        });
+    }
+
     function requestLeader() {
         channel.postMessage({ type: "leader_request", tabId: TAB_ID });
     }
@@ -255,29 +292,6 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         }
     };
 
-    //inactivity listeners
-    function setupVisibilityHandler() {
-        document.addEventListener("visibilitychange", handleVisibility);
-    }
-
-    function setupActivityListeners() {
-        const updateActive = () => {
-            lastActiveTime = Date.now();
-        };
-
-        const events = [
-            "mousemove",
-            "keydown",
-            "scroll",
-            "touchstart",
-            "click",
-        ];
-
-        events.forEach((evt) => {
-            window.addEventListener(evt, updateActive, { passive: true });
-        });
-    }
-
     //listener for tab close/unload and broadcast to other tabs
     window.addEventListener("beforeunload", () => {
         try {
@@ -409,7 +423,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
             "click",
         ];
         events.forEach((evt) => {
-            window.removeEventListener(evt, updateActive);
+            window.removeEventListener(evt, updateActive());
         });
     }
 
