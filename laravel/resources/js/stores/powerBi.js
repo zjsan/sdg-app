@@ -142,37 +142,31 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
         console.log("Received BC message:", msg);
 
-        // Another tab declares leadership
+        // Leader declares leadership
         if (msg.type === "leader") {
             console.log("Leader detected.");
 
             leaderResponseReceived = true;
 
-            // IMPORTANT — followers must never refresh or run timers
             isLeader.value = false;
             clearInterval(refreshTimer);
             refreshTimer = null;
 
-            // Leader may include the newest URL
-            if (
-                !isLeader.value &&
-                (msg.type === "leader" || msg.type === "refresh")
-            ) {
-                try {
-                    const resp = await api.get("/pbi", {
-                        headers: { Authorization: `Bearer ${auth.token}` },
-                    });
+            // Followers fetch their own signed URL
+            try {
+                const resp = await api.get("/pbi", {
+                    headers: { Authorization: `Bearer ${auth.token}` },
+                });
 
-                    if (resp?.data?.signedUrl) {
-                        powerBiEmbedUrl.value = resp.data.signedUrl;
-                        lastRefresh.value = Date.now();
-                    }
-                } catch (err) {
-                    console.error(
-                        "Follower failed to get its own signed URL",
-                        err
-                    );
+                if (resp?.data?.signedUrl) {
+                    powerBiEmbedUrl.value = resp.data.signedUrl;
+                    lastRefresh.value = Date.now();
                 }
+            } catch (err) {
+                console.error(
+                    "Follower failed to fetch signed URL after leader message",
+                    err
+                );
             }
 
             return;
@@ -224,14 +218,27 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
         // Leader broadcasts new token URL
         if (msg.type === "refresh") {
-            if (isLeader.value) return; // Leaders ignore refresh messages
+            if (isLeader.value) return;
 
-            console.log("Follower received refresh URL.");
+            console.log("Follower received refresh trigger.");
 
             leaderResponseReceived = true;
-            if (msg.url) {
-                powerBiEmbedUrl.value = msg.url;
-                lastRefresh.value = Date.now();
+
+            // Followers fetch their own fresh signed URL
+            try {
+                const resp = await api.get("/pbi", {
+                    headers: { Authorization: `Bearer ${auth.token}` },
+                });
+
+                if (resp?.data?.signedUrl) {
+                    powerBiEmbedUrl.value = resp.data.signedUrl;
+                    lastRefresh.value = Date.now();
+                }
+            } catch (err) {
+                console.error(
+                    "Follower failed to fetch signed URL on refresh",
+                    err
+                );
             }
 
             return;
