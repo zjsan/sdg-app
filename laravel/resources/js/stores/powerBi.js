@@ -3,6 +3,7 @@ import api from "@/plugins/axios";
 import { ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import { watch } from "vue";
+import { v4 as uuidv4 } from "uuid";
 
 export const usePowerBiStore = defineStore("powerbi", () => {
     const auth = useAuthStore();
