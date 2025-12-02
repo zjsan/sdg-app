@@ -419,6 +419,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
             stopAuthWatch();
             stopAuthWatch = null;
         }
+        cleanup();
     }
 
     function logoutHandler() {
