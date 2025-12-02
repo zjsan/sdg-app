@@ -102,8 +102,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     }
 
     //geenrate unique tab ID
-    const TAB_ID =
-        crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2);
+    const TAB_ID = crypto.randomUUID();
 
     // ---------------------------------------------------
     // BroadcastChannel Communication
@@ -447,13 +446,6 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         clearLeaderClaimIfMine();
 
         console.log("PowerBI store logged out and cleaned up.");
-
-        if (typeof stopAuthWatch === "function") {
-            stopAuthWatch();
-            stopAuthWatch = null;
-        }
-
-        cleanup();
     }
 
     // ---------------------------------------------------
