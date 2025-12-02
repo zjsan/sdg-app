@@ -479,25 +479,39 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
     function cleanup() {
         initialized = false;
+
+        // stop refresh timer
         clearInterval(refreshTimer);
         refreshTimer = null;
+
+        // clear store state
         powerBiEmbedUrl.value = null;
         isLeader.value = false;
         leaderResponseReceived = false;
-        channel.close();
+
+        // clear leader claim if this tab owns it
         clearLeaderClaimIfMine();
+
+        // stop auth watcher
         if (typeof stopAuthWatch === "function") {
             stopAuthWatch();
             stopAuthWatch = null;
         }
 
+        // remove visibility handler
         document.removeEventListener("visibilitychange", handleVisibility);
 
+        // remove window listeners
         window.removeEventListener("beforeunload", handleBeforeUnload);
         window.removeEventListener("storage", handleStorageEvent);
 
+        // remove activity listeners & heartbeat
         removeActivityListeners();
         stopHeartbeat();
+
+        console.log(
+            "PowerBI store fully cleaned up (listeners removed, timers stopped)."
+        );
     }
 
     return {
