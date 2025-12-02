@@ -14,7 +14,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     let leaderResponseReceived = false;
     let refreshTimer = null;
 
-    const refreshInterval = 2700; // For testing 15 seconds; change to 2700 (45 mins)
+    const refreshInterval = 2700; // For testing or development 15 seconds; change to 2700 (45 mins) in production
     let refreshInProgress = false;
 
     const channel = new BroadcastChannel("pbi_refresh");
@@ -158,7 +158,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
         // Another tab requests leader
         if (msg.type === "leader_request") {
-            // FIX 1: Leader always responds if it exists, letting the receiver handle null URL.
+            // Leader always responds if it exists, letting the receiver handle null URL.
             if (isLeader.value) {
                 channel.postMessage({
                     type: "leader",
