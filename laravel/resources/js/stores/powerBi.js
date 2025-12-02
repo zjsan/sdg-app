@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import api from "@/plugins/axios";
 import { ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
+import { watch } from "vue";
 
 export const usePowerBiStore = defineStore("powerbi", () => {
     const auth = useAuthStore();
@@ -19,6 +20,22 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     let lastActiveTime = Date.now();
 
     let initialized = false;
+
+    // Auth token watcher
+    watch(
+        () => auth.token,
+        async (newToken, oldToken) => {
+            if (!newToken) {
+                // logged out
+                cleanup();
+                return;
+            }
+            // If new token and we're leader, immediately refresh the signed url
+            if (isLeader.value) {
+                await refresh();
+            }
+        }
+    );
 
     // ---------------------------------------------------
     // BroadcastChannel Communication
