@@ -14,12 +14,11 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     let leaderResponseReceived = false;
     let refreshTimer = null;
 
-    const refreshInterval = 2700; // For testing or development 15 seconds; change to 2700 (45 mins) in production
+    const refreshInterval = 15; // For testing or development 15 seconds; change to 2700 (45 mins) in production
     let refreshInProgress = false;
 
     const channel = new BroadcastChannel("pbi_refresh");
     let lastActiveTime = Date.now();
-
     let initialized = false;
 
     let stopAuthWatch = null; //wathcer stopper variable
@@ -27,6 +26,8 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     //heartbeat variables
     let heartbeatTimer = null;
     let lastHeartbeat = Date.now();
+
+    const events = ["mousemove", "keydown", "scroll", "touchstart", "click"]; //activity events
 
     // Auth token watcher
     stopAuthWatch = watch(
@@ -53,28 +54,12 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     }
 
     function setupActivityListeners() {
-        const events = [
-            "mousemove",
-            "keydown",
-            "scroll",
-            "touchstart",
-            "click",
-        ];
-
         events.forEach((evt) => {
             window.addEventListener(evt, updateActive, { passive: true });
         });
     }
 
     function removeActivityListeners() {
-        const events = [
-            "mousemove",
-            "keydown",
-            "scroll",
-            "touchstart",
-            "click",
-        ];
-
         events.forEach((evt) => {
             window.removeEventListener(evt, updateActive);
         });
