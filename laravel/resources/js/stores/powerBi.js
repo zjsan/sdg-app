@@ -422,6 +422,8 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         await tryClaimLeadershipWithLock(1000);
         setupVisibilityHandler();
         setupActivityListeners();
+        window.addEventListener("beforeunload", handleBeforeUnload);
+        window.addEventListener("storage", handleStorageEvent);
     }
 
     function cleanup() {
@@ -433,6 +435,9 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         leaderResponseReceived = false;
         channel.close();
         document.removeEventListener("visibilitychange", handleVisibility);
+
+        window.removeEventListener("beforeunload", handleBeforeUnload);
+        window.removeEventListener("storage", handleStorageEvent);
 
         const events = [
             "mousemove",
