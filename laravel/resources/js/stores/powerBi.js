@@ -484,13 +484,6 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         window.removeEventListener("beforeunload", handleBeforeUnload);
         window.removeEventListener("storage", handleStorageEvent);
 
-        const events = [
-            "mousemove",
-            "keydown",
-            "scroll",
-            "touchstart",
-            "click",
-        ];
         removeActivityListeners();
         stopHeartbeat();
     }
