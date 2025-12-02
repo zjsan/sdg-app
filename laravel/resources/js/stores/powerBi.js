@@ -123,10 +123,9 @@ export const usePowerBiStore = defineStore("powerbi", () => {
             return;
         }
 
-        // Broadcast leadership + the NEWLY FETCHED URL
+        // Broadcast leadership
         channel.postMessage({
             type: "leader",
-            url: powerBiEmbedUrl.value,
             tabId: TAB_ID,
             ts: Date.now(),
         });
@@ -280,7 +279,12 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         const url = await fetchSignedUrl();
         if (url) {
             console.log("Leader refreshed and broadcasting new URL.");
-            channel.postMessage({ type: "refresh", tabId: TAB_ID, url });
+            // broadcast refresh trigger
+            channel.postMessage({
+                type: "refresh",
+                tabId: TAB_ID,
+                ts: Date.now(),
+            });
         } else {
             console.warn(
                 "Leader failed to refresh token. Relinquishing leadership."
@@ -452,15 +456,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
             stopAuthWatch = null;
         }
 
-        clearInterval(refreshTimer);
-        refreshTimer = null;
-        powerBiEmbedUrl.value = null;
-        isLeader.value = false;
-        leaderResponseReceived = false;
-        document.removeEventListener("visibilitychange", handleVisibility);
-        removeActivityListeners();
-        clearLeaderClaimIfMine();
-
+        cleanup();
         console.log("PowerBI store logged out and cleaned up.");
     }
 
