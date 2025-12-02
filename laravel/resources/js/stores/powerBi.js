@@ -341,21 +341,6 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         logoutHandler();
     }
 
-    function logoutHandler() {
-        clearInterval(refreshTimer);
-        refreshTimer = null;
-        powerBiEmbedUrl.value = null;
-        isLeader.value = false;
-        leaderResponseReceived = false;
-        document.removeEventListener("visibilitychange", handleVisibility);
-        console.log("PowerBI store logged out and cleaned up.");
-
-        if (typeof stopAuthWatch === "function") {
-            stopAuthWatch();
-            stopAuthWatch = null;
-        }
-    }
-
     // HELPER FUNCTION
     //centralizes the logic for requesting a leader, waiting for a response, and then taking leadership if no response is received.
     async function tryClaimLeadershipWithLock(timeoutMs = 800) {
@@ -410,6 +395,47 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         }
     }
 
+    function clearLeaderClaimIfMine() {
+        try {
+            const claim = localStorage.getItem("pbi_leader_claim");
+            if (!claim) return;
+            const parsed = JSON.parse(claim);
+            if (parsed && parsed.tabId === TAB_ID) {
+                localStorage.removeItem("pbi_leader_claim");
+            }
+        } catch (e) {}
+    }
+
+    function logoutHandler() {
+        clearInterval(refreshTimer);
+        refreshTimer = null;
+        powerBiEmbedUrl.value = null;
+        isLeader.value = false;
+        leaderResponseReceived = false;
+        document.removeEventListener("visibilitychange", handleVisibility);
+        console.log("PowerBI store logged out and cleaned up.");
+
+        if (typeof stopAuthWatch === "function") {
+            stopAuthWatch();
+            stopAuthWatch = null;
+        }
+    }
+
+    function logoutHandler() {
+        if (typeof stopAuthWatch === "function") {
+            stopAuthWatch();
+            stopAuthWatch = null;
+        }
+        clearInterval(refreshTimer);
+        refreshTimer = null;
+        powerBiEmbedUrl.value = null;
+        isLeader.value = false;
+        leaderResponseReceived = false;
+        document.removeEventListener("visibilitychange", handleVisibility);
+        clearLeaderClaimIfMine();
+        console.log("PowerBI store logged out and cleaned up.");
+    }
+
     // ---------------------------------------------------
     // INIT — Called from component onMounted()
     // ---------------------------------------------------
@@ -434,6 +460,12 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         isLeader.value = false;
         leaderResponseReceived = false;
         channel.close();
+        clearLeaderClaimIfMine();
+        if (typeof stopAuthWatch === "function") {
+            stopAuthWatch();
+            stopAuthWatch = null;
+        }
+
         document.removeEventListener("visibilitychange", handleVisibility);
 
         window.removeEventListener("beforeunload", handleBeforeUnload);
@@ -447,11 +479,6 @@ export const usePowerBiStore = defineStore("powerbi", () => {
             "click",
         ];
         removeActivityListeners();
-
-        if (typeof stopAuthWatch === "function") {
-            stopAuthWatch();
-            stopAuthWatch = null;
-        }
     }
 
     return {
