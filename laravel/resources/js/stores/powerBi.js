@@ -37,18 +37,6 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         }
     );
 
-    // ---------------------------------------------------
-    // BroadcastChannel Communication
-    // ---------------------------------------------------
-
-    //geenrate unique tab ID
-    function generateTabId() {
-        return (
-            "t_" + Math.random().toString(36).slice(2) + Date.now().toString(36)
-        );
-    }
-    const TAB_ID = generateTabId();
-
     //inactivity listeners
     function updateActive() {
         lastActiveTime = Date.now();
@@ -85,6 +73,18 @@ export const usePowerBiStore = defineStore("powerbi", () => {
             window.removeEventListener(evt, updateActive);
         });
     }
+
+    //geenrate unique tab ID
+    function generateTabId() {
+        return (
+            "t_" + Math.random().toString(36).slice(2) + Date.now().toString(36)
+        );
+    }
+    const TAB_ID = generateTabId();
+
+    // ---------------------------------------------------
+    // BroadcastChannel Communication
+    // ---------------------------------------------------
 
     function requestLeader() {
         channel.postMessage({ type: "leader_request", tabId: TAB_ID });
