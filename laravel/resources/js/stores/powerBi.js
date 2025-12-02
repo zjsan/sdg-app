@@ -258,6 +258,16 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         if (url) {
             console.log("Leader refreshed and broadcasting new URL.");
             channel.postMessage({ type: "refresh", tabId: TAB_ID, url });
+        } else {
+            // --- FIX STARTS HERE ---
+            console.warn(
+                "Leader failed to refresh token. Relinquishing leadership."
+            );
+            isLeader.value = false;
+            clearInterval(refreshTimer);
+            refreshTimer = null;
+            channel.postMessage({ type: "leader_failed", tabId: TAB_ID });
+            // --- FIX ENDS HERE ---
         }
     }
 
