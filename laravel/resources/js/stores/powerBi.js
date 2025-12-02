@@ -422,9 +422,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
             "touchstart",
             "click",
         ];
-        events.forEach((evt) => {
-            window.removeEventListener(evt, updateActive());
-        });
+        removeActivityListeners();
     }
 
     return {
