@@ -13,7 +13,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     let leaderResponseReceived = false;
     let refreshTimer = null;
 
-    const refreshInterval = 2700; // For testing or development 15 seconds; change to 2700 (45 mins) in production
+    const refreshInterval = 30; // For testing or development 15 seconds; change to 2700 (45 mins) in production
     let refreshInProgress = false;
 
     const channel = new BroadcastChannel("pbi_refresh");
@@ -450,11 +450,6 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     }
 
     function logoutHandler() {
-        if (typeof stopAuthWatch === "function") {
-            stopAuthWatch();
-            stopAuthWatch = null;
-        }
-
         cleanup();
         console.log("PowerBI store logged out and cleaned up.");
     }
