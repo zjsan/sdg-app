@@ -154,9 +154,25 @@ export const usePowerBiStore = defineStore("powerbi", () => {
             refreshTimer = null;
 
             // Leader may include the newest URL
-            if (msg.url) {
-                powerBiEmbedUrl.value = msg.url;
-                lastRefresh.value = Date.now();
+            if (
+                !isLeader.value &&
+                (msg.type === "leader" || msg.type === "refresh")
+            ) {
+                try {
+                    const resp = await api.get("/pbi", {
+                        headers: { Authorization: `Bearer ${auth.token}` },
+                    });
+
+                    if (resp?.data?.signedUrl) {
+                        powerBiEmbedUrl.value = resp.data.signedUrl;
+                        lastRefresh.value = Date.now();
+                    }
+                } catch (err) {
+                    console.error(
+                        "Follower failed to get its own signed URL",
+                        err
+                    );
+                }
             }
 
             return;
