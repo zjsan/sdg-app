@@ -3,7 +3,6 @@ import api from "@/plugins/axios";
 import { ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import { watch } from "vue";
-import { v4 as uuidv4 } from "uuid";
 
 export const usePowerBiStore = defineStore("powerbi", () => {
     const auth = useAuthStore();
@@ -468,6 +467,8 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         console.log("PowerBI store init — requesting leader.");
         if (initialized) return;
         initialized = true;
+
+        console.log("PowerBI Store initialized in Tab:", TAB_ID);
 
         await tryClaimLeadershipWithLock(1000);
         setupVisibilityHandler();
