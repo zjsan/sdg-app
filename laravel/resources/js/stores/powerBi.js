@@ -14,7 +14,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     let leaderResponseReceived = false;
     let refreshTimer = null;
 
-    const refreshInterval = 15; // For testing or development 15 seconds; change to 2700 (45 mins) in production
+    const refreshInterval = 2700; // For testing or development 15 seconds; change to 2700 (45 mins) in production
     let refreshInProgress = false;
 
     const channel = new BroadcastChannel("pbi_refresh");
@@ -195,7 +195,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
             // Immediately run the leader challenge.
             // This allows the current tab to skip waiting and attempt to acquire leadership
             // or receive the token from a different leader.
-            // Use a short timeout (e.g., 500ms) since the system is already active.
+            // short timeout since the system is already active.
             tryClaimLeadershipWithLock(500);
 
             return;
@@ -211,7 +211,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
             if (isLeader.value) return;
 
             // Force a re-challenge to speed up the election.
-            tryClaimLeadershipWithLock(500); // Use a shorter, fast-response timeout
+            tryClaimLeadershipWithLock(500); //shorter fast-response timeout
             return;
         }
 
