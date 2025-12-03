@@ -28,6 +28,9 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
     const events = ["mousemove", "keydown", "scroll", "touchstart", "click"]; //activity events
 
+    //geenrate unique tab ID
+    const TAB_ID = crypto.randomUUID();
+
     // Auth token watcher
     stopAuthWatch = watch(
         () => auth.token,
@@ -84,9 +87,6 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         clearInterval(heartbeatTimer);
         heartbeatTimer = null;
     }
-
-    //geenrate unique tab ID
-    const TAB_ID = crypto.randomUUID();
 
     // ---------------------------------------------------
     // BroadcastChannel Communication
