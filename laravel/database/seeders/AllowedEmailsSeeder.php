@@ -23,6 +23,20 @@ class AllowedEmailsSeeder extends Seeder
             ['email' => 'wrpagtaconan@mmsu.edu.ph', 'is_active' => true],
         ];
 
+        //cleaning the emails table before seeding
+        $emails = array_map(function($item){
+
+            $cleanEmail = strtolower(trim($item['email']));
+            $cleanEmail = filter_var($cleanEmail, FILTER_SANITIZE_EMAIL);
+
+            return [
+                'email' => $cleanEmail,
+                'is_active' => $item['is_active'],
+            ];
+
+        }, $emails);
+
+        //insert or update emails in the allowed_emails table
         foreach ($emails as $email) {
             DB::table('allowed_emails')->updateOrInsert(
                 ['email' => $email['email']], // where condition
