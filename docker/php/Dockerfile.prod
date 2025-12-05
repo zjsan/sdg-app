@@ -1,0 +1,84 @@
+# ============================
+# STAGE 1 — Composer Dependencies
+# ============================
+FROM php:8.3-fpm AS composer_build
+
+WORKDIR /var/www/laravel
+
+# Install necessary packages
+RUN apt-get update && apt-get install -y \
+    zip unzip curl git \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install PHP extensions
+RUN docker-php-ext-install pdo pdo_mysql
+
+# Install Composer
+RUN php -r "readfile('https://getcomposer.org/installer');" \
+    | php -- --install-dir=/usr/bin/ --filename=composer
+
+# Copy only composer files first (optimization)
+COPY ./laravel/composer.json ./laravel/composer.lock ./
+
+# Install without dev dependencies, optimized
+RUN composer install --no-dev --no-scripts --optimize-autoloader
+
+
+# ============================
+# STAGE 2 — Node Build (Vue / Vite)
+# ============================
+FROM node:20 AS node_build
+
+WORKDIR /var/www/laravel
+
+# Copy package files
+COPY ./laravel/package.json ./laravel/package-lock.json ./
+
+# Install node dependencies
+RUN npm install
+
+# Copy all laravel files
+COPY ./laravel .
+
+# Build Vite assets
+RUN npm run build
+
+
+# ============================
+# STAGE 3 — Final Production Image
+# ============================
+FROM php:8.3-fpm AS production
+
+WORKDIR /var/www/laravel
+
+# Set timezone
+ENV TZ=Asia/Manila
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# Install system packages again in final image
+RUN apt-get update && apt-get install -y \
+    zip unzip curl git \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install PHP extensions
+RUN docker-php-ext-install pdo pdo_mysql
+
+# Copy app source code
+COPY ./laravel .
+
+# Copy vendor from composer stage
+COPY --from=composer_build /var/www/laravel/vendor ./vendor
+
+# Copy built frontend assets from node stage
+COPY --from=node_build /var/www/laravel/public/build ./public/build
+
+# Set correct permissions
+RUN chown -R www-data:www-data storage bootstrap/cache
+
+# Laravel optimize commands
+RUN php artisan config:cache \
+    && php artisan route:cache \
+    && php artisan view:cache \
+    && php artisan event:cache
+
+CMD ["php-fpm"]

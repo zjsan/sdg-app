@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: sdgapp-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${password}
+      MYSQL_DATABASE: sdg_db
+      MYSQL_USER: ${username}
+      MYSQL_PASSWORD: ${password}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - sdgapp_net
+
+  php:
+    build:
+      context: ./docker/php
+      dockerfile: Dockerfile.prod   # Production Dockerfile
+    container_name: sdg-php
+    depends_on:
+      - mysql
+    networks:
+      - sdgapp_net
+    volumes:
+      - laravel_storage:/var/www/laravel/storage  # persistent storage only
+
+  nginx:
+    image: nginx:stable
+    container_name: sdg-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"      # Public HTTP
+      # - "443:443"  # Enable if using SSL later
+    volumes:
+      - ./docker/nginx/prod.conf:/etc/nginx/conf.d/default.conf
+      - laravel_storage:/var/www/laravel/storage   # needed for file access
+    depends_on:
+      - php
+    networks:
+      - sdgapp_net
+
+networks:
+  sdgapp_net:
+
+volumes:
+  mysql_data:
+  laravel_storage:
