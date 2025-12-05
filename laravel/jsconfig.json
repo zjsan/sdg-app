@@ -2,17 +2,13 @@
     "compilerOptions": {
         "baseUrl": ".",
         "paths": {
-            "@/*": ["./resources/js/*"]
-        },
-        "target": "esnext",
-        "module": "esnext",
-        "moduleResolution": "node",
-        "allowJs": true,
-        "checkJs": true
+            "@/*": ["resources/js/*"]
+        }
     },
     "include": [
-        "resources/js/**/*.ts",
+        "resources/js",
         "resources/js/**/*.vue",
-        "resources/js/vite-env.d.ts"
+        "resources/js/**/*.js",
+        "resources/js/**/*.ts"
     ]
 }
