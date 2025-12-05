@@ -4,7 +4,7 @@ import { useAuthStore } from "@/stores/auth";
 
 // Create a reusable axios instance
 const api = axios.create({
-    baseURL: "http://localhost:8080/api", // Laravel API base
+    baseURL: import.meta.env.VITE_API_URL + '/api', // Laravel API base
     headers: {
         "X-Requested-With": "XMLHttpRequest",
     },
