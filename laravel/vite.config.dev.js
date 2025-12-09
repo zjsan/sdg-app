@@ -23,7 +23,7 @@ export default defineConfig({
 
         // CRITICAL: Tells the browser to connect to 'localhost', not [::]
         hmr: {
-            host: "13.251.136.207",
+            host: "locahost",
             protocol: "ws",
             port: 5173
         },
