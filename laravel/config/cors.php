@@ -20,7 +20,7 @@ return [
     'allowed_methods' => ['*'],
 
     'allowed_origins' => [  'http://localhost:5173', // Vue dev server
-    'http://localhost:8080', 'http://13.251.136.207:8080'], // Nginx serving Vue build],
+    'http://localhost:8080', 'http://13.251.136.207'], // Nginx serving Vue build],
 
     'allowed_origins_patterns' => [],
 
