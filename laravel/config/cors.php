@@ -22,7 +22,7 @@ return [
     'allowed_origins' => [  
     'http://localhost:5173', // Vue dev server
     'http://localhost:8080', // Local Nginx
-    'http://13.251.136.207', // production server
+    'https://13.251.136.207', // Production URL
      ], 
 
     'allowed_origins_patterns' => [],
