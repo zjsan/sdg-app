@@ -6,7 +6,7 @@ services:
     container_name: sdgapp-mysql
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ${password}
+      MYSQL_ROOT_PASSWORD: ${password} 
       MYSQL_DATABASE: sdg_db
       MYSQL_USER: ${username}
       MYSQL_PASSWORD: ${password}
@@ -23,12 +23,10 @@ services:
     depends_on:
       - mysql
     networks:
-      - sdgapp_net
-    env_file:
-      - ./laravel/.env
+      - sdgapp_net 
     volumes:
-      - ./laravel:/var/www/laravel
-      - laravel_storage:/var/www/laravel/storage  # persistent storage only
+      - laravel_storage:/var/www/laravel/storage 
+      - ./laravel/config/app.php:/var/www/laravel/config/app.php:ro # Optional: Mount specific config if needed
 
   nginx:
     image: nginx:stable
