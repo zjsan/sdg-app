@@ -24,7 +24,10 @@ services:
       - mysql
     networks:
       - sdgapp_net
+    env_file:
+      - ./laravel/.env
     volumes:
+      - ./laravel:/var/www/laravel
       - laravel_storage:/var/www/laravel/storage  # persistent storage only
 
   nginx:
@@ -33,11 +36,12 @@ services:
     restart: unless-stopped
     ports:
       - "80:80"      # Public HTTP
-      # - "443:443"  # Enable if using SSL later
+      - "443:443"
     volumes:
       - ./docker/nginx/prod.conf:/etc/nginx/conf.d/default.conf
       - ./docker/nginx/ssl:/etc/nginx/ssl:ro # SSL certs 
       - laravel_storage:/var/www/laravel/storage   # needed for file access
+      - ./laravel/public:/var/www/laravel/public:ro # serve only public files
     depends_on:
       - php
     networks:
