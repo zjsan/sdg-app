@@ -1,84 +1,90 @@
 # ============================
-# STAGE 1 — Composer Dependencies
+# STAGE 1 — Composer Dependencies (Builder)
+# Installs Composer dependencies without dev packages.
 # ============================
 FROM php:8.3-fpm AS composer_build
 
 WORKDIR /var/www/laravel
 
-# Install necessary packages
+# Install essential system packages and PHP extensions
 RUN apt-get update && apt-get install -y \
-    zip unzip curl git \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+    zip unzip curl git libzip-dev \
+    && rm -rf /var/lib/apt/lists/*
+    
+# Install core Laravel PHP extensions (pdo, bcmath, mbstring, exif, opcache are critical)
+RUN docker-php-ext-install pdo pdo_mysql bcmath mbstring exif opcache
 
-# Install PHP extensions
-RUN docker-php-ext-install pdo pdo_mysql
-
-# Install Composer
+# Install Composer globally
 RUN php -r "readfile('https://getcomposer.org/installer');" \
     | php -- --install-dir=/usr/bin/ --filename=composer
 
-# Copy only composer files first (optimization)
-COPY ./laravel/composer.json ./laravel/composer.lock ./
+# Copy only Composer files to leverage Docker layer caching
+COPY laravel/composer.json composer.json
+COPY laravel/composer.lock composer.lock
 
-# Install without dev dependencies, optimized
-RUN composer install --no-dev --no-scripts --optimize-autoloader
+# Install dependencies for production only, optimized for autoloading
+RUN composer install --no-dev --prefer-dist --optimize-autoloader
 
 
 # ============================
-# STAGE 2 — Node Build (Vue / Vite)
+# STAGE 2 — Node Build (Asset Builder)
+# Installs Node dependencies and compiles Vue/Vite assets.
 # ============================
 FROM node:20 AS node_build
 
 WORKDIR /var/www/laravel
 
-# Copy package files
-COPY ./laravel/package.json ./laravel/package-lock.json ./
+# Copy package files for dependency caching
+COPY laravel/package.json package.json
+COPY laravel/package-lock.json package-lock.json
 
-# Install node dependencies
-RUN npm install
+# Use npm ci for clean, fast, and correct production installation
+RUN npm ci
 
-# Copy all laravel files
-COPY ./laravel .
+# Copy remaining Laravel application files
+COPY laravel .
 
-# Build Vite assets
+# Build Vite assets (output goes to public/build)
 RUN npm run build
 
 
 # ============================
-# STAGE 3 — Final Production Image
+# STAGE 3 — Final Production Image (The Runtime)
+# Copies artifacts from previous stages into a clean environment.
 # ============================
 FROM php:8.3-fpm AS production
 
 WORKDIR /var/www/laravel
 
-# Set timezone
+# Set timezone for consistent log timestamps
 ENV TZ=Asia/Manila
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# Install system packages again in final image
+# Install necessary system packages and extensions for runtime
 RUN apt-get update && apt-get install -y \
-    zip unzip curl git \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+    zip unzip curl git libzip-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install PHP extensions
-RUN docker-php-ext-install pdo pdo_mysql
+# Install necessary PHP extensions again
+RUN docker-php-ext-install pdo pdo_mysql bcmath mbstring exif opcache
 
-# Copy app source code
-COPY ./laravel .
+# Copy minimal application source code (excluding .env via .dockerignore)
+COPY laravel .
 
-# Copy vendor from composer stage
+# Copy vendor dependencies from Stage 1
 COPY --from=composer_build /var/www/laravel/vendor ./vendor
 
-# Copy built frontend assets from node stage
+# Copy compiled frontend assets from Stage 2
 COPY --from=node_build /var/www/laravel/public/build ./public/build
 
-# Set correct permissions
+# Set correct permissions for storage and caching
 RUN chown -R www-data:www-data storage bootstrap/cache
 
-# Laravel optimize commands
+# Laravel optimization commands for production performance
 RUN php artisan config:cache \
     && php artisan route:cache \
     && php artisan view:cache \
     && php artisan event:cache
 
+# Default command to start PHP-FPM for Nginx
 CMD ["php-fpm"]
