@@ -28,6 +28,7 @@ return [
      //production ip address
     'http://13.251.136.207',  
     'https://13.251.136.207', // Production URL
+    'https://app.sdg-dashboard.com', // Production URL
      ], 
 
     'allowed_origins_patterns' => [],

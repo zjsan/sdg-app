@@ -28,7 +28,6 @@ services:
       - "app.sdg-dashboard.com:host-gateway" 
     volumes:
       - laravel_storage:/var/www/laravel/storage 
-      - ./laravel/config/app.php:/var/www/laravel/config/app.php:ro # Optional: Mount specific config if needed
 
   nginx:
     image: nginx:stable
