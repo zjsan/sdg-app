@@ -22,6 +22,8 @@ return [
     'allowed_origins' => [  
     'http://localhost:5173', // Vue dev server
     'http://localhost:8080', // Local Nginx
+     // Local Nginx alias
+    'http://local.sdg-dashboard.com',
 
      //production ip address
     'http://13.251.136.207',  
