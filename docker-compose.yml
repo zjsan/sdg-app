@@ -37,6 +37,8 @@ services:
       - mysql
     networks:
       - sdgapp_net
+    extra_hosts:
+      - "local.sdg-dashboard.com:host-gateway"
 
   nginx:
     image: nginx:stable
@@ -49,7 +51,9 @@ services:
     depends_on:
       - php
     networks:
-      - sdgapp_net
+      - sdgapp_net:
+        aliases:
+          - local.sdg-dashboard.com
 
   node:
     image: node:20
