@@ -23,7 +23,7 @@ return [
     'http://localhost:5173', // Vue dev server
     'http://localhost:8080', // Local Nginx
      // Local Nginx alias
-    'http://local.sdg-dashboard.com',
+    'http://local.sdg-dashboard.com:8080',
 
      //production ip address
     'http://13.251.136.207',  
