@@ -8,12 +8,15 @@ distinguished_name = dn
 [dn]
 C = PH
 ST = Ilocos Norte
-L = Laoag
+L = Batac
 O = SDG App
-CN = 13.251.136.207
+# Change the CN to the domain
+CN = app.sdg-dashboard.com
 
 [req_ext]
 subjectAltName = @alt_names
 
 [alt_names]
+# This tells the browser the certificate is valid for BOTH
+DNS.1 = app.sdg-dashboard.com
 IP.1 = 13.251.136.207
