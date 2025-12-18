@@ -3,6 +3,7 @@ import api from "@/plugins/axios";
 import { ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import { watch } from "vue";
+import { v4 as uuidv4 } from 'uuid';
 
 export const usePowerBiStore = defineStore("powerbi", () => {
     const auth = useAuthStore();
@@ -29,7 +30,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     const events = ["mousemove", "keydown", "scroll", "touchstart", "click"]; //activity events
 
     //geenrate unique tab ID
-    const TAB_ID = crypto.randomUUID();
+    const TAB_ID = uuidv4();
 
     // Auth token watcher
     stopAuthWatch = watch(
