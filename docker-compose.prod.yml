@@ -17,8 +17,8 @@ services:
 
   php:
     build:
-      context: ./docker/php
-      dockerfile: Dockerfile.prod   # Production Dockerfile
+      context: .
+      dockerfile: docker/php/Dockerfile.prod   # Production Dockerfile
     container_name: sdg-php
     depends_on:
       - mysql
