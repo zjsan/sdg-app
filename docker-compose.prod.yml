@@ -6,10 +6,10 @@ services:
     container_name: sdgapp-mysql
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ${password} 
+      MYSQL_ROOT_PASSWORD: r00tProd_SDG_App_db!@#Xq 
       MYSQL_DATABASE: sdg_db
-      MYSQL_USER: ${username}
-      MYSQL_PASSWORD: ${password}
+      MYSQL_USER: sdg_app_user
+      MYSQL_PASSWORD: SDG_App_Db_10F!3kLp@
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
