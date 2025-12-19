@@ -7,22 +7,31 @@ WORKDIR /var/www/laravel
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     zip unzip curl git libzip-dev libonig-dev \
-    && rm -rf /var/lib/apt/lists/* # FIXED: Added git and libonig-dev
+    && rm -rf /var/lib/apt/lists/*
 
-# FIXED: Added 'zip' extension
-RUN docker-php-ext-install pdo pdo_mysql bcmath mbstring exif opcache zip
+RUN docker-php-ext-install \
+    pdo \
+    pdo_mysql \
+    bcmath \
+    mbstring \
+    exif \
+    opcache \
+    zip
 
 RUN php -r "readfile('https://getcomposer.org/installer');" \
     | php -- --install-dir=/usr/bin/ --filename=composer
 
+# Copy only composer files
 COPY laravel/composer.json composer.json
 COPY laravel/composer.lock composer.lock
 
+# 🔑 FIX: Disable scripts because artisan does not exist yet
 RUN composer install \
     --no-dev \
     --prefer-dist \
     --optimize-autoloader \
-    --no-interaction
+    --no-interaction \
+    --no-scripts
 
 
 # ============================
@@ -48,16 +57,13 @@ FROM php:8.3-fpm
 
 WORKDIR /var/www/laravel
 
-# Set timezone
 ENV TZ=Asia/Manila
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# Runtime + build deps needed for PHP extensions
 RUN apt-get update && apt-get install -y --no-install-recommends \
     zip unzip libzip-dev libonig-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Install PHP extensions
 RUN docker-php-ext-install \
     pdo \
     pdo_mysql \
@@ -67,15 +73,21 @@ RUN docker-php-ext-install \
     opcache \
     zip
 
-# Copy application source
+# Copy full application
 COPY laravel .
 
-# Copy built dependencies & assets
+# Copy dependencies & built assets
 COPY --from=composer_build /var/www/laravel/vendor ./vendor
 COPY --from=node_build /var/www/laravel/public/build ./public/build
 
 # Permissions
 RUN chown -R www-data:www-data \
     storage bootstrap/cache public/build
+
+RUN php artisan key:generate --force || true \
+ && php artisan config:clear \
+ && php artisan config:cache \
+ && php artisan route:cache \
+ && php artisan view:cache
 
 CMD ["php-fpm"]
