@@ -31,12 +31,11 @@ RUN composer install \
 FROM node:20 AS node_build
 
 WORKDIR /var/www/laravel
-ENV NODE_ENV=production
 
 COPY laravel/package.json package.json
 COPY laravel/package-lock.json package-lock.json
 
-RUN npm ci --verbose
+RUN npm ci
 
 COPY laravel .
 RUN npm run build
