@@ -1,0 +1,13 @@
+# Git
+.git
+
+# Docker configuration (not needed inside image)
+docker
+
+# Dependencies rebuilt in Docker
+laravel/node_modules
+laravel/vendor
+
+# Environment files 
+laravel/.env
+.env

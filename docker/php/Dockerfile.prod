@@ -1,90 +1,70 @@
 # ============================
-# STAGE 1 — Composer Dependencies (Builder)
-# Installs Composer dependencies without dev packages.
+# Stage 1 — Composer
 # ============================
 FROM php:8.3-fpm AS composer_build
 
 WORKDIR /var/www/laravel
 
-# Install essential system packages and PHP extensions
-RUN apt-get update && apt-get install -y \
-    zip unzip curl git libzip-dev \
-    && rm -rf /var/lib/apt/lists/*
-    
-# Install core Laravel PHP extensions (pdo, bcmath, mbstring, exif, opcache are critical)
-RUN docker-php-ext-install pdo pdo_mysql bcmath mbstring exif opcache
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    zip unzip curl git libzip-dev libonig-dev \
+    && rm -rf /var/lib/apt/lists/* # FIXED: Added git and libonig-dev
 
-# Install Composer globally
+# FIXED: Added 'zip' extension
+RUN docker-php-ext-install pdo pdo_mysql bcmath mbstring exif opcache zip
+
 RUN php -r "readfile('https://getcomposer.org/installer');" \
     | php -- --install-dir=/usr/bin/ --filename=composer
 
-# Copy only Composer files to leverage Docker layer caching
 COPY laravel/composer.json composer.json
 COPY laravel/composer.lock composer.lock
 
-# Install dependencies for production only, optimized for autoloading
-RUN composer install --no-dev --prefer-dist --optimize-autoloader
+RUN composer install \
+    --no-dev \
+    --prefer-dist \
+    --optimize-autoloader \
+    --no-interaction
 
 
 # ============================
-# STAGE 2 — Node Build (Asset Builder)
-# Installs Node dependencies and compiles Vue/Vite assets.
+# Stage 2 — Node Build
 # ============================
 FROM node:20 AS node_build
 
 WORKDIR /var/www/laravel
+ENV NODE_ENV=production
 
-# Copy package files for dependency caching
 COPY laravel/package.json package.json
 COPY laravel/package-lock.json package-lock.json
 
-# Use npm ci for clean, fast, and correct production installation
-RUN npm ci
+RUN npm ci --verbose
 
-# Copy remaining Laravel application files
 COPY laravel .
-
-# Build Vite assets (output goes to public/build)
 RUN npm run build
 
 
 # ============================
-# STAGE 3 — Final Production Image (The Runtime)
-# Copies artifacts from previous stages into a clean environment.
+# Stage 3 — Production
 # ============================
-FROM php:8.3-fpm AS production
+FROM php:8.3-fpm
 
 WORKDIR /var/www/laravel
 
-# Set timezone for consistent log timestamps
 ENV TZ=Asia/Manila
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# Install necessary system packages and extensions for runtime
-RUN apt-get update && apt-get install -y \
-    zip unzip curl git libzip-dev \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    zip unzip libzip4 libonig5 \
+    && rm -rf /var/lib/apt/lists/* # FIXED: Added libonig5 runtime
 
-# Install necessary PHP extensions again
-RUN docker-php-ext-install pdo pdo_mysql bcmath mbstring exif opcache
+# FIXED: Added 'zip' extension
+RUN docker-php-ext-install pdo pdo_mysql bcmath mbstring exif opcache zip
 
-# Copy minimal application source code (excluding .env via .dockerignore)
 COPY laravel .
-
-# Copy vendor dependencies from Stage 1
 COPY --from=composer_build /var/www/laravel/vendor ./vendor
-
-# Copy compiled frontend assets from Stage 2
 COPY --from=node_build /var/www/laravel/public/build ./public/build
 
-# Set correct permissions for storage and caching
-RUN chown -R www-data:www-data storage bootstrap/cache
+# Ensure permissions for the web user
+RUN chown -R www-data:www-data \
+    storage bootstrap/cache public/build
 
-# Laravel optimization commands for production performance
-RUN php artisan config:cache \
-    && php artisan route:cache \
-    && php artisan view:cache \
-    && php artisan event:cache
-
-# Default command to start PHP-FPM for Nginx
 CMD ["php-fpm"]
