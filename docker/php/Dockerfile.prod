@@ -80,14 +80,10 @@ COPY laravel .
 COPY --from=composer_build /var/www/laravel/vendor ./vendor
 COPY --from=node_build /var/www/laravel/public/build ./public/build
 
-# Permissions
+# Permissions Crucial for production
 RUN chown -R www-data:www-data \
-    storage bootstrap/cache public/build
+    storage bootstrap/cache public/build \
+    && chmod -R 775 storage bootstrap/cache
 
-RUN php artisan key:generate --force || true \
- && php artisan config:clear \
- && php artisan config:cache \
- && php artisan route:cache \
- && php artisan view:cache
 
 CMD ["php-fpm"]
