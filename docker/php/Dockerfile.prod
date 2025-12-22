@@ -85,5 +85,12 @@ RUN chown -R www-data:www-data \
     storage bootstrap/cache public/build \
     && chmod -R 775 storage bootstrap/cache
 
+# Setup the Entrypoint  
+COPY docker/php/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
+# Tell Docker to use this script to start the container
+ENTRYPOINT ["docker-entrypoint.sh"]
+
+# Start PHP-FPM
 CMD ["php-fpm"]
