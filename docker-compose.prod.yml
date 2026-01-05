@@ -6,7 +6,7 @@ services:
     container_name: sdgapp-mysql
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: r00tProd_SDG_App_db!@#Xq 
+      MYSQL_ROOT_PASSWORD: r00tProd_SDG_App_db!@#Xq
       MYSQL_DATABASE: sdg_db
       MYSQL_USER: sdg_app_user
       MYSQL_PASSWORD: SDG_App_Db_10F!3kLp@
@@ -18,29 +18,28 @@ services:
   php:
     build:
       context: .
-      dockerfile: docker/php/Dockerfile.prod   # Production Dockerfile
+      dockerfile: docker/php/Dockerfile.prod # Production Dockerfile
     container_name: sdg-php
     depends_on:
       - mysql
     networks:
       - sdgapp_net
     extra_hosts:
-      - "app.sdg-dashboard.com:host-gateway" 
+      - "app.sdg-dashboard.com:host-gateway"
     volumes:
-      - laravel_storage:/var/www/laravel/storage 
+      - laravel_storage:/var/www/laravel/storage
 
   nginx:
     image: nginx:stable
     container_name: sdg-nginx
     restart: unless-stopped
     ports:
-      - "80:80"      # Public HTTP
+      - "80:80" # Public HTTP
       - "443:443"
     volumes:
       - ./docker/nginx/prod.conf:/etc/nginx/conf.d/default.conf
-      - ./docker/nginx/ssl:/etc/nginx/ssl:ro # SSL certs 
-      - laravel_storage:/var/www/laravel/storage   # needed for file access
-      - ./laravel/public:/var/www/laravel/public:ro # serve only public files
+      - ./docker/nginx/ssl:/etc/nginx/ssl:ro # SSL certificates
+      - laravel_storage:/var/www/laravel/storage
     depends_on:
       - php
     networks:
