@@ -18,7 +18,7 @@ fi
 MAX_RETRIES=20
 COUNT=0
 until php artisan migrate:status >/dev/null 2>&1; do
-    echo "⏳ Waiting for database connection..."
+    echo "Waiting for database connection..."
     COUNT=$((COUNT+1))
     if [ $COUNT -ge $MAX_RETRIES ]; then
         echo "Database not reachable after $MAX_RETRIES attempts. Exiting."
@@ -28,7 +28,7 @@ until php artisan migrate:status >/dev/null 2>&1; do
 done
 
 # 3. Force permissions (important for mounted volumes)
-echo "🔐 Setting folder permissions..."
+echo "Setting folder permissions..."
 chown -R www-data:www-data storage bootstrap/cache public/build
 chmod -R 775 storage storage/logs storage/framework bootstrap/cache
 
