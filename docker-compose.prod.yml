@@ -26,10 +26,11 @@ services:
       - sdgapp_net
     extra_hosts:
       - "app.sdg-dashboard.com:host-gateway"
+    env_file:
+      - ./laravel/.env
     volumes:
       - laravel_storage:/var/www/laravel/storage
       - laravel_public:/var/www/laravel/public
-      - ./laravel/.env:/var/www/laravel/.env
 
   nginx:
     image: nginx:stable
