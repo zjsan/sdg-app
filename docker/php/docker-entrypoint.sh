@@ -4,15 +4,32 @@ set -e
 echo "Starting Laravel production entrypoint..."
 
 # 1. Check essential environment
-if [ ! -f .env ]; then
-    echo "ERROR: .env file not found!"
+ENV_FILE="/var/www/laravel/.env"
+
+# 1. Detect Docker mount bug
+if [ -d "$ENV_FILE" ]; then
+    echo "CRITICAL: .env is a directory (Docker mount error)."
+    echo "Check your path: see real file at ./laravel/.env?"
     exit 1
 fi
 
-if [ -z "$APP_KEY" ]; then
-    echo "ERROR: APP_KEY not set!"
+if [ ! -f "$ENV_FILE" ]; then
+    echo "CRITICAL: .env file is missing at $ENV_FILE"
     exit 1
 fi
+
+# 2. Extract APP_KEY safely
+if [ -z "$APP_KEY" ]; then
+    echo "Extracting APP_KEY from .env..."
+    export APP_KEY=$(sed -n 's/^APP_KEY=["'\'']\?\(.*\)["'\'']\?$/\1/p' "$ENV_FILE" | tr -d '\r')
+fi
+
+# 3. Verify
+if [ -z "$APP_KEY" ]; then
+    echo "ERROR: APP_KEY could not be extracted. Artisan commands will fail."
+    exit 1
+fi
+
 
 # 2. Wait for DB (max 20 retries)
 MAX_RETRIES=20
