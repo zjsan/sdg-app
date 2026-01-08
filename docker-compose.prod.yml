@@ -30,7 +30,6 @@ services:
       - ./laravel/.env
     volumes:
       - laravel_storage:/var/www/laravel/storage
-      - laravel_public:/var/www/laravel/public
 
   nginx:
     image: nginx:stable

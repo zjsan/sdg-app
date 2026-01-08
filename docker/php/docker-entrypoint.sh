@@ -3,48 +3,74 @@ set -e
 
 echo "Starting Laravel production entrypoint..."
 
-# 1. Check essential environment
+#######################################
+# 1. Protect against Docker mount bugs
+#######################################
+if [ -d "/var/www/html/.env" ]; then
+    echo "CRITICAL: .env is a directory. Check your Docker volume mounts!"
+    exit 1
+fi
+
+#######################################
+# 2. Verify required environment variables
+#######################################
 REQUIRED_VARS="APP_KEY DB_HOST DB_DATABASE DB_USERNAME DB_PASSWORD"
 
 for VAR in $REQUIRED_VARS; do
-  if [ -z "$(printenv $VAR)" ]; then
-    echo "CRITICAL: Environment variable $VAR is missing"
-    exit 1
-  fi
+    if [ -z "$(printenv "$VAR")" ]; then
+        echo "CRITICAL: Environment variable $VAR is missing"
+        exit 1
+    fi
 done
 
-
-# 2. Wait for DB (max 20 retries)
+#######################################
+# 3. Wait for database to become ready
+#######################################
 MAX_RETRIES=20
-COUNT=0
+COUNT=1
+
 until php artisan migrate:status >/dev/null 2>&1; do
-    echo "Waiting for database connection..."
-    COUNT=$((COUNT+1))
-    if [ $COUNT -ge $MAX_RETRIES ]; then
+    echo "Waiting for database connection... ($COUNT/$MAX_RETRIES)"
+
+    if [ "$COUNT" -ge "$MAX_RETRIES" ]; then
         echo "Database not reachable after $MAX_RETRIES attempts. Exiting."
         exit 1
     fi
+
+    COUNT=$((COUNT + 1))
     sleep 3
 done
 
-# 3. Force permissions (important for mounted volumes)
-echo "Setting folder permissions..."
-chown -R www-data:www-data storage bootstrap/cache public/build
-chmod -R 775 storage storage/logs storage/framework bootstrap/cache
+#######################################
+# 4. Fix permissions (optimized)
+#######################################
+echo "Verifying storage permissions..."
 
-# 4. Clear stale caches
+# Only fix ownership when incorrect (fast on large volumes)
+find storage bootstrap/cache \
+    ! -user www-data -exec chown www-data:www-data {} +
+
+# Ensure required write permissions
+chmod -R 775 storage bootstrap/cache
+
+#######################################
+# 5. Laravel production lifecycle
+#######################################
+echo "Running Laravel production setup..."
+
 php artisan optimize:clear
 
-# 5. Ensure storage symlink exists
+# Storage symlink is idempotent; failure should not stop container
 php artisan storage:link --force || true
 
-# 6. Run migrations safely
-# Optionally add a lock file to prevent race conditions in multi-container setups
+# Run migrations safely in production
 php artisan migrate --force
 
-# 7. Rebuild optimized cache for production
+# Rebuild optimized caches
 php artisan optimize
 
+#######################################
+# 6. Hand off to PHP-FPM
+#######################################
 echo "Laravel is ready. Starting PHP-FPM..."
-
 exec "$@"
