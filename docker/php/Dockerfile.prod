@@ -77,6 +77,7 @@ RUN chown -R www-data:www-data /var/www/laravel \
     && chmod -R 775 storage bootstrap/cache
 
 # PHP-FPM Config
+# prevent clearing of env vars so Laravel can access them
 RUN echo "clear_env = no" >> /usr/local/etc/php-fpm.d/zz-docker.conf
 
 COPY docker/php/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh

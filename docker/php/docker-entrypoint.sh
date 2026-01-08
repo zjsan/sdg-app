@@ -39,7 +39,7 @@ done
 # 4. Fix permissions (optimized)
 echo "Verifying storage permissions..."
 
-# Only fix ownership when incorrect (fast on large volumes)
+# Only fix ownership when incorrect
 find storage bootstrap/cache \
     ! -user www-data -exec chown www-data:www-data {} +
 
