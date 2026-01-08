@@ -3,17 +3,14 @@ set -e
 
 echo "Starting Laravel production entrypoint..."
 
-#######################################
+
 # 1. Protect against Docker mount bugs
-#######################################
-if [ -d "/var/www/html/.env" ]; then
+if [ -d "/var/www/laravel/.env" ]; then
     echo "CRITICAL: .env is a directory. Check your Docker volume mounts!"
     exit 1
 fi
 
-#######################################
 # 2. Verify required environment variables
-#######################################
 REQUIRED_VARS="APP_KEY DB_HOST DB_DATABASE DB_USERNAME DB_PASSWORD"
 
 for VAR in $REQUIRED_VARS; do
@@ -23,13 +20,11 @@ for VAR in $REQUIRED_VARS; do
     fi
 done
 
-#######################################
 # 3. Wait for database to become ready
-#######################################
 MAX_RETRIES=20
 COUNT=1
 
-until php artisan migrate:status >/dev/null 2>&1; do
+until php artisan db:show >/dev/null 2>&1; do
     echo "Waiting for database connection... ($COUNT/$MAX_RETRIES)"
 
     if [ "$COUNT" -ge "$MAX_RETRIES" ]; then
@@ -41,9 +36,7 @@ until php artisan migrate:status >/dev/null 2>&1; do
     sleep 3
 done
 
-#######################################
 # 4. Fix permissions (optimized)
-#######################################
 echo "Verifying storage permissions..."
 
 # Only fix ownership when incorrect (fast on large volumes)
@@ -53,9 +46,7 @@ find storage bootstrap/cache \
 # Ensure required write permissions
 chmod -R 775 storage bootstrap/cache
 
-#######################################
 # 5. Laravel production lifecycle
-#######################################
 echo "Running Laravel production setup..."
 
 php artisan optimize:clear
@@ -69,8 +60,6 @@ php artisan migrate --force
 # Rebuild optimized caches
 php artisan optimize
 
-#######################################
 # 6. Hand off to PHP-FPM
-#######################################
 echo "Laravel is ready. Starting PHP-FPM..."
 exec "$@"

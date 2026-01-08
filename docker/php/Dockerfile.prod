@@ -57,43 +57,30 @@ FROM php:8.3-fpm
 
 WORKDIR /var/www/laravel
 
+# Combine apt-get and extension installs to reduce layers
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    zip unzip libzip-dev libonig-dev libpng-dev \
+    && docker-php-ext-install pdo pdo_mysql bcmath mbstring exif opcache zip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set Timezone
 ENV TZ=Asia/Manila
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    zip unzip libzip-dev libonig-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN docker-php-ext-install \
-    pdo \
-    pdo_mysql \
-    bcmath \
-    mbstring \
-    exif \
-    opcache \
-    zip
-
-# Copy full application
+# Copy application first, THEN dependencies
 COPY laravel .
-
-# Copy dependencies & built assets
 COPY --from=composer_build /var/www/laravel/vendor ./vendor
 COPY --from=node_build /var/www/laravel/public/build ./public/build
 
-# Permissions Crucial for production
-RUN chown -R www-data:www-data \
-    storage bootstrap/cache public/build \
+# CRITICAL: Fix permissions before the entrypoint
+RUN chown -R www-data:www-data /var/www/laravel \
     && chmod -R 775 storage bootstrap/cache
 
-# Prevent PHP-FPM from stripping environment variables
+# PHP-FPM Config
 RUN echo "clear_env = no" >> /usr/local/etc/php-fpm.d/zz-docker.conf
 
-# Setup the Entrypoint  
 COPY docker/php/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# Tell Docker to use this script to start the container
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
-
-# Start PHP-FPM
 CMD ["php-fpm"]
