@@ -42,7 +42,6 @@ services:
       - ./docker/nginx/prod.conf:/etc/nginx/conf.d/default.conf
       - ./docker/nginx/ssl:/etc/nginx/ssl:ro # SSL certificates
       - laravel_storage:/var/www/laravel/storage
-      - laravel_public:/var/www/laravel/public:ro
     depends_on:
       - php
     networks:
@@ -56,4 +55,3 @@ networks:
 volumes:
   mysql_data:
   laravel_storage:
-  laravel_public:
