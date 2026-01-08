@@ -6,7 +6,7 @@ echo "Starting Laravel production entrypoint..."
 
 # 1. Protect against Docker mount bugs
 if [ -d "/var/www/laravel/.env" ]; then
-    echo "CRITICAL: .env is a directory. Check your Docker volume mounts!"
+    echo "CRITICAL: .env is a directory. Check Docker volume mounts!"
     exit 1
 fi
 
