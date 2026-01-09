@@ -1,13 +1,19 @@
+# Ignore everything in docker by default
+docker/**
+
+# Explicitly allow required docker files
+!docker/php/
+!docker/php/**
+!docker/nginx/
+!docker/nginx/**
+
 # Git
 .git
 
-# Docker configuration (not needed inside image)
-docker
-
-# Dependencies rebuilt in Docker
+# Dependencies
 laravel/node_modules
 laravel/vendor
 
-# Environment files 
+# Environment files (runtime only)
 laravel/.env
 .env
