@@ -17,3 +17,4 @@ laravel/vendor
 # Environment files (runtime only)
 laravel/.env
 .env
+.env.dev
