@@ -3,24 +3,6 @@ set -e
 
 echo "Starting Laravel production entrypoint..."
 
-# Cleanup Windows line endings in .env file
-ENV_PATH="/var/www/laravel/.env"
-
-if [ -f "$ENV_PATH" ]; then
-    # 1. Perform the strip
-    sed -i 's/\r$//' "$ENV_PATH"
-
-    # 2. Verification: Check if any \r characters still exist
-    if grep -q $'\r' "$ENV_PATH"; then
-        echo "Verification failed: Windows line endings still detected in $ENV_PATH"
-        exit 1
-    else
-        echo "Verification successful: $ENV_PATH is now using Unix line endings (LF)."
-    fi
-else
-    echo "Warning: .env file not found at $ENV_PATH. Skipping cleanup."
-fi
-
 # 1. Protect against Docker mount bugs
 if [ -d "/var/www/laravel/.env" ]; then
     echo "CRITICAL: .env is a directory. Check Docker volume mounts!"
