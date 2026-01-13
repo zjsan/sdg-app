@@ -55,6 +55,10 @@ chmod -R 775 storage bootstrap/cache
 # 5. Laravel production lifecycle
 echo "Running Laravel production setup..."
 
+# Force a fresh discovery here
+echo "Generating fresh package manifest..."
+php artisan package:discover --ansi
+
 php artisan optimize:clear
 
 # Storage symlink is idempotent; failure should not stop container
