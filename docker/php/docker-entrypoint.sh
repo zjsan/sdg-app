@@ -20,7 +20,7 @@ for VAR in $REQUIRED_VARS; do
 done
 
 # 3. Wait for database to become ready
-MAX_RETRIES=20
+MAX_RETRIES=60
 COUNT=1
 
 until php artisan db:show >/dev/null 2>&1; do
