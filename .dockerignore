@@ -18,3 +18,7 @@ laravel/vendor
 laravel/.env
 .env
 .env.dev
+
+#dev cache files
+laravel/bootstrap/cache/*.php
+!laravel/bootstrap/cache/.gitignore
