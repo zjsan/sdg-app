@@ -123,4 +123,8 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'providers' => array_filter([
+        App\Providers\AppServiceProvider::class,
+        class_exists('Laravel\Pail\PailServiceProvider') ? 'Laravel\Pail\PailServiceProvider' : null,
+    ]),
 ];
