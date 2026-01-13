@@ -72,6 +72,9 @@ COPY laravel .
 COPY --from=composer_build /var/www/laravel/vendor ./vendor
 COPY --from=node_build /var/www/laravel/public/build ./public/build
 
+# Clean stale caches (Safety Net)
+RUN rm -f bootstrap/cache/packages.php bootstrap/cache/services.php bootstrap/cache/config.php
+
 # CRITICAL: Fix permissions before the entrypoint
 RUN chown -R www-data:www-data /var/www/laravel \
     && chmod -R 775 storage bootstrap/cache
