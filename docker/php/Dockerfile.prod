@@ -16,7 +16,8 @@ RUN docker-php-ext-install \
     mbstring \
     exif \
     opcache \
-    zip
+    zip \
+    fileinfo
 
 RUN php -r "readfile('https://getcomposer.org/installer');" \
     | php -- --install-dir=/usr/bin/ --filename=composer
@@ -61,6 +62,7 @@ WORKDIR /var/www/laravel
 RUN apt-get update && apt-get install -y --no-install-recommends \
     zip unzip libzip-dev libonig-dev libpng-dev \
     && docker-php-ext-install pdo pdo_mysql bcmath mbstring exif opcache zip \
+    fileinfo \
     && rm -rf /var/lib/apt/lists/*
 
 # Set Timezone
