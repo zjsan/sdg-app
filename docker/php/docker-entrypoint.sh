@@ -20,10 +20,17 @@ for VAR in $REQUIRED_VARS; do
 done
 
 # 3. Wait for database to become ready
-MAX_RETRIES=60
+MAX_RETRIES=40
 COUNT=1
 
-until php artisan db:show >/dev/null 2>&1; do
+until php -r "try { new PDO('mysql:host=' . getenv('DB_HOST') . 
+            ';port=' . getenv('DB_PORT') . 
+            ';dbname=' . getenv('DB_DATABASE'), 
+            getenv('DB_USERNAME'), 
+            getenv('DB_PASSWORD')); 
+            exit(0); } 
+            catch (Exception \$e) { exit(1); }"; do
+            
     echo "Waiting for database connection... ($COUNT/$MAX_RETRIES)"
 
     if [ "$COUNT" -ge "$MAX_RETRIES" ]; then
