@@ -9,44 +9,33 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     zip unzip curl git libzip-dev libonig-dev \
     && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-install \
-    pdo \
-    pdo_mysql \
-    bcmath \
-    mbstring \
-    exif \
-    opcache \
-    zip \
-    fileinfo
+RUN docker-php-ext-install bcmath mbstring
 
+# Install composer
 RUN php -r "readfile('https://getcomposer.org/installer');" \
     | php -- --install-dir=/usr/bin/ --filename=composer
 
-# Copy only composer files
+# Copy composer files
 COPY laravel/composer.json composer.json
 COPY laravel/composer.lock composer.lock
 
-# Disable scripts because artisan does not exist yet
-RUN composer install \
-    --no-dev \
-    --prefer-dist \
-    --optimize-autoloader \
-    --no-interaction \
-    --no-scripts
+# 1. Install dependencies (no-scripts because code isn't here yet)
+RUN composer install --no-dev --prefer-dist --no-interaction --no-scripts --no-autoloader
+
+# 2. Copy the actual app code into this stage
+COPY laravel .
+
+# 3. generate the optimized autoloader with the code present
+RUN composer dump-autoload --no-dev --optimize --no-scripts
 
 
 # ============================
-# Stage 2 — Node Build
+# Stage 2 — Node Build (No changes needed here)
 # ============================
 FROM node:20 AS node_build
-
 WORKDIR /var/www/laravel
-
-COPY laravel/package.json package.json
-COPY laravel/package-lock.json package-lock.json
-
+COPY laravel/package.json laravel/package-lock.json ./
 RUN npm ci
-
 COPY laravel .
 RUN npm run build
 
@@ -58,42 +47,34 @@ FROM php:8.3-fpm
 
 WORKDIR /var/www/laravel
 
-# Combine apt-get and extension installs to reduce layers
 RUN apt-get update && apt-get install -y --no-install-recommends \
     zip unzip libzip-dev libonig-dev libpng-dev \
-    && docker-php-ext-install pdo pdo_mysql bcmath mbstring exif opcache zip \
-    fileinfo \
+    && docker-php-ext-install pdo pdo_mysql bcmath mbstring exif opcache zip fileinfo \
     && rm -rf /var/lib/apt/lists/*
 
-# Set Timezone
 ENV TZ=Asia/Manila
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# Copy application first, THEN dependencies
-COPY laravel .
-COPY --from=composer_build /var/www/laravel/vendor ./vendor
+# --- IMPORTANT CHANGES HERE ---
+
+# 1. Copy everything from the composer_build stage (Code + Optimized Vendor)
+COPY --from=composer_build /var/www/laravel /var/www/laravel
+
+# 2. Copy the assets from node stage
 COPY --from=node_build /var/www/laravel/public/build ./public/build
 
-# Clean stale caches (Safety Net)
-RUN rm -f bootstrap/cache/packages.php bootstrap/cache/services.php bootstrap/cache/config.php
+# 3. Wipe stale caches that might have been copied from your host machine
+RUN rm -f bootstrap/cache/config.php bootstrap/cache/packages.php bootstrap/cache/services.php
 
-# CRITICAL: Fix permissions before the entrypoint
+# 4. Fix permissions
 RUN chown -R www-data:www-data /var/www/laravel \
     && chmod -R 775 storage bootstrap/cache
 
-# PHP-FPM Config
-# prevent clearing of env vars so Laravel can access them
 RUN echo "clear_env = no" >> /usr/local/etc/php-fpm.d/zz-docker.conf
 
-# Setup the Entrypoint 
 COPY docker/php/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-
-# Remove Windows line endings and make it executable INSIDE the image
 RUN sed -i 's/\r$//' /usr/local/bin/docker-entrypoint.sh && \
     chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# Tell Docker to use this script
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
-
-# Start PHP-FPM
 CMD ["php-fpm"]

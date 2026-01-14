@@ -55,6 +55,14 @@ chmod -R 775 storage bootstrap/cache
 # 5. Laravel production lifecycle
 echo "Running Laravel production setup..."
 
+# Remove any hidden cache files that might be stuck in a volume
+echo "Cleaning up old cache files..."
+rm -f bootstrap/cache/*.php
+
+# Instead of discovery first, clear everything to reset the container's brain
+echo "Clearing existing caches..."
+php artisan optimize:clear || echo "Clear failed, continuing..."
+
 # Force a fresh discovery here
 echo "Generating fresh package manifest..."
 php artisan package:discover --ansi
