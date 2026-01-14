@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     zip unzip curl git libzip-dev libonig-dev \
     && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-install bcmath mbstring
+RUN docker-php-ext-install bcmath mbstring fileinfo
 
 # Install composer
 RUN php -r "readfile('https://getcomposer.org/installer');" \
