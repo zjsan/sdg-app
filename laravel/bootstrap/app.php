@@ -16,7 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->group('api', [
         \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
         \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        
     ]);
+        $middleware->trustProxies(at: '*');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
