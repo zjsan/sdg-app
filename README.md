@@ -152,7 +152,7 @@ For developers / operators only
 
 **Access via:** http://localhost:8080
 
-## 7. Production Deployment
+## 7. Production Deployment Workflow
 
 ## Docker Entrypoint File
 
@@ -168,16 +168,25 @@ The `docker-entrypoint.sh` script is the brain of the container.Attached within 
   - Runs database migrations (`migrate --force`).
   - Pre-caches the application for production performance.
 
-**Standard Update**
+**Standard Update - Source code changes**
 
+    git pull
+    docker-compose -f docker-compose.prod.yml up -d --build php
+    docker exec -it sdg-php php artisan optimize:clear
+    docker exec -it sdg-php php artisan optimize
+
+**Config or Dependency Changes**
+
+    git pull
     docker-compose -f docker-compose.prod.yml down
-    git pull #if there are changes in repo
     docker-compose -f docker-compose.prod.yml build --no-cache
     docker-compose -f docker-compose.prod.yml up -d
+    docker exec -it sdg-php php artisan optimize:clear
+    docker exec -it sdg-php php artisan optimize
 
 **Fresh Start (Recovery Mode)**
 
-Use this to fix stale volumes or cached configuration bugs:
+Use this to fix stale volumes or cached configuration bugs.This will permanently delete database data, sessions, and Docker volumes:
 
     # Stop and wipe volumes/images
     docker-compose -f docker-compose.prod.yml down -v --rmi local
@@ -188,7 +197,7 @@ Use this to fix stale volumes or cached configuration bugs:
     find ./laravel/.env -maxdepth 0 -type d -exec rm -rf {} +
     sed -i 's/\r$//' ./laravel/.env
 
-    # Rebuild and launch
+    # Rebuild and launch clean stack
     docker-compose -f docker-compose.prod.yml build --no-cache
     docker-compose -f docker-compose.prod.yml up -d
 
