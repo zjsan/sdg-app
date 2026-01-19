@@ -139,6 +139,14 @@ For developers / operators only
 - .env must be a file, not a directory
 - Must use Unix line endings (LF) ( avoid potential errors)
 
+### Frontend Environment Configuration (Production)
+
+To prevent the `GET /undefined/auth/google/redirect` error in production builds, define the API URL for the frontend:
+
+- Ensure `./laravel/.env.production.localfrontend` exists
+- Ensure the file uses **Unix line endings (LF)**.
+- This variable will be injected into the frontend build process, ensuring that API requests are correctly routed to the backend service.
+
 ## 6. Local Development Workflow
 
     # 1. Build and start containers
@@ -196,6 +204,11 @@ Use this to fix stale volumes or cached configuration bugs.This will permanently
     # Fix .env directory bugs and line endings
     find ./laravel/.env -maxdepth 0 -type d -exec rm -rf {} +
     sed -i 's/\r$//' ./laravel/.env
+
+    # Clean up your new Frontend .env
+    find ./laravel/.env.production.localfrontend -maxdepth 0 -type d -exec rm -rf {} +
+    sed -i 's/\r$//' ./laravel/.env.production.localfrontend
+
 
     # Rebuild and launch clean stack
     docker-compose -f docker-compose.prod.yml build --no-cache
