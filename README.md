@@ -205,7 +205,7 @@ Use this to fix stale volumes or cached configuration bugs.This will permanently
     find ./laravel/.env -maxdepth 0 -type d -exec rm -rf {} +
     sed -i 's/\r$//' ./laravel/.env
 
-    # Clean up your new Frontend .env
+    # Clean up Frontend .env
     find ./laravel/.env.production.localfrontend -maxdepth 0 -type d -exec rm -rf {} +
     sed -i 's/\r$//' ./laravel/.env.production.localfrontend
 
