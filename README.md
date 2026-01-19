@@ -34,18 +34,102 @@ To access Live Prod: **13.251.136.207** -> automatically redirected to https://a
 
 ## 4. Hosts File Configuration
 
-To ensure the application resolves correctly during testing and production, must map the domain in the system's `hosts` file.
+To make sure the application works correctly during testing and production, you need to map the domain in your system's **hosts file**.  
+There are two simple ways to do this: using **Notepad** or using **PowerShell**.
 
-### How to Update (Windows)
+---
 
-1.  **Open Notepad as Administrator**: Search for "Notepad" in the Start menu, right-click it, and select **Run as Administrator**.
-2.  **Open the Hosts File**: Go to `File > Open` and navigate to:
-    `C:\Windows\System32\drivers\etc\hosts`
-    _(Note: Ensure "All Files" is selected in the bottom-right dropdown to see the file)._ Then select again notepad.
-3.  **Add Configuration**: Scroll to the bottom and paste the appropriate line:
-    - **For testing of production setup:** `127.0.0.1 app.sdg-dashboard.com`
-    - **For Live Production:** `13.251.136.207 app.sdg-dashboard.com`
-4.  **Save and Close**: Press `Ctrl + S` to save and close the file.
+### Option 1: Update Using Notepad (Windows)
+
+1. **Open Notepad as Administrator**
+
+   - Search for "Notepad" in the Start menu.
+   - Right-click it and select **Run as Administrator**.
+
+2. **Open the Hosts File**
+
+   - In Notepad, go to **File > Open**.
+   - Navigate to:  
+     `C:\Windows\System32\drivers\etc\hosts`
+   - At the bottom-right, change the dropdown to **All Files** so you can see the file.
+   - Select the file and open it.
+
+3. **Add Configuration**
+
+   - Scroll to the bottom and paste one of the following lines:
+     - For testing:
+       ```
+       127.0.0.1    app.sdg-dashboard.com
+       ```
+     - For live production:
+       ```
+       13.251.136.207    app.sdg-dashboard.com
+       ```
+
+4. **Save and Close**
+   - Press **Ctrl + S** to save.
+   - Close Notepad.
+
+---
+
+### Option 2: Update Using PowerShell (Windows)
+
+1. **Open PowerShell as Administrator**
+
+   - Search for "PowerShell" in the Start menu.
+   - Right-click it and select **Run as Administrator**.
+
+2. **Add the Configuration**
+
+   - Copy and paste one of these commands into PowerShell, then press **Enter**:
+     - For **Live Production**:
+       ```
+       Add-Content -Path "$env:windir\System32\drivers\etc\hosts" -Value "`n13.251.136.207`tapp.sdg-dashboard.com" -Force
+       ```
+     - For **Testing (local setup)**:
+       ```
+       Add-Content -Path "$env:windir\System32\drivers\etc\hosts" -Value "`n127.0.0.1`tapp.sdg-dashboard.com" -Force
+       ```
+
+3. **Refresh DNS Cache**
+   - Run this command:
+     ```
+     ipconfig /flushdns
+     ```
+
+---
+
+### How to Remove the Configuration (PowerShell)
+
+For deleting the entry:
+
+1. **Open PowerShell as Administrator**
+
+   - Same as above.
+
+2. **Run the Removal Command**
+
+   - Choose one of the following depending on what you want to remove:
+     - To remove **Live Production** entry:
+       ```
+       $hosts = "$env:windir\System32\drivers\etc\hosts"
+       (Get-Content $hosts) |
+         Where-Object { $_ -notmatch '^\s*13\.251\.136\.207\s+app\.sdg-dashboard\.com\s*$' } |
+         Set-Content $hosts
+       ```
+     - To remove **Testing (local setup)** entry:
+       ```
+       $hosts = "$env:windir\System32\drivers\etc\hosts"
+       (Get-Content $hosts) |
+         Where-Object { $_ -notmatch '^\s*127\.0\.0\.1\s+app\.sdg-dashboard\.com\s*$' } |
+         Set-Content $hosts
+       ```
+
+3. **Refresh DNS Cache Again**
+   - Run:
+     ```
+     ipconfig /flushdns
+     ```
 
 ## 5. Environment Variable
 
