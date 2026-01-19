@@ -182,6 +182,8 @@ Use this to fix stale volumes or cached configuration bugs:
     # Stop and wipe volumes/images
     docker-compose -f docker-compose.prod.yml down -v --rmi local
 
+    git pull #if there are changes in repo
+
     # Fix .env directory bugs and line endings
     find ./laravel/.env -maxdepth 0 -type d -exec rm -rf {} +
     sed -i 's/\r$//' ./laravel/.env
