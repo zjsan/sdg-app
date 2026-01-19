@@ -37,7 +37,7 @@ COPY laravel/package.json laravel/package-lock.json ./
 RUN npm ci
 COPY laravel .
 
-#Copy your specific frontend env file
+#production env file for frontend build
 COPY laravel/.env.production.localfrontend .env
 
 RUN npm run build
