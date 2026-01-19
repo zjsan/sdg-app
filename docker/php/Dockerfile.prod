@@ -12,8 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN docker-php-ext-install bcmath mbstring fileinfo
 
 # Install composer
-RUN php -r "readfile('https://getcomposer.org/installer');" \
-    | php -- --install-dir=/usr/bin/ --filename=composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Copy composer files
 COPY laravel/composer.json composer.json
