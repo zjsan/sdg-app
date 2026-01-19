@@ -42,7 +42,7 @@ class GoogleAuthController extends Controller
 
                 if (! $isAllowed) {
                     // Redirect the user to a frontend route
-                    return redirect()->away(env('FRONTEND_URL') . '/unauthorized');
+                    return redirect()->away(config('app.frontend_url') . '/unauthorized');
                 }
             } catch (\Throwable $e) {
                 Log::error('Database error during whitelist check', ['error' => $e->getMessage()]);
@@ -86,7 +86,7 @@ class GoogleAuthController extends Controller
             ], now()->addMinutes(2));
 
             // Redirect to frontend with session_id
-            return redirect()->to(env('FRONTEND_URL') . "/auth/callback?session_id={$sessionId}");
+            return redirect()->to(config('app.frontend_url') . "/auth/callback?session_id={$sessionId}");
        } catch (\Throwable $e) {
 
         // Log actual error not shown to frontend
@@ -96,7 +96,7 @@ class GoogleAuthController extends Controller
         ]);
 
         // Return dedicated error response to frontend
-        return redirect()->away(env('FRONTEND_URL') . '/auth-error');
+        return redirect()->away(config('app.frontend_url') . '/auth-error');
         }
     }
 

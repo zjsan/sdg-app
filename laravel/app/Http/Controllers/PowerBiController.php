@@ -34,12 +34,12 @@ class PowerBiController extends Controller
             //Else return the Power BI embed URL for external users
             if(Str::endsWith($user->email, "@$domain_whitelist")){
                 //  Only authenticated users reach this point due to Sanctum middleware
-                $embedId = env('POWER_BI_MMSU_EMBED_ID');
+                $embedId = config('app.POWER_BI_MMSU_EMBED_ID');
                 $message = 'MMSU user access granted.';
             
             }
             else{
-                $embedId = env('POWER_BI_EXTERNAL_EMBED_ID');
+                $embedId = config('app.POWER_BI_EXTERNAL_EMBED_ID');
                 $message = 'External user access granted.';
             }
 
@@ -93,7 +93,7 @@ class PowerBiController extends Controller
         
         // All checks passed, proceed to redirect to Power BI embed URL
         $embedId = $data['embedId']; 
-        $baseUrl = env('POWER_BI_BASE_URL');
+        $baseUrl = config('app.POWER_BI_BASE_URL');
         
         return redirect($baseUrl . $embedId);
     }
