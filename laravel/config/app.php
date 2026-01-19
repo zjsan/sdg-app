@@ -123,4 +123,10 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'frontend_url' => env('FRONTEND_URL', 'https://app.sdg-dashboard.com'),
+
+    'POWER_BI_BASE_URL' => env('POWER_BI_BASE_URL', 'https://app.powerbi.com/view?r='),
+    'POWER_BI_MMSU_EMBED_ID' => env('POWER_BI_MMSU_EMBED_ID', 'eyJrIjoiZjY3NjQ5N2MtMWRmZS00MjE1LTk1NzItYzFiMGY0YWVkZWE0IiwidCI6IjdjZmY5YzA2LThmNGQtNDAwNi1iOWQwLWU4MWRjYWJjZDU1NyIsImMiOjEwfQ%3D%3D'),
+    'POWER_BI_EXTERNAL_EMBED_ID' => env('POWER_BI_EXTERNAL_EMBED_ID', 'eyJrIjoiNWJkOGY5YTktYzZiOS00ZDE4LThmMjctOGI3MjYwMTQyZjBhIiwidCI6IjdjZmY5YzA2LThmNGQtNDAwNi1iOWQwLWU4MWRjYWJjZDU1NyIsImMiOjEwfQ%3D%3D'),
+
 ];
