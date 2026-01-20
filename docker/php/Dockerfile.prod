@@ -37,8 +37,8 @@ COPY laravel/package.json laravel/package-lock.json ./
 RUN npm ci
 COPY laravel .
 
-#production env file for frontend build
-COPY laravel/.env.production.localfrontend .env
+ENV VITE_API_URL=https://app.sdg-dashboard.com
+RUN echo "The API URL is: $VITE_API_URL"
 
 RUN npm run build
 
