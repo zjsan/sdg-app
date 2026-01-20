@@ -173,6 +173,8 @@ The `docker-entrypoint.sh` script is the brain of the container.Attached within 
 
 - Controller logic
 - Blade/Vue files
+- Pinia Stores
+- Vue routers
 - Middleware
 - API logic
 
@@ -180,8 +182,13 @@ The `docker-entrypoint.sh` script is the brain of the container.Attached within 
   git pull
   docker-compose -f docker-compose.prod.yml up -d --build
 
+
+  # Fix permissions
+  docker exec -it sdg-php chown -R www-data:www-data storage bootstrap/cache
+  docker exec -it sdg-php chmod -R 775 storage bootstrap/cache
+
   docker exec -it sdg-php php artisan optimize:clear
-  docker exec -it sdg-php php artisan optimize
+
 ```
 
 **Config or Dependency Changes**
@@ -197,8 +204,15 @@ The `docker-entrypoint.sh` script is the brain of the container.Attached within 
  docker-compose -f docker-compose.prod.yml build --no-cache
  docker-compose -f docker-compose.prod.yml up -d
 
+ # Fix permissions
+ docker exec -it sdg-php chown -R www-data:www-data storage bootstrap/cache
+ docker exec -it sdg-php chmod -R 775 storage bootstrap/cache
+
  docker exec -it sdg-php php artisan optimize:clear
+
+ # Optimize ONLY after validation (totally working)
  docker exec -it sdg-php php artisan optimize
+
 ```
 
 **Docker / Infrastructure Changes**
@@ -214,8 +228,15 @@ The `docker-entrypoint.sh` script is the brain of the container.Attached within 
   docker-compose -f docker-compose.prod.yml build --no-cache
   docker-compose -f docker-compose.prod.yml up -d
 
+  # Fix permissions
+  docker exec -it sdg-php chown -R www-data:www-data storage bootstrap/cache
+  docker exec -it sdg-php chmod -R 775 storage bootstrap/cache
+
   docker exec -it sdg-php php artisan optimize:clear
+
+  # Optimize ONLY after validation (totally working)
   docker exec -it sdg-php php artisan optimize
+
 ```
 
 **Fresh Start (Recovery Mode)**
