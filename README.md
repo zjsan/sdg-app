@@ -42,12 +42,10 @@ There are two simple ways to do this: using **Notepad** or using **PowerShell**.
 ### Option 1: Update Using Notepad (Windows)
 
 1. **Open Notepad as Administrator**
-
    - Search for "Notepad" in the Start menu.
    - Right-click it and select **Run as Administrator**.
 
 2. **Open the Hosts File**
-
    - In Notepad, go to **File > Open**.
    - Navigate to:  
      `C:\Windows\System32\drivers\etc\hosts`
@@ -55,7 +53,6 @@ There are two simple ways to do this: using **Notepad** or using **PowerShell**.
    - Select the file and open it.
 
 3. **Add Configuration**
-
    - Scroll to the bottom and paste one of the following lines:
      - For testing:
        ```
@@ -75,12 +72,10 @@ There are two simple ways to do this: using **Notepad** or using **PowerShell**.
 ### Option 2: Update Using PowerShell (Windows)
 
 1. **Open PowerShell as Administrator**
-
    - Search for "PowerShell" in the Start menu.
    - Right-click it and select **Run as Administrator**.
 
 2. **Add the Configuration**
-
    - Copy and paste one of these commands into PowerShell, then press **Enter**:
      - For **Live Production**:
        ```
@@ -104,11 +99,9 @@ There are two simple ways to do this: using **Notepad** or using **PowerShell**.
 For deleting the entry:
 
 1. **Open PowerShell as Administrator**
-
    - Same as above.
 
 2. **Run the Removal Command**
-
    - Choose one of the following depending on what you want to remove:
      - To remove **Live Production** entry:
        ```
@@ -179,7 +172,7 @@ The `docker-entrypoint.sh` script is the brain of the container.Attached within 
 **Standard Update - Source code changes**
 
     git pull
-    docker-compose -f docker-compose.prod.yml up -d --build php
+    docker-compose -f docker-compose.prod.yml up -d --build
     docker exec -it sdg-php php artisan optimize:clear
     docker exec -it sdg-php php artisan optimize
 
