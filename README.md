@@ -171,41 +171,76 @@ The `docker-entrypoint.sh` script is the brain of the container.Attached within 
 
 **Standard Update - Source code changes**
 
-    git pull
-    docker-compose -f docker-compose.prod.yml up -d --build
-    docker exec -it sdg-php php artisan optimize:clear
-    docker exec -it sdg-php php artisan optimize
+- Controller logic
+- Blade/Vue files
+- Middleware
+- API logic
+
+  git pull
+  docker-compose -f docker-compose.prod.yml up -d --build
+
+  docker exec -it sdg-php php artisan optimize:clear
+  docker exec -it sdg-php php artisan optimize
 
 **Config or Dependency Changes**
 
-    git pull
-    docker-compose -f docker-compose.prod.yml down
-    docker-compose -f docker-compose.prod.yml build --no-cache
-    docker-compose -f docker-compose.prod.yml up -d
-    docker exec -it sdg-php php artisan optimize:clear
-    docker exec -it sdg-php php artisan optimize
+- any `.env` changes
+- `composer.json`
+- `package.json`
+- Cache/session/database driver changes
+
+  git pull
+  docker-compose -f docker-compose.prod.yml down
+  docker-compose -f docker-compose.prod.yml build --no-cache
+  docker-compose -f docker-compose.prod.yml up -d
+
+  docker exec -it sdg-php php artisan optimize:clear
+  docker exec -it sdg-php php artisan optimize
+
+**Docker / Infrastructure Changes**
+
+- Dockerfile
+- docker-compose.prod.yml
+- Nginx config
+- Entrypoint script
+
+  docker-compose -f docker-compose.prod.yml down
+  git pull
+  docker-compose -f docker-compose.prod.yml build --no-cache
+  docker-compose -f docker-compose.prod.yml up -d
+
+  docker exec -it sdg-php php artisan optimize:clear
+  docker exec -it sdg-php php artisan optimize
 
 **Fresh Start (Recovery Mode)**
 
 Use this to fix stale volumes or cached configuration bugs.This will permanently delete database data, sessions, and Docker volumes:
 
-    # Stop and wipe volumes/images
-    docker-compose -f docker-compose.prod.yml down -v --rmi local
+- First-Time Production Deployment
+- Severe Production Bugs (State Corruption)
+- Docker Volume / Cache Corruption
+- Switching Critical Infrastructure Settings
 
-    git pull #if there are changes in repo
+  # Stop and wipe volumes/images
 
-    # Fix .env directory bugs and line endings
-    find ./laravel/.env -maxdepth 0 -type d -exec rm -rf {} +
-    sed -i 's/\r$//' ./laravel/.env
+  docker-compose -f docker-compose.prod.yml down -v --rmi local
 
-    # Clean up Frontend .env
-    find ./laravel/.env.production.localfrontend -maxdepth 0 -type d -exec rm -rf {} +
-    sed -i 's/\r$//' ./laravel/.env.production.localfrontend
+  git pull #if there are changes in repo
 
+  # Fix .env directory bugs and line endings
 
-    # Rebuild and launch clean stack
-    docker-compose -f docker-compose.prod.yml build --no-cache
-    docker-compose -f docker-compose.prod.yml up -d
+  find ./laravel/.env -maxdepth 0 -type d -exec rm -rf {} +
+  sed -i 's/\r$//' ./laravel/.env
+
+  # Clean up Frontend .env
+
+  find ./laravel/.env.production.localfrontend -maxdepth 0 -type d -exec rm -rf {} +
+  sed -i 's/\r$//' ./laravel/.env.production.localfrontend
+
+  # Rebuild and launch clean stack
+
+  docker-compose -f docker-compose.prod.yml build --no-cache
+  docker-compose -f docker-compose.prod.yml up -d
 
 ## 8. Maintenance Commands
 
