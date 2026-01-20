@@ -32,9 +32,8 @@ export const useAuthStore = defineStore("auth", {
             if (!this.token) return;
 
             try {
-                api.defaults.headers.common[
-                    "Authorization"
-                ] = `Bearer ${this.token}`;
+                api.defaults.headers.common["Authorization"] =
+                    `Bearer ${this.token}`;
                 const { data } = await api.get("/user");
                 this.user = data;
                 this.saveUserToStorage();
@@ -60,9 +59,8 @@ export const useAuthStore = defineStore("auth", {
                 this.token = data.token;
 
                 // Step 3: set token for axios instance
-                api.defaults.headers.common[
-                    "Authorization"
-                ] = `Bearer ${this.token}`;
+                api.defaults.headers.common["Authorization"] =
+                    `Bearer ${this.token}`;
 
                 // Step 3: Get the user
                 await this.getUser();
@@ -91,9 +89,8 @@ export const useAuthStore = defineStore("auth", {
                     return;
                 }
 
-                api.defaults.headers.common[
-                    "Authorization"
-                ] = `Bearer ${this.token}`;
+                api.defaults.headers.common["Authorization"] =
+                    `Bearer ${this.token}`;
                 const { data } = await api.get("/user");
                 this.user = data;
             } catch (error) {
@@ -146,9 +143,8 @@ export const useAuthStore = defineStore("auth", {
                 this.user = user;
 
                 // Set token in axios for future requests
-                api.defaults.headers.common[
-                    "Authorization"
-                ] = `Bearer ${this.token}`;
+                api.defaults.headers.common["Authorization"] =
+                    `Bearer ${this.token}`;
 
                 this.saveUserToStorage();
                 //Push to the intermediate page instead of the Dashboard
