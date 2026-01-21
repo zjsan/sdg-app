@@ -16,9 +16,13 @@ laravel/vendor
 
 # Ignore Laravel runtime env only
 laravel/.env
+laravel/.env.production
+laravel/.env.production.local
+laravel/.env.production.localfrontend
 .env
 .env.dev
 .env.production.localfrontend
+.env.production
 
 # dev cache files
 laravel/bootstrap/cache/*.php
