@@ -14,11 +14,14 @@ docker/**
 laravel/node_modules
 laravel/vendor
 
-# Environment files (runtime only)
+# Ignore Laravel runtime env only
 laravel/.env
 .env
 .env.dev
 
-#dev cache files
+# Allow Vite production env
+!laravel/.env.production
+
+# dev cache files
 laravel/bootstrap/cache/*.php
 !laravel/bootstrap/cache/.gitignore

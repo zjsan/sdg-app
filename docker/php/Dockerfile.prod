@@ -35,10 +35,9 @@ FROM node:20 AS node_build
 WORKDIR /var/www/laravel
 COPY laravel/package.json laravel/package-lock.json ./
 RUN npm ci
+
 COPY laravel .
 
-ENV VITE_API_URL=https://app.sdg-dashboard.com
-RUN echo "The API URL is: $VITE_API_URL"
 
 RUN npm run build
 
