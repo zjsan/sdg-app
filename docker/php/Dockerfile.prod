@@ -33,11 +33,17 @@ RUN composer dump-autoload --no-dev --optimize --no-scripts
 # ============================
 FROM node:20 AS node_build
 WORKDIR /var/www/laravel
+
+# Accept build arg
+ARG VITE_API_URL
+
+# Expose it as env so Vite can read it
+ENV VITE_API_URL=${VITE_API_URL}
+
 COPY laravel/package.json laravel/package-lock.json ./
 RUN npm ci
 
 COPY laravel .
-
 
 RUN npm run build
 

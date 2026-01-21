@@ -19,9 +19,6 @@ laravel/.env
 .env
 .env.dev
 
-# Allow Vite production env
-!laravel/.env.production
-
 # dev cache files
 laravel/bootstrap/cache/*.php
 !laravel/bootstrap/cache/.gitignore

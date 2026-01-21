@@ -19,6 +19,8 @@ services:
     build:
       context: .
       dockerfile: docker/php/Dockerfile.prod # Production Dockerfile
+      args:
+        VITE_API_URL: https://app.sdg-dashboard.com
     container_name: sdg-php
     depends_on:
       - mysql
