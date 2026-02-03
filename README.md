@@ -79,11 +79,17 @@ There are two simple ways to do this: using **Notepad** or using **PowerShell**.
    - Copy and paste one of these commands into PowerShell, then press **Enter**:
      - For **Live Production**:
        ```
-       Add-Content -Path "$env:windir\System32\drivers\etc\hosts" -Value "`n13.251.136.207`tapp.sdg-dashboard.com" -Force
+       Add-Content `
+          -Path "$env:windir\System32\drivers\etc\hosts" `
+          -Value "$([Environment]::NewLine)13.251.136.207`tapp.sdg-dashboard.com" `
+          -Encoding ASCII
        ```
      - For **Testing (local setup)**:
        ```
-       Add-Content -Path "$env:windir\System32\drivers\etc\hosts" -Value "`n127.0.0.1`tapp.sdg-dashboard.com" -Force
+       Add-Content `
+          -Path "$env:windir\System32\drivers\etc\hosts" `
+          -Value "$([Environment]::NewLine)127.0.0.1`tapp.sdg-dashboard.com" `
+          -Encoding ASCII
        ```
 
 3. **Refresh DNS Cache**
@@ -123,6 +129,39 @@ For deleting the entry:
      ```
      ipconfig /flushdns
      ```
+
+### Checking logs and Fixing potential error
+
+1. **Verify addition - shows the last two lines**
+   - Run:
+     ```
+     Get-Content "$env:windir\System32\drivers\etc\hosts" -Tail 2
+     ```
+
+2. **Run this to fix newline error if already appended in the host file**
+   - Run:
+
+     ```
+     $hosts  = "$env:windir\System32\drivers\etc\hosts"
+     $entry  = "13.251.136.207`tapp.sdg-dashboard.com"
+
+     $content = Get-Content $hosts -Raw
+
+     $content = $content -replace "`r?`n", "`r`n"
+     $content = $content -replace "(?m)^[^\#].*app\.sdg-dashboard\.com.*`r?`n?", ""
+     ```
+
+   if ($content -and -not $content.EndsWith("`r`n")) {
+   $content += "`r`n"
+   }
+
+   $content += "$entry`r`n"
+
+   Set-Content -Path $hosts -Value $content -Encoding ASCII -Force
+
+   ```
+
+   ```
 
 ## 5. Environment Variable
 
