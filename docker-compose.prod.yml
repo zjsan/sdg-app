@@ -22,6 +22,11 @@ services:
       args:
         VITE_API_URL: https://app.sdg-dashboard.com
     container_name: sdg-php
+    healthcheck:
+      test: ["CMD-SHELL", "php-fpm -t || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
     depends_on:
       - mysql
     networks:
@@ -47,7 +52,8 @@ services:
       - laravel_storage:/var/www/laravel/storage
       - laravel_public:/var/www/laravel/public
     depends_on:
-      - php
+      - php:
+        condition: service_healthy
     networks:
       sdgapp_net:
         aliases:
