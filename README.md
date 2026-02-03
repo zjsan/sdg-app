@@ -141,25 +141,22 @@ For deleting the entry:
 2. **Run this to fix newline error if already appended in the host file**
    - Run:
 
-     ```
-     $hosts  = "$env:windir\System32\drivers\etc\hosts"
-     $entry  = "13.251.136.207`tapp.sdg-dashboard.com"
+   ```
+   $hosts  = "$env:windir\System32\drivers\etc\hosts"
+   $entry  = "13.251.136.207`tapp.sdg-dashboard.com"
 
-     $content = Get-Content $hosts -Raw
+   $content = Get-Content $hosts -Raw
 
-     $content = $content -replace "`r?`n", "`r`n"
-     $content = $content -replace "(?m)^[^\#].*app\.sdg-dashboard\.com.*`r?`n?", ""
-     ```
+   $content = $content -replace "`r?`n", "`r`n"
+   $content = $content -replace "(?m)^[^\#].*app\.sdg-dashboard\.com.*`r?`n?", ""
 
    if ($content -and -not $content.EndsWith("`r`n")) {
-   $content += "`r`n"
+       $content += "`r`n"
    }
 
    $content += "$entry`r`n"
 
    Set-Content -Path $hosts -Value $content -Encoding ASCII -Force
-
-   ```
 
    ```
 
