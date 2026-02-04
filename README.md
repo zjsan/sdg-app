@@ -142,21 +142,28 @@ For deleting the entry:
    - Run:
 
    ```
-   $hosts  = "$env:windir\System32\drivers\etc\hosts"
-   $entry  = "13.251.136.207`tapp.sdg-dashboard.com"
+   $hosts = "$env:windir\System32\drivers\etc\hosts"
 
+   #create backup
+   $backupPath = Join-Path (Split-Path $hosts) "host-backup.bak"
+   Copy-Item -Path $hosts -Destination $backupPath -Force
+   Write-Host "Backup created at $backupPath" -ForegroundColor Cyan
+
+   #read content
    $content = Get-Content $hosts -Raw
 
-   $content = $content -replace "`r?`n", "`r`n"
-   $content = $content -replace "(?m)^[^\#].*app\.sdg-dashboard\.com.*`r?`n?", ""
+   # regex pattern to target IP/Domain.
+   $pattern = '([^\s])\h*((?:13\.\s*251\.\s*136\.\s*207)\s*app\.sdg-dashboard\.com)'
+   $replacement = "$1`r`n$2"
 
-   if ($content -and -not $content.EndsWith("`r`n")) {
-       $content += "`r`n"
+   # Apply fix
+   if ($content -match $pattern) {
+      $content = $content -replace $pattern, $replacement
+      Set-Content -Path $hosts -Value $content -Encoding ASCII -Force
+      Write-Host "Fixed glued or misformatted SDG dashboard host entry." -ForegroundColor Green
+   } else {
+      Write-Host "No problematic SDG dashboard entries found." -ForegroundColor Yellow
    }
-
-   $content += "$entry`r`n"
-
-   Set-Content -Path $hosts -Value $content -Encoding ASCII -Force
 
    ```
 
