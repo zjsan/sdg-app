@@ -151,32 +151,33 @@ For deleting the entry:
      Get-Content "$env:windir\System32\drivers\etc\hosts" -Tail 2
      ```
 
-2. **Run this to fix newline error if already appended in the host file**
+2. **Run this to fix glued entry error if already appended in the host file**
    - Run:
 
    ```
-   $hosts = "$env:windir\System32\drivers\etc\hosts"
+    $hosts = "$env:windir\System32\drivers\etc\hosts"
 
-   #create backup
-   $backupPath = Join-Path (Split-Path $hosts) "host-backup.bak"
-   Copy-Item -Path $hosts -Destination $backupPath -Force
-   Write-Host "Backup created at $backupPath" -ForegroundColor Cyan
+    # create backup
+    $backupPath = Join-Path (Split-Path $hosts) "host-backup.bak"
+    Copy-Item -Path $hosts -Destination $backupPath -Force
+    Write-Host "Backup created at $backupPath" -ForegroundColor Cyan
 
-   #read content
-   $content = Get-Content $hosts -Raw
+    # read content
+    $content = Get-Content $hosts -Raw
 
-   # regex pattern to target IP/Domain.
-   $pattern = '([^\s])\h*((?:13\.\s*251\.\s*136\.\s*207)\s*app\.sdg-dashboard\.com)'
-   $replacement = "$1`r`n$2"
+    # use Universal Regex (Compatible with all PowerShell versions)
+    # [ \t]* replaces \h* to avoid "Unrecognized escape sequence" errors
+    $pattern = '([^\s])[ \t]*((?:13\.\s*251\.\s*136\.\s*207)\s*app\.sdg-dashboard\.com)'
+    $replacement = '$1' + "`r`n" + '$2'
 
-   # Apply fix
-   if ($content -match $pattern) {
-      $content = $content -replace $pattern, $replacement
-      Set-Content -Path $hosts -Value $content -Encoding ASCII -Force
-      Write-Host "Fixed glued or misformatted SDG dashboard host entry." -ForegroundColor Green
-   } else {
-      Write-Host "No problematic SDG dashboard entries found." -ForegroundColor Yellow
-   }
+    # Apply fix
+    if ($content -match $pattern) {
+        $content = $content -replace $pattern, $replacement
+        Set-Content -Path $hosts -Value $content -Encoding ASCII -Force
+        Write-Host "SUCCESS: Fixed the glued entry." -ForegroundColor Green
+    } else {
+        Write-Host "No problematic entries found or already fixed." -ForegroundColor Yellow
+    }
 
    ```
 
