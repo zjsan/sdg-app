@@ -78,18 +78,31 @@ There are two simple ways to do this: using **Notepad** or using **PowerShell**.
 2. **Add the Configuration**
    - Copy and paste one of these commands into PowerShell, then press **Enter**:
      - For **Live Production**:
+
        ```
-       Add-Content `
-          -Path "$env:windir\System32\drivers\etc\hosts" `
-          -Value "$([Environment]::NewLine)13.251.136.207`tapp.sdg-dashboard.com" `
-          -Encoding ASCII
+       $HostEntry = "13.251.136.207`tapp.sdg-dashboard.com"
+       $Path = "$env:windir\System32\drivers\etc\hosts"
+
+       if ((Get-Content $Path) -notcontains $HostEntry) {
+            Add-Content -Path $Path -Value "$([Environment]::NewLine)$HostEntry" -Encoding ASCII
+            Write-Host "Entry added successfully." -ForegroundColor Green
+       } else {
+            Write-Host "Entry already exists. Skipping." -ForegroundColor Yellow
+       }
        ```
+
      - For **Testing (local setup)**:
+
        ```
-       Add-Content `
-          -Path "$env:windir\System32\drivers\etc\hosts" `
-          -Value "$([Environment]::NewLine)127.0.0.1`tapp.sdg-dashboard.com" `
-          -Encoding ASCII
+       $HostEntry = "127.0.0.1`tapp.sdg-dashboard.com"
+       $Path = "$env:windir\System32\drivers\etc\hosts"
+
+       if ((Get-Content $Path) -notcontains $HostEntry) {
+            Add-Content -Path $Path -Value "$([Environment]::NewLine)$HostEntry" -Encoding ASCII
+            Write-Host "Entry added successfully." -ForegroundColor Green
+       } else {
+            Write-Host "Entry already exists. Skipping." -ForegroundColor Yellow
+       }
        ```
 
 3. **Refresh DNS Cache**
