@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             //
+            // constrained() automatically assumes the 'organizations' table
+            // nullOnDelete() ensures if an org is deleted, the user record stays
+            $table->foreignId('organization_id')
+              ->nullable()
+              ->after('id') 
+              ->constrained('organization')
+              ->nullOnDelete();
         });
     }
 
@@ -23,6 +30,8 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             //
+            $table->dropForeign(['organization_id']);
+            $table->dropColumn('organization_id');
         });
     }
 };
