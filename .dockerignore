@@ -23,6 +23,7 @@ laravel/.env.production.localfrontend
 .env.dev
 .env.production.localfrontend
 .env.production
+.env.dev.prod
 
 # dev cache files
 laravel/bootstrap/cache/*.php

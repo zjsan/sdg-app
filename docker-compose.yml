@@ -54,7 +54,7 @@ services:
     networks:
       sdgapp_net:
         aliases:
-         - local.sdg-dashboard.com
+          - local.sdg-dashboard.com
 
   node:
     image: node:20
