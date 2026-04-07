@@ -16,12 +16,11 @@ class PowerBiController extends Controller
      */
     public function generateSignedUrl(Request $request)
     {
-        $domain_whitelist = 'mmsu.edu.ph';
         $urlLifespan = 3600;// 1 hour in seconds
 
         try{    
 
-            $user = $request->user(); //fetch email from users table
+            $user = $request->user()->load('organization'); //get the user with their organization
 
             if (! $user || ! $user->email) {
                 return response()->json(['message' => 'User not authenticated.'], 401);
