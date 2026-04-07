@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('allowed_emails', function (Blueprint $table) {
             //
-            $table->foreignId('organization_id')->nullable()->constrained('organization');
+            $table->foreignId('organization_id')->nullable()->after('id')->constrained('organization');
         });
     }
 
