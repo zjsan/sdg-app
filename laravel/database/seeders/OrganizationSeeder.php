@@ -12,7 +12,7 @@ class OrganizationSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        //initial database seeding for the organization table
         \App\Models\Organization::updateOrCreate(
             ['slug' => 'mmsu'],
             ['name' => 'MMSU', 'pbi_embed_id' => config('app.power_bi.MMSU_EMBED_ID')] // MMSU ID
