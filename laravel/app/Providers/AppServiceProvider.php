@@ -21,7 +21,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Check if user belongs to a specific organization by slug
+        Gate:define('view-dashboard', function (User $user, string $org_slug) {
+            return $user->organization?->slug === $org_slug;
+        });
 
     }
 }
