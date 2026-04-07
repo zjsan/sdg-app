@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table('allowed_emails', function (Blueprint $table) {
             //
+            $table->foreignId('organization_id')->nullable()->constrained('organization');
         });
     }
 
@@ -23,6 +24,8 @@ return new class extends Migration
     {
         Schema::table('allowed_emails', function (Blueprint $table) {
             //
+            $table->dropForeign(['organization_id']);
+            $table->dropColumn('organization_id');
         });
     }
 };
