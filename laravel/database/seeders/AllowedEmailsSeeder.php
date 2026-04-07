@@ -13,6 +13,11 @@ class AllowedEmailsSeeder extends Seeder
      */
     public function run(): void
     {
+        // fetch organization IDs once to avoid repeated queries
+        $mmsuId = DB::table('organization')->where('slug', 'mmsu')->value('id');
+        $chedId = DB::table('organization')->where('slug', 'ched')->value('id');
+        $externalId = DB::table('organization')->where('slug', 'external')->value('id');
+
         //email list to be whitelisted
         $emails = [
             ['email' => 'zjsantos25@gmail.com', 'is_active' => true],
