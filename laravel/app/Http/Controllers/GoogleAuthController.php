@@ -38,12 +38,19 @@ class GoogleAuthController extends Controller
                  $isAllowed = DB::table('allowed_emails')
                 ->where('email', $email)
                 ->where('is_active', true)
-                ->exists();
+                ->first();
 
                 if (! $isAllowed) {
                     // Redirect the user to a frontend route
                     return redirect()->away(config('app.frontend_url') . '/unauthorized');
                 }
+
+                if ($isAllowed->organization_id) {
+                    $user->update([
+                        'organization_id' => $isAllowed->organization_id
+                    ]);
+                }
+
             } catch (\Throwable $e) {
                 Log::error('Database error during whitelist check', ['error' => $e->getMessage()]);
                 return response()->json([
