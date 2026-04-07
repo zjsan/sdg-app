@@ -22,25 +22,20 @@ class PowerBiController extends Controller
 
             $user = $request->user()->load('organization'); //get the user with their organization
 
+            //initial checking 
             if (! $user || ! $user->email) {
                 return response()->json(['message' => 'User not authenticated.'], 401);
+            }
+
+            if (!$user || !$user->organization) {
+                return response()->json(['message' => 'Organization not assigned.'], 403);
             }
             
             $userID = $user->id;//fetch user id from users table
 
-            //Check if email domain is in the whitelist
-            //If yes, return the Power BI embed URL for mmsu users
-            //Else return the Power BI embed URL for external users
-            if(Str::endsWith($user->email, "@$domain_whitelist")){
-                //  Only authenticated users reach this point due to Sanctum middleware
-                $embedId = config('app.power_bi.MMSU_EMBED_ID');
-                $message = 'MMSU user access granted.';
-            
-            }
-            else{
-                $embedId = config('app.power_bi.EXTERNAL_EMBED_ID');
-                $message = 'External user access granted.';
-            }
+            //fetch the Power BI embed ID and organization name from the user's organization
+            $embedId = $user->organization->pbi_embed_id;
+            $orgName = $user->organization->name;
 
              // Generate one-time token
             $token = Str::uuid()->toString();
@@ -60,7 +55,7 @@ class PowerBiController extends Controller
             return response()->json([
                 'signedUrl' => $signedUrl,
                 'expiresIn' => $urlLifespan,
-                'message' => $message
+                'message' => "Access granted for $orgName."
             ]);
 
         } catch (\Throwable $e) {
