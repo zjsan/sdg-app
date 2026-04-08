@@ -43,12 +43,23 @@ class GoogleAuthController extends Controller
                     // Redirect the user to a frontend route
                     return redirect()->away(config('app.frontend_url') . '/unauthorized');
                 }
-
-                if ($whitelistEntry->organization_id) {
-                    $user->update([
-                        'organization_id' => $whitelistEntry->organization_id
-                    ]);
-                }
+                
+                //Fetch or Create the User
+                $user = User::firstOrCreate(
+                    ['email' => $email],
+                    [
+                        'name' => $googleUser->getName(),
+                        'google_id' => $googleUser->getId(),
+                        'email_verified_at' => now(),
+                    ]
+                );
+                
+                //sync organization id for every login to ensure it stays up to date with whitelist
+                $user->update([
+                    'organization_id' => $whitelistEntry->organization_id,
+                    'google_id' => $googleUser->getId(), // Keep ID up to date
+                ]);
+                
 
             } catch (\Throwable $e) {
                 Log::error('Database error during whitelist check', ['error' => $e->getMessage()]);
@@ -56,16 +67,6 @@ class GoogleAuthController extends Controller
                     'message' => 'Something went wrong verifying your access.'
                 ], 500);
             }
-          
-
-            $user = User::firstOrCreate(
-                ['email' => $email],
-                [
-                    'name' => $googleUser->getName(),
-                    'google_id' => $googleUser->getId(),
-                    'email_verified_at' => now(),
-                ]
-            );
 
             // Update Google ID if not yet stored
             if (empty($user->google_id)) {
