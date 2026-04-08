@@ -50,14 +50,10 @@ class AllowedEmailsSeeder extends Seeder
 
         //insert or update emails in the allowed_emails table
         foreach ($emails as $email) {
-            DB::table('allowed_emails')->updateOrInsert(
-                ['email' => $email['email']], // where condition
-                [
-                    'organizations_id' => $email['organizations_id'],
-                    'is_active' => $email['is_active'],
-                    'updated_at' => now(),
-                    'created_at' => now(),
-                ]
+            AllowedEmail::upsert(
+                $emails,           // The array of data
+                ['email'],         // The column that makes a record unique
+                ['organizations_id', 'is_active', 'updated_at'] // Columns to update on match
             );
         }
     }
