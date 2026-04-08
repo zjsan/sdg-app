@@ -29,25 +29,24 @@ class GoogleAuthController extends Controller
     {
         try {
             $googleUser = Socialite::driver('google')->stateless()->user();
-
-              // Extract the email
+            // Extract the email
             $email = $googleUser->getEmail();
 
             //check the whitelist table
             try{
-                 $isAllowed = DB::table('allowed_emails')
+                 $whitelistEntry = DB::table('allowed_emails')
                 ->where('email', $email)
                 ->where('is_active', true)
                 ->first();
 
-                if (! $isAllowed) {
+                if (! $whitelistEntry) {
                     // Redirect the user to a frontend route
                     return redirect()->away(config('app.frontend_url') . '/unauthorized');
                 }
 
-                if ($isAllowed->organization_id) {
+                if ($whitelistEntry->organization_id) {
                     $user->update([
-                        'organization_id' => $isAllowed->organization_id
+                        'organization_id' => $whitelistEntry->organization_id
                     ]);
                 }
 
