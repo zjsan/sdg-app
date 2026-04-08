@@ -24,7 +24,7 @@ class OrganizationSeeder extends Seeder
             ['name' => 'CHED', 'pbi_embed_id' => config('app.power_bi.CHED_EMBED_ID')] // CHED ID 
         );
 
-         Organization::updateOrCreate(
+        Organization::updateOrCreate(
             ['slug' => 'external'],
             ['name' => 'EXTERNAL', 'pbi_embed_id' => config('app.power_bi.EXTERNAL_EMBED_ID')] // EXTERNAL
         );

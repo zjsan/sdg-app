@@ -14,24 +14,24 @@ class AllowedEmailsSeeder extends Seeder
     public function run(): void
     {
         // fetch organization IDs once to avoid repeated queries
-        $mmsuId = DB::table('organization')->where('slug', 'mmsu')->value('id');
-        $chedId = DB::table('organization')->where('slug', 'ched')->value('id');
+        $mmsuId = DB::table('organizations')->where('slug', 'mmsu')->value('id');
+        $chedId = DB::table('organizations')->where('slug', 'ched')->value('id');
         $externalId = DB::table('organization')->where('slug', 'external')->value('id');
 
         //email list to be whitelisted
         $emails = [
 
             //mmsu
-            ['email' => 'zdsantos@mmsu.edu.ph', 'organization_id' => $mmsuId, 'is_active' => true],
-            ['email' => 'sfnisperos@mmsu.edu.ph', 'organization_id' => $mmsuId, 'is_active' => true],
-            ['email' => 'jpacang@mmsu.edu.ph', 'organization_id' => $mmsuId, 'is_active' => true],
-            ['email' => 'wrpagtaconan@mmsu.edu.ph', 'organization_id' => $mmsuId, 'is_active' => true],
+            ['email' => 'zdsantos@mmsu.edu.ph', 'organizations_id' => $mmsuId, 'is_active' => true],
+            ['email' => 'sfnisperos@mmsu.edu.ph', 'organizations_id' => $mmsuId, 'is_active' => true],
+            ['email' => 'jpacang@mmsu.edu.ph', 'organizations_id' => $mmsuId, 'is_active' => true],
+            ['email' => 'wrpagtaconan@mmsu.edu.ph', 'organizations_id' => $mmsuId, 'is_active' => true],
 
             //ched
 
             //external
-            ['email' => 'zjsantos25@gmail.com','organization_id' => $externalId, 'is_active' => true],
-            ['email' => 'ninanisperos519@gmail.com', 'organization_id' => $externalId, 'is_active' => true],
+            ['email' => 'zjsantos25@gmail.com','organizations_id' => $externalId, 'is_active' => true],
+            ['email' => 'ninanisperos519@gmail.com', 'organizations_id' => $externalId, 'is_active' => true],
         ];
 
         //cleaning the emails table before seeding
@@ -42,7 +42,7 @@ class AllowedEmailsSeeder extends Seeder
 
             return [
                 'email' => $cleanEmail,
-                'organization_id' => $item['organization_id'],
+                'organizations_id' => $item['organizations_id'],
                 'is_active' => $item['is_active'],
             ];
 
@@ -53,7 +53,7 @@ class AllowedEmailsSeeder extends Seeder
             DB::table('allowed_emails')->updateOrInsert(
                 ['email' => $email['email']], // where condition
                 [
-                    'organization_id' => $email['organization_id'],
+                    'organizations_id' => $email['organizations_id'],
                     'is_active' => $email['is_active'],
                     'updated_at' => now(),
                     'created_at' => now(),
