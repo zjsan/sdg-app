@@ -22,16 +22,16 @@ class AllowedEmailsSeeder extends Seeder
         $emails = [
 
             //mmsu
-            ['email' => 'zdsantos@mmsu.edu.ph', 'organizations_id' => $mmsuId, 'is_active' => true],
-            ['email' => 'sfnisperos@mmsu.edu.ph', 'organizations_id' => $mmsuId, 'is_active' => true],
-            ['email' => 'jpacang@mmsu.edu.ph', 'organizations_id' => $mmsuId, 'is_active' => true],
-            ['email' => 'wrpagtaconan@mmsu.edu.ph', 'organizations_id' => $mmsuId, 'is_active' => true],
+            ['email' => 'zdsantos@mmsu.edu.ph', 'organization_id' => $mmsuId, 'is_active' => true],
+            ['email' => 'sfnisperos@mmsu.edu.ph', 'organization_id' => $mmsuId, 'is_active' => true],
+            ['email' => 'jpacang@mmsu.edu.ph', 'organization_id' => $mmsuId, 'is_active' => true],
+            ['email' => 'wrpagtaconan@mmsu.edu.ph', 'organization_id' => $mmsuId, 'is_active' => true],
 
             //ched
 
             //external
-            ['email' => 'zjsantos25@gmail.com','organizations_id' => $externalId, 'is_active' => true],
-            ['email' => 'ninanisperos519@gmail.com', 'organizations_id' => $externalId, 'is_active' => true],
+            ['email' => 'zjsantos25@gmail.com','organization_id' => $externalId, 'is_active' => true],
+            ['email' => 'ninanisperos519@gmail.com', 'organization_id' => $externalId, 'is_active' => true],
         ];
 
         //cleaning the emails table before seeding
@@ -42,7 +42,7 @@ class AllowedEmailsSeeder extends Seeder
 
             return [
                 'email' => $cleanEmail,
-                'organizations_id' => $item['organizations_id'],
+                'organization_id' => $item['organization_id'],
                 'is_active' => $item['is_active'],
             ];
 
@@ -53,7 +53,7 @@ class AllowedEmailsSeeder extends Seeder
             DB::table('allowed_emails')->updateOrInsert(
                 ['email' => $email['email']], // where condition
                 [
-                    'organizations_id' => $email['organizations_id'],
+                    'organization_id' => $email['organization_id'],
                     'is_active' => $email['is_active'],
                     'updated_at' => now(),
                     'created_at' => now(),

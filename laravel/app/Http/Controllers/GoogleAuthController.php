@@ -53,7 +53,7 @@ class GoogleAuthController extends Controller
                         'email_verified_at' => now(),
                     ]
                 );
-                
+
                 //sync organization id for every login to ensure it stays up to date with whitelist
                 $user->update([
                     'organization_id' => $whitelistEntry->organization_id,

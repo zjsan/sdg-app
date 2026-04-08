@@ -15,7 +15,7 @@ return new class extends Migration
             //
             // constrained() automatically assumes the 'organizations' table
             // nullOnDelete() ensures if an org is deleted, the user record stays
-            $table->foreignId('organizations_id')
+            $table->foreignId('organization_id')
               ->nullable()
               ->after('id') 
               ->constrained('organizations')
@@ -30,8 +30,8 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             //
-            $table->dropForeign(['organizations_id']);
-            $table->dropColumn('organizations_id');
+            $table->dropForeign(['organization_id']);
+            $table->dropColumn('organization_id');
         });
     }
 };
