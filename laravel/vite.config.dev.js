@@ -23,9 +23,9 @@ export default defineConfig({
 
         // CRITICAL: Tells the browser to connect to 'localhost', not [::]
         hmr: {
-            host: "local.sdg-dashboard.com",
+            host: "localhost",
             protocol: "ws",
-            port: 5173
+            port: 5173,
         },
     },
 });

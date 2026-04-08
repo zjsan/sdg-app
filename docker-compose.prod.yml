@@ -32,8 +32,6 @@ services:
       - mysql
     networks:
       - sdgapp_net
-    extra_hosts:
-      - "app.sdg-dashboard.com:host-gateway"
     env_file:
       - ./laravel/.env
     volumes:
@@ -57,8 +55,6 @@ services:
       - laravel_public:/var/www/laravel/public
     networks:
       sdgapp_net:
-        aliases:
-          - app.sdg-dashboard.com #Nginx the internal "nickname"
 
 networks:
   sdgapp_net:
