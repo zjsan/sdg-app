@@ -18,11 +18,17 @@ class AllowedEmailsSeeder extends Seeder
         $chedId = DB::table('organizations')->where('slug', 'ched')->value('id');
         $externalId = DB::table('organizations')->where('slug', 'external')->value('id');
 
+
+        //fetching role IDs
+        $devRole = DB::table('roles')->where('slug', 'developer')->value('id');
+        $adminRole = DB::table('roles')->where('slug', 'admin')->value('id');
+        $viewerRole = DB::table('roles')->where('slug', 'viewer')->value('id');
+
         //email list to be whitelisted
         $emails = [
 
             //mmsu
-            ['email' => 'zdsantos@mmsu.edu.ph', 'organization_id' => $mmsuId, 'is_active' => true],
+            ['email' => 'zdsantos@mmsu.edu.ph', 'organization_id' => $mmsuId, 'role_id'=> $devRole, 'is_active' => true],
             ['email' => 'sfnisperos@mmsu.edu.ph', 'organization_id' => $mmsuId, 'is_active' => true],
             ['email' => 'jpacang@mmsu.edu.ph', 'organization_id' => $mmsuId, 'is_active' => true],
             ['email' => 'wrpagtaconan@mmsu.edu.ph', 'organization_id' => $mmsuId, 'is_active' => true],
