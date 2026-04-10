@@ -57,7 +57,7 @@ class GoogleAuthController extends Controller
 
                 // check the user instance in the gate to check the user permission
                 if (Gate::forUser($user)->denies('view-dashboard')) {
-                    abort(403, 'You do not have permission to view this dashboard.');
+                    return redirect()->away(config('app.frontend_url') . '/unauthorized');
                 }
 
                 //sync organization id for every login to ensure it stays up to date with whitelist
