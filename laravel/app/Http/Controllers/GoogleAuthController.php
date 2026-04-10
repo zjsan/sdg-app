@@ -25,7 +25,7 @@ class GoogleAuthController extends Controller
         ->redirect();
     }
 
-    public function handleGoogleCallback()
+    public function handleGoogleCallback(Request $request)
     {
         try {
             $googleUser = Socialite::driver('google')->stateless()->user();
@@ -54,9 +54,15 @@ class GoogleAuthController extends Controller
                     ]
                 );
 
+                // they must have a valid role assigned to see the PBI link.
+                if ($request->user()->cannot('view-dashboard')) {
+                    abort(403, 'You do not have permission to view this dashboard.');
+                }
+
                 //sync organization id for every login to ensure it stays up to date with whitelist
                 $user->update([
                     'organization_id' => $whitelistEntry->organization_id,
+                    'role_id' => $whitelistEntry->role_id,
                     'google_id' => $googleUser->getId(), // Keep ID up to date
                 ]);
                 
