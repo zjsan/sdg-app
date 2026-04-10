@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str; 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\Gate
+use Illuminate\Support\Facades\Gate;
 
 class GoogleAuthController extends Controller
 {
