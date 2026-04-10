@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str; 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Gate
 
 class GoogleAuthController extends Controller
 {
@@ -54,8 +55,8 @@ class GoogleAuthController extends Controller
                     ]
                 );
 
-                // they must have a valid role assigned to see the PBI link.
-                if ($request->user()->cannot('view-dashboard')) {
+                // check the user instance in the gate to check the user permission
+                if (Gate::forUser($user)->denies('view-dashboard')) {
                     abort(403, 'You do not have permission to view this dashboard.');
                 }
 
