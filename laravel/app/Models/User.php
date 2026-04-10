@@ -58,6 +58,12 @@ class User extends Authenticatable
         return 'username';
     }
 
+    //relationships with other table
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
     public function organization() {
         return $this->belongsTo(Organization::class);
     }

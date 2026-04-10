@@ -13,4 +13,8 @@ class Organization extends Model
     public function users() {
         return $this->hasMany(User::class);
     }
+
+    public function allowedEmails(){
+        return $this->hasMany(AllowedEmails::class);
+    }
 }
