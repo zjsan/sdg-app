@@ -24,8 +24,20 @@
 </template>
 
 <script setup>
-import UserSection from "@/Components/UserSection.vue";
+import UserSection from "./UserSection.vue";
 
 defineProps(["isOpen", "isMobile"]);
 defineEmits(["close"]);
 </script>
+
+<style scoped>
+/* Optional: Router link exact match styling */
+.router-link-active {
+    background-color: #f3f4f6; /* bg-gray-100 */
+    font-weight: 600; /* font-semibold */
+}
+/* Adjusting icon size for consistency (PrimeIcons often require an explicit size class) */
+.pi {
+    font-size: 1.25rem; /* Equivalent to Tailwind's text-xl for icons */
+}
+</style>

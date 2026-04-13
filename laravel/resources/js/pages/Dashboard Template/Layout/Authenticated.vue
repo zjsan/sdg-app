@@ -1,25 +1,3 @@
-<script setup>
-import { ref, onMounted, onUnmounted, computed } from "vue";
-import Sidebar from "@/Components/Sidebar.vue";
-import { Button } from "@/components/ui/button";
-
-const isSidebarOpen = ref(false);
-const screenWidth = ref(window.innerWidth);
-const isMobile = computed(() => screenWidth.value < 1024);
-
-const handleResize = () => {
-    screenWidth.value = window.innerWidth;
-    isSidebarOpen.value = window.innerWidth >= 1024;
-};
-
-onMounted(() => {
-    window.addEventListener("resize", handleResize);
-    handleResize();
-});
-
-onUnmounted(() => window.removeEventListener("resize", handleResize));
-</script>
-
 <template>
     <div class="flex flex-col lg:flex-row h-screen bg-gray-50">
         <header
@@ -55,3 +33,31 @@ onUnmounted(() => window.removeEventListener("resize", handleResize));
         </main>
     </div>
 </template>
+
+<script setup>
+import { ref, onMounted, onUnmounted, computed } from "vue";
+import Sidebar from "../Component/Sidebar.vue";
+import { Button } from "@/components/ui/button";
+
+const isSidebarOpen = ref(false);
+const screenWidth = ref(window.innerWidth);
+const isMobile = computed(() => screenWidth.value < 1024);
+
+const handleResize = () => {
+    screenWidth.value = window.innerWidth;
+    isSidebarOpen.value = window.innerWidth >= 1024;
+};
+
+onMounted(() => {
+    window.addEventListener("resize", handleResize);
+    handleResize();
+});
+
+onUnmounted(() => window.removeEventListener("resize", handleResize));
+</script>
+<style scoped>
+/* Ensures the main container takes the full viewport height */
+.h-screen {
+    height: 100vh;
+}
+</style>

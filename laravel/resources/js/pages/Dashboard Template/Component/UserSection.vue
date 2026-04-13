@@ -1,28 +1,3 @@
-<script setup>
-import { useAuthStore } from "@/stores/auth";
-import { usePowerBiStore } from "@/stores/powerBi";
-import { Button } from "@/components/ui/button";
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-
-const auth = useAuthStore();
-const powerBiStore = usePowerBiStore();
-
-const logout = async () => {
-    powerBiStore.broadcastLogout();
-    await auth.logout();
-};
-</script>
-
 <template>
     <div class="p-4 border-t border-gray-200 flex-shrink-0">
         <div class="flex items-center p-2 mb-3">
@@ -67,3 +42,28 @@ const logout = async () => {
         </AlertDialog>
     </div>
 </template>
+
+<script setup>
+import { useAuthStore } from "@/stores/auth";
+import { usePowerBiStore } from "@/stores/powerBi";
+import { Button } from "@/components/ui/button";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
+const auth = useAuthStore();
+const powerBiStore = usePowerBiStore();
+
+const logout = async () => {
+    powerBiStore.broadcastLogout();
+    await auth.logout();
+};
+</script>
