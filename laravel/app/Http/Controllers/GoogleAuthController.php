@@ -55,11 +55,6 @@ class GoogleAuthController extends Controller
                     ]
                 );
 
-                // check the user instance in the gate to check the user permission
-                if (Gate::forUser($user)->denies('view-dashboard')) {
-                    return redirect()->away(config('app.frontend_url') . '/unauthorized');
-                }
-
                 //sync organization id for every login to ensure it stays up to date with whitelist
                 $user->update([
                     'organization_id' => $whitelistEntry->organization_id,
@@ -67,6 +62,13 @@ class GoogleAuthController extends Controller
                     'google_id' => $googleUser->getId(), // Keep ID up to date
                 ]);
                 
+
+                // check the user instance in the gate to check the user permission
+                if (Gate::forUser($user)->denies('view-dashboard')) {
+                    return redirect()->away(config('app.frontend_url') . '/unauthorized');
+                }
+
+              
 
             } catch (\Throwable $e) {
                 Log::error('Database error during whitelist check', ['error' => $e->getMessage()]);
