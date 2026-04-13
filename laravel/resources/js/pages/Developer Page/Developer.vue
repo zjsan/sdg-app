@@ -8,6 +8,7 @@
 <script setup>
 import { useAuthStore } from "@/stores/auth";
 import Authenticated from "../Dashboard Template/Layout/Authenticated.vue";
+
 const auth = useAuthStore();
 
 const logout = async () => {
