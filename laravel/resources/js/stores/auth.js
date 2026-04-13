@@ -20,7 +20,10 @@ export const useAuthStore = defineStore("auth", {
         isAuthenticated: (state) => !!state.user,
 
         //checking user roles for role-based access control
-        isDeveloper: (state) => state.user?.role?.slug === "developer",
+        isDeveloper: (state) => {
+            console.log("Checking role:", state.user?.role?.slug);
+            return state.user?.role?.slug === "developer";
+        },
         isAdmin: (state) =>
             ["admin", "developer"].includes(state.user?.role?.slug),
     },
