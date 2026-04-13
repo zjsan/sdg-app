@@ -61,14 +61,14 @@ class GoogleAuthController extends Controller
                     'role_id' => $whitelistEntry->role_id,
                     'google_id' => $googleUser->getId(), // Keep ID up to date
                 ]);
-                
+
+                // load organization relationship to get slug for gate check
+                $orgSlug = $user->load('organization')->organization?->slug;
 
                 // check the user instance in the gate to check the user permission
-                if (Gate::forUser($user)->denies('view-dashboard')) {
+                if (Gate::forUser($user)->denies('view-dashboard', $orgSlug)) {
                     return redirect()->away(config('app.frontend_url') . '/unauthorized');
                 }
-
-              
 
             } catch (\Throwable $e) {
                 Log::error('Database error during whitelist check', ['error' => $e->getMessage()]);
