@@ -77,12 +77,6 @@ class GoogleAuthController extends Controller
                 ], 500);
             }
 
-            // Update Google ID if not yet stored
-            if (empty($user->google_id)) {
-                $user->google_id = $googleUser->getId();
-                $user->save();
-            }
-
             // Generate Sanctum token with expiry
             $tokenResult = $user->createToken('auth_token');
             $token = $tokenResult->plainTextToken;
