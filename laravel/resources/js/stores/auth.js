@@ -18,6 +18,11 @@ export const useAuthStore = defineStore("auth", {
      */
     getters: {
         isAuthenticated: (state) => !!state.user,
+
+        //checking user roles for role-based access control
+        isDeveloper: (state) => state.user?.role?.slug === "developer",
+        isAdmin: (state) =>
+            ["admin", "developer"].includes(state.user?.role?.slug),
     },
 
     actions: {
@@ -43,7 +48,10 @@ export const useAuthStore = defineStore("auth", {
                 this.logout(); // clear invalid session
             }
         },
+
         /**
+         * Old login method using Laravel Sanctum's session-based auth.
+         * Before the google login implementation, this method is not used anymore
          * Login user with credentials.
          * On success, it fetches the user and redirects.
          */
