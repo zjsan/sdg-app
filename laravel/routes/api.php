@@ -19,3 +19,14 @@ Route::get('/auth/session/{sessionId}', [GoogleAuthController::class, 'fetchSess
 // Protected route to get Power BI embed URL
 Route::middleware('auth:sanctum')->get('/pbi', [PowerBiController::class, 'generateSignedUrl']);
 
+Route::middleware(['auth:sanctum'])->group(function () {
+    
+    // Developer-only routes
+    Route::middleware(['can:manage-pbi-links'])->group(function () {
+
+        // routes for GET, POST, PUT, DELETE /api/organizations
+        Route::apiResource('organizations', OrganizationController::class);
+        
+    });
+    
+});
