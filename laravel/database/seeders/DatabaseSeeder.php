@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
         //keep the order of seeding to (OrganizationSeeder, AllowedEmailsSeeder) to avoid foreign key constraint issues
         OrganizationSeeder::class,
+        RoleSeeder::class,
         AllowedEmailsSeeder::class,
     ]);
     }
