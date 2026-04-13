@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import Login from "../pages/Login.vue";
 import Dashboard from "../pages/Dashboard.vue";
+import Developer from "../pages/Developer Page/Developer.vue";
 import NotFoundView from "../pages/NotFoundView.vue";
 import { useAuthStore } from "@/stores/auth";
 import GoogleCallback from "../pages/GoogleCallback.vue";
@@ -28,6 +29,13 @@ const routes = [
         path: "/dashboard",
         name: "Dashboard",
         component: Dashboard,
+        meta: { requiresAuth: true }, // must be logged in
+    },
+
+    {
+        path: "/developer",
+        name: "DeveloperPage",
+        component: Developer,
         meta: { requiresAuth: true }, // must be logged in
     },
 
