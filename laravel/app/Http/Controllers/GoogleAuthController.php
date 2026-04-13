@@ -123,7 +123,7 @@ class GoogleAuthController extends Controller
         return response()->json([
             'message' => 'Login successful.',
             'token' => $data['token'],
-            'user' => $data['user'],
+            'user'  => $data['user']->load(['role', 'organization'])
         ]);
     } catch (\Throwable $e) {
         Log::error('Session fetch failed', ['error' => $e->getMessage()]);

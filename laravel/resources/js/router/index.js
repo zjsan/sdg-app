@@ -36,7 +36,7 @@ const routes = [
         path: "/developer",
         name: "DeveloperPage",
         component: Developer,
-        meta: { requiresAuth: true }, // must be logged in
+        meta: { requiresAuth: true, role: "developer" }, // must be logged in
     },
 
     {
@@ -125,10 +125,26 @@ router.beforeEach(async (to, from) => {
         return { name: "Login" };
     }
 
+    //Role based access control for protected routes
+    if (to.meta.requiresAuth && auth.isAuthenticated) {
+        // If user is a developer and trying to go to Dashboard,
+        // redirect them to DeveloperPage instead
+        if (auth.isDeveloper && to.name === "Dashboard") {
+            return { name: "DeveloperPage" };
+        }
+
+        // Prevent non-developers from accessing the Developer Page
+        if (to.meta.role === "developer" && !auth.isDeveloper) {
+            return { name: "NotAuthorized" };
+        }
+    }
+
     // Prevent logged-in users from accessing guest-only routes
     // if logged in, stay on dashboard
     if (to.meta.guestOnly && auth.isAuthenticated) {
-        return { name: "Dashboard" };
+        return auth.isDeveloper
+            ? { name: "DeveloperPage" }
+            : { name: "Dashboard" };
     }
 });
 
