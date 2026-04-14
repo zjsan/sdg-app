@@ -87,18 +87,27 @@ const router = createRouter({
 router.beforeEach(async (to, from) => {
     const auth = useAuthStore();
 
-    //special cases when already login and trying to access auth routes
-    // FIX: Prevent Power BI Fullscreen "Back" returning to Google OAuth URLs
-    const blockedAuthPatterns = [/^\/auth\/google\/redirect$/i];
+    if (auth.token && !auth.initialized) {
+        await auth.getUser();
+    }
 
-    if (blockedAuthPatterns.some((pattern) => pattern.test(to.path))) {
-        console.warn("Blocked unintended Google OAuth redirect attempt.");
+    // Auth Logic
+    if (to.meta.requiresAuth && !auth.isAuthenticated) {
+        return { name: "Login" };
+    }
 
-        if (auth.isAuthenticated) {
-            return { name: "Dashboard", replace: true };
+    if (to.meta.guestOnly && auth.isAuthenticated) {
+        return { name: "Dashboard" };
+    }
+
+    // Role Protection
+    if (to.meta.role && auth.isAuthenticated) {
+        if (to.meta.role === "developer" && !auth.isDeveloper) {
+            return { name: "NotAuthorized" };
         }
-
-        return { name: "Login", replace: true };
+        if (to.meta.role === "admin" && !auth.isAdmin) {
+            return { name: "NotAuthorized" };
+        }
     }
 
     // Only try restoring session if route REQUIRES AUTH
@@ -117,34 +126,20 @@ router.beforeEach(async (to, from) => {
     // Intercept the faulty callback navigation if the user is already authenticated
     if (to.path.startsWith("/auth/callback") && auth.isAuthenticated) {
         // Redirect them safely to the dashboard, avoiding the broken logic.
-        return getLandingPage(auth);
+        return { name: "Dashboard", replace: true };
     }
+    //special cases when already login and trying to access auth routes
+    // FIX: Prevent Power BI Fullscreen "Back" returning to Google OAuth URLs
+    const blockedAuthPatterns = [/^\/auth\/google\/redirect$/i];
 
-    // Protected route
-    //if route requires auth and user is not authenticated, redirect to login
-    if (to.meta.requiresAuth && !auth.isAuthenticated) {
-        return { name: "Login" };
-    }
+    if (blockedAuthPatterns.some((pattern) => pattern.test(to.path))) {
+        console.warn("Blocked unintended Google OAuth redirect attempt.");
 
-    // Prevent logged-in users from accessing guest-only routes
-    // if logged in, stay on dashboard
-    if (to.meta.guestOnly && auth.isAuthenticated) {
-        return { name: "Dashboard" };
-    }
-
-    //Check for Role-Based Access
-    if (to.meta.role) {
-        const userRole = auth.user?.role?.slug;
-
-        // If the route requires 'developer' and user isn't one
-        if (to.meta.role === "developer" && !auth.isDeveloper) {
-            return { name: "NotAuthorized" };
+        if (auth.isAuthenticated) {
+            return { name: "Dashboard", replace: true };
         }
 
-        // If the route requires 'admin' and user isn't one
-        if (to.meta.role === "admin" && !auth.isAdmin) {
-            return { name: "NotAuthorized" };
-        }
+        return { name: "Login", replace: true };
     }
 });
 
