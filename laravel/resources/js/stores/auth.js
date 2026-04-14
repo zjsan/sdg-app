@@ -59,13 +59,15 @@ export const useAuthStore = defineStore("auth", {
             try {
                 if (!this.token) {
                     console.warn("No token found — skipping getUser()");
+                    this.initialized = true; // Mark that we've attempted to fetch user
                     return;
                 }
-                this.initialized = true; // Mark that we've attempted to fetch user
+
                 api.defaults.headers.common["Authorization"] =
                     `Bearer ${this.token}`;
                 const { data } = await api.get("/user");
                 this.user = data;
+                this.initialized = true;
             } catch (error) {
                 this.initialized = false; // Reset initialization on failure
                 console.error("Failed to fetch user:", error);
@@ -115,7 +117,7 @@ export const useAuthStore = defineStore("auth", {
             try {
                 this.token = token;
                 this.user = user;
-
+                this.initialized = true;
                 // Set token in axios for future requests
                 api.defaults.headers.common["Authorization"] =
                     `Bearer ${this.token}`;
