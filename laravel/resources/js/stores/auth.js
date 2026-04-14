@@ -9,6 +9,7 @@ export const useAuthStore = defineStore("auth", {
         loading: false, // tracks async requests
         token: localStorage.getItem("token") || null, // persist token
         error: null, // for error handling
+        initalized: false, // to track if restoreSession has been attempted
     }),
 
     /**
@@ -43,69 +44,13 @@ export const useAuthStore = defineStore("auth", {
                 api.defaults.headers.common["Authorization"] =
                     `Bearer ${this.token}`;
                 const { data } = await api.get("/user");
+                this.initalized = true; // Mark that we've attempted to fetch user
                 this.user = data;
                 this.saveUserToStorage();
                 console.log("Session restored");
             } catch (error) {
+                this.initalized = false; // Reset initialization on failure
                 console.warn("Session restore failed:", error);
-                this.logout(); // clear invalid session
-            }
-        },
-
-        /**
-         * Old login method using Laravel Sanctum's session-based auth.
-         * Before the google login implementation, this method is not used anymore
-         * Login user with credentials.
-         * On success, it fetches the user and redirects.
-         */
-        async login(credentials) {
-            this.loading = true;
-            this.error = null;
-
-            try {
-                // Step 1: Login and get token
-                const { data } = await api.post("/login", credentials);
-
-                // Step 2: store token
-                this.token = data.token;
-
-                // Step 3: set token for axios instance
-                api.defaults.headers.common["Authorization"] =
-                    `Bearer ${this.token}`;
-
-                // Step 3: Get the user
-                await this.getUser();
-                this.saveUserToStorage(); //perssist user
-
-                //redirect to /dashboard once authenticated
-                //avoids manual refreshes or blank states after login.
-                if (this.user) {
-                    router.replace({ name: "Dashboard" });
-                }
-            } catch (err) {
-                this.error = err.response?.data?.message || "Login failed";
-            } finally {
-                this.loading = false;
-            }
-        },
-
-        /**
-         * Fetch the authenticated user.
-         * Called after login or on app load (to restore session).
-         */
-        async getUser() {
-            try {
-                if (!this.token) {
-                    console.warn("No token found — skipping getUser()");
-                    return;
-                }
-
-                api.defaults.headers.common["Authorization"] =
-                    `Bearer ${this.token}`;
-                const { data } = await api.get("/user");
-                this.user = data;
-            } catch (error) {
-                console.error("Failed to fetch user:", error);
                 this.logout(); // clear invalid session
             }
         },
