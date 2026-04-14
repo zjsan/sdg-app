@@ -87,47 +87,6 @@ const router = createRouter({
 router.beforeEach(async (to, from) => {
     const auth = useAuthStore();
 
-    if (auth.token && !auth.initialized) {
-        await auth.getUser();
-    }
-
-    // Auth Logic
-    if (to.meta.requiresAuth && !auth.isAuthenticated) {
-        return { name: "Login" };
-    }
-
-    if (to.meta.guestOnly && auth.isAuthenticated) {
-        return { name: "Dashboard" };
-    }
-
-    // Role Protection
-    if (to.meta.role && auth.isAuthenticated) {
-        if (to.meta.role === "developer" && !auth.isDeveloper) {
-            return { name: "NotAuthorized" };
-        }
-        if (to.meta.role === "admin" && !auth.isAdmin) {
-            return { name: "NotAuthorized" };
-        }
-    }
-
-    // Only try restoring session if route REQUIRES AUTH
-    // If user is unknown, try restoring session
-    if (to.meta.requiresAuth && !auth.user && auth.token) {
-        try {
-            await auth.getUser();
-            console.log("User session restored in router");
-        } catch (error) {
-            console.error("Session restore failed:", error);
-            auth.token = null;
-            localStorage.removeItem("token");
-        }
-    }
-
-    // Intercept the faulty callback navigation if the user is already authenticated
-    if (to.path.startsWith("/auth/callback") && auth.isAuthenticated) {
-        // Redirect them safely to the dashboard, avoiding the broken logic.
-        return { name: "Dashboard", replace: true };
-    }
     //special cases when already login and trying to access auth routes
     // FIX: Prevent Power BI Fullscreen "Back" returning to Google OAuth URLs
     const blockedAuthPatterns = [/^\/auth\/google\/redirect$/i];
@@ -140,6 +99,46 @@ router.beforeEach(async (to, from) => {
         }
 
         return { name: "Login", replace: true };
+    }
+
+    // Intercept the faulty callback navigation if the user is already authenticated
+    if (to.path.startsWith("/auth/callback") && auth.isAuthenticated) {
+        // Redirect them safely to the dashboard, avoiding the broken logic.
+        return { name: "Dashboard", replace: true };
+    }
+
+    // SINGLE SESSION RESTORE POINT
+    // If we have a token but haven't initialized the user yet, do it NOW.
+    if (auth.token && !auth.initialized) {
+        await auth.getUser();
+    }
+
+    // Redirect authenticated users away from Login
+    if (to.meta.guestOnly && auth.isAuthenticated) {
+        return { name: "Dashboard" };
+    }
+
+    // Protect routes that require auth
+    if (to.meta.requiresAuth && !auth.isAuthenticated) {
+        return { name: "Login" };
+    }
+
+    //  Handle Callback bypass
+    if (to.path.startsWith("/auth/callback") && auth.isAuthenticated) {
+        return { name: "Dashboard", replace: true };
+    }
+
+    //  Role-Based Access Control
+    if (to.meta.role && auth.isAuthenticated) {
+        const userRole = auth.user?.role?.slug;
+
+        if (to.meta.role === "developer" && !auth.isDeveloper) {
+            return { name: "NotAuthorized" };
+        }
+
+        if (to.meta.role === "admin" && !auth.isAdmin) {
+            return { name: "NotAuthorized" };
+        }
     }
 });
 
