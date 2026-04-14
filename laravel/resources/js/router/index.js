@@ -131,6 +131,21 @@ router.beforeEach(async (to, from) => {
     if (to.meta.guestOnly && auth.isAuthenticated) {
         return { name: "Dashboard" };
     }
+
+    //Check for Role-Based Access
+    if (to.meta.role) {
+        const userRole = auth.user?.role?.slug;
+
+        // If the route requires 'developer' and user isn't one
+        if (to.meta.role === "developer" && !auth.isDeveloper) {
+            return { name: "NotAuthorized" };
+        }
+
+        // If the route requires 'admin' and user isn't one
+        if (to.meta.role === "admin" && !auth.isAdmin) {
+            return { name: "NotAuthorized" };
+        }
+    }
 });
 
 export default router;
