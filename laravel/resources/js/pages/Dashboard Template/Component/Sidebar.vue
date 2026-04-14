@@ -44,7 +44,7 @@ const menuItems = [
         visible: () => true, // Everyone logged in sees this
     },
     {
-        name: "Developer",
+        name: "DeveloperPage",
         to: "/developer",
         icon: "pi-code",
         visible: () => auth.isDeveloper,
