@@ -67,6 +67,7 @@ export const useAuthStore = defineStore("auth", {
                     `Bearer ${this.token}`;
                 const { data } = await api.get("/user");
                 this.user = data;
+                this.saveUserToStorage();
                 this.initialized = true;
             } catch (error) {
                 this.initialized = false; // Reset initialization on failure
