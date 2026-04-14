@@ -9,7 +9,7 @@ export const useAuthStore = defineStore("auth", {
         loading: false, // tracks async requests
         token: localStorage.getItem("token") || null, // persist token
         error: null, // for error handling
-        initalized: false, // to track if restoreSession has been attempted
+        initialized: false, // to track if restoreSession has been attempted
     }),
 
     /**
@@ -25,8 +25,10 @@ export const useAuthStore = defineStore("auth", {
             console.log("Checking role:", state.user?.role?.slug);
             return state.user?.role?.slug === "developer";
         },
-        isAdmin: (state) =>
-            ["admin", "developer"].includes(state.user?.role?.slug),
+        isAdmin: (state) => {
+            console.log("Checking role:", state.user?.role?.slug);
+            return ["admin", "developer"].includes(state.user?.role?.slug);
+        },
     },
 
     actions: {
@@ -44,13 +46,29 @@ export const useAuthStore = defineStore("auth", {
                 api.defaults.headers.common["Authorization"] =
                     `Bearer ${this.token}`;
                 const { data } = await api.get("/user");
-                this.initalized = true; // Mark that we've attempted to fetch user
                 this.user = data;
                 this.saveUserToStorage();
                 console.log("Session restored");
             } catch (error) {
-                this.initalized = false; // Reset initialization on failure
                 console.warn("Session restore failed:", error);
+                this.logout(); // clear invalid session
+            }
+        },
+
+        async getUser() {
+            try {
+                if (!this.token) {
+                    console.warn("No token found — skipping getUser()");
+                    return;
+                }
+                this.initialized = true; // Mark that we've attempted to fetch user
+                api.defaults.headers.common["Authorization"] =
+                    `Bearer ${this.token}`;
+                const { data } = await api.get("/user");
+                this.user = data;
+            } catch (error) {
+                this.initialized = false; // Reset initialization on failure
+                console.error("Failed to fetch user:", error);
                 this.logout(); // clear invalid session
             }
         },

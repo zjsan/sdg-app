@@ -84,9 +84,32 @@ const router = createRouter({
     routes,
 });
 
+function getLandingPage(auth) {
+    const role = auth.user?.role?.slug;
+    switch (role) {
+        case "developer":
+            return { name: "DeveloperPage" };
+        case "admin":
+            return { name: "AdminPage" }; // Future proofing
+        case "viewer":
+        default:
+            return { name: "Dashboard" };
+    }
+}
+
 router.beforeEach(async (to, from) => {
     const auth = useAuthStore();
 
+    // if we have a token but haven't initialized the user, try to fetch it.
+    if (auth.token && !auth.initialized) {
+        await auth.getUser();
+    }
+
+    if (to.meta.guestOnly && auth.isAuthenticated) {
+        return getLandingPage(auth);
+    }
+
+    //special cases when already login and trying to access auth routes
     // FIX: Prevent Power BI Fullscreen "Back" returning to Google OAuth URLs
     const blockedAuthPatterns = [/^\/auth\/google\/redirect$/i];
 
@@ -94,7 +117,7 @@ router.beforeEach(async (to, from) => {
         console.warn("Blocked unintended Google OAuth redirect attempt.");
 
         if (auth.isAuthenticated) {
-            return { name: "Dashboard", replace: true };
+            return getLandingPage(auth);
         }
 
         return { name: "Login", replace: true };
@@ -116,7 +139,7 @@ router.beforeEach(async (to, from) => {
     // Intercept the faulty callback navigation if the user is already authenticated
     if (to.path.startsWith("/auth/callback") && auth.isAuthenticated) {
         // Redirect them safely to the dashboard, avoiding the broken logic.
-        return { name: "Dashboard", replace: true };
+        return getLandingPage(auth);
     }
 
     // Protected route
@@ -127,24 +150,14 @@ router.beforeEach(async (to, from) => {
 
     //Role based access control for protected routes
     if (to.meta.requiresAuth && auth.isAuthenticated) {
-        // If user is a developer and trying to go to Dashboard,
-        // redirect them to DeveloperPage instead
+        // Handle Developer landing logic
         if (auth.isDeveloper && to.name === "Dashboard") {
             return { name: "DeveloperPage" };
         }
-
-        // Prevent non-developers from accessing the Developer Page
-        if (to.meta.role === "developer" && !auth.isDeveloper) {
+        // Final check for specific roles
+        if (to.meta.role && to.meta.role !== auth.user?.role?.slug) {
             return { name: "NotAuthorized" };
         }
-    }
-
-    // Prevent logged-in users from accessing guest-only routes
-    // if logged in, stay on dashboard
-    if (to.meta.guestOnly && auth.isAuthenticated) {
-        return auth.isDeveloper
-            ? { name: "DeveloperPage" }
-            : { name: "Dashboard" };
     }
 });
 
