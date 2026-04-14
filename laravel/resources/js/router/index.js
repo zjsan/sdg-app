@@ -84,30 +84,8 @@ const router = createRouter({
     routes,
 });
 
-function getLandingPage(auth) {
-    const role = auth.user?.role?.slug;
-    switch (role) {
-        case "developer":
-            return { name: "DeveloperPage" };
-        case "admin":
-            return { name: "AdminPage" }; // Future proofing
-        case "viewer":
-        default:
-            return { name: "Dashboard" };
-    }
-}
-
 router.beforeEach(async (to, from) => {
     const auth = useAuthStore();
-
-    // if we have a token but haven't initialized the user, try to fetch it.
-    if (auth.token && !auth.initialized) {
-        await auth.getUser();
-    }
-
-    if (to.meta.guestOnly && auth.isAuthenticated) {
-        return getLandingPage(auth);
-    }
 
     //special cases when already login and trying to access auth routes
     // FIX: Prevent Power BI Fullscreen "Back" returning to Google OAuth URLs
@@ -117,7 +95,7 @@ router.beforeEach(async (to, from) => {
         console.warn("Blocked unintended Google OAuth redirect attempt.");
 
         if (auth.isAuthenticated) {
-            return getLandingPage(auth);
+            return { name: "Dashboard", replace: true };
         }
 
         return { name: "Login", replace: true };
@@ -148,16 +126,10 @@ router.beforeEach(async (to, from) => {
         return { name: "Login" };
     }
 
-    //Role based access control for protected routes
-    if (to.meta.requiresAuth && auth.isAuthenticated) {
-        // Handle Developer landing logic
-        if (auth.isDeveloper && to.name === "Dashboard") {
-            return { name: "DeveloperPage" };
-        }
-        // Final check for specific roles
-        if (to.meta.role && to.meta.role !== auth.user?.role?.slug) {
-            return { name: "NotAuthorized" };
-        }
+    // Prevent logged-in users from accessing guest-only routes
+    // if logged in, stay on dashboard
+    if (to.meta.guestOnly && auth.isAuthenticated) {
+        return { name: "Dashboard" };
     }
 });
 
