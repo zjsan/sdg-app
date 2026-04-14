@@ -3,7 +3,7 @@ import api from "@/plugins/axios";
 import { ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import { watch } from "vue";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 export const usePowerBiStore = defineStore("powerbi", () => {
     const auth = useAuthStore();
@@ -44,7 +44,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
             if (isLeader.value) {
                 await refresh();
             }
-        }
+        },
     );
 
     //inactivity listeners
@@ -108,14 +108,14 @@ export const usePowerBiStore = defineStore("powerbi", () => {
             signed = await fetchSignedUrl();
             if (signed) break;
             console.warn(
-                `fetchSignedUrl attempt ${attempt} failed, retrying...`
+                `fetchSignedUrl attempt ${attempt} failed, retrying...`,
             );
             await new Promise((r) => setTimeout(r, 500 * attempt)); // small backoff
         }
 
         if (!signed) {
             console.error(
-                "Unable to fetch signed URL — cannot become leader right now."
+                "Unable to fetch signed URL — cannot become leader right now.",
             );
             isLeader.value = false;
             // Optionally broadcast a 'leader_failed' message so other tabs can try
@@ -164,7 +164,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
             } catch (err) {
                 console.error(
                     "Follower failed to fetch signed URL after leader message",
-                    err
+                    err,
                 );
             }
 
@@ -186,7 +186,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
         if (msg.type === "leader_failed") {
             console.warn(
-                `Tab ${msg.tabId} reported failure to fetch token and claim leadership. Initiating re-challenge.`
+                `Tab ${msg.tabId} reported failure to fetch token and claim leadership. Initiating re-challenge.`,
             );
 
             // A follower should not be running the timer, but we check to be safe.
@@ -203,7 +203,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
         if (msg.type === "leader_left") {
             console.log(
-                `Leader tab ${msg.tabId} left. Initiating a new leader challenge.`
+                `Leader tab ${msg.tabId} left. Initiating a new leader challenge.`,
             );
 
             // Check if the current tab is also currently in a leadership state (which is unlikely
@@ -236,7 +236,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
             } catch (err) {
                 console.error(
                     "Follower failed to fetch signed URL on refresh",
-                    err
+                    err,
                 );
             }
 
@@ -287,7 +287,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
             });
         } else {
             console.warn(
-                "Leader failed to refresh token. Relinquishing leadership."
+                "Leader failed to refresh token. Relinquishing leadership.",
             );
             isLeader.value = false;
             clearInterval(refreshTimer);
@@ -380,8 +380,12 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     // Logout Handling
     // ---------------------------------------------------
     function broadcastLogout() {
-        channel.postMessage({ type: "logout", tabId: TAB_ID });
-        // Immediately do local cleanup so current tab is consistent
+        // Check if channel is still open before posting
+        try {
+            channel.postMessage({ type: "logout", tabId: TAB_ID });
+        } catch (e) {
+            console.warn("Channel already closed or unusable:", e);
+        }
         logoutHandler();
     }
 
@@ -414,14 +418,14 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
         // Wait for the remainder of the timeout for other BC responses
         await new Promise((resolve) =>
-            setTimeout(resolve, Math.max(0, timeoutMs - randomizedDelay))
+            setTimeout(resolve, Math.max(0, timeoutMs - randomizedDelay)),
         );
 
         if (!leaderResponseReceived) {
             // set a quick localStorage claim (so other tabs see it immediately)
             localStorage.setItem(
                 "pbi_leader_claim",
-                JSON.stringify({ tabId: TAB_ID, ts: Date.now() })
+                JSON.stringify({ tabId: TAB_ID, ts: Date.now() }),
             );
             // small grace period to allow others to pick up the claim
             await new Promise((r) => setTimeout(r, 50));
@@ -431,7 +435,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
                 await becomeLeader();
             } else {
                 console.log(
-                    "Another leader appeared after claim; backing off."
+                    "Another leader appeared after claim; backing off.",
                 );
             }
         } else {
@@ -507,7 +511,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         stopHeartbeat();
 
         console.log(
-            "PowerBI store fully cleaned up (listeners removed, timers stopped)."
+            "PowerBI store fully cleaned up (listeners removed, timers stopped).",
         );
         channel.close();
     }
