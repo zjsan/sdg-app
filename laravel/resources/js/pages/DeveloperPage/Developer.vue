@@ -2,35 +2,49 @@
     <Authenticated>
         <div class="p-8">
             <h1 class="text-2xl font-bold">Power Bi Link Management</h1>
-            <div
-                v-for="org in organizations"
-                :key="org.id"
-                class="border p-4 mb-4 rounded shadow-sm bg-white"
-            >
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h2 class="text-xl font-bold">{{ org.name }}</h2>
-                        <p class="text-gray-500 font-mono text-xs">
-                            ID: {{ org.pbi_embed_id }}
-                        </p>
-                    </div>
-
-                    <div class="space-x-2">
-                        <button
-                            @click="testLink(org.pbi_embed_id)"
-                            class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded text-sm transition"
-                        >
-                            Test Link
-                        </button>
-
-                        <button
-                            @click="saveOrg(org)"
-                            class="px-4 py-2 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 transition"
-                        >
-                            Update Link
-                        </button>
-                    </div>
-                </div>
+            <div class="overflow-x-auto bg-white rounded-lg shadow">
+                <table class="min-w-full table-auto">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+                            >
+                                Organization
+                            </th>
+                            <th
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+                            >
+                                Power BI Public Link
+                            </th>
+                            <th
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+                            >
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr v-for="org in organizations" :key="org.id">
+                            <td class="px-6 py-4 font-medium">
+                                {{ org.name }}
+                            </td>
+                            <td class="px-6 py-4">
+                                <input
+                                    v-model="org.pbi_embed_link"
+                                    class="w-full border rounded px-2 py-1 text-sm focus:ring-blue-500"
+                                />
+                            </td>
+                            <td class="px-6 py-4">
+                                <button
+                                    @click="saveOrg(org)"
+                                    class="bg-indigo-600 text-white px-4 py-1 rounded text-sm hover:bg-indigo-700"
+                                >
+                                    Update
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </Authenticated>
