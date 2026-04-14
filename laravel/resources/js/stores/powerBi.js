@@ -513,7 +513,6 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         console.log(
             "PowerBI store fully cleaned up (listeners removed, timers stopped).",
         );
-        channel.close();
     }
 
     return {
