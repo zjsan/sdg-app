@@ -59,8 +59,19 @@ const organizations = ref([]);
 const pbiStore = usePowerBiStore();
 
 const fetchOrgs = async () => {
-    const { data } = await api.get("/api/organizations");
-    organizations.value = data;
+    try {
+        const response = await api.get("/organizations");
+        // Debugging: Check console to see what the server actually sent
+        console.log("Backend Response:", response.data);
+
+        // If backend returns a Resource, it might be response.data.data
+        organizations.value = Array.isArray(response.data)
+            ? response.data
+            : response.data.data;
+    } catch (error) {
+        console.error("Failed to fetch organizations:", error);
+        alert("Failed to load organizations. Please try again.");
+    }
 };
 
 const testLink = (id) => {

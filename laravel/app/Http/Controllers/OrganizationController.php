@@ -16,7 +16,7 @@ class OrganizationController extends Controller
         //
         // Any authenticated user can likely see the list, 
         // but only if they are an Admin or Developer
-        return Organization::all();
+        return response()->json(Organization::all());
     }
 
     /**
