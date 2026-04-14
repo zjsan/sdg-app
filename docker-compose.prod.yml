@@ -38,7 +38,7 @@ services:
       - ./laravel/.env
     volumes:
       - laravel_storage:/var/www/laravel/storage
-      - laravel_public:/var/www/laravel/public
+    #  - laravel_public:/var/www/laravel/public
 
   nginx:
     image: nginx:stable
@@ -54,7 +54,7 @@ services:
       - ./docker/nginx/prod.conf:/etc/nginx/conf.d/default.conf
       - ./docker/nginx/ssl:/etc/nginx/ssl:ro # SSL certificates
       - laravel_storage:/var/www/laravel/storage
-      - laravel_public:/var/www/laravel/public
+      #- laravel_public:/var/www/laravel/public
     networks:
       sdgapp_net:
         aliases:
