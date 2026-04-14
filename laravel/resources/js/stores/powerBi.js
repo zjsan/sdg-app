@@ -515,7 +515,22 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         );
     }
 
+    // Force Refresh function for developers to trigger a manual refresh and broadcast to all tabs
+    async function forceRefresh() {
+        console.log("Developer triggered manual refresh. Broadcasting...");
+        // 1. Fetch fresh URL for current tab
+        await fetchSignedUrl();
+
+        // 2. Tell all other tabs to do the same
+        channel.postMessage({
+            type: "refresh",
+            tabId: TAB_ID,
+            ts: Date.now(),
+        });
+    }
+
     return {
+        forceRefresh,
         powerBiEmbedUrl,
         isLeader,
         init,
