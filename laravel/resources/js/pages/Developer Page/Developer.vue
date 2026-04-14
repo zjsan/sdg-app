@@ -1,7 +1,7 @@
 <template>
     <Authenticated>
         <div class="p-8">
-            <h1 class="text-2xl font-bold">Organization Management</h1>
+            <h1 class="text-2xl font-bold">Power Bi Link Management</h1>
 
             <table class="min-w-full mt-4 bg-white border">
                 <thead>
@@ -19,7 +19,7 @@
                         </td>
                         <td class="border px-4 py-2">
                             <button
-                                @click="editOrg(org)"
+                                @click="saveOrg(org.id, org.pbi_embed_id)"
                                 class="bg-blue-500 text-white px-3 py-1 rounded"
                             >
                                 Edit PBI Link
@@ -32,12 +32,27 @@
     </Authenticated>
 </template>
 <script setup>
-import { useAuthStore } from "@/stores/auth";
 import Authenticated from "../Dashboard Template/Layout/Authenticated.vue";
+import api from "@/plugins/axios";
+import { ref, onMounted } from "vue";
 
-const auth = useAuthStore();
+const organizations = ref([]);
 
-const logout = async () => {
-    await auth.logout();
+const fetchOrgs = async () => {
+    const { data } = await api.get("/api/organizations");
+    organizations.value = data;
 };
+
+const saveOrg = async (id, newId) => {
+    try {
+        await api.put(`/api/organizations/${id}`, { pbi_embed_id: newId });
+        fetchOrgs(); // Refresh list
+        alert("PBI Embed ID updated successfully!");
+    } catch (error) {
+        console.error(error);
+        alert("Update failed.");
+    }
+};
+
+onMounted(fetchOrgs);
 </script>
