@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import Login from "../pages/Login.vue";
 import Dashboard from "../pages/Dashboard.vue";
-import Developer from "../pages/Developer Page/Developer.vue";
+import Developer from "../pages/DeveloperPage/Developer.vue";
 import NotFoundView from "../pages/NotFoundView.vue";
 import { useAuthStore } from "@/stores/auth";
 import GoogleCallback from "../pages/GoogleCallback.vue";
