@@ -11,11 +11,14 @@
 
         <nav class="flex-grow p-4 space-y-2 overflow-y-auto">
             <router-link
-                to="/dashboard"
+                v-for="item in filteredMenu"
+                :key="item.to"
+                :to="item.to"
                 class="flex items-center p-3 text-gray-700 rounded-lg hover:bg-gray-100 transition"
-                @click="$emit('close')"
+                active-class="bg-gray-100 font-semibold border-l-4 border-blue-500"
             >
-                <i class="pi pi-home mr-3"></i> Dashboard
+                <i :class="['pi text-xl mr-3', item.icon]"></i>
+                {{ item.name }}
             </router-link>
         </nav>
 
@@ -25,9 +28,37 @@
 
 <script setup>
 import UserSection from "./UserSection.vue";
-
+import { computed } from "vue";
+import { useAuthStore } from "@/stores/auth";
 defineProps(["isOpen", "isMobile"]);
 defineEmits(["close"]);
+
+const auth = useAuthStore();
+
+// Define menu structure
+const menuItems = [
+    {
+        name: "Dashboard",
+        to: "/dashboard",
+        icon: "pi-home",
+        visible: () => true, // Everyone logged in sees this
+    },
+    {
+        name: "Developer",
+        to: "/developer",
+        icon: "pi-code",
+        visible: () => auth.isDeveloper,
+    },
+    // {
+    //     name: "Admin Panel",
+    //     to: "/admin",
+    //     icon: "pi-shield",
+    //     visible: () => auth.isAdmin,
+    // },
+];
+const filteredMenu = computed(() => {
+    return menuItems.filter((item) => item.visible());
+});
 </script>
 
 <style scoped>
