@@ -10,13 +10,11 @@ C = PH
 ST = Ilocos Norte
 L = Batac
 O = SDG App
-# Change the CN to the domain
-CN = app.sdg-dashboard.com
+CN = sdg-dashboard.ddnsfree.com
 
 [req_ext]
 subjectAltName = @alt_names
 
 [alt_names]
-# This tells the browser the certificate is valid for BOTH
-DNS.1 = app.sdg-dashboard.com
+DNS.1 = sdg-dashboard.ddnsfree.com
 IP.1 = 13.251.136.207

@@ -1,0 +1,71 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: sdgapp-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: r00tProd_SDG_App_db!@#Xq
+      MYSQL_DATABASE: sdg_db
+      MYSQL_USER: sdg_app_user
+      MYSQL_PASSWORD: SDG_App_Db_10F!3kLp@
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - sdgapp_net
+
+  php:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile.prod # Production Dockerfile
+      args:
+        VITE_API_URL: https://app.sdg-dashboard.com
+    container_name: sdg-php
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "php-fpm -t || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    depends_on:
+      - mysql
+    networks:
+      - sdgapp_net
+    extra_hosts:
+      - "app.sdg-dashboard.com:host-gateway"
+    env_file:
+      - ./laravel/.env
+    volumes:
+      - laravel_storage:/var/www/laravel/storage
+      #  - laravel_public:/var/www/laravel/public
+      - laravel_public:/var/www/laravel/public
+
+  nginx:
+    image: nginx:stable
+    container_name: sdg-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80" # Public HTTP
+      - "443:443"
+    depends_on:
+      php:
+        condition: service_healthy
+    volumes:
+      - ./docker/nginx/prod.conf:/etc/nginx/conf.d/default.conf
+      - ./docker/nginx/ssl:/etc/nginx/ssl:ro # SSL certificates
+      - laravel_storage:/var/www/laravel/storage
+      #- laravel_public:/var/www/laravel/public
+      - laravel_public:/var/www/laravel/public
+    networks:
+      sdgapp_net:
+        aliases:
+          - app.sdg-dashboard.com #Nginx the internal "nickname"
+
+networks:
+  sdgapp_net:
+
+volumes:
+  mysql_data:
+  laravel_storage:
+  laravel_public:
