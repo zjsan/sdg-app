@@ -53,12 +53,12 @@ services:
     volumes:
       - ./docker/nginx/prod.conf:/etc/nginx/conf.d/default.conf
       - ./docker/nginx/ssl:/etc/nginx/ssl:ro # SSL certificates
+      - ./certbot-etc:/etc/letsencrypt # Add this to match where certs go
+      - ./certbot-var:/var/www/certbot
       - laravel_storage:/var/www/laravel/storage
       - laravel_public:/var/www/laravel/public
     networks:
       sdgapp_net:
-        aliases:
-          - app.sdg-dashboard.com #Nginx the internal "nickname"
 
 networks:
   sdgapp_net:
