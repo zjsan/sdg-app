@@ -50,20 +50,11 @@ services:
         condition: service_healthy
     volumes:
       - ./docker/nginx/prod.conf:/etc/nginx/conf.d/default.conf
-      - ./docker/nginx/ssl:/etc/letsencrypt # Add this to match where certs go
-      - ./docker/nginx/www:/var/www/certbot
+      - ./docker/nginx/ssl:/etc/nginx/ssl:ro # SSL certificates
       - laravel_storage:/var/www/laravel/storage
       - laravel_public:/var/www/laravel/public
     networks:
       sdgapp_net:
-
-  certbot:
-    image: certbot/certbot
-    container_name: sdg-certbot
-    volumes:
-      - ./docker/nginx/ssl:/etc/letsencrypt
-      - ./docker/nginx/www:/var/www/certbot
-    entrypoint: ""
 
 networks:
   sdgapp_net:
