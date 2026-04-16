@@ -26,9 +26,29 @@
                 <CardContent>
                     <Button
                         @click="loginWithGoogle"
-                        class="w-full py-2 text-lg font-medium bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition cursor-pointer"
+                        class="w-full flex items-center justify-center gap-3 py-6.5 px-3 bg-white border border-gray-300 rounded-lg text-gray-800 text-lg font-medium hover:bg-gray-50 transition cursor-pointer"
                     >
-                        <i class="pi pi-google"></i>
+                        <!-- Google Logo SVG -->
+                        <!-- From offical google icon guidelines-->
+                        <svg class="size-7 shrink-0" viewBox="0 0 48 48">
+                            <path
+                                fill="#EA4335"
+                                d="M24 9.5c3.54 0 6.73 1.22 9.24 3.6l6.9-6.9C35.64 2.38 30.2 0 24 0 14.64 0 6.48 5.48 2.52 13.44l8.04 6.24C12.36 13.2 17.7 9.5 24 9.5z"
+                            />
+                            <path
+                                fill="#4285F4"
+                                d="M46.5 24.5c0-1.6-.14-3.14-.4-4.62H24v9.24h12.74c-.55 2.96-2.2 5.46-4.68 7.14l7.2 5.6C43.92 37.3 46.5 31.4 46.5 24.5z"
+                            />
+                            <path
+                                fill="#FBBC05"
+                                d="M10.56 28.68A14.48 14.48 0 0 1 9.5 24c0-1.62.28-3.2.76-4.68l-8.04-6.24A23.98 23.98 0 0 0 0 24c0 3.86.92 7.52 2.52 10.56l8.04-5.88z"
+                            />
+                            <path
+                                fill="#34A853"
+                                d="M24 48c6.2 0 11.4-2.04 15.2-5.52l-7.2-5.6c-2 1.34-4.56 2.14-8 2.14-6.3 0-11.64-3.7-13.44-9.18l-8.04 5.88C6.48 42.52 14.64 48 24 48z"
+                            />
+                        </svg>
+
                         <span>Sign in with Google</span>
                     </Button>
 
