@@ -263,15 +263,26 @@ Before using the automation scripts, you must ensure that the `make` utility is 
 
 ```
 
-**Run database seeders**:
+**Database Seeding**:
 
-- Clean Docker rebuild and restart
-- Backend or configuration changes are made
-- New environment variables are added
-- Middleware, routes, or API logic changes
+- Rebuilds and restarts the production environment.
+- Executes the Laravel Seeder to insert initial or dummy data.
+- Ensures the application state is optimized post-seeding.
 
 ```
   make seed
+
+```
+
+**Full DB Refresh + Seeding**:
+
+- Warning: This will drop all tables and data.
+- Rolls back all migrations and runs them again from scratch.
+- Seeds the database immediately after the migration.
+- Ideal for staging environments or local recovery
+
+```
+  make seed-fresh
 
 ```
 
