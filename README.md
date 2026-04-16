@@ -225,6 +225,55 @@ The `docker-entrypoint.sh` script is the brain of the container.Attached within 
   - Runs database migrations (`migrate --force`).
   - Pre-caches the application for production performance.
 
+**MakeFile Automated script using Makefile**
+
+## 1. Prerequisites
+
+### Installing Make on Ubuntu/Linux
+
+Before using the automation scripts, you must ensure that the `make` utility is installed on your system.
+
+```
+  sudo apt update
+  sudo apt install make
+  make --version
+
+```
+
+**Rebuild and refresh frontend assets**:
+
+- Updating Vue components
+- Modifying frontend assets
+- Encountering stale frontend builds
+
+```
+  make build-fresh
+
+```
+
+**Run full deployment process including pulling updates and rebuilding containers**:
+
+- Clean Docker rebuild and restart
+- Backend or configuration changes are made
+- New environment variables are added
+- Middleware, routes, or API logic changes
+
+```
+  make deploy
+
+```
+
+**Run database seeders**:
+
+- Clean Docker rebuild and restart
+- Backend or configuration changes are made
+- New environment variables are added
+- Middleware, routes, or API logic changes
+
+```
+  make deploy
+```
+
 **Standard Update - Source code changes**
 
 - Controller logic
