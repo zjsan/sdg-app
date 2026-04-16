@@ -28,7 +28,7 @@ seed:
 seed-fresh:
 	$(COMPOSE_PROD) build --no-cache
 	$(COMPOSE_PROD) up -d
-	docker exec $(PHP_CONT) php artisan migrate:refresh --seed --force
+	docker exec $(PHP_CONT) php artisan migrate:fresh --seed --force
 	$(MAKE) optimize
 
 # 5. Normal Build (no cache, but no DB changes)
