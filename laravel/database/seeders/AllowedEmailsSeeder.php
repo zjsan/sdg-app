@@ -37,7 +37,7 @@ class AllowedEmailsSeeder extends Seeder
 
             //external
             ['email' => 'zjsantos25@gmail.com','organization_id' => $externalId, 'role_id'=> $viewerRole, 'is_active' => true],
-            ['email' => 'ninanisperos519@gmail.com', 'organization_id' => $externalId,'role_id'=> $viewerRole, 'is_active' => true],
+           // ['email' => 'ninanisperos519@gmail.com', 'organization_id' => $externalId,'role_id'=> $viewerRole, 'is_active' => true],
         ];
 
         //cleaning the emails table before seeding
