@@ -271,7 +271,8 @@ Before using the automation scripts, you must ensure that the `make` utility is 
 - Middleware, routes, or API logic changes
 
 ```
-  make deploy
+  make seed
+
 ```
 
 **Standard Update - Source code changes**

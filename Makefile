@@ -36,6 +36,20 @@ build-normal:
 	$(COMPOSE_PROD) up -d --build
 	$(MAKE) optimize
 
+# 6. Frontend and Database Refresh (clean build + migrate refresh and seed)
+start-refresh:
+	docker volume rm sdg-app_laravel_public || true
+	
+	$(MAKE) seed
+	$(MAKE) optimize
+
+# 7. Fresh Start (Recovery Mode)
+nucleus-start:
+	$(COMPOSE_PROD) down -v --rmi local
+	
+	$(MAKE) seed
+	$(MAKE) optimize
+
 # Helper: Optimization logic
 optimize:
 	docker exec $(PHP_CONT) php artisan optimize:clear
