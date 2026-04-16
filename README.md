@@ -236,7 +236,7 @@ The `docker-entrypoint.sh` script is the brain of the container.Attached within 
 
 ```
   git pull
-  docker-compose -f docker-compose.prod.yml up -d --build
+  docker compose -f docker-compose.prod.yml up -d --build
 
 
   # Fix permissions
@@ -256,9 +256,9 @@ The `docker-entrypoint.sh` script is the brain of the container.Attached within 
 
 ```
  git pull
- docker-compose -f docker-compose.prod.yml down
- docker-compose -f docker-compose.prod.yml build --no-cache
- docker-compose -f docker-compose.prod.yml up -d
+ docker compose -f docker-compose.prod.yml down
+ docker compose -f docker-compose.prod.yml build --no-cache
+ docker compose -f docker-compose.prod.yml up -d
 
  # Fix permissions
  docker exec -it sdg-php chown -R www-data:www-data storage bootstrap/cache
@@ -279,10 +279,10 @@ The `docker-entrypoint.sh` script is the brain of the container.Attached within 
 - Entrypoint script
 
 ```
-  docker-compose -f docker-compose.prod.yml down
+  docker compose -f docker-compose.prod.yml down
   git pull
-  docker-compose -f docker-compose.prod.yml build --no-cache
-  docker-compose -f docker-compose.prod.yml up -d
+  docker compose -f docker-compose.prod.yml build --no-cache
+  docker compose -f docker-compose.prod.yml up -d
 
   # Fix permissions
   docker exec -it sdg-php chown -R www-data:www-data storage bootstrap/cache
@@ -301,12 +301,12 @@ The `docker-entrypoint.sh` script is the brain of the container.Attached within 
 - Frontend Links
 
 ```
-  docker-compose -f docker-compose.prod.yml down
+  docker compose -f docker-compose.prod.yml down
   git pull
   docker volume rm sdg-app_laravel_public
 
-  docker-compose -f docker-compose.prod.yml build --no-cache
-  docker-compose -f docker-compose.prod.yml up -d
+  docker compose -f docker-compose.prod.yml build --no-cache
+  docker compose -f docker-compose.prod.yml up -d
 
 
   docker exec -it sdg-php php artisan optimize:clear
@@ -328,7 +328,7 @@ Use this to fix stale volumes or cached configuration bugs.This will permanently
 ```
  # Stop and wipe volumes/images
 
- docker-compose -f docker-compose.prod.yml down -v --rmi local
+ docker compose -f docker-compose.prod.yml down -v --rmi local
 
  git pull #if there are changes in repo
 
@@ -344,8 +344,8 @@ Use this to fix stale volumes or cached configuration bugs.This will permanently
 
  # Rebuild and launch clean stack
 
- docker-compose -f docker-compose.prod.yml build --no-cache
- docker-compose -f docker-compose.prod.yml up -d
+ docker compose -f docker-compose.prod.yml build --no-cache
+ docker compose -f docker-compose.prod.yml up -d
 
 ```
 
