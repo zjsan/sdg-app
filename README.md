@@ -296,6 +296,27 @@ The `docker-entrypoint.sh` script is the brain of the container.Attached within 
 
 ```
 
+**Frontend Changes**
+
+- Vue Components
+- Frontend Links
+
+```
+  docker-compose -f docker-compose.prod.yml down
+  git pull
+  docker volume rm sdg-app_laravel_public
+
+  docker-compose -f docker-compose.prod.yml build --no-cache
+  docker-compose -f docker-compose.prod.yml up -d
+
+
+  docker exec -it sdg-php php artisan optimize:clear
+
+  # Optimize ONLY after validation (totally working)
+  docker exec -it sdg-php php artisan optimize
+
+```
+
 **Fresh Start (Recovery Mode)**
 
 Use this to fix stale volumes or cached configuration bugs.This will permanently delete database data, sessions, and Docker volumes:
