@@ -13,7 +13,9 @@
                 />
             </div>
 
-            <Card class="w-full max-w-sm shadow-xl rounded-2xl border-none">
+            <Card
+                class="w-full max-w-sm shadow-xl rounded-2xl border-none px-5"
+            >
                 <CardHeader class="text-center pb-2 pt-4">
                     <CardTitle class="text-2xl font-bold text-blue-500">
                         Welcome!
