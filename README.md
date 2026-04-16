@@ -26,11 +26,10 @@ The system consists of:
 ## 3. Infrastructure Overview
 
 - **Production IP**: 13.251.136.207
-- **Production Domain (DNS not yet public)**: https://app.sdg-dashboard.com
-- **Testing Domain (Local)**: app.sdg-dashboard.com (Mapped to 127.0.0.1)
-- **Testing Production Domain**: app.sdg-dashboard.com (Mapped to 13.251.136.207)
+- **Production Domain (available through internet)**: https://sdg-dashboard.ddnsfree.com
+- **Testing Domain (Local)**: sdg-dashboard.ddnsfree.com (Mapped to 127.0.0.1)
 
-To access Live Prod: **13.251.136.207** -> automatically redirected to https://app.sdg-dashboard.com by nginx config
+To access Live Prod: **13.251.136.207** or **sdg-dashboard.ddnsfree.com**
 
 ## 4. Hosts File Configuration
 
@@ -54,13 +53,13 @@ There are two simple ways to do this: using **Notepad** or using **PowerShell**.
 
 3. **Add Configuration**
    - Scroll to the bottom and paste one of the following lines:
-     - For testing:
+     - For testing(mimic production environment using wsl ubuntu):
        ```
-       127.0.0.1    app.sdg-dashboard.com
+       127.0.0.1    sdg-dashboard.ddnsfree.com
        ```
      - For live production:
        ```
-       13.251.136.207    app.sdg-dashboard.com
+       13.251.136.207    sdg-dashboard.ddnsfree.com
        ```
 
 4. **Save and Close**
