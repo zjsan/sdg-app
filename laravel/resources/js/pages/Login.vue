@@ -5,7 +5,7 @@
         <div
             class="flex flex-col items-center justify-center gap-10 sm:flex-row w-full max-w-4xl"
         >
-            <div class="max-w-sm sm:max-w-sm md:max-w-md">
+            <div class="w-56 mx-auto md:w-80 lg:w-96">
                 <img
                     src="/public/images/sdg_transparent_upscaled.png"
                     alt="Sustainable Development Goals Logo"
@@ -15,7 +15,7 @@
 
             <div class="flex flex-col">
                 <!--main title-->
-                <h1 class="text-2xl font-semibold text-gray-800 text-center">
+                <h1 class="text-2xl font-bold text-blue-600 text-center">
                     PHEI SDG Dashboard
                 </h1>
                 <p class="text-sm text-gray-500 mt-1 text-center">
@@ -23,10 +23,10 @@
                 </p>
 
                 <Card
-                    class="w-full max-w-sm shadow-xl rounded-2xl border-none px-5"
+                    class="w-full max-w-sm shadow-xl rounded-2xl border-none px-5 mt-4"
                 >
                     <CardHeader class="text-center pb-2 pt-4">
-                        <CardTitle class="text-2xl font-bold text-blue-500">
+                        <CardTitle class="text-2xl font-semibold text-blue-500">
                             Welcome!
                         </CardTitle>
                         <CardDescription
