@@ -42,9 +42,7 @@
             </router-link>
         </nav>
 
-        <div class="p-4 border-t border-slate-100">
-            <UserSection />
-        </div>
+        <UserSection />
     </aside>
 </template>
 
