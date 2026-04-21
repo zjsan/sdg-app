@@ -41,14 +41,12 @@ start-refresh:
 	docker volume rm sdg-app_laravel_public || true
 	
 	$(MAKE) seed-fresh
-	$(MAKE) optimize
 
 # 7. Fresh Start (Recovery Mode)
 nucleus-start:
 	$(COMPOSE_PROD) down -v --rmi local
 	
-	$(MAKE) seed
-	$(MAKE) optimize
+	$(MAKE) seed-fresh
 
 # Helper: Optimization logic
 optimize:
