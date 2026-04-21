@@ -1,12 +1,14 @@
 <template>
     <aside
         :class="isOpen ? 'translate-x-0' : '-translate-x-full'"
-        class="fixed inset-y-0 left-0 z-40 w-64 flex flex-col border-r border-gray-200 bg-slate-50 transform transition-transform duration-300 lg:relative lg:translate-x-0"
+        class="fixed inset-y-0 left-0 z-40 w-64 flex flex-col border-r border-slate-200 bg-white transform transition-transform duration-300 lg:relative lg:translate-x-0"
     >
         <div class="flex items-center justify-center h-20 border-b p-4">
-            <span class="text-xl font-semibold text-gray-800"
-                >SDG DASHBOARD</span
-            >
+            <img
+                src="/public/images/sdg_transparent_upscaled.png"
+                alt="Sustainable Development Goals Logo"
+                class="w-full h-auto drop-shadow-xl transition duration-500 hover:scale-105"
+            />
         </div>
 
         <nav class="flex-grow p-4 space-y-2 overflow-y-auto">
@@ -14,7 +16,7 @@
                 v-for="item in filteredMenu"
                 :key="item.to"
                 :to="item.to"
-                class="flex items-center p-3 text-gray-700 rounded-lg hover:bg-gray-100 transition"
+                class="group flex items-center px-4 py-3 text-slate-500 rounded-xl hover:bg-slate-50 hover:text-blue-600 transition-all duration-200"
                 active-class="bg-gray-100 font-semibold border-l-4 border-blue-500"
             >
                 <i :class="['pi text-xl mr-3', item.icon]"></i>
@@ -22,7 +24,9 @@
             </router-link>
         </nav>
 
-        <UserSection />
+        <div class="p-4 border-t border-slate-100">
+            <UserSection />
+        </div>
     </aside>
 </template>
 

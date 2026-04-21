@@ -13,7 +13,6 @@
                     class="text-xl"
                 ></i>
             </Button>
-            <span class="font-semibold">SDG DASHBOARD</span>
         </header>
 
         <Sidebar
