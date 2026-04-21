@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col lg:flex-row h-screen bg-gray-50">
+    <div class="flex flex-col lg:flex-row h-screen bg-slate-50">
         <header
             class="h-14 lg:hidden border-b bg-white flex items-center justify-between p-4 shadow-sm flex-shrink-0"
         >

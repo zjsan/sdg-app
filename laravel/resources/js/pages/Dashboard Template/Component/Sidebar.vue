@@ -1,7 +1,7 @@
 <template>
     <aside
         :class="isOpen ? 'translate-x-0' : '-translate-x-full'"
-        class="fixed inset-y-0 left-0 z-40 w-64 flex flex-col border-r border-gray-200 bg-white transform transition-transform duration-300 lg:relative lg:translate-x-0"
+        class="fixed inset-y-0 left-0 z-40 w-64 flex flex-col border-r border-gray-200 bg-slate-50 transform transition-transform duration-300 lg:relative lg:translate-x-0"
     >
         <div class="flex items-center justify-center h-20 border-b p-4">
             <span class="text-xl font-semibold text-gray-800"
