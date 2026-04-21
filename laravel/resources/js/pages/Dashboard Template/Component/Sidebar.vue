@@ -3,12 +3,30 @@
         :class="isOpen ? 'translate-x-0' : '-translate-x-full'"
         class="fixed inset-y-0 left-0 z-40 w-64 flex flex-col border-r border-slate-200 bg-white transform transition-transform duration-300 lg:relative lg:translate-x-0"
     >
-        <div class="flex items-center justify-center h-20 border-b p-4">
-            <img
-                src="/public/images/sdg_transparent_upscaled.png"
-                alt="Sustainable Development Goals Logo"
-                class="w-full h-auto drop-shadow-xl transition duration-500 hover:scale-105"
-            />
+        <div class="flex items-center gap-3">
+            <div class="relative group">
+                <img
+                    src="/public/images/sdg_transparent_upscaled.png"
+                    alt="SDG Logo"
+                    class="w-12 h-12 object-contain transition-transform duration-500"
+                />
+                <div
+                    class="absolute inset-0 bg-blue-400/20 blur-xl rounded-full -z-10 opacity-0 group-hover:opacity-100 transition-opacity"
+                ></div>
+            </div>
+
+            <div class="flex flex-col">
+                <span
+                    class="text-lg font-black tracking-tight text-slate-800 leading-none"
+                >
+                    PHEI <span class="text-blue-600">SDG</span>
+                </span>
+                <span
+                    class="text-[10px] uppercase tracking-[0.2em] text-slate-400 font-bold mt-1"
+                >
+                    Portal
+                </span>
+            </div>
         </div>
 
         <nav class="flex-grow p-4 space-y-2 overflow-y-auto">
@@ -16,8 +34,8 @@
                 v-for="item in filteredMenu"
                 :key="item.to"
                 :to="item.to"
-                class="group flex items-center px-4 py-3 text-slate-500 rounded-xl hover:bg-slate-50 hover:text-blue-600 transition-all duration-200"
-                active-class="bg-gray-100 font-semibold border-l-4 border-blue-500"
+                class="group flex items-center px-4 py-3 hover:bg-slate-50 hover:text-blue-600 transition-all duration-200"
+                active-class="bg-blue-50 font-medium rounded border-blue-500"
             >
                 <i :class="['pi text-xl mr-3', item.icon]"></i>
                 {{ item.name }}
