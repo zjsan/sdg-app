@@ -3,19 +3,21 @@
         class="min-h-screen flex items-center justify-center bg-gray-50 px-4 text-gray-900 animate-fade-in"
     >
         <div
-            class="flex flex-col items-center justify-center w-full max-w-4xl gap-7 md:flex-row md:gap-10 mx-auto px-4"
+            class="flex flex-col items-center justify-center w-full max-w-5xl gap-10 md:flex-row md:items-center mx-auto px-4"
         >
             <div class="w-56 mx-auto md:w-80 lg:w-96">
                 <img
                     src="/public/images/sdg_transparent_upscaled.png"
                     alt="Sustainable Development Goals Logo"
-                    class="w-full h-auto"
+                    class="w-full h-auto drop-shadow-xl transition duration-500 hover:scale-105"
                 />
             </div>
 
             <div class="flex flex-col">
                 <!--main title-->
-                <h1 class="text-2xl font-bold text-blue-600 text-center">
+                <h1
+                    class="text-2xl font-bold text-blue-600 text-center drop-shadow-md"
+                >
                     PHEI SDG Dashboard
                 </h1>
                 <p class="text-sm text-gray-500 mt-1 text-center">
