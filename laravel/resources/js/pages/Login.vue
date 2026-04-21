@@ -1,6 +1,6 @@
 <template>
     <div
-        class="min-h-screen flex items-center justify-center bg-gray-50 px-4 text-gray-900 animate-fade-in"
+        class="min-h-screen flex items-center justify-center bg-gray-50 px-4 text-gray-900"
     >
         <div
             class="flex flex-col items-center justify-center w-full max-w-5xl gap-10 md:flex-row md:items-center mx-auto px-4"
@@ -25,9 +25,8 @@
                 >
                     Monitor and analyze sustainability goals
                 </p>
-
                 <Card
-                    class="w-full max-w-sm shadow-xl rounded-2xl border-none px-5 mt-4"
+                    class="w-full max-w-sm backdrop-blur-md bg-white/70 border border-white/40 shadow-md rounded-3xl px-6 mt-6"
                 >
                     <CardHeader class="text-center pb-2 pt-4">
                         <CardTitle class="text-2xl font-semibold text-blue-500">
@@ -43,7 +42,7 @@
                     <CardContent>
                         <Button
                             @click="loginWithGoogle"
-                            class="w-full flex items-center justify-center gap-3 py-6.5 px-3 bg-white border border-gray-300 rounded-lg text-gray-800 text-lg font-medium hover:bg-gray-50 transition cursor-pointer"
+                            class="w-full flex items-center justify-center gap-3 py-6 px-7 bg-white border border-gray-200 rounded-xl text-gray-700 font-medium shadow-sm hover:shadow-md hover:bg-gray-50 active:scale-[0.98] transition-all duration-200 cursor-pointer"
                         >
                             <!-- Google Logo SVG -->
                             <!-- From offical google icon guidelines-->
