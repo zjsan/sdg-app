@@ -16,11 +16,13 @@
             <div class="flex flex-col">
                 <!--main title-->
                 <h1
-                    class="text-2xl font-bold text-blue-600 text-center drop-shadow-md"
+                    class="text-3xl drop-shadow md:text-4xl font-bold text-blue-500 text-center md:text-left"
                 >
                     PHEI SDG Dashboard
                 </h1>
-                <p class="text-sm text-gray-500 mt-1 text-center">
+                <p
+                    class="text-base text-center text-gray-500 mt-2 text-center md: max-w-sm"
+                >
                     Monitor and analyze sustainability goals
                 </p>
 
