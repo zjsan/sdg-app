@@ -1,9 +1,9 @@
 <template>
     <aside
         :class="isOpen ? 'translate-x-0' : '-translate-x-full'"
-        class="fixed inset-y-0 left-0 z-40 w-64 flex flex-col border-r border-slate-200 bg-white transform transition-transform duration-300 lg:relative lg:translate-x-0"
+        class="fixed inset-y-0 left-0 z-40 w-64 flex flex-col border-r border-slate-200 drop-shadow bg-white transform transition-transform duration-300 lg:relative lg:translate-x-0"
     >
-        <div class="flex items-center gap-3 pt-4">
+        <div class="flex items-center gap-3 pt-4 px-5">
             <div class="relative group">
                 <img
                     src="/public/images/sdg_transparent_upscaled.png"
