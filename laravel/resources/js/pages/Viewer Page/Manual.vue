@@ -134,13 +134,8 @@
                                         Show as a table
                                     </p>
                                     <p class="text-sm text-slate-500">
-                                        Hover over any visual;
-                                        <strong>if available</strong> and click
-                                        the
-                                        <i
-                                            class="pi pi-ellipsis-v text-[10px]"
-                                        ></i>
-                                        (More options) icon, then select
+                                        Right click on any visual;
+                                        <strong>if available</strong> and select
                                         <b>Show as a table</b> to display the
                                         underlying data in a tabular format.
                                     </p>
@@ -160,30 +155,34 @@
                     <div
                         class="bg-slate-900 text-white p-8 rounded-3xl shadow-xl"
                     >
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div>
                                 <h4 class="text-blue-400 font-bold mb-2">
                                     Reset View
                                 </h4>
                                 <p class="text-sm text-slate-300">
                                     To clear all active filters and return to
-                                    the original report state, click the
-                                    <strong>Reset to Default</strong> button at
-                                    the top right of the Power BI toolbar.
+                                    the original report state, click the blue
+                                    <strong>
+                                        <i class="pi pi-sync text-[10px]"></i
+                                    ></strong>
+                                    (Reset) button in the Slicer Panes.
                                 </p>
                             </div>
                             <div>
                                 <h4 class="text-blue-400 font-bold mb-2">
-                                    Drill-Through
+                                    Zoom Controls
                                 </h4>
                                 <p class="text-sm text-slate-300">
-                                    Right-click on a data point (like a specific
-                                    University name) to see if a
-                                    <strong>Drill-through</strong> option is
-                                    available for more granular HEI profiles.
+                                    Use zoom controls to adjust how you view
+                                    dashboard visuals. Zoom in to inspect
+                                    detailed patterns in charts or zoom out to
+                                    see a broader overview of trends and
+                                    KPIs.This is especially useful for dense or
+                                    high-volume data visuals.
                                 </p>
                             </div>
-                            <div>
+                            <!-- <div>
                                 <h4 class="text-blue-400 font-bold mb-2">
                                     Exporting
                                 </h4>
@@ -194,7 +193,7 @@
                                     underlying data to <strong>Excel</strong> or
                                     <strong>CSV</strong> format.
                                 </p>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </section>
