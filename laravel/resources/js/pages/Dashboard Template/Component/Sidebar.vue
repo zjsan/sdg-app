@@ -42,6 +42,24 @@
             </router-link>
         </nav>
 
+        <div class="mt-10 space-y-4">
+            <div
+                class="px-4 py-5 rounded-2xl bg-slate-50 border border-slate-100"
+            >
+                <h4 class="text-xs font-bold text-slate-800 flex items-center">
+                    <i class="pi pi-info-circle mr-2 text-blue-500"></i>
+                    Report Scope
+                </h4>
+                <p class="text-[11px] text-slate-500 mt-2 leading-relaxed">
+                    Insights are derived from raw performance metrics sourced
+                    via THE DataPoints. This data is pre-processed and
+                    harmonized to visualize how Higher Education Institutions
+                    (HEIs) align with the United Nations’ Sustainable
+                    Development Goals
+                </p>
+            </div>
+        </div>
+
         <UserSection />
     </aside>
 </template>
