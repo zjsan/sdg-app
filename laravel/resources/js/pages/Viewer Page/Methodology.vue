@@ -1,6 +1,6 @@
 <template>
     <Authenticated>
-        <div class="p-6 lg:p-10 max-w-6xl mx-auto overflow-y-auto h-full">
+        <div class="p-6 lg:p-10 w-full mx-auto overflow-y-auto h-full">
             <header class="mb-10">
                 <h1 class="text-3xl font-bold text-slate-900">
                     Methodology & Data Sources
@@ -12,7 +12,7 @@
                 </p>
             </header>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div
                     class="p-6 bg-white border border-slate-200 rounded-3xl shadow-sm"
                 >
@@ -68,7 +68,7 @@
                     </p>
                 </div>
 
-                <div
+                <!-- <div
                     class="p-6 bg-white border border-slate-200 rounded-3xl shadow-sm"
                 >
                     <div
@@ -83,21 +83,84 @@
                         augment and provide context for institutional
                         performance trends.
                     </p>
-                </div>
+                </div> -->
             </div>
 
             <div class="mt-10 p-8 bg-slate-900 rounded-[2rem] text-white">
                 <div class="flex items-center space-x-3 mb-4">
                     <i class="pi pi-sync text-blue-400"></i>
-                    <h2 class="text-xl font-bold">
-                        Data Harmonization Process
-                    </h2>
+                    <h2 class="text-xl font-bold">Data Processing</h2>
                 </div>
-                <p class="text-slate-400 text-sm leading-relaxed max-w-3xl">
+                <p class="text-slate-400 text-sm leading-relaxed max-w-4xl">
                     Data from THE Impact Rankings and DataPoints is not used in
-                    raw form. It undergoes preprocessing and harmonization
+                    raw form. It undergoes preprocessing and transformations
                     before visualization.
                 </p>
+
+                <ul class="space-y-5 mt-6">
+                    <li class="flex gap-4">
+                        <span
+                            class="flex-shrink-0 h-2 w-2 mt-2 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.6)]"
+                        ></span>
+                        <div>
+                            <p class="font-semibold text-white">
+                                Data Extraction from THE Platforms
+                            </p>
+                            <p class="text-sm text-slate-400">
+                                Raw institutional and SDG-related metrics are
+                                extracted from THE Impact Rankings and
+                                DataPoints covering Philippine HEIs.
+                            </p>
+                        </div>
+                    </li>
+
+                    <li class="flex gap-4">
+                        <span
+                            class="flex-shrink-0 h-2 w-2 mt-2 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.6)]"
+                        ></span>
+                        <div>
+                            <p class="font-semibold text-white">
+                                Data Cleaning & Standardization
+                            </p>
+                            <p class="text-sm text-slate-400">
+                                Institutional names, SDG labels, and metric
+                                formats are standardized to ensure consistency
+                                across datasets and reporting periods.
+                            </p>
+                        </div>
+                    </li>
+
+                    <li class="flex gap-4">
+                        <span
+                            class="flex-shrink-0 h-2 w-2 mt-2 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.6)]"
+                        ></span>
+                        <div>
+                            <p class="font-semibold text-white">
+                                SDG Mapping & Classification
+                            </p>
+                            <p class="text-sm text-slate-400">
+                                Extracted metrics are mapped to the 17 UN
+                                Sustainable Development Goals based on THE’s
+                                indicator framework and classification system.
+                            </p>
+                        </div>
+                    </li>
+
+                    <li class="flex gap-4">
+                        <span
+                            class="flex-shrink-0 h-2 w-2 mt-2 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.6)]"
+                        ></span>
+                        <div>
+                            <p class="font-semibold text-white">
+                                Aggregation into SDG Datasets
+                            </p>
+                            <p class="text-sm text-slate-400">
+                                Processed data are aggregated into various
+                                datasets for data visualization.
+                            </p>
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
     </Authenticated>

@@ -162,11 +162,11 @@
                                 </h4>
                                 <p class="text-sm text-slate-300">
                                     To clear all active filters and return to
-                                    the original report state, click the blue
+                                    the original report state, click the
                                     <strong>
-                                        <i class="pi pi-sync text-[10px]"></i
+                                        <i class="pi pi-sync text-blue-400"></i
                                     ></strong>
-                                    (Reset) button in the Slicer Panes.
+                                    (Reset) button in the Slicer Panels.
                                 </p>
                             </div>
                             <div>
