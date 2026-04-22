@@ -3,7 +3,7 @@
         :class="isOpen ? 'translate-x-0' : '-translate-x-full'"
         class="fixed inset-y-0 left-0 z-40 w-64 flex flex-col border-r border-slate-200 bg-white transform transition-transform duration-300 lg:relative lg:translate-x-0"
     >
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-3 pt-4">
             <div class="relative group">
                 <img
                     src="/public/images/sdg_transparent_upscaled.png"
@@ -17,14 +17,14 @@
 
             <div class="flex flex-col">
                 <span
-                    class="text-lg font-black tracking-tight text-slate-800 leading-none"
+                    class="text-md font-black tracking-tight text-slate-800 leading-none"
                 >
                     PHEI <span class="text-blue-600">SDG</span>
                 </span>
                 <span
                     class="text-[10px] uppercase tracking-[0.2em] text-slate-400 font-bold mt-1"
                 >
-                    Portal
+                    Dashboard
                 </span>
             </div>
         </div>
