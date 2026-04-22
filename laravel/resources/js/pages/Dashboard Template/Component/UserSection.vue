@@ -19,7 +19,7 @@
         <AlertDialog v-if="auth.isAuthenticated">
             <AlertDialogTrigger as-child>
                 <Button
-                    class="w-full justify-center bg-gray-800 hover:bg-gray-600 text-white"
+                    class="w-full justify-center bg-blue-400 hover:bg-blue-600 text-white"
                 >
                     <i class="pi pi-sign-out mr-2"></i> Logout
                 </Button>
@@ -36,7 +36,7 @@
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction
                         @click="logout"
-                        class="bg-gray-800 hover:bg-gray-400"
+                        class="bg-blue-400 hover:bg-blue-600"
                     >
                         Yes, Log me out
                     </AlertDialogAction>
