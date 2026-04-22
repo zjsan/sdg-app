@@ -76,17 +76,18 @@ const auth = useAuthStore();
 // Define menu structure
 const menuItems = [
     {
-        name: "Dashboard",
-        to: "/dashboard",
-        icon: "pi-chart-line",
-        visible: () => true, // Everyone logged in sees this
-    },
-    {
         name: "Dashboard Manual",
         to: "/manual",
         icon: "pi-book",
         visible: () => true, // Everyone logged in sees this
     },
+    {
+        name: "Dashboard",
+        to: "/dashboard",
+        icon: "pi-chart-line",
+        visible: () => true, // Everyone logged in sees this
+    },
+
     {
         name: "Organization Management",
         to: "/developer",
