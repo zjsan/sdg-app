@@ -34,7 +34,7 @@
                 v-for="item in filteredMenu"
                 :key="item.to"
                 :to="item.to"
-                class="group flex items-center px-4 py-3 text-slate-400 text-sm hover:text-blue-600 hover:font-bold transition-all duration-200"
+                class="group flex items-center px-4 py-3 text-slate-400 text-sm hover:text-blue-600 hover:font-bold transition-all duration-100"
                 active-class="bg-slate-50 !text-blue-600 font-medium rounded border-blue-500"
             >
                 <i :class="['pi text-sm mr-3', item.icon]"></i>
