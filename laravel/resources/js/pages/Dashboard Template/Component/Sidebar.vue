@@ -42,7 +42,7 @@
             </router-link>
         </nav>
 
-        <div class="mt-10 space-y-4">
+        <!-- <div class="mt-10 space-y-4">
             <div
                 class="px-4 py-5 rounded-2xl bg-slate-50 border border-slate-100"
             >
@@ -58,7 +58,7 @@
                     Development Goals
                 </p>
             </div>
-        </div>
+        </div> -->
 
         <UserSection />
     </aside>

@@ -1,6 +1,6 @@
 <template>
     <Authenticated>
-        <div class="p-6 lg:p-10 max-w-5xl mx-auto overflow-y-auto h-full">
+        <div class="p-6 lg:p-10 w-full mx-auto overflow-y-auto h-full">
             <header class="mb-10 border-b pb-8">
                 <div class="flex items-center space-x-3 mb-2">
                     <h1
@@ -10,9 +10,8 @@
                     </h1>
                 </div>
                 <p class="text-slate-600 text-lg">
-                    A comprehensive guide to interacting with the Higher
-                    Education Institution (HEI) Performance & SDG Alignment
-                    portal.
+                    A comprehensive guide in interacting with the Philippine
+                    Higher Education Institution (PHEI) SDG Dashboard.
                 </p>
             </header>
 
@@ -34,6 +33,21 @@
                                 >
                                 <div>
                                     <p class="font-semibold text-slate-800">
+                                        Dashboard Navigation Links
+                                    </p>
+                                    <p class="text-sm text-slate-500">
+                                        Click the menus at the top of the
+                                        dashboard to navigate through the
+                                        different report tabs.
+                                    </p>
+                                </div>
+                            </li>
+                            <li class="flex gap-3">
+                                <span class="font-mono text-blue-500 font-bold"
+                                    >02.</span
+                                >
+                                <div>
+                                    <p class="font-semibold text-slate-800">
                                         Slicer Panes
                                     </p>
                                     <p class="text-sm text-slate-500">
@@ -45,7 +59,7 @@
                             </li>
                             <li class="flex gap-3">
                                 <span class="font-mono text-blue-500 font-bold"
-                                    >02.</span
+                                    >03.</span
                                 >
                                 <div>
                                     <p class="font-semibold text-slate-800">
@@ -77,7 +91,7 @@
                             <li class="flex gap-3">
                                 <span
                                     class="font-mono text-indigo-500 font-bold"
-                                    >03.</span
+                                    >01.</span
                                 >
                                 <div>
                                     <p class="font-semibold text-slate-800">
@@ -94,7 +108,7 @@
                             <li class="flex gap-3">
                                 <span
                                     class="font-mono text-indigo-500 font-bold"
-                                    >04.</span
+                                    >02.</span
                                 >
                                 <div>
                                     <p class="font-semibold text-slate-800">
@@ -107,6 +121,28 @@
                                         ></i>
                                         icon to expand that specific chart to
                                         the full canvas width.
+                                    </p>
+                                </div>
+                            </li>
+                            <li class="flex gap-3">
+                                <span
+                                    class="font-mono text-indigo-500 font-bold"
+                                    >03.</span
+                                >
+                                <div>
+                                    <p class="font-semibold text-slate-800">
+                                        Show as a table
+                                    </p>
+                                    <p class="text-sm text-slate-500">
+                                        Hover over any visual;
+                                        <strong>if available</strong> and click
+                                        the
+                                        <i
+                                            class="pi pi-ellipsis-v text-[10px]"
+                                        ></i>
+                                        (More options) icon, then select
+                                        <b>Show as a table</b> to display the
+                                        underlying data in a tabular format.
                                     </p>
                                 </div>
                             </li>
@@ -163,26 +199,35 @@
                     </div>
                 </section>
             </div>
-            <!-- <footer
+            <footer
                 class="mt-12 p-6 bg-slate-50 border border-slate-100 rounded-2xl"
             >
                 <div class="flex items-start space-x-3">
                     <i class="pi pi-shield text-blue-500 mt-1"></i>
                     <div>
                         <p class="text-sm font-bold text-slate-800">
-                            Data Source Integrity
+                            Report Scope & Data Source Integrity
                         </p>
                         <p class="text-xs text-slate-500 leading-relaxed mt-1">
-                            The metrics presented in the dashboard are sourced
-                            directly from <strong>THE DataPoints</strong>. Data
-                            is processed through a harmonization layer to ensure
+                            The insights presented in the dashboard are
+                            collected from
+                            <strong>THE DataPoints</strong> website. Data is
+                            processed through a harmonization layer to ensure
                             standardized comparison across different Higher
                             Education Institutions (HEIs) and their respective
                             SDG impact scores.
                         </p>
+                        <p class="text-xs text-slate-500 leading-relaxed mt-1">
+                            <strong>Note:</strong> Updates to
+                            <strong>THE DataPoints</strong> website are not
+                            automatically reflected in real-time in the PHEI SDG
+                            Dashboard. New data is subject to a scheduled
+                            collection and pre-processing cycle to maintain data
+                            integrity.
+                        </p>
                     </div>
                 </div>
-            </footer> -->
+            </footer>
         </div>
     </Authenticated>
 </template>
