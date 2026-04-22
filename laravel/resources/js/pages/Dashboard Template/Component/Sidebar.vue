@@ -37,7 +37,7 @@
                 class="group flex items-center px-4 py-3 hover:bg-slate-50 hover:text-blue-600 transition-all duration-200"
                 active-class="bg-blue-50 font-medium rounded border-blue-500"
             >
-                <i :class="['pi text-xl mr-3', item.icon]"></i>
+                <i :class="['pi text-sm mr-3', item.icon]"></i>
                 {{ item.name }}
             </router-link>
         </nav>
@@ -60,11 +60,11 @@ const menuItems = [
     {
         name: "Dashboard",
         to: "/dashboard",
-        icon: "pi-home",
+        icon: "pi-chart-bar",
         visible: () => true, // Everyone logged in sees this
     },
     {
-        name: "DeveloperPage",
+        name: "Organization Management",
         to: "/developer",
         icon: "pi-code",
         visible: () => auth.isDeveloper,
