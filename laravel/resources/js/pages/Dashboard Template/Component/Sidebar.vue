@@ -87,6 +87,12 @@ const menuItems = [
         icon: "pi-chart-line",
         visible: () => true, // Everyone logged in sees this
     },
+    {
+        name: "Methodology",
+        to: "/methodology",
+        icon: "pi-chart-line",
+        visible: () => true, // Everyone logged in sees this
+    },
 
     {
         name: "Organization Management",

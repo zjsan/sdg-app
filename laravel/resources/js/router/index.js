@@ -10,6 +10,7 @@ import Unauthorized from "../pages/NotAuthorized.vue";
 import AuthError from "../pages/AuthError.vue";
 import SafeRedirect from "../pages/SafeRedirect.vue";
 import Manual from "../pages/Viewer Page/Manual.vue";
+import Methodology from "../pages/Viewer Page/Methodology.vue";
 
 /** @type {import('vue-router').RouteRecordRaw[]} */
 const routes = [
@@ -44,6 +45,13 @@ const routes = [
         path: "/manual",
         name: "Manual",
         component: Manual,
+        meta: { requiresAuth: true }, // must be logged in
+    },
+
+    {
+        path: "/methodology",
+        name: "Methodology",
+        component: Methodology,
         meta: { requiresAuth: true }, // must be logged in
     },
 
