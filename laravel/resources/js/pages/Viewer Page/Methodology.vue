@@ -6,8 +6,9 @@
                     Methodology & Data Sources
                 </h1>
                 <p class="text-slate-500 mt-2">
-                    The framework used to harmonize global metrics with local
-                    institutional insights.
+                    This page documents the origin, scope, and processing of
+                    data used in the SDG Performance Analytics Dashboard for
+                    Philippine Higher Education Institutions (HEIs).
                 </p>
             </header>
 
@@ -37,6 +38,14 @@
                             Visit THE DataPoints
                             <i class="pi pi-external-link ml-1"></i>
                         </a>
+                        <a
+                            href="https://www.timeshighereducation.com/impactrankings"
+                            target="_blank"
+                            class="mt-1 text-xs text-blue-600 font-semibold flex items-center"
+                        >
+                            Visit THE Impact Rankings
+                            <i class="pi pi-external-link ml-1"></i>
+                        </a>
                     </div>
                 </div>
 
@@ -48,12 +57,14 @@
                     >
                         <i class="pi pi-users text-xl"></i>
                     </div>
-                    <h3 class="font-bold text-slate-800">MMSU SDG Research</h3>
+                    <h3 class="font-bold text-slate-800">
+                        MMSU SDG Research Team
+                    </h3>
                     <p class="text-sm text-slate-500 mt-2 leading-relaxed">
-                        Localized data and qualitative evidence provided by the
-                        <strong>MMSU SDG Research Team</strong>. This ensures
-                        the dashboard reflects specific regional impacts and
-                        GREEN University initiatives.
+                        Data collected from THE DataPoints and other sources are
+                        verified by the MMSU SDG Research Team. This validation
+                        process ensures that the dashboard accurately reflects
+                        specific HEI performance within the 17 SDGs.
                     </p>
                 </div>
 
@@ -67,9 +78,10 @@
                     </div>
                     <h3 class="font-bold text-slate-800">Supplementary Data</h3>
                     <p class="text-sm text-slate-500 mt-2 leading-relaxed">
-                        Aggregated from verified academic repositories and the
-                        2030 UN Agenda archives. This data serves to augment and
-                        validate institutional performance trends.
+                        Aggregated from verified academic repositories and
+                        articles online. These external sources are used to
+                        augment and provide context for institutional
+                        performance trends.
                     </p>
                 </div>
             </div>
@@ -82,12 +94,9 @@
                     </h2>
                 </div>
                 <p class="text-slate-400 text-sm leading-relaxed max-w-3xl">
-                    Our methodology employs a normalization technique to ensure
-                    that data from different sources (Global vs. Local) is
-                    comparable. Qualitative evidence from research teams is
-                    assigned a weighted score that aligns with the quantitative
-                    metrics provided by THE DataPoints, resulting in a single,
-                    unified "Alignment Index" for each institution.
+                    Data from THE Impact Rankings and DataPoints is not used in
+                    raw form. It undergoes preprocessing and harmonization
+                    before visualization.
                 </p>
             </div>
         </div>
