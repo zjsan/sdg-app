@@ -34,10 +34,10 @@
                 v-for="item in filteredMenu"
                 :key="item.to"
                 :to="item.to"
-                class="group flex items-center px-4 py-3 text-slate-400 text-sm hover:text-blue-600 transition-all duration-200"
-                exact-active-class="text-blue-600 font-medium"
+                class="group flex items-center px-4 py-3 text-slate-400 text-sm hover:bg-slate-50 hover:text-blue-600 transition-all duration-200"
+                active-class="bg-slate-50 !text-blue-600 font-medium rounded border-blue-500"
             >
-                <i :class="['pi text-xs mr-3', item.icon]"></i>
+                <i :class="['pi text-sm mr-3', item.icon]"></i>
                 {{ item.name }}
             </router-link>
         </nav>
@@ -109,7 +109,8 @@ const filteredMenu = computed(() => {
 /* Optional: Router link exact match styling */
 .router-link-active {
     background-color: #f3f4f6; /* bg-gray-100 */
-    font-weight: 600; /* font-semibold */
+    font-weight: 500; /* font-semibold */
+    color: #2563eb; /* text-blue-600 */
 }
 /* Adjusting icon size for consistency (PrimeIcons often require an explicit size class) */
 .pi {
