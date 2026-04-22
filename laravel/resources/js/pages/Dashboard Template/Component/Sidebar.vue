@@ -29,13 +29,13 @@
             </div>
         </div>
 
-        <nav class="flex-grow p-4 space-y-2 overflow-y-auto">
+        <nav class="mt-1 flex-grow p-4 space-y-2 overflow-y-auto">
             <router-link
                 v-for="item in filteredMenu"
                 :key="item.to"
                 :to="item.to"
-                class="group flex items-center px-4 py-3 hover:bg-slate-50 hover:text-blue-600 transition-all duration-200"
-                active-class="bg-blue-50 font-medium rounded border-blue-500"
+                class="group flex items-center px-4 py-3 text-blue-400 text-sm hover:bg-slate-50 hover:text-blue-600 transition-all duration-200"
+                active-class="bg-slate-50 font-medium rounded border-blue-500"
             >
                 <i :class="['pi text-sm mr-3', item.icon]"></i>
                 {{ item.name }}
