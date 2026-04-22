@@ -34,10 +34,10 @@
                 v-for="item in filteredMenu"
                 :key="item.to"
                 :to="item.to"
-                class="group flex items-center px-4 py-3 text-blue-400 text-sm hover:bg-slate-50 hover:text-blue-600 transition-all duration-200"
-                active-class="bg-slate-50 font-medium rounded border-blue-500"
+                class="group flex items-center px-4 py-3 text-slate-400 text-sm hover:text-blue-600 transition-all duration-200"
+                exact-active-class="text-blue-600 font-medium"
             >
-                <i :class="['pi text-sm mr-3', item.icon]"></i>
+                <i :class="['pi text-xs mr-3', item.icon]"></i>
                 {{ item.name }}
             </router-link>
         </nav>
@@ -78,7 +78,13 @@ const menuItems = [
     {
         name: "Dashboard",
         to: "/dashboard",
-        icon: "pi-chart-bar",
+        icon: "pi-chart-line",
+        visible: () => true, // Everyone logged in sees this
+    },
+    {
+        name: "Dashboard Manual",
+        to: "/manual",
+        icon: "pi-book",
         visible: () => true, // Everyone logged in sees this
     },
     {
@@ -107,6 +113,6 @@ const filteredMenu = computed(() => {
 }
 /* Adjusting icon size for consistency (PrimeIcons often require an explicit size class) */
 .pi {
-    font-size: 1.25rem; /* Equivalent to Tailwind's text-xl for icons */
+    font-size: 1rem; /* Equivalent to Tailwind's text-xl for icons */
 }
 </style>
