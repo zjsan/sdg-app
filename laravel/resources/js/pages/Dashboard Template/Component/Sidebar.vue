@@ -90,7 +90,7 @@ const menuItems = [
     {
         name: "Methodology",
         to: "/methodology",
-        icon: "pi-chart-line",
+        icon: "pi-sitemap",
         visible: () => true, // Everyone logged in sees this
     },
 
