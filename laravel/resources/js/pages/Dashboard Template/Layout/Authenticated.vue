@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col lg:flex-row min-h-screen bg-gray-50">
+    <div class="flex h-screen bg-gray-50 overflow-hidden">
         <header
             class="h-14 lg:hidden border-b bg-white flex items-center justify-between p-4 shadow-sm flex-shrink-0"
         >
@@ -15,6 +15,7 @@
             </Button>
         </header>
 
+        <!-- SIDEBAR -->
         <Sidebar
             :is-open="isSidebarOpen"
             :is-mobile="isMobile"
@@ -27,12 +28,13 @@
             class="fixed inset-0 z-30 bg-black/50 lg:hidden"
         ></div>
 
-        <div class="flex flex-col flex-1 w-full">
-            <main class="flex-1">
+        <!-- SCROLLABLE CONTENT AREA -->
+        <div class="flex-1 overflow-y-auto">
+            <main class="p-6">
                 <slot />
             </main>
 
-            <Footer class="mt-auto" />
+            <Footer />
         </div>
     </div>
 </template>
