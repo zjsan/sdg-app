@@ -63,11 +63,11 @@
                         MMSU SDG Research Team
                     </h3>
                     <p class="text-sm text-slate-500 mt-2 leading-relaxed">
-                        Following initial processing, all data is formally
-                        verified by the MMSU SDG Research Team. This critical
-                        oversight ensures the dashboard’s analytical insights
-                        maintain the highest level of accuracy regarding HEI
-                        performance across the 17 SDGs.
+                        Following data processing, all data is formally verified
+                        by the MMSU SDG Research Team. This critical oversight
+                        ensures the dashboard’s analytical insights maintain the
+                        highest level of accuracy regarding HEI performance
+                        across the 17 SDGs.
                     </p>
                 </div>
 
