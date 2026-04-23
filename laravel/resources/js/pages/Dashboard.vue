@@ -1,9 +1,9 @@
 <template>
     <Authenticated>
-        <div class="flex-grow flex flex-col">
+        <div class="h-full w-full flex flex-col">
             <div
                 v-if="!powerBiStore.powerBiEmbedUrl"
-                class="flex items-center justify-center flex-grow text-gray-500"
+                class="flex-1 flex items-center justify-center"
             >
                 <i class="pi pi-spin pi-spinner text-3xl mr-2"></i> Loading
                 Dashboard...
@@ -12,7 +12,7 @@
             <!-- <iframe
                 v-else
                 :src="powerBiStore.powerBiEmbedUrl"
-                class="flex-grow w-full h-full border-0"
+                class="w-full h-[calc(100vh-80px)] border-0"
                 allowfullscreen
             ></iframe> -->
         </div>
