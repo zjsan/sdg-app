@@ -21,13 +21,15 @@
                     >
                         <i class="pi pi-globe text-xl"></i>
                     </div>
-                    <h3 class="font-bold text-slate-800">Global Benchmarks</h3>
+                    <h3 class="font-bold text-slate-800">THE Websites</h3>
                     <p class="text-sm text-slate-500 mt-2 leading-relaxed">
-                        Primary metrics are extracted from
+                        The dashboard is primarily powered by data sourced from
                         <strong>THE Impact Rankings</strong> and
-                        <strong>DataPoints</strong>. These provide standardized
-                        comparisons across 17 SDGs using bibliometric and
-                        institutional data.
+                        <strong>THE DataPoints</strong>. These platforms serve
+                        as the core sources for our collection process,
+                        providing the standardized bibliometric and
+                        institutional data required for analysis across the 17
+                        SDGs.
                     </p>
                     <div class="mt-4 pt-4 border-t border-slate-50">
                         <a
