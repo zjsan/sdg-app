@@ -11,6 +11,7 @@
             @click="isSidebarOpen = false"
             class="fixed inset-0 z-30 bg-black/50 lg:hidden"
         ></div>
+
         <!--Right side-->
         <div class="flex flex-col flex-1 min-w-0">
             <header
