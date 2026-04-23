@@ -204,12 +204,15 @@
                         Scope & Limitations
                     </h3>
                     <p class="text-sm text-slate-500 mt-2 leading-relaxed">
-                        The dashboard is limited to data available from THE
-                        Impact Rankings and DataPoints. Not all Philippine HEIs
-                        may be represented, and some SDG indicators may have
-                        incomplete records. Results reflect THE’s methodology
-                        and should not be interpreted as independent
-                        institutional evaluations.
+                        The dashboard’s scope is defined by the data available
+                        within <strong>THE Impact Rankings</strong> and
+                        <strong>DataPoints</strong>. Consequently,
+                        representation is limited to participating Philippine
+                        HEIs, and some impact categories may reflect data gaps.
+                        These results are a direct output of
+                        <strong>THE’s methodology</strong>
+                        and are intended for comparative context rather than as
+                        independent institutional evaluations.
                     </p>
                 </div>
 
@@ -224,11 +227,14 @@
                     </div>
                     <h3 class="font-bold text-slate-800">Update Cycle</h3>
                     <p class="text-sm text-slate-500 mt-2 leading-relaxed">
-                        Data updates follow the release cycle of THE Impact
-                        Rankings and DataPoints. The system is updated
-                        periodically after new datasets become available to
-                        ensure the latest institutional performance metrics are
-                        reflected in the dashboard.
+                        Data updates follow the release cycle of
+                        <strong>THE Impact Rankings</strong> and
+                        <strong>DataPoints</strong>. Once new datasets are
+                        released, they undergo our internal processing and
+                        validation before being reflected in the dashboard.
+                        However, all visualized data is subject to ongoing
+                        validation to ensure the highest standards of accuracy
+                        and performance insight.
                     </p>
                 </div>
             </div>
