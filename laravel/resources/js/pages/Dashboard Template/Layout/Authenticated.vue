@@ -37,6 +37,7 @@
 import { ref, onMounted, onUnmounted, computed } from "vue";
 import Sidebar from "../Component/Sidebar.vue";
 import { Button } from "@/components/ui/button";
+import Footer from "./Footer.vue";
 
 const isSidebarOpen = ref(false);
 const screenWidth = ref(window.innerWidth);
