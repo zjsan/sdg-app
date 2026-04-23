@@ -12,6 +12,7 @@
                 </p>
             </header>
 
+            <!--Data Sources container-->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div
                     class="p-6 bg-white border border-slate-200 rounded-3xl shadow-sm"
@@ -89,6 +90,7 @@
                 </div> -->
             </div>
 
+            <!--Data Processing container-->
             <div class="mt-10 p-8 bg-slate-900 rounded-[2rem] text-white">
                 <div class="flex items-center space-x-3 mb-4">
                     <i class="pi pi-sync text-blue-400"></i>
@@ -164,6 +166,68 @@
                         </div>
                     </li>
                 </ul>
+            </div>
+
+            <div class="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!--Harmonization Logic-->
+                <div
+                    class="p-6 bg-white border border-slate-200 rounded-3xl shadow-sm"
+                >
+                    <div
+                        class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mb-4"
+                    >
+                        <i class="pi pi-sliders-h text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800">Data Harmonization</h3>
+                    <p class="text-sm text-slate-500 mt-2 leading-relaxed">
+                        Data from multiple THE datasets are aligned to ensure
+                        consistency across institutions and SDG indicators.
+                        Variations in naming, structure, and reporting formats
+                        are standardized into a unified schema for accurate
+                        comparison and visualization.
+                    </p>
+                </div>
+
+                <!--Scope & Limitations-->
+                <div
+                    class="p-6 bg-white border border-slate-200 rounded-3xl shadow-sm"
+                >
+                    <div
+                        class="w-12 h-12 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center mb-4"
+                    >
+                        <i class="pi pi-exclamation-triangle text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800">
+                        Scope & Limitations
+                    </h3>
+                    <p class="text-sm text-slate-500 mt-2 leading-relaxed">
+                        The dashboard is limited to data available from THE
+                        Impact Rankings and DataPoints. Not all Philippine HEIs
+                        may be represented, and some SDG indicators may have
+                        incomplete records. Results reflect THE’s methodology
+                        and should not be interpreted as independent
+                        institutional evaluations.
+                    </p>
+                </div>
+
+                <!--Update Cycle-->
+                <div
+                    class="p-6 bg-white border border-slate-200 rounded-3xl shadow-sm"
+                >
+                    <div
+                        class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-4"
+                    >
+                        <i class="pi pi-refresh text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800">Update Cycle</h3>
+                    <p class="text-sm text-slate-500 mt-2 leading-relaxed">
+                        Data updates follow the release cycle of THE Impact
+                        Rankings and DataPoints. The system is updated
+                        periodically after new datasets become available to
+                        ensure the latest institutional performance metrics are
+                        reflected in the dashboard.
+                    </p>
+                </div>
             </div>
         </div>
     </Authenticated>
