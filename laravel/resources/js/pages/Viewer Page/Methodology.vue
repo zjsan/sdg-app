@@ -160,8 +160,9 @@
                                 Aggregation into SDG Datasets
                             </p>
                             <p class="text-sm text-slate-400">
-                                Processed data are aggregated into various
-                                datasets for data visualization.
+                                Processed data are aggregated into SDG-level
+                                performance metrics, which are then used for
+                                visualization within the dashboard.
                             </p>
                         </div>
                     </li>
