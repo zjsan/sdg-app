@@ -30,7 +30,7 @@
             </header>
 
             <!-- SCROLLABLE CONTENT AREA -->
-            <div class="flex-1 overflow-y-auto">
+            <div class="flex-1 min-h-0 overflow-y-auto">
                 <main class="p-6">
                     <slot />
                 </main>
