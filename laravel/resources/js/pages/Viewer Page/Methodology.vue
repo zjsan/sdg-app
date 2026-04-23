@@ -181,11 +181,13 @@
                     </div>
                     <h3 class="font-bold text-slate-800">Data Harmonization</h3>
                     <p class="text-sm text-slate-500 mt-2 leading-relaxed">
-                        Data from multiple THE datasets are aligned to ensure
-                        consistency across institutions and SDG indicators.
-                        Variations in naming, structure, and reporting formats
-                        are standardized into a unified schema for accurate
-                        comparison and visualization.
+                        To ensure seamless <strong>interoperability</strong>,
+                        data from various <strong>THE datasets</strong> are
+                        aligned for consistency across all institutional
+                        indicators. We employ a normalization process to
+                        transform diverse naming conventions and reporting
+                        structures into a unified schema, enabling
+                        high-precision comparison and visualization.
                     </p>
                 </div>
 
