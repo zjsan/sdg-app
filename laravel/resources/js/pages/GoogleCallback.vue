@@ -31,12 +31,12 @@ onMounted(async () => {
     const sessionId = route.query.session_id;
 
     if (window.history.state && window.history.state.back) {
-        router.replace({ name: "Dashboard" });
+        router.replace({ name: "Manual" });
     }
 
     // If the user is authenticated (e.g., iframe fallback), exit safely.
     if (auth.isAuthenticated) {
-        router.replace({ name: "Dashboard" });
+        router.replace({ name: "Manual" });
         return;
     }
 
@@ -54,7 +54,7 @@ onMounted(async () => {
         if (data?.token && data?.user) {
             // Pass data to the Pinia store handler
             auth.handleGoogleCallback(data.token, data.user);
-            router.replace({ name: "Dashboard" });
+            router.replace({ name: "Manual" });
 
             return;
         } else {
