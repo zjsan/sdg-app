@@ -6,10 +6,35 @@
                     Methodology & Data Sources
                 </h1>
                 <p class="text-slate-500 mt-2">
-                    This page documents the origin, scope, and processing of
-                    data used in the SDG Performance Analytics Dashboard for
-                    Philippine Higher Education Institutions (HEIs).
+                    This page provides a transparent overview of how data is
+                    sourced, processed, and structured within the SDG
+                    Performance Analytics Dashboard for Philippine Higher
+                    Education Institutions (HEIs).
                 </p>
+                <p class="text-slate-500 mt-3 leading-relaxed">
+                    It outlines the data lifecycle—from acquisition and
+                    validation to transformation and visualization—providing
+                    users with a clear understanding of how institutional SDG
+                    performance is interpreted within this system.
+                </p>
+
+                <div class="mt-4 flex flex-wrap gap-2">
+                    <span
+                        class="text-xs px-3 py-1 rounded-full bg-slate-100 text-slate-600"
+                    >
+                        SDG Analytics
+                    </span>
+                    <span
+                        class="text-xs px-3 py-1 rounded-full bg-slate-100 text-slate-600"
+                    >
+                        Philippine HEIs
+                    </span>
+                    <span
+                        class="text-xs px-3 py-1 rounded-full bg-slate-100 text-slate-600"
+                    >
+                        THE Data Sources
+                    </span>
+                </div>
             </header>
 
             <!--Data Sources container-->
