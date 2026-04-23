@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col lg:flex-row h-screen bg-gray-50">
+    <div class="flex flex-col lg:flex-row min-h-screen bg-gray-50">
         <header
             class="h-14 lg:hidden border-b bg-white flex items-center justify-between p-4 shadow-sm flex-shrink-0"
         >
@@ -27,9 +27,13 @@
             class="fixed inset-0 z-30 bg-black/50 lg:hidden"
         ></div>
 
-        <main class="flex-grow w-full flex flex-col overflow-hidden">
-            <slot />
-        </main>
+        <div class="flex flex-col flex-1 w-full">
+            <main class="flex-1">
+                <slot />
+            </main>
+
+            <Footer class="mt-auto" />
+        </div>
     </div>
 </template>
 
