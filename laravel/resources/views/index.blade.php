@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>SDG Analytics Dashboard</title>
+    <title>PHEI Dashboard</title>
 </head>
 <body>
     {{--  element Vue needs to attach to --}}
