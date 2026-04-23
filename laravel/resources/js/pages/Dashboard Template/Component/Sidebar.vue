@@ -29,7 +29,7 @@
             </div>
         </div>
 
-        <nav class="mt-1 flex-grow p-4 space-y-2 overflow-y-auto">
+        <nav class="mt-1 flex-1 p-4 space-y-2 overflow-y-auto">
             <router-link
                 v-for="item in filteredMenu"
                 :key="item.to"
