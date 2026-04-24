@@ -4,7 +4,7 @@
             <section class="mb-16">
                 <div class="max-w-3xl">
                     <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
-                        PHEI SDG Performance Analytics
+                        PHEI SDG DASHBOARD
                     </h1>
                     <p class="text-xl text-slate-600 leading-relaxed">
                         A dedicated platform designed to monitor, analyze, and visualize the impact of 

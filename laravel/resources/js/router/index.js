@@ -11,6 +11,7 @@ import AuthError from "../pages/AuthError.vue";
 import SafeRedirect from "../pages/SafeRedirect.vue";
 import Manual from "../pages/Viewer Page/Manual.vue";
 import Methodology from "../pages/Viewer Page/Methodology.vue";
+import Overview from "../pages/Viewer Page/Overview.vue"
 
 /** @type {import('vue-router').RouteRecordRaw[]} */
 const routes = [
@@ -39,6 +40,13 @@ const routes = [
         name: "DeveloperPage",
         component: Developer,
         meta: { requiresAuth: true, role: "developer" }, // must be logged in
+    },
+
+     {
+        path: "/overview",
+        name: "Overview",
+        component: Overview,
+        meta: { requiresAuth: true }, // must be logged in
     },
 
     {
