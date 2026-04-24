@@ -1,7 +1,9 @@
 <template>
     <Authenticated>
         <div class="p-6 lg:p-12 w-full mx-auto max-w-6xl h-full overflow-y-auto">
-            <section class="mb-16 border-b pb-8">
+
+            <!--hero-->
+            <section class="mb-16    border-b pb-8">
                 <div class="max-w-3xl">
                     <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
                         PHEI SDG DASHBOARD
@@ -15,7 +17,7 @@
             </section>
 
           
-
+            <!--About the project-->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
                 <div>
                     <h2 class="text-sm font-bold uppercase tracking-widest text-blue-600 mb-3">The Project</h2>
@@ -38,10 +40,14 @@
                 </div>
             </div>
 
-            <section class="mb-16 p-10 bg-slate-50 rounded-[3rem] border border-slate-100">
-                <h2 class="text-2xl font-bold text-slate-900 mb-8 text-center">What can you do with this portal?</h2>
+            <!--What can you do-->
+            <div class="bg-slate-900 text-white py-16 px-6 rounded-3xl shadow-xl">
+                <section class="max-w-6xl mx-auto text-center">
+                <h2 class="text-3xl md:text-4xl font-extrabold mb-4">What can you do with this portal?</h2>
+
+
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="flex flex-col items-center text-center">
+                    <div class="flex flex-col items-center text-center ">
                         <div class="w-14 h-14 bg-white shadow-sm rounded-2xl flex items-center justify-center mb-4 text-blue-500 text-xl">
                             <i class="pi pi-map"></i>
                         </div>
@@ -63,9 +69,11 @@
                         <p class="text-sm text-slate-500 mt-2"> Identify strengths, gaps, and opportunities across SDGs using harmonized institutional data.</p>
                     </div>
                 </div>
-            </section>
+                 </section>
+            </div>
 
-            <section>
+            <!--Get started section-->
+              <section>
                 <h2 class="text-lg font-bold text-slate-900 mb-6">Get Started</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <router-link to="/dashboard" class="group p-6 bg-blue-600 rounded-2xl flex items-center justify-between transition-all hover:bg-blue-700">

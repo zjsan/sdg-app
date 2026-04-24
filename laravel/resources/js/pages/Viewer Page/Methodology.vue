@@ -40,7 +40,7 @@
             <!--Data Sources container-->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div
-                    class="p-6 bg-white border border-slate-200 rounded-3xl shadow-sm"
+                    class="p-6 bg-white border border-slate-200 rounded-3xl shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
                 >
                     <div
                         class="w-12 h-12 bg-orange-50 text-orange-600 rounded-2xl flex items-center justify-center mb-4"
@@ -78,7 +78,7 @@
                 </div>
 
                 <div
-                    class="p-6 bg-white border border-slate-200 rounded-3xl shadow-sm"
+                    class="p-6 bg-white border border-slate-200 rounded-3xl shadow-sm  text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
                 >
                     <div
                         class="w-12 h-12 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center mb-4"
@@ -197,7 +197,7 @@
             <div class="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <!--Harmonization Logic-->
                 <div
-                    class="p-6 bg-white border border-slate-200 rounded-3xl shadow-sm"
+                    class="p-6 bg-white border border-slate-200 rounded-3xl shadow-sm  text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
                 >
                     <div
                         class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mb-4"
@@ -218,7 +218,7 @@
 
                 <!--Scope & Limitations-->
                 <div
-                    class="p-6 bg-white border border-slate-200 rounded-3xl shadow-sm"
+                    class="p-6 bg-white border border-slate-200 rounded-3xl shadow-sm  text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
                 >
                     <div
                         class="w-12 h-12 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center mb-4"
@@ -243,7 +243,7 @@
 
                 <!--Update Cycle-->
                 <div
-                    class="p-6 bg-white border border-slate-200 rounded-3xl shadow-sm"
+                    class="p-6 bg-white border border-slate-200 rounded-3xl shadow-sm  text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
                 >
                     <div
                         class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-4"
