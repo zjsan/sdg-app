@@ -38,7 +38,7 @@
             </header>
 
             <!--Data Sources container-->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 cursor-pointer">
                 <div
                     class="p-6 bg-white border border-slate-200 rounded-3xl shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
                 >
@@ -194,7 +194,7 @@
                 </ul>
             </div>
 
-            <div class="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-6 cursor-pointer">
                 <!--Harmonization Logic-->
                 <div
                     class="p-6 bg-white border border-slate-200 rounded-3xl shadow-sm  text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
