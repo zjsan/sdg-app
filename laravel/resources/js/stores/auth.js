@@ -22,7 +22,7 @@ export const useAuthStore = defineStore("auth", {
 
         //checking user roles for role-based access control
         isDeveloper: (state) => {
-            console.log("Checking role:", state.user?.role?.slug);
+            //console.log("Checking role:", state.user?.role?.slug);
             return state.user?.role?.slug === "developer";
         },
         isAdmin: (state) => {
@@ -48,7 +48,7 @@ export const useAuthStore = defineStore("auth", {
                 const { data } = await api.get("/user");
                 this.user = data;
                 this.saveUserToStorage();
-                console.log("Session restored");
+                //console.log("Session restored");
             } catch (error) {
                 console.warn("Session restore failed:", error);
                 this.logout(); // clear invalid session

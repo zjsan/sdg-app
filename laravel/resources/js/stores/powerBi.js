@@ -76,7 +76,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
             const delta = (now - lastHeartbeat) / 1000;
             // if gap is much larger than interval -> likely system sleep or heavy throttle
             if (delta > refreshInterval + 20) {
-                console.log("Detected long suspension — re-evaluating leader.");
+                //console.log("Detected long suspension — re-evaluating leader.");
                 lastActiveTime = now;
                 tryClaimLeadershipWithLock(500);
             }
@@ -99,7 +99,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
     async function becomeLeader() {
         isLeader.value = true;
-        console.log("BECOMING LEADER: Fetching initial token...");
+        //console.log("BECOMING LEADER: Fetching initial token...");
 
         // Try to fetch with a few rapid retries
         let signed = null;
@@ -139,11 +139,11 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         if (!msg || !msg.type) return;
         if (msg.tabId === TAB_ID) return;
 
-        console.log("Received BC message:", msg);
+        //console.log("Received BC message:", msg);
 
         // Leader declares leadership
         if (msg.type === "leader") {
-            console.log("Leader detected.");
+            //console.log("Leader detected.");
 
             leaderResponseReceived = true;
 
@@ -202,9 +202,9 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         }
 
         if (msg.type === "leader_left") {
-            console.log(
-                `Leader tab ${msg.tabId} left. Initiating a new leader challenge.`,
-            );
+            // console.log(
+            //     `Leader tab ${msg.tabId} left. Initiating a new leader challenge.`,
+            // );
 
             // Check if the current tab is also currently in a leadership state (which is unlikely
             // but possible if two tabs became leaders briefly).
@@ -219,7 +219,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         if (msg.type === "refresh") {
             if (isLeader.value) return;
 
-            console.log("Follower received refresh trigger.");
+            //console.log("Follower received refresh trigger.");
 
             leaderResponseReceived = true;
 
@@ -244,7 +244,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         }
 
         if (msg.type === "logout") {
-            console.log("Received logout broadcast.");
+           // console.log("Received logout broadcast.");
             logoutHandler();
             return;
         }
@@ -263,7 +263,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
             const { signedUrl, message } = response.data;
 
             if (signedUrl) {
-                console.log(message);
+                //console.log(message);
                 powerBiEmbedUrl.value = signedUrl;
                 lastRefresh.value = Date.now();
                 return signedUrl;
@@ -278,7 +278,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
         const url = await fetchSignedUrl();
         if (url) {
-            console.log("Leader refreshed and broadcasting new URL.");
+           // console.log("Leader refreshed and broadcasting new URL.");
             // broadcast refresh trigger
             channel.postMessage({
                 type: "refresh",
@@ -318,7 +318,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
     const handleVisibility = async () => {
         if (document.hidden) {
-            console.log("Tab hidden — pausing refresh timer.");
+           // console.log("Tab hidden — pausing refresh timer.");
             lastActiveTime = Date.now();
 
             // Leader MUST stop its timer when hidden.
@@ -327,12 +327,12 @@ export const usePowerBiStore = defineStore("powerbi", () => {
             return;
         }
 
-        console.log("Tab visible — evaluating inactivity.");
+       // console.log("Tab visible — evaluating inactivity.");
         const inactiveTime = (Date.now() - lastActiveTime) / 1000;
         const threshold = refreshInterval + 10; // buffer of 10 seconds
 
         if (inactiveTime >= threshold) {
-            console.log("Inactive too long. Checking leader again.");
+            //console.log("Inactive too long. Checking leader again.");
 
             //call helper function
             // shorter timeout here as the app is already running and active tabs should respond quickly.
@@ -346,7 +346,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
         // wresume the timer that was paused when the tab was hidden.
         // Resume only if leader
         if (isLeader.value && !refreshTimer) {
-            console.log("Active Leader detected. Resuming auto refresh.");
+           // console.log("Active Leader detected. Resuming auto refresh.");
             startAutoRefresh();
         }
     };
@@ -431,15 +431,15 @@ export const usePowerBiStore = defineStore("powerbi", () => {
             await new Promise((r) => setTimeout(r, 50));
             // double-check if someone else posted leader over BC
             if (!leaderResponseReceived) {
-                console.log("Taking leadership (post-lock).");
+               // console.log("Taking leadership (post-lock).");
                 await becomeLeader();
             } else {
-                console.log(
-                    "Another leader appeared after claim; backing off.",
-                );
+                // console.log(
+                //     "Another leader appeared after claim; backing off.",
+                // );
             }
         } else {
-            console.log("Existing leader responded — will follow.");
+           // console.log("Existing leader responded — will follow.");
         }
     }
 
@@ -464,11 +464,11 @@ export const usePowerBiStore = defineStore("powerbi", () => {
     // ---------------------------------------------------
 
     async function init() {
-        console.log("PowerBI store init — requesting leader.");
+       // console.log("PowerBI store init — requesting leader.");
         if (initialized) return;
         initialized = true;
 
-        console.log("PowerBI Store initialized in Tab:", TAB_ID);
+       // console.log("PowerBI Store initialized in Tab:", TAB_ID);
 
         await tryClaimLeadershipWithLock(1000);
         setupVisibilityHandler();
@@ -517,7 +517,7 @@ export const usePowerBiStore = defineStore("powerbi", () => {
 
     // Force Refresh function for developers to trigger a manual refresh and broadcast to all tabs
     async function forceRefresh() {
-        console.log("Developer triggered manual refresh. Broadcasting...");
+       // console.log("Developer triggered manual refresh. Broadcasting...");
         // 1. Fetch fresh URL for current tab
         await fetchSignedUrl();
 
