@@ -112,17 +112,38 @@ const features = [
   },
   {
     title: 'Trend Analysis',
-    description: 'Track institutional progress and identify high-performing impact areas.',
+    description: 'Track institutional progress over time and identify emerging trends and high-performing SDG areas',
     icon: 'pi-chart-line',
     color: 'text-green-400',
     bg: 'bg-green-400/10',
   },
   {
     title: 'SDG Performance Insights',
-    description: 'Identify strengths, gaps, and opportunities across SDGs using harmonized institutional data.',
+    description: 'Identify strengths, gaps, and key patterns across SDGs through structured institutional data.',
     icon: 'pi-search',
     color: 'text-orange-400',
     bg: 'bg-orange-400/10',
+  },
+  {
+    title: 'Decision Support',
+    description: 'Support strategic planning and policy development through SDG insights.',
+    icon: 'pi-comments',
+    color: 'text-amber-400',
+    bg: 'bg-amber-400/10',
+  },
+  {
+    title: 'Benchmarking & Comparison',
+    description: 'Compare institutional performance using consistent insights to ensure fair and meaningful evaluation across HEIs.',
+    icon: 'pi-sync',
+    color: 'text-indigo-400',
+    bg: 'bg-indigo-400/10',
+  },
+  {
+   title: 'Impact Transparency',
+    description: 'Understand how Philippine HEIs contribute to the global sustainability goals through clear and verifiable metrics.',
+    icon: 'pi-eye',
+    color: 'text-purple-400',
+    bg: 'bg-purple-400/10',
   },
 ];
 
