@@ -1,7 +1,7 @@
 <template>
     <Authenticated>
         <div class="p-6 lg:p-12 w-full mx-auto max-w-6xl h-full overflow-y-auto">
-            <section class="mb-16">
+            <section class="mb-16 border-b pb-8">
                 <div class="max-w-3xl">
                     <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
                         PHEI SDG DASHBOARD
@@ -13,6 +13,8 @@
                     </p>
                 </div>
             </section>
+
+          
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
                 <div>
@@ -57,8 +59,8 @@
                         <div class="w-14 h-14 bg-white shadow-sm rounded-2xl flex items-center justify-center mb-4 text-orange-500 text-xl">
                             <i class="pi pi-file-export"></i>
                         </div>
-                        <h4 class="font-bold text-slate-800">Data Accessibility</h4>
-                        <p class="text-sm text-slate-500 mt-2">Access harmonized data structured for research and institutional reporting.</p>
+                        <h4 class="font-bold text-slate-800">SDG Performance Insights</h4>
+                        <p class="text-sm text-slate-500 mt-2"> Identify strengths, gaps, and opportunities across SDGs using harmonized institutional data.</p>
                     </div>
                 </div>
             </section>
