@@ -20,15 +20,15 @@
 
                 <!-- Center: Navigation -->
                 <div class="flex flex-wrap gap-4 text-xs text-slate-500">
-                    <a href="/dashboard" class="hover:text-blue-600">
-                        Dashboard
-                    </a>
-                    <a href="/methodology" class="hover:text-blue-600">
-                        Methodology
-                    </a>
-                    <a href="/user-manual" class="hover:text-blue-600">
-                        User Manual
-                    </a>
+                    <router-link
+                        v-for="item in filteredMenu"
+                        :key="item.to"
+                        :to="item.to"
+                        class="hover:hover:text-blue-600 transition-all duration-100"
+                    >
+                        {{ item.name }}
+                    </router-link>
+                  
                 </div>
 
                 <!-- Right: Attribution -->
@@ -50,3 +50,35 @@
         </div>
     </footer>
 </template>
+<script setup>
+import { computed } from "vue";
+
+const menuItems = [
+    {
+        name: "Overview",
+        to: "/overview",
+        icon: "pi-home",
+    },
+
+    {
+        name: "Dashboard Manual",
+        to: "/manual",
+    },
+    {
+        name: "Dashboard",
+        to: "/dashboard",
+        icon: "pi-chart-line",
+    },
+    {
+        name: "Methodology",
+        to: "/methodology",
+        icon: "pi-sitemap",
+
+    },
+];
+
+const filteredMenu = computed(() => {
+    return menuItems.filter((item) => item.name);
+});
+
+</script>
