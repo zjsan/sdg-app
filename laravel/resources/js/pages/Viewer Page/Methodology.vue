@@ -78,7 +78,7 @@
                 </div>
 
                 <div
-                    class="p-6 bg-white border border-slate-200 rounded-3xl shadow-sm  text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+                    class="p-6 bg-white border border-slate-200 rounded-3xl shadow-sm  transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
                 >
                     <div
                         class="w-12 h-12 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center mb-4"

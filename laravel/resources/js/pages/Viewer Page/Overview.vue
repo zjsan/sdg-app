@@ -89,7 +89,7 @@
                     <router-link to="/manual" class="group p-6 bg-white border border-slate-200 rounded-2xl flex items-center justify-between transition-all hover:border-blue-300">
                         <div>
                             <p class="font-bold text-slate-800 text-lg">Read User Manual</p>
-                            <p class="text-slate-500 text-sm">New here? Learn how to use the dashboard tools.</p>
+                            <p class="text-slate-500 text-sm">New here? Learn how to use the dashboard.</p>
                         </div>
                         <i class="pi pi-chevron-right text-slate-400"></i>
                     </router-link>

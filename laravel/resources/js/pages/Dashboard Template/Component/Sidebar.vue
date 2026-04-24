@@ -78,7 +78,7 @@ const menuItems = [
     {
         name: "Overview",
         to: "/overview",
-        icon: "pi-book",
+        icon: "pi-home",
         visible: () => true, // Everyone logged in sees this
     },
 
