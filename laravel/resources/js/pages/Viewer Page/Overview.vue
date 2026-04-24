@@ -104,8 +104,8 @@ import Authenticated from "./../Dashboard Template/Layout/Authenticated.vue";
 
 const features = [
   {
-    title: 'Regional Comparison',
-    description: 'Filter and compare SDG performance across different Philippine regions.',
+    title: 'Explore & Compare Performance',
+    description: 'Analyze SDG performance across institutions, regions, and specific goals using flexible filtering tools.',
     icon: 'pi-map',
     color: 'text-blue-400',
     bg: 'bg-blue-400/10',
