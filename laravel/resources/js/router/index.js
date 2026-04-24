@@ -119,7 +119,7 @@ router.beforeEach(async (to, from) => {
         console.warn("Blocked unintended Google OAuth redirect attempt.");
 
         if (auth.isAuthenticated) {
-            return { name: "Manual", replace: true };
+            return { name: "Overview", replace: true };
         }
 
         return { name: "Login", replace: true };
@@ -128,7 +128,7 @@ router.beforeEach(async (to, from) => {
     // Intercept the faulty callback navigation if the user is already authenticated
     if (to.path.startsWith("/auth/callback") && auth.isAuthenticated) {
         // Redirect them safely to the dashboard, avoiding the broken logic.
-        return { name: "Manual", replace: true };
+        return { name: "Overview", replace: true };
     }
 
     // SINGLE SESSION RESTORE POINT
@@ -139,7 +139,7 @@ router.beforeEach(async (to, from) => {
 
     // Redirect authenticated users away from Login
     if (to.meta.guestOnly && auth.isAuthenticated) {
-        return { name: "Manual" };
+        return { name: "Overview" };
     }
 
     // Protect routes that require auth
@@ -149,7 +149,7 @@ router.beforeEach(async (to, from) => {
 
     //  Handle Callback bypass
     if (to.path.startsWith("/auth/callback") && auth.isAuthenticated) {
-        return { name: "Manual", replace: true };
+        return { name: "Overview", replace: true };
     }
 
     //  Role-Based Access Control
