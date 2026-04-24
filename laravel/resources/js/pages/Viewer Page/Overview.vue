@@ -41,36 +41,38 @@
             </div>
 
             <!--What can you do-->
-            <div class="bg-slate-900 text-white py-16 px-6 rounded-3xl shadow-xl">
-                <section class="max-w-6xl mx-auto text-center">
-                <h2 class="text-3xl md:text-4xl font-extrabold mb-4">What can you do with this portal?</h2>
+            <div class="bg-slate-900 text-white py-20 px-6 rounded-[2rem] shadow-2xl mb-16 border border-white/5">
+    <section class="max-w-6xl mx-auto">
+      <header class="text-center mb-16">
+        <h2 class="text-3xl md:text-5xl font-extrabold tracking-tight">
+          What can you do with the <span class="text-blue-400">dashboard?</span>
+        </h2>
+      </header>
 
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="flex flex-col items-center text-center ">
-                        <div class="w-14 h-14 bg-white shadow-sm rounded-2xl flex items-center justify-center mb-4 text-blue-500 text-xl">
-                            <i class="pi pi-map"></i>
-                        </div>
-                        <h4 class="font-bold text-slate-800">Regional Comparison</h4>
-                        <p class="text-sm text-slate-500 mt-2">Filter and compare SDG performance across different Philippine regions.</p>
-                    </div>
-                    <div class="flex flex-col items-center text-center">
-                        <div class="w-14 h-14 bg-white shadow-sm rounded-2xl flex items-center justify-center mb-4 text-green-500 text-xl">
-                            <i class="pi pi-chart-line"></i>
-                        </div>
-                        <h4 class="font-bold text-slate-800">Trend Analysis</h4>
-                        <p class="text-sm text-slate-500 mt-2">Track institutional progress and identify high-performing impact areas.</p>
-                    </div>
-                    <div class="flex flex-col items-center text-center">
-                        <div class="w-14 h-14 bg-white shadow-sm rounded-2xl flex items-center justify-center mb-4 text-orange-500 text-xl">
-                            <i class="pi pi-file-export"></i>
-                        </div>
-                        <h4 class="font-bold text-slate-800">SDG Performance Insights</h4>
-                        <p class="text-sm text-slate-500 mt-2"> Identify strengths, gaps, and opportunities across SDGs using harmonized institutional data.</p>
-                    </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div 
+                v-for="feature in features" 
+                :key="feature.title"
+                class="group relative bg-white/5 backdrop-blur-sm p-8 rounded-3xl border border-white/10 
+                        hover:bg-white/10 hover:border-white/20 transition-all duration-500 cursor-pointer 
+                        hover:-translate-y-2"
+                >
+                <div :class="[feature.bg, feature.color, 'w-16 h-16 rounded-2xl flex items-center justify-center mb-6 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3']">
+                    <i :class="['pi text-2xl', feature.icon]"></i>
                 </div>
-                 </section>
+
+                <h4 class="font-bold text-xl mb-3 group-hover:text-blue-300 transition-colors">
+                    {{ feature.title }}
+                </h4>
+                <p class="text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors">
+                    {{ feature.description }}
+                </p>
+                
+                <div class="absolute -inset-px rounded-3xl border-2 border-transparent group-hover:border-blue-500/20 pointer-events-none" />
+                </div>
             </div>
+            </section>
+        </div>
 
             <!--Get started section-->
               <section>
@@ -98,4 +100,31 @@
 </template>
 <script setup>
 import Authenticated from "./../Dashboard Template/Layout/Authenticated.vue";
+
+
+const features = [
+  {
+    title: 'Regional Comparison',
+    description: 'Filter and compare SDG performance across different Philippine regions.',
+    icon: 'pi-map',
+    color: 'text-blue-400',
+    bg: 'bg-blue-400/10',
+  },
+  {
+    title: 'Trend Analysis',
+    description: 'Track institutional progress and identify high-performing impact areas.',
+    icon: 'pi-chart-line',
+    color: 'text-green-400',
+    bg: 'bg-green-400/10',
+  },
+  {
+    title: 'SDG Performance Insights',
+    description: 'Identify strengths, gaps, and opportunities across SDGs using harmonized institutional data.',
+    icon: 'pi-search',
+    color: 'text-orange-400',
+    bg: 'bg-orange-400/10',
+  },
+];
+
+
 </script>
