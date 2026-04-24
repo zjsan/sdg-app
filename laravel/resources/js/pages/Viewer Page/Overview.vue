@@ -22,20 +22,20 @@
                 <div>
                     <h2 class="text-sm font-bold uppercase tracking-widest text-blue-600 mb-3">The Project</h2>
                     <p class="text-slate-700 leading-relaxed">
-                        The <strong>Philippine HEI SDG Dashboard</strong> is an initiative by the 
-                        MMSU SDG Research Team. It serves as a centralized hub for stakeholders 
-                        to understand how local universities are contributing to global sustainability. 
-                        By harmonizing complex data from <em>THE Impact Rankings</em>, we provide 
-                        a clear picture of institutional progress across the Philippines.
+                        The <strong>Philippine HEI SDG Dashboard</strong> is a centralized analytics platform 
+                            designed to present and interpret the performance of Higher Education Institutions 
+                            (HEIs) in relation to the United Nations Sustainable Development Goals (SDGs). 
+                            It consolidates and harmonizes data derived from the <strong>THE Datapoints</strong>, enabling 
+                            consistent and comparable insights across institutions and regions within the Philippines.
                     </p>
                 </div>
                 <div>
                     <h2 class="text-sm font-bold uppercase tracking-widest text-indigo-600 mb-3">The Objective</h2>
                     <p class="text-slate-700 leading-relaxed">
-                        Our goal is to foster a data-driven culture within Philippine academia. 
-                        Whether you are a researcher, university administrator, or policy maker, 
-                        this portal provides the evidence needed to drive institutional 
-                        improvements and regional collaboration.
+                        The dashboard aims to support evidence-based analysis and strategic decision-making 
+                        within the higher education sector. By providing structured and accessible SDG-related 
+                        data, it enables stakeholders to assess institutional performance, identify development 
+                        areas, and inform policies and initiatives aligned with sustainable development priorities.
                     </p>
                 </div>
             </div>
