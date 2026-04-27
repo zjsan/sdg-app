@@ -135,6 +135,7 @@
                             class="flex-shrink-0 h-2 w-2 mt-2 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.6)]"
                         ></span>
                         <div>
+                            <!--Data collection-->
                             <p class="font-semibold text-white">
                                 Data Extraction from THE Platforms
                             </p>
@@ -151,6 +152,7 @@
                             class="flex-shrink-0 h-2 w-2 mt-2 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.6)]"
                         ></span>
                         <div>
+                            <!--Cleaning of the collected data-->
                             <p class="font-semibold text-white">
                                 Data Cleaning & Standardization
                             </p>
@@ -167,6 +169,7 @@
                             class="flex-shrink-0 h-2 w-2 mt-2 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.6)]"
                         ></span>
                         <div>
+                            <!--Mapping of various datasets into their respective reports-->
                             <p class="font-semibold text-white">
                                 Multidimensional Data Mapping
                             </p>
@@ -175,8 +178,29 @@
                                 specialized datasets, strategically mapping them
                                 to the relevant pages. This ensures that each
                                 section of the dashboard delivers the specific
-                                SDG metrics and visualizations unique to that
+                                SDG data and visualizations unique to that
                                 reporting category.
+                            </p>
+                        </div>
+                    </li>
+
+                    <li class="flex gap-4">
+                        <span
+                            class="flex-shrink-0 h-2 w-2 mt-2 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.6)]"
+                        ></span>
+                        <div>
+                            <!--analytical logic-->
+                            <p class="font-semibold text-white">
+                                Advanced Analytical Modeling
+                            </p>
+                            <p class="text-sm text-slate-400">
+                                Beyond simple data grouping, the dashboard
+                                applies custom analytical logic to calculate
+                                complex performance insights. Using specialized
+                                measures, the system generates dynamic
+                                comparisons, year-on-year trends, and weighted
+                                scores that provide a deeper context for
+                                institutional performance.
                             </p>
                         </div>
                     </li>
