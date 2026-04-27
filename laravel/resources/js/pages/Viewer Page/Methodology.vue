@@ -123,9 +123,10 @@
                 </div>
                 <p class="text-slate-400 text-sm leading-relaxed max-w-4xl">
                     To ensure accuracy and clarity, the platform refines and
-                    organizes information from THE Impact Rankings and
-                    DataPoints. This process converts complex datasets into
-                    intuitive, actionable insights.
+                    organizes information from
+                    <strong>THE Impact Rankings</strong> and
+                    <strong>DataPoints</strong>. This process converts raw and
+                    unorganized data into intuitive, actionable insights.
                 </p>
 
                 <ul class="space-y-5 mt-6">
@@ -156,7 +157,7 @@
                             <p class="text-sm text-slate-400">
                                 Institutional names, SDG labels, and metric
                                 formats are standardized to ensure consistency
-                                across datasets and reporting periods.
+                                across different datasets and categories.
                             </p>
                         </div>
                     </li>
@@ -167,12 +168,15 @@
                         ></span>
                         <div>
                             <p class="font-semibold text-white">
-                                Aggregation into SDG Datasets
+                                Multidimensional Data Mapping
                             </p>
                             <p class="text-sm text-slate-400">
-                                Processed data are aggregated into SDG-level
-                                performance metrics, which are then used for
-                                visualization within the dashboard.
+                                The system organizes processed information into
+                                specialized datasets, strategically mapping them
+                                to the relevant pages. This ensures that each
+                                section of the dashboard delivers the specific
+                                SDG metrics and visualizations unique to that
+                                reporting category.
                             </p>
                         </div>
                     </li>
