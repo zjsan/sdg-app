@@ -16,14 +16,12 @@ build-db-fresh:
 	docker volume rm sdg-app_laravel_public || true
 	
 	$(MAKE) seed-fresh
-	$(MAKE) optimize
 
 # Full Frontend/Build Refresh + DB seeding
 build-db:
 	docker volume rm sdg-app_laravel_public || true
 	
 	$(MAKE) seed
-	$(MAKE) optimize
 
 
 # 2. Config/Dependency Changes
