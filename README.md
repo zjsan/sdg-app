@@ -240,6 +240,17 @@ Before using the automation scripts, you must ensure that the `make` utility is 
 
 ```
 
+**Standard Full Deployment Process**:
+
+- Clean Docker rebuild and restart
+- Backend or configuration changes are made
+- New environment variables are added
+- Middleware, routes, or API logic changes
+
+```
+ make deploy
+```
+
 **Rebuild and refresh frontend assets**:
 
 - Updating Vue components
