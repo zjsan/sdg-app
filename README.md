@@ -240,17 +240,6 @@ Before using the automation scripts, you must ensure that the `make` utility is 
 
 ```
 
-**Standard Full Deployment Process**:
-
-- Clean Docker rebuild and restart
-- Backend or configuration changes are made
-- New environment variables are added
-- Middleware, routes, or API logic changes
-
-```
- make deploy
-```
-
 **Rebuild and refresh frontend assets**:
 
 - Updating Vue components
@@ -296,6 +285,15 @@ Before using the automation scripts, you must ensure that the `make` utility is 
   make seed-fresh
 
 ```
+
+**Advanced Commands**
+
+| Command             | Description                                                                        |
+| ------------------- | ---------------------------------------------------------------------------------- |
+| make build-db-fresh | Combined routine: Clears frontend public volumes and runs a fresh migration/seed.  |
+| make build-normal   | Standard up --build without clearing caches or volumes.                            |
+| make nucleus-start  | Recovery Mode: Removes all volumes and local images before a fresh seed-migration. |
+| make optimize       | Clears and regenerates Laravel config, route, and view caches.                     |
 
 **Standard Update - Source code changes**
 
