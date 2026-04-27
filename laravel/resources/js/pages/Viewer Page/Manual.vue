@@ -11,7 +11,7 @@
                 </div>
                 <p class="text-slate-600 text-lg">
                     A comprehensive guide in interacting with the Philippine
-                    Higher Education Institution (PHEI) SDG Dashboard.
+                    Higher Education Institutions (PHEI) SDG Dashboard.
                 </p>
             </header>
 

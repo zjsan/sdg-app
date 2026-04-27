@@ -6,10 +6,10 @@
                     Methodology & Data Sources
                 </h1>
                 <p class="text-slate-500 mt-2">
-                    This page provides a transparent overview of how data is
-                    sourced, processed, and structured within the SDG
-                    Performance Analytics Dashboard for Philippine Higher
-                    Education Institutions (HEIs).
+                    This page provides an overview of how data is sourced,
+                    processed, and structured within the SDG Performance
+                    Analytics Dashboard for Philippine Higher Education
+                    Institutions (HEIs).
                 </p>
                 <p class="text-slate-500 mt-3 leading-relaxed">
                     It outlines the data lifecycle—from acquisition and
@@ -78,7 +78,7 @@
                 </div>
 
                 <div
-                    class="p-6 bg-white border border-slate-200 rounded-3xl shadow-sm  transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+                    class="p-6 bg-white border border-slate-200 rounded-3xl shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
                 >
                     <div
                         class="w-12 h-12 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center mb-4"
@@ -89,11 +89,11 @@
                         MMSU SDG Research Team
                     </h3>
                     <p class="text-sm text-slate-500 mt-2 leading-relaxed">
-                        Following data processing, all data is formally verified
-                        by the MMSU SDG Research Team. This critical oversight
-                        ensures the dashboard’s analytical insights maintain the
-                        highest level of accuracy regarding HEI performance
-                        across the 17 SDGs.
+                        Following data processing and visualization, all data is
+                        formally verified by the MMSU SDG Research Team. This
+                        critical oversight ensures the dashboard’s analytical
+                        insights maintain the highest level of accuracy
+                        regarding HEI performance across the 17 SDGs.
                     </p>
                 </div>
 
@@ -122,9 +122,10 @@
                     <h2 class="text-xl font-bold">Data Processing</h2>
                 </div>
                 <p class="text-slate-400 text-sm leading-relaxed max-w-4xl">
-                    Data from THE Impact Rankings and DataPoints is not used in
-                    raw form. It undergoes preprocessing and transformations
-                    before visualization.
+                    To ensure accuracy and clarity, the platform refines and
+                    organizes information from THE Impact Rankings and
+                    DataPoints. This process converts complex datasets into
+                    intuitive, actionable insights.
                 </p>
 
                 <ul class="space-y-5 mt-6">
@@ -166,22 +167,6 @@
                         ></span>
                         <div>
                             <p class="font-semibold text-white">
-                                SDG Mapping & Classification
-                            </p>
-                            <p class="text-sm text-slate-400">
-                                Extracted metrics are mapped to the 17 UN
-                                Sustainable Development Goals based on THE’s
-                                indicator framework and classification system.
-                            </p>
-                        </div>
-                    </li>
-
-                    <li class="flex gap-4">
-                        <span
-                            class="flex-shrink-0 h-2 w-2 mt-2 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.6)]"
-                        ></span>
-                        <div>
-                            <p class="font-semibold text-white">
                                 Aggregation into SDG Datasets
                             </p>
                             <p class="text-sm text-slate-400">
@@ -194,10 +179,12 @@
                 </ul>
             </div>
 
-            <div class="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-6 cursor-pointer">
+            <div
+                class="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-6 cursor-pointer"
+            >
                 <!--Harmonization Logic-->
                 <div
-                    class="p-6 bg-white border border-slate-200 rounded-3xl shadow-sm  text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+                    class="p-6 bg-white border border-slate-200 rounded-3xl shadow-sm text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
                 >
                     <div
                         class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mb-4"
@@ -218,7 +205,7 @@
 
                 <!--Scope & Limitations-->
                 <div
-                    class="p-6 bg-white border border-slate-200 rounded-3xl shadow-sm  text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+                    class="p-6 bg-white border border-slate-200 rounded-3xl shadow-sm text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
                 >
                     <div
                         class="w-12 h-12 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center mb-4"
@@ -243,7 +230,7 @@
 
                 <!--Update Cycle-->
                 <div
-                    class="p-6 bg-white border border-slate-200 rounded-3xl shadow-sm  text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+                    class="p-6 bg-white border border-slate-200 rounded-3xl shadow-sm text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
                 >
                     <div
                         class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-4"
