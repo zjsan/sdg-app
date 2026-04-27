@@ -63,6 +63,8 @@ nucleus-start:
 
 # Refresh only the Organization Power BI links
 refresh-links:
+	$(COMPOSE_PROD) build --no-cache
+	$(COMPOSE_PROD) up -d
 	docker exec $(PHP_CONT) php artisan db:seed --class=OrganizationSeeder --force
 	
 	$(MAKE) optimize
