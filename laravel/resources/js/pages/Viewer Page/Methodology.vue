@@ -224,7 +224,7 @@
                         To ensure seamless <strong>interoperability</strong>,
                         data from various <strong>THE datasets</strong> are
                         aligned for consistency across all institutional
-                        indicators. We employ a normalization process to
+                        indicators. A normalization process is employed to
                         transform diverse naming conventions and reporting
                         structures into a unified schema, enabling
                         high-precision comparison and visualization.
@@ -270,7 +270,7 @@
                         Data updates follow the release cycle of
                         <strong>THE Impact Rankings</strong> and
                         <strong>DataPoints</strong>. Once new datasets are
-                        released, they undergo our internal processing and
+                        released, they undergo internal processing and
                         validation before being reflected in the dashboard.
                         However, all visualized data is subject to ongoing
                         validation to ensure the highest standards of accuracy
