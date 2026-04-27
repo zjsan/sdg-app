@@ -48,7 +48,7 @@
                                 >
                                 <div>
                                     <p class="font-semibold text-slate-800">
-                                        Slicer Panes
+                                        Slicer Panels
                                     </p>
                                     <p class="text-sm text-slate-500">
                                         Use the dropdown menus at the top/side
