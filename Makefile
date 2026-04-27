@@ -61,6 +61,13 @@ nucleus-start:
 	
 	$(MAKE) seed-fresh
 
+# Refresh only the Organization Power BI links
+refresh-links:
+	docker exec $(PHP_CONT) php artisan db:seed --class=OrganizationSeeder --force
+	
+	$(MAKE) optimize
+	@echo "Power BI links have been synchronized successfully."
+
 # Helper: Optimization logic
 optimize:
 	docker exec $(PHP_CONT) php artisan optimize:clear

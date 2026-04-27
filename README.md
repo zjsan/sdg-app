@@ -225,7 +225,7 @@ The `docker-entrypoint.sh` script is the brain of the container.Attached within 
   - Runs database migrations (`migrate --force`).
   - Pre-caches the application for production performance.
 
-**MakeFile Automated script using Makefile**
+## MakeFile Automated script using Makefile
 
 ## 1. Prerequisites
 
@@ -291,9 +291,12 @@ Before using the automation scripts, you must ensure that the `make` utility is 
 | Command             | Description                                                                        |
 | ------------------- | ---------------------------------------------------------------------------------- |
 | make build-db-fresh | Combined routine: Clears frontend public volumes and runs a fresh migration/seed.  |
+| make build-db       | Combined routine: Clears frontend public volumes and runs migration/seed.          |
 | make build-normal   | Standard up --build without clearing caches or volumes.                            |
 | make nucleus-start  | Recovery Mode: Removes all volumes and local images before a fresh seed-migration. |
 | make optimize       | Clears and regenerates Laravel config, route, and view caches.                     |
+
+## Manual commands
 
 **Standard Update - Source code changes**
 
