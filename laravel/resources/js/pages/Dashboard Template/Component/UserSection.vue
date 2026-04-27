@@ -33,10 +33,12 @@
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogCancel class="cursor-pointer"
+                        >Cancel</AlertDialogCancel
+                    >
                     <AlertDialogAction
                         @click="logout"
-                        class="bg-blue-400 hover:bg-blue-600"
+                        class="bg-blue-400 hover:bg-blue-600 cursor-pointer"
                     >
                         Yes, Log me out
                     </AlertDialogAction>
