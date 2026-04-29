@@ -17,7 +17,7 @@ export const useOrganizationStore = defineStore("organization", {
                 console.log("Backend Response:", response.data);
 
                 // If backend returns a Resource, it might be response.data.data
-                organizations.value = Array.isArray(response.data)
+                this.organizations = Array.isArray(response.data)
                     ? response.data
                     : response.data.data;
             } catch (error) {

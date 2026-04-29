@@ -22,7 +22,7 @@ export const useAuthStore = defineStore("auth", {
 
         //checking user roles for role-based access control
         isDeveloper: (state) => {
-            //console.log("Checking role:", state.user?.role?.slug);
+            console.log("Checking role:", state.user?.role?.slug);
             return state.user?.role?.slug === "developer";
         },
         isAdmin: (state) => {
@@ -59,7 +59,7 @@ export const useAuthStore = defineStore("auth", {
             try {
                 if (!this.token) {
                     console.warn("No token found — skipping getUser()");
-                    this.initialized = true; // Mark that we've attempted to fetch user
+                    this.initialized = true;
                     return;
                 }
 

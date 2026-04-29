@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PowerBiController;
 use App\Http\Controllers\GoogleAuthController;
+use App\Http\Controllers\OrganizationController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
