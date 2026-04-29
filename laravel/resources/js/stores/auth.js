@@ -40,6 +40,10 @@ export const useAuthStore = defineStore("auth", {
 
         // Restore session if token exists
         async restoreSession() {
+            console.log(
+                "Restore session triggered. Token found:",
+                !!this.token,
+            );
             if (!this.token) return;
 
             try {

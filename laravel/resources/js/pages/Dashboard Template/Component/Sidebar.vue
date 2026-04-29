@@ -115,7 +115,7 @@ const menuItems = computed(() => [
     // },
 ]);
 const filteredMenu = computed(() => {
-    return menuItems.filter((item) => item.visible());
+    return menuItems.value.filter((item) => item.visible());
 });
 </script>
 
