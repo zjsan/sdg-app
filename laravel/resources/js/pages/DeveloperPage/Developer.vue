@@ -24,15 +24,15 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
-                        <tr v-for="org in organizations" :key="org.id">
+                        <tr
+                            v-for="org in organizationStore.organizations"
+                            :key="org.id"
+                        >
                             <td class="px-6 py-4 font-medium">
                                 {{ org.name }}
                             </td>
                             <td class="px-6 py-4">
-                                <input
-                                    v-model="org.pbi_embed_link"
-                                    class="w-full border rounded px-2 py-1 text-sm focus:ring-blue-500"
-                                />
+                                {{ org.pbi_embed_id || "No link set" }}
                             </td>
                             <td class="px-6 py-4">
                                 <button
