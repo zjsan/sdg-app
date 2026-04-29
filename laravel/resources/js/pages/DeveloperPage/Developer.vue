@@ -57,39 +57,10 @@ import { usePowerBiStore } from "../../stores/powerBi.js";
 
 const organizations = ref([]);
 const pbiStore = usePowerBiStore();
-
-const fetchOrgs = async () => {
-    try {
-        const response = await api.get("/organizations");
-        // Debugging: Check console to see what the server actually sent
-        console.log("Backend Response:", response.data);
-
-        // If backend returns a Resource, it might be response.data.data
-        organizations.value = Array.isArray(response.data)
-            ? response.data
-            : response.data.data;
-    } catch (error) {
-        console.error("Failed to fetch organizations:", error);
-        alert("Failed to load organizations. Please try again.");
-    }
-};
-
 const testLink = (id) => {
     // POWER_BI_BASE_URL should ideally be an injected config or env variable
     const baseUrl = "https://app.powerbi.com/view?r=";
     window.open(`${baseUrl}${id}`, "_blank");
-};
-
-const saveOrg = async (id, newId) => {
-    try {
-        await api.put(`/api/organizations/${id}`, { pbi_embed_id: newId });
-        fetchOrgs(); // Refresh list
-        await pbiStore.forceRefresh();
-        alert("PBI Embed ID updated successfully!");
-    } catch (error) {
-        console.error(error);
-        alert("Update failed.");
-    }
 };
 
 onMounted(fetchOrgs);
