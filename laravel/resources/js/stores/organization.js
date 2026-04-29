@@ -30,11 +30,11 @@ export const useOrganizationStore = defineStore("organization", {
 
         async UpdateOrganizations(id, newId) {
             try {
-                await api.put(`/api/organizations/${id}`, {
+                await api.put(`/organizations/${id}`, {
                     pbi_embed_id: newId,
                 });
-                fetchOrgs(); // Refresh list
-                await pbiStore.forceRefresh();
+                fetchOrganizations(); // Refresh list
+                // await pbiStore.forceRefresh();
                 alert("PBI Embed ID updated successfully!");
             } catch (error) {
                 console.error(error);
