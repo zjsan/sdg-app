@@ -74,7 +74,7 @@ defineEmits(["close"]);
 const auth = useAuthStore();
 
 // Define menu structure
-const menuItems = [
+const menuItems = computed(() => [
     {
         name: "Overview",
         to: "/overview",
@@ -113,7 +113,7 @@ const menuItems = [
     //     icon: "pi-shield",
     //     visible: () => auth.isAdmin,
     // },
-];
+]);
 const filteredMenu = computed(() => {
     return menuItems.filter((item) => item.visible());
 });

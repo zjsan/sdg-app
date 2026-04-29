@@ -48,8 +48,10 @@ export const useAuthStore = defineStore("auth", {
                 const { data } = await api.get("/user");
                 this.user = data;
                 this.saveUserToStorage();
-                //console.log("Session restored");
+                console.log("Session restored");
+                console.log("Restored user:", this.user);
             } catch (error) {
+                console.error("Session restore failed:", error);
                 console.warn("Session restore failed:", error);
                 this.logout(); // clear invalid session
             }
@@ -62,10 +64,11 @@ export const useAuthStore = defineStore("auth", {
                     this.initialized = true;
                     return;
                 }
-
                 api.defaults.headers.common["Authorization"] =
                     `Bearer ${this.token}`;
                 const { data } = await api.get("/user");
+
+                console.log("Fetched user data:", data);
                 this.user = data;
                 this.saveUserToStorage();
                 this.initialized = true;
