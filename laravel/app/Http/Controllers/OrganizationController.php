@@ -13,9 +13,7 @@ class OrganizationController extends Controller
      */
     public function index()
     {
-        //
-        // Any authenticated user can likely see the list, 
-        // but only if they are an Admin or Developer
+        //fetch the contents of the organization table 
         return response()->json(Organization::all());
     }
 

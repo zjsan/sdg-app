@@ -51,17 +51,20 @@
 </template>
 <script setup>
 import Authenticated from "../Dashboard Template/Layout/Authenticated.vue";
-import api from "../../plugins/axios.js";
 import { ref, onMounted } from "vue";
 import { usePowerBiStore } from "../../stores/powerBi.js";
+import { useOrganizationStore } from "../../stores/organization.js";
 
-const organizations = ref([]);
 const pbiStore = usePowerBiStore();
+const organizationStore = useOrganizationStore();
+
 const testLink = (id) => {
     // POWER_BI_BASE_URL should ideally be an injected config or env variable
     const baseUrl = "https://app.powerbi.com/view?r=";
     window.open(`${baseUrl}${id}`, "_blank");
 };
 
-onMounted(fetchOrgs);
+onMounted(() => {
+    organizationStore.fetchOrganizations();
+});
 </script>
