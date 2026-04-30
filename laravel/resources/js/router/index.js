@@ -131,6 +131,11 @@ router.beforeEach(async (to, from) => {
         return { name: "Overview", replace: true };
     }
 
+    // if token exist and not initialize, resotre the session
+    if (!auth.initialized) {
+        await auth.restoreSession();
+    }
+
     // initialize auth state if token exists but user data is not loaded
     if (auth.token && !auth.initialized) {
         await auth.getUser();
