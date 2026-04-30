@@ -22,29 +22,38 @@ export const useAuthStore = defineStore("auth", {
 
         //checking user roles for role-based access control
         isDeveloper: (state) => {
-            console.log("Checking role:", state.user?.role?.slug);
-            return state.user?.role?.slug === "developer";
+            const slug = state.user?.role?.slug || null;
+            console.log("Checking role:", slug);
+            return slug === "developer";
         },
         isAdmin: (state) => {
-            console.log("Checking role:", state.user?.role?.slug);
-            return ["admin", "developer"].includes(state.user?.role?.slug);
+            const slug = state.user?.role?.slug || null;
+            console.log("Checking role:", slug);
+            return ["admin", "developer"].includes(slug);
         },
     },
 
     actions: {
         // Save both token and user in localStorage
         saveUserToStorage() {
-            localStorage.setItem("user", JSON.stringify(this.user));
-            localStorage.setItem("token", this.token);
+            if (this.user && this.token) {
+                localStorage.setItem("user", JSON.stringify(this.user));
+                localStorage.setItem("token", this.token);
+            }
         },
 
         // Restore session if token exists
         async restoreSession() {
-            console.log(
-                "Restore session triggered. Token found:",
-                !!this.token,
-            );
-            if (!this.token) return;
+            //fetch token from localStorage in case of page refresh
+            const storedToken = localStorage.getItem("token");
+            if (!storedToken) {
+                this.initialized = true; // Mark as initialized even if no token, to avoid repeated attempts
+                return;
+            }
+
+            this.token = storedToken; //assign token to the state
+
+            console.log("Restore session triggered. Token found:", storedToken); //for debugging
 
             try {
                 api.defaults.headers.common["Authorization"] =
@@ -58,6 +67,8 @@ export const useAuthStore = defineStore("auth", {
                 console.error("Session restore failed:", error);
                 console.warn("Session restore failed:", error);
                 this.logout(); // clear invalid session
+            } finally {
+                this.initialized = true; // Mark as initialized after attempt
             }
         },
 
