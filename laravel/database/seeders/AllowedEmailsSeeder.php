@@ -32,6 +32,8 @@ class AllowedEmailsSeeder extends Seeder
             ['email' => 'sfnisperos@mmsu.edu.ph', 'organization_id' => $mmsuId, 'role_id'=> $adminRole,'is_active' => true],
             ['email' => 'jpacang@mmsu.edu.ph', 'organization_id' => $mmsuId, 'role_id'=> $viewerRole, 'is_active' => true],
             ['email' => 'wrpagtaconan@mmsu.edu.ph', 'organization_id' => $mmsuId, 'role_id'=> $viewerRole, 'is_active' => true],
+            ['email' => 'rpvillacillo@mmsu.edu.ph', 'organization_id' => $mmsuId, 'role_id'=> $viewerRole, 'is_active' => true],
+            ['email' => 'lhaquino@mmsu.edu.ph', 'organization_id' => $mmsuId, 'role_id'=> $viewerRole, 'is_active' => true],
 
             //ched
 
