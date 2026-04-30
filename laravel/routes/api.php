@@ -8,7 +8,7 @@ use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\OrganizationController;
 
 Route::get('/user', function (Request $request) {
-    return $request->user();
+    return $request->user()->load('role');//eager loading the role relationship to include role data in the response
 })->middleware('auth:sanctum');
 
 //auth routes

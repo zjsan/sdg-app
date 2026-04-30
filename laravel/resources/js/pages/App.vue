@@ -10,11 +10,8 @@ import { useRoute } from "vue-router";
 const auth = useAuthStore();
 
 onMounted(async () => {
-    try {
+    if (!auth.initialized) {
         await auth.restoreSession();
-    } finally {
-        //trigger the initialized flag on app load
-        auth.initialized = true;
     }
 });
 </script>
