@@ -11,7 +11,7 @@ import AuthError from "../pages/AuthError.vue";
 import SafeRedirect from "../pages/SafeRedirect.vue";
 import Manual from "../pages/Viewer Page/Manual.vue";
 import Methodology from "../pages/Viewer Page/Methodology.vue";
-import Overview from "../pages/Viewer Page/Overview.vue"
+import Overview from "../pages/Viewer Page/Overview.vue";
 
 /** @type {import('vue-router').RouteRecordRaw[]} */
 const routes = [
@@ -42,7 +42,7 @@ const routes = [
         meta: { requiresAuth: true, role: "developer" }, // must be logged in
     },
 
-     {
+    {
         path: "/overview",
         name: "Overview",
         component: Overview,
@@ -131,8 +131,7 @@ router.beforeEach(async (to, from) => {
         return { name: "Overview", replace: true };
     }
 
-    // SINGLE SESSION RESTORE POINT
-    // If we have a token but haven't initialized the user yet, do it NOW.
+    // initialize auth state if token exists but user data is not loaded
     if (auth.token && !auth.initialized) {
         await auth.getUser();
     }
