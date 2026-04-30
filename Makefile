@@ -70,6 +70,14 @@ refresh-links:
 	$(MAKE) optimize
 	@echo "Power BI links have been synchronized successfully."
 
+update-whitelist:
+	$(COMPOSE_PROD) build --no-cache
+	$(COMPOSE_PROD) up -d
+	docker exec $(PHP_CONT) php artisan db:seed --class=AllowedEmailsSeeder --force
+	
+	$(MAKE) optimize
+	@echo "Allowed emails have been updated successfully."
+
 # Helper: Optimization logic
 optimize:
 	docker exec $(PHP_CONT) php artisan optimize:clear
