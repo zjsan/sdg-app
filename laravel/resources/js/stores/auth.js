@@ -22,6 +22,7 @@ export const useAuthStore = defineStore("auth", {
 
         //checking user roles for role-based access control
         isDeveloper: (state) => {
+            console.log("Full User Object in Store:", state.user); //debugging log to check user data structure
             const slug = state.user?.role?.slug || null;
             console.log("Checking role:", slug);
             return slug === "developer";
