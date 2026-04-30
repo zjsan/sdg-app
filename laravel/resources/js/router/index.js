@@ -136,11 +136,6 @@ router.beforeEach(async (to, from) => {
         await auth.restoreSession();
     }
 
-    // initialize auth state if token exists but user data is not loaded
-    if (auth.token && !auth.initialized) {
-        await auth.getUser();
-    }
-
     // Redirect authenticated users away from Login
     if (to.meta.guestOnly && auth.isAuthenticated) {
         return { name: "Overview" };
