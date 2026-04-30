@@ -23,6 +23,21 @@ build-db:
 	
 	$(MAKE) seed
 
+build-normal:
+	@echo "Starting full build and deployment cycle..."
+	@echo "Removing existing frontend volume to ensure a clean slate..."
+
+	docker volume rm sdg-app_laravel_public || true
+
+	@echo "Building and deploying containers without cache..."
+	$(COMPOSE_PROD) build --no-cache
+
+	@echo "Starting containers in detached mode..."
+	$(COMPOSE_PROD) up -d
+
+	@echo "optimizing application and clearing caches..."
+	$(MAKE) optimize
+
 
 # 2. Config/Dependency Changes
 deploy:
@@ -44,18 +59,14 @@ seed-fresh:
 	docker exec $(PHP_CONT) php artisan migrate:fresh --seed --force
 	$(MAKE) optimize
 
-# 5. Normal Build (no cache, but no DB changes)
-build-normal:
-	$(COMPOSE_PROD) up -d --build
-	$(MAKE) optimize
 
-# 6. Frontend and Database Refresh (clean build + migrate refresh and seed)
+# 5. Frontend and Database Refresh (clean build + migrate refresh and seed)
 start-refresh:
 	docker volume rm sdg-app_laravel_public || true
 	
 	$(MAKE) seed-fresh
 
-# 7. Fresh Start (Recovery Mode)
+# 6. Fresh Start (Recovery Mode)
 nucleus-start:
 	$(COMPOSE_PROD) down -v --rmi local
 	
