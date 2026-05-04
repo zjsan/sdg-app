@@ -64,6 +64,19 @@ const testLink = (id) => {
     window.open(`${baseUrl}${id}`, "_blank");
 };
 
+const saveOrg = async () => {
+    try {
+        await organizationStore.UpdateOrganizations(id, newId); //update action
+        await organizationStore.fetchOrganizations(); // Refresh list for the table
+
+        await pbiStore.forceRefresh(); //force power bi link refresh
+        alert("PBI Embed ID updated successfully!");
+    } catch (error) {
+        console.error(error);
+        alert("Update failed.");
+    }
+};
+
 onMounted(() => {
     organizationStore.fetchOrganizations();
 });

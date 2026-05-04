@@ -33,11 +33,11 @@ export const useOrganizationStore = defineStore("organization", {
                 await api.put(`/organizations/${id}`, {
                     pbi_embed_id: newId,
                 });
-                fetchOrganizations(); // Refresh list
-                alert("PBI Embed ID updated successfully!");
+                console.log(
+                    `Organization ${id} updated with new PBI Embed ID: ${newId}`,
+                );
             } catch (error) {
                 console.error(error);
-                alert("Update failed.");
             }
         },
     },
