@@ -34,7 +34,6 @@ export const useOrganizationStore = defineStore("organization", {
                     pbi_embed_id: newId,
                 });
                 fetchOrganizations(); // Refresh list
-                // await pbiStore.forceRefresh();
                 alert("PBI Embed ID updated successfully!");
             } catch (error) {
                 console.error(error);
