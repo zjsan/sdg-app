@@ -1,45 +1,81 @@
 <template>
     <Authenticated>
-        <div class="p-8">
-            <h1 class="text-2xl font-bold">Power Bi Link Management</h1>
-            <div class="overflow-x-auto bg-white rounded-lg shadow">
-                <table class="min-w-full table-auto">
-                    <thead class="bg-gray-50">
+        <div class="p-8 max-w-6xl mx-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-2xl font-bold text-slate-800">
+                    Power BI Link Management
+                </h1>
+                <span class="text-sm text-slate-500"
+                    >{{
+                        organizationStore.organizations.length
+                    }}
+                    Organizations</span
+                >
+            </div>
+
+            <div
+                class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden"
+            >
+                <table class="min-w-full divide-y divide-slate-200">
+                    <thead class="bg-slate-50">
                         <tr>
                             <th
-                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+                                class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider"
                             >
                                 Organization
                             </th>
                             <th
-                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+                                class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider"
                             >
-                                Power BI Link
+                                Embed Configuration
                             </th>
                             <th
-                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+                                class="px-6 py-4 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider"
                             >
                                 Action
                             </th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-200">
+                    <tbody class="divide-y divide-slate-200">
                         <tr
                             v-for="org in organizationStore.organizations"
                             :key="org.id"
+                            class="hover:bg-slate-50 transition-colors"
                         >
-                            <td class="px-6 py-4 font-medium">
-                                {{ org.name }}
+                            <td class="px-6 py-4">
+                                <div class="font-semibold text-slate-900">
+                                    {{ org.name }}
+                                </div>
+                                <div class="text-xs text-slate-400">
+                                    ID: {{ org.id }}
+                                </div>
                             </td>
                             <td class="px-6 py-4">
-                                {{ org.pbi_embed_id || "No link set" }}
-                            </td>
-                            <td class="px-6 py-4">
-                                <button
-                                    @click="saveOrg(org)"
-                                    class="bg-indigo-600 text-white px-4 py-1 rounded text-sm hover:bg-indigo-700"
+                                <div
+                                    v-if="org.pbi_embed_id"
+                                    class="flex items-center space-x-2"
                                 >
-                                    Update
+                                    <span
+                                        class="px-2 py-1 bg-indigo-50 text-indigo-700 rounded text-xs font-mono"
+                                    >
+                                        {{
+                                            org.pbi_embed_id.substring(0, 8)
+                                        }}...{{ org.pbi_embed_id.slice(-4) }}
+                                    </span>
+                                    <!-- A small "copy" button here would be a huge UX win -->
+                                </div>
+                                <span
+                                    v-else
+                                    class="text-sm text-slate-400 italic"
+                                    >No link configured</span
+                                >
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <button
+                                    @click="openEditModal(org)"
+                                    class="inline-flex items-center px-3 py-1.5 border border-slate-300 text-sm font-medium rounded-md text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all"
+                                >
+                                    Edit Link
                                 </button>
                             </td>
                         </tr>
