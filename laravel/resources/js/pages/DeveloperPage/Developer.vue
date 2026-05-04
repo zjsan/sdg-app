@@ -59,10 +59,18 @@
                                         class="px-2 py-1 bg-indigo-50 text-indigo-700 rounded text-xs font-mono"
                                     >
                                         {{
-                                            org.pbi_embed_id.substring(0, 8)
+                                            org.pbi_embed_id.substring(0, 15)
                                         }}...{{ org.pbi_embed_id.slice(-4) }}
                                     </span>
                                     <!-- A small "copy" button here would be a huge UX win -->
+                                    <button
+                                        @click="
+                                            copyToClipboard(org.pbi_embed_id)
+                                        "
+                                        class="text-xs text-blue-600 hover:text-indigo-800 cursor-pointer transition-colors"
+                                    >
+                                        Copy
+                                    </button>
                                 </div>
                                 <span
                                     v-else
@@ -100,6 +108,15 @@ const testLink = (id) => {
     window.open(`${baseUrl}${id}`, "_blank");
 };
 
+const copyToClipboard = async (text) => {
+    try {
+        await navigator.clipboard.writeText(text);
+        alert("Embed ID copied to clipboard!");
+    } catch (err) {
+        console.error("Failed to copy: ", err);
+        alert("Failed to copy to clipboard.");
+    }
+};
 const saveOrg = async () => {
     try {
         await organizationStore.UpdateOrganizations(id, newId); //update action
