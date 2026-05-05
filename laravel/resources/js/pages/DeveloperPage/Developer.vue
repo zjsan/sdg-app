@@ -218,30 +218,21 @@ const copyToClipboard = async (text) => {
 const saveOrg = async (id, newId) => {
     try {
         await organizationStore.UpdateOrganizations(id, newId); //update action
-
-        // Refresh both org list and PBI config to reflect changes immediately
-        await Promise.all([
-            organizationStore.fetchOrganizations(),
-            pbiStore.forceRefresh(),
-        ]);
-
-        alert("PBI Embed ID updated successfully!");
+        alert("Organization updated successfully!");
+        console.log("updated successfully.");
     } catch (error) {
-        const errorContext = {
-            message: error.message,
-            status: error.response?.status,
-            data: error.response?.data,
-        };
-
-        console.error("Critical Failure in saveOrg:", errorContext);
-
-        // Friendly UI feedback based on error type
-        if (error.response?.status === 403) {
-            alert("You don't have permission to update this org.");
-        } else {
-            alert(`Update failed: ${error.message}`);
-        }
+        console.error("Error updating organization: ", error);
+        alert("Failed to update organization. Please try again.");
+        return; //exit on failure
     }
+
+    // Refresh both org list and PBI config to reflect changes immediately
+    await Promise.all([
+        organizationStore.fetchOrganizations(),
+        pbiStore.forceRefresh(),
+    ]);
+
+    alert("PBI Embed ID updated successfully!");
 };
 
 onMounted(() => {
