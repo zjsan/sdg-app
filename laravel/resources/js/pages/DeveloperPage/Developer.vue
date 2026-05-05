@@ -166,7 +166,7 @@
                             Cancel
                         </button>
                         <button
-                            @click="saveOrg(selectedOrg)"
+                            @click="saveOrg(selectedOrg.id, editValue)"
                             class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm shadow-indigo-200 transition-all active:scale-95 cursor-pointer"
                         >
                             Save Changes
@@ -215,7 +215,14 @@ const copyToClipboard = async (text) => {
         alert("Failed to copy to clipboard.");
     }
 };
+
 const saveOrg = async (id, newId) => {
+    console.log("ID:", id, "New PBI ID:", newId);
+
+    if (!id || !newId) {
+        alert("Missing information. Please fill out the ID.");
+        return;
+    }
     try {
         await organizationStore.UpdateOrganizations(id, newId); //update action
         alert("Organization updated successfully!");
@@ -226,13 +233,25 @@ const saveOrg = async (id, newId) => {
         return; //exit on failure
     }
 
-    // Refresh both org list and PBI config to reflect changes immediately
-    await Promise.all([
-        organizationStore.fetchOrganizations(),
-        pbiStore.forceRefresh(),
-    ]);
+    // // refresh both org list and pbi link
+    // const refreshResults = await Promise.allSettled([
+    //     organizationStore.fetchOrganizations(),
+    //     pbiStore.forceRefresh(),
+    // ]);
 
-    alert("PBI Embed ID updated successfully!");
+    // const [fetchRes, pbiRes] = refreshResults; //log results for debugging
+
+    // if (fetchRes.status === "rejected") {
+    //     console.error("fetchOrganizations: Failed", fetchRes.reason);
+    // } else {
+    //     console.log("fetchOrganizations: Success");
+    // }
+
+    // if (pbiRes.status === "rejected") {
+    //     console.error("pbiStore.forceRefresh: Failed", pbiRes.reason);
+    // } else {
+    //     console.log("pbiStore.forceRefresh: Success");
+    // }
 };
 
 onMounted(() => {
