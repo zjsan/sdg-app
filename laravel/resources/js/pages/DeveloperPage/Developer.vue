@@ -233,25 +233,25 @@ const saveOrg = async (id, newId) => {
         return; //exit on failure
     }
 
-    // // refresh both org list and pbi link
-    // const refreshResults = await Promise.allSettled([
-    //     organizationStore.fetchOrganizations(),
-    //     pbiStore.forceRefresh(),
-    // ]);
+    // refresh both org list and pbi link
+    const refreshResults = await Promise.allSettled([
+        organizationStore.fetchOrganizations(),
+        pbiStore.forceRefresh(),
+    ]);
 
-    // const [fetchRes, pbiRes] = refreshResults; //log results for debugging
+    const [fetchRes, pbiRes] = refreshResults; //log results for debugging
 
-    // if (fetchRes.status === "rejected") {
-    //     console.error("fetchOrganizations: Failed", fetchRes.reason);
-    // } else {
-    //     console.log("fetchOrganizations: Success");
-    // }
+    if (fetchRes.status === "rejected") {
+        console.error("fetchOrganizations: Failed", fetchRes.reason);
+    } else {
+        console.log("fetchOrganizations: Success");
+    }
 
-    // if (pbiRes.status === "rejected") {
-    //     console.error("pbiStore.forceRefresh: Failed", pbiRes.reason);
-    // } else {
-    //     console.log("pbiStore.forceRefresh: Success");
-    // }
+    if (pbiRes.status === "rejected") {
+        console.error("pbiStore.forceRefresh: Failed", pbiRes.reason);
+    } else {
+        console.log("pbiStore.forceRefresh: Success");
+    }
 };
 
 onMounted(() => {
