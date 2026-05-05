@@ -22,8 +22,15 @@ class OrganizationController extends Controller
      */
     public function store(Request $request, Organization $organization)
     {
-        //
+        //retrive the clean and validated data
+        $validated = $request->validated();
 
+        $organization = Organization::create($validated);
+
+        return response()->json([
+            'message' => "Successfully created organization.",
+            'organization' => $organization
+        ], 201);
 
     }
 
