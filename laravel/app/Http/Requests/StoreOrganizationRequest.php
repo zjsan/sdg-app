@@ -18,7 +18,7 @@ class StoreOrganizationRequest extends FormRequest
     {
         $this->merge([
             'name' =>  strtoupper(trim($this->name)),
-            'last_name'  =>  trim($this->slug),
+            'slug'  =>  trim($this->slug),
             'pbi_embed_id' => trim($this->pbi_embed_id),
         ]);
     }
@@ -31,8 +31,14 @@ class StoreOrganizationRequest extends FormRequest
      */
     public function rules(): array
     {
+        $orgId = $this->route('organization')?->id;
+
         return [
             //
+            'name' => 'required|string|max:255|unique:organizations,name,' . $orgId,
+            'slug' => 'required|string|max:255|unique:organizations,slug,' . $orgId,
+            'pbi_embed_id' => 'required|string|min:10',
+
         ];
     }
 }
