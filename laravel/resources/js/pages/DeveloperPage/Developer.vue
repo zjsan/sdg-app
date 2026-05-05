@@ -166,7 +166,7 @@
                             Cancel
                         </button>
                         <button
-                            @click="saveOrg()"
+                            @click="saveOrg(selectedOrg)"
                             class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm shadow-indigo-200 transition-all active:scale-95 cursor-pointer"
                         >
                             Save Changes
@@ -215,7 +215,7 @@ const copyToClipboard = async (text) => {
         alert("Failed to copy to clipboard.");
     }
 };
-const saveOrg = async () => {
+const saveOrg = async (id, newId) => {
     try {
         await organizationStore.UpdateOrganizations(id, newId); //update action
         await organizationStore.fetchOrganizations(); // Refresh list for the table
