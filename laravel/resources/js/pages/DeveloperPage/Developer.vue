@@ -81,7 +81,7 @@
                             <td class="px-6 py-4 text-right">
                                 <button
                                     @click="openEditModal(org)"
-                                    class="inline-flex items-center px-3 py-1.5 border border-slate-300 text-sm font-medium rounded-md text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all"
+                                    class="inline-flex items-center px-3 py-1.5 border border-slate-300 text-sm font-medium rounded-md text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all cursor-pointer"
                                 >
                                     Edit Link
                                 </button>
@@ -114,7 +114,7 @@
                         </h3>
                         <button
                             @click="closeModal"
-                            class="text-slate-400 hover:text-slate-600"
+                            class="text-slate-400 hover:text-slate-600 cursor-pointer transition-colors"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -161,13 +161,13 @@
                     <div class="flex justify-end gap-3">
                         <button
                             @click="closeModal"
-                            class="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+                            class="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-lg cursor-pointer transition-colors"
                         >
                             Cancel
                         </button>
                         <button
-                            @click="handleUpdate"
-                            class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm shadow-indigo-200 transition-all active:scale-95"
+                            @click="saveOrg()"
+                            class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm shadow-indigo-200 transition-all active:scale-95 cursor-pointer"
                         >
                             Save Changes
                         </button>
