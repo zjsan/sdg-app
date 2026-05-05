@@ -218,13 +218,29 @@ const copyToClipboard = async (text) => {
 const saveOrg = async (id, newId) => {
     try {
         await organizationStore.UpdateOrganizations(id, newId); //update action
-        await organizationStore.fetchOrganizations(); // Refresh list for the table
 
-        await pbiStore.forceRefresh(); //force power bi link refresh
+        // Refresh both org list and PBI config to reflect changes immediately
+        await Promise.all([
+            organizationStore.fetchOrganizations(),
+            pbiStore.forceRefresh(),
+        ]);
+
         alert("PBI Embed ID updated successfully!");
     } catch (error) {
-        console.error(error);
-        alert("Update failed.");
+        const errorContext = {
+            message: error.message,
+            status: error.response?.status,
+            data: error.response?.data,
+        };
+
+        console.error("Critical Failure in saveOrg:", errorContext);
+
+        // Friendly UI feedback based on error type
+        if (error.response?.status === 403) {
+            alert("You don't have permission to update this org.");
+        } else {
+            alert(`Update failed: ${error.message}`);
+        }
     }
 };
 
