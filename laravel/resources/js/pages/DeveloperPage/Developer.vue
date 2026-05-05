@@ -85,6 +85,12 @@
                                 >
                                     Edit Link
                                 </button>
+                                <button
+                                    @click="openEditModal(org)"
+                                    class="inline-flex items-center px-3 py-1.5 border border-slate-300 text-sm font-medium rounded-md text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all cursor-pointer"
+                                >
+                                    Add
+                                </button>
                             </td>
                         </tr>
                     </tbody>
