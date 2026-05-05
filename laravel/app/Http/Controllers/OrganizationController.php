@@ -22,16 +22,22 @@ class OrganizationController extends Controller
      */
     public function store(Request $request, Organization $organization)
     {
-        //retrive the clean and validated data
-        $validated = $request->validated();
+        try{
+            //retrive the clean and validated data
+            $validated = $request->validated();
 
-        $organization = Organization::create($validated);
+            $organization = Organization::create($validated);
 
-        return response()->json([
-            'message' => "Successfully created organization.",
-            'organization' => $organization
-        ], 201);
+            return response()->json([
+                'message' => "Successfully created organization.",
+                'organization' => $organization
+            ], 201);
 
+        }
+        catch (Exception $e) {
+            return response()->json(['message' => 'Failed to create organization: ' . $e->getMessage()], 500);
+        }
+      
     }
 
     /**
@@ -47,22 +53,27 @@ class OrganizationController extends Controller
      */
     public function update(Request $request, Organization $organization)
     {
-        //
-        // Authorize via Gate
-        Gate::authorize('manage-pbi-links');
+        try{
+            // Authorize via Gate
+            Gate::authorize('manage-pbi-links');
 
-        // Validate input
-        $validated = $request->validate([
-            'pbi_embed_id' => 'required|string|min:10',
-        ]);
+            // Validate input
+            $validated = $request->validate([
+                'pbi_embed_id' => 'required|string|min:10',
+            ]);
 
-        // Update the DB
-        $organization->update($validated);
+            // Update the DB
+            $organization->update($validated);
 
-        return response()->json([
-            'message' => "Successfully updated {$organization->name}'s dashboard.",
-            'organization' => $organization
-        ]);
+            return response()->json([
+                'message' => "Successfully updated {$organization->name}'s dashboard.",
+                'organization' => $organization
+            ]);
+
+        } catch (Exception $e) {
+            return response()->json(['message' => 'Failed to update organization: ' . $e->getMessage()], 500);
+        }
+        
     }
 
     /**
