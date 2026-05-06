@@ -12,7 +12,12 @@
                     Organizations</span
                 >
             </div>
-
+            <button
+                @click="openAddModal"
+                class="inline-flex items-center px-3 py-1.5 border border-slate-300 text-sm font-medium rounded-md text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all cursor-pointer"
+            >
+                Add Organization
+            </button>
             <div
                 class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden"
             >
@@ -90,12 +95,6 @@
                     </tbody>
                 </table>
             </div>
-            <button
-                @click="openAddModal"
-                class="inline-flex items-center px-3 py-1.5 border border-slate-300 text-sm font-medium rounded-md text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all cursor-pointer"
-            >
-                Add Organization
-            </button>
         </div>
 
         <!-- Modal Backdrop -->
@@ -171,7 +170,7 @@
                                 v-model="orgName"
                                 type="text"
                                 class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50"
-                                placeholder="e.g. Acme Corp"
+                                placeholder="e.g. CHED"
                             />
                         </div>
 
