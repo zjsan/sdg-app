@@ -26,8 +26,9 @@ class OrganizationController extends Controller
     public function store(StoreOrganizationRequest $request)
     {
         try{
+            
             return DB::transaction(function () use ($request) {
-                
+
                 //retrive the clean and validated data
                 $validated = $request->validated();
 
@@ -37,7 +38,7 @@ class OrganizationController extends Controller
                     'message' => "Successfully created organization.",
                     'organization' => $organization
                 ], 201);
-            }
+            });
         }
         catch (Exception $e) {
             Log::error("Failed to create organization: " . $e->getMessage());
