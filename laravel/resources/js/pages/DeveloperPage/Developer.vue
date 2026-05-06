@@ -192,12 +192,20 @@ import { useOrganizationStore } from "../../stores/organization.js";
 const pbiStore = usePowerBiStore();
 const organizationStore = useOrganizationStore();
 const isModalOpen = ref(false);
-const selectedOrg = ref(null);
+const selectedOrg = ref(null); //if null means adding
 const editValue = ref("");
 
+//for editing
 const openEditModal = (org) => {
     selectedOrg.value = org;
     editValue.value = org.pbi_embed_id || ""; // Initialize with current value
+    isModalOpen.value = true;
+};
+
+//adding
+const openAddModal = () => {
+    selectedOrg.value = null; // Ensure it's null
+    editValue.value = ""; // Clear the input
     isModalOpen.value = true;
 };
 
