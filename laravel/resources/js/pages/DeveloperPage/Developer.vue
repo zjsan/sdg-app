@@ -239,8 +239,10 @@ const handleSubmit = async (id, newId) => {
         return;
     }
 
+    const isUpdate = !!selectedOrg.value; //true if editing, false if adding
+
     try {
-        if (selectedOrg.value) {
+        if (isUpdate) {
             await organizationStore.UpdateOrganizations(id, newId); //update action
             alert("Organization updated successfully!");
             console.log("updated successfully.");
@@ -255,25 +257,28 @@ const handleSubmit = async (id, newId) => {
         return; //exit on failure
     }
 
-    // refresh both org list and pbi link
-    const refreshResults = await Promise.allSettled([
-        organizationStore.fetchOrganizations(),
-        pbiStore.forceRefresh(),
-    ]);
+    const tasks = [organizationStore.fetchOrganizations()]; //always refresh org list after add/edit
 
-    const [fetchRes, pbiRes] = refreshResults; //log results for debugging
-
-    if (fetchRes.status === "rejected") {
-        console.error("fetchOrganizations: Failed", fetchRes.reason);
-    } else {
-        console.log("fetchOrganizations: Success");
+    // only force refresh power bi link when the operation is update
+    //this avoid uncessarry refresh
+    if (isUpdate) {
+        tasks.push(pbiStore.forceRefresh());
     }
 
-    if (pbiRes.status === "rejected") {
-        console.error("pbiStore.forceRefresh: Failed", pbiRes.reason);
-    } else {
-        console.log("pbiStore.forceRefresh: Success");
-    }
+    const refreshResults = await Promise.allSettled(tasks); //wait for all refresh tasks to complete
+
+    //log corresponding result for each task
+    refreshResults.forEach((result, index) => {
+        const taskLabel = index === 0 ? "Organization List" : "Power BI Link";
+
+        if (result === "rejected") {
+            console.error(`Failed to refresh ${taskLabel}:`, result.reason);
+            alert(`Failed to refresh ${taskLabel}`);
+        } else {
+            console.log(`${taskLabel} refreshed successfully.`);
+            alert(`${taskLabel} refreshed successfully.`);
+        }
+    });
 };
 
 onMounted(() => {
