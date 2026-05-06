@@ -194,6 +194,7 @@ const organizationStore = useOrganizationStore();
 const isModalOpen = ref(false);
 const selectedOrg = ref(null); //if null means adding
 const editValue = ref("");
+const orgName = ref("");
 
 //for editing
 const openEditModal = (org) => {
@@ -230,13 +231,14 @@ const copyToClipboard = async (text) => {
     }
 };
 
-const saveOrg = async (id, newId) => {
+const handleSubmit = async (id, newId) => {
     console.log("ID:", id, "New PBI ID:", newId);
 
-    if (!id || !newId) {
-        alert("Missing information. Please fill out the ID.");
+    if (!editValue.value || (!selectedOrg.value && !orgName.value)) {
+        alert("Please fill in all required fields.");
         return;
     }
+
     try {
         await organizationStore.UpdateOrganizations(id, newId); //update action
         alert("Organization updated successfully!");
