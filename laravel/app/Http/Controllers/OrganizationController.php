@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Organization;
 use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\StoreOrganizationRequest;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class OrganizationController extends Controller
 {
@@ -20,21 +23,24 @@ class OrganizationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, Organization $organization)
+    public function store(StoreOrganizationRequest $request)
     {
         try{
-            //retrive the clean and validated data
-            $validated = $request->validated();
+            return DB::transaction(function () use ($request) {
+                
+                //retrive the clean and validated data
+                $validated = $request->validated();
 
-            $organization = Organization::create($validated);
+                $organization = Organization::create($validated);
 
-            return response()->json([
-                'message' => "Successfully created organization.",
-                'organization' => $organization
-            ], 201);
-
+                return response()->json([
+                    'message' => "Successfully created organization.",
+                    'organization' => $organization
+                ], 201);
+            }
         }
         catch (Exception $e) {
+            Log::error("Failed to create organization: " . $e->getMessage());
             return response()->json(['message' => 'Failed to create organization: ' . $e->getMessage()], 500);
         }
       
@@ -71,6 +77,7 @@ class OrganizationController extends Controller
             ]);
 
         } catch (Exception $e) {
+            Log::error("Failed to update organization: " . $e->getMessage());
             return response()->json(['message' => 'Failed to update organization: ' . $e->getMessage()], 500);
         }
         
