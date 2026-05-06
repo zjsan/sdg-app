@@ -232,7 +232,7 @@ const copyToClipboard = async (text) => {
 };
 
 const handleSubmit = async (id, newId) => {
-    console.log("ID:", id, "New PBI ID:", newId);
+    //  console.log("ID:", id, "New PBI ID:", newId);
 
     if (!editValue.value || (!selectedOrg.value && !orgName.value)) {
         alert("Please fill in all required fields.");
@@ -240,9 +240,15 @@ const handleSubmit = async (id, newId) => {
     }
 
     try {
-        await organizationStore.UpdateOrganizations(id, newId); //update action
-        alert("Organization updated successfully!");
-        console.log("updated successfully.");
+        if (selectedOrg.value) {
+            await organizationStore.UpdateOrganizations(id, newId); //update action
+            alert("Organization updated successfully!");
+            console.log("updated successfully.");
+        } else {
+            await organizationStore.createOrganization(orgName.value, newId); //create action
+            alert("Organization created successfully!");
+            console.log("created successfully.");
+        }
     } catch (error) {
         console.error("Error updating organization: ", error);
         alert("Failed to update organization. Please try again.");
