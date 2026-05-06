@@ -276,14 +276,23 @@ const handleSubmit = async () => {
 
     try {
         if (isUpdate) {
-            await organizationStore.UpdateOrganizations(id, newId); //update action
+            //update action
+            await organizationStore.UpdateOrganizations(
+                selectedOrg.value.id,
+                editValue.value,
+            );
             alert("Organization updated successfully!");
             console.log("updated successfully.");
         } else {
-            await organizationStore.createOrganization(orgName.value, newId); //create action
+            //create action
+            await organizationStore.createOrganization(
+                orgName.value,
+                editValue.value,
+            );
             alert("Organization created successfully!");
             console.log("created successfully.");
         }
+        closeModal(); //close modal once form is properly submitted
     } catch (error) {
         console.error("Error updating organization: ", error);
         alert("Failed to update organization. Please try again.");
