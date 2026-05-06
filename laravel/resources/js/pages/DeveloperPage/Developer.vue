@@ -85,17 +85,17 @@
                                 >
                                     Edit Link
                                 </button>
-                                <button
-                                    @click="openEditModal(org)"
-                                    class="inline-flex items-center px-3 py-1.5 border border-slate-300 text-sm font-medium rounded-md text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all cursor-pointer"
-                                >
-                                    Add
-                                </button>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
+            <button
+                @click="openAddModal"
+                class="inline-flex items-center px-3 py-1.5 border border-slate-300 text-sm font-medium rounded-md text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all cursor-pointer"
+            >
+                Add Organization
+            </button>
         </div>
 
         <!-- Modal Backdrop -->
@@ -147,11 +147,17 @@
                     </div>
 
                     <div class="mb-6">
-                        <p class="text-sm text-slate-500 mb-4">
+                        <p
+                            v-if="selectedOrg"
+                            class="text-sm text-slate-500 mb-4"
+                        >
                             Updating link for
                             <span class="font-bold text-slate-700">{{
                                 selectedOrg?.name
                             }}</span>
+                        </p>
+                        <p v-else class="text-sm text-slate-500 mb-4">
+                            Enter the details for the new organization.
                         </p>
 
                         <!--organization input when adding new organization-->
