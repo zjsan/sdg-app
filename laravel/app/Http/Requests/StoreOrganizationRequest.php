@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 
 class StoreOrganizationRequest extends FormRequest
 {
@@ -18,7 +19,7 @@ class StoreOrganizationRequest extends FormRequest
     {
         $this->merge([
             'name' =>  strtoupper(trim($this->name)),
-            'slug'  =>  trim($this->slug),
+            'slug'  =>  Str::lower($this->name),
             'pbi_embed_id' => trim($this->pbi_embed_id),
         ]);
     }
