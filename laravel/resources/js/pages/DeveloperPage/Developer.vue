@@ -115,9 +115,16 @@
             >
                 <div class="p-6">
                     <div class="flex items-center justify-between mb-4">
+                        <!--header-->
                         <h3 class="text-lg font-semibold text-slate-800">
-                            Update Embed Link
+                            {{
+                                selectedOrg
+                                    ? "Update Embed Link"
+                                    : "Add New Organization"
+                            }}
                         </h3>
+
+                        <!--close icon-->
                         <button
                             @click="closeModal"
                             class="text-slate-400 hover:text-slate-600 cursor-pointer transition-colors"
@@ -147,6 +154,22 @@
                             }}</span>
                         </p>
 
+                        <!--organization input when adding new organization-->
+                        <div v-if="!selectedOrg" class="mb-4">
+                            <label
+                                class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2"
+                            >
+                                Organization Name
+                            </label>
+                            <input
+                                v-model="orgName"
+                                type="text"
+                                class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50"
+                                placeholder="e.g. Acme Corp"
+                            />
+                        </div>
+
+                        <!--embed ID input for both add and edit-->
                         <label
                             class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2"
                         >
@@ -164,6 +187,7 @@
                         </p>
                     </div>
 
+                    <!--action buttons-->
                     <div class="flex justify-end gap-3">
                         <button
                             @click="closeModal"
@@ -172,10 +196,14 @@
                             Cancel
                         </button>
                         <button
-                            @click="saveOrg(selectedOrg.id, editValue)"
+                            @click="handleSubmit"
                             class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm shadow-indigo-200 transition-all active:scale-95 cursor-pointer"
                         >
-                            Save Changes
+                            {{
+                                selectedOrg
+                                    ? "Save Changes"
+                                    : "Create Organization"
+                            }}
                         </button>
                     </div>
                 </div>
@@ -231,7 +259,7 @@ const copyToClipboard = async (text) => {
     }
 };
 
-const handleSubmit = async (id, newId) => {
+const handleSubmit = async () => {
     //  console.log("ID:", id, "New PBI ID:", newId);
 
     if (!editValue.value || (!selectedOrg.value && !orgName.value)) {
