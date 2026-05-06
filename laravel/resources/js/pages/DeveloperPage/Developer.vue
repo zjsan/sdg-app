@@ -204,11 +204,14 @@
                             @click="handleSubmit"
                             class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm shadow-indigo-200 transition-all active:scale-95 cursor-pointer"
                         >
-                            {{
+                            <span v-if="organizationStore.loading"
+                                >Processing...</span
+                            >
+                            <span v-else>{{
                                 selectedOrg
                                     ? "Save Changes"
                                     : "Create Organization"
-                            }}
+                            }}</span>
                         </button>
                     </div>
                 </div>
