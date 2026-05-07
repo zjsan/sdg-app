@@ -73,12 +73,16 @@ export const useOrganizationStore = defineStore("organization", {
                 return;
             }
             try {
-                await api.delete(`/organizations/${id}`);
+                response = await api.delete(`/organizations/${id}`);
 
+                //remove user from local state
                 this.organizations = this.organizations.filter(
                     (organization) => organization.id !== id,
                 );
-                console.log(`Organization ${id} deleted successfully.`);
+                console.log(
+                    response.message ||
+                        `Organization ${id} deleted successfully.`,
+                );
             } catch (error) {
                 this.errors =
                     error.response?.data?.message ||
