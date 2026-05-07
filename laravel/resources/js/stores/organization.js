@@ -50,10 +50,11 @@ export const useOrganizationStore = defineStore("organization", {
         async UpdateOrganizations(id, newId) {
             this.loading = true;
             try {
-                await api.put(`/organizations/${id}`, {
+                const response = await api.put(`/organizations/${id}`, {
                     pbi_embed_id: newId,
                 });
                 console.log(
+                    response.message,
                     `Organization ${id} updated with new PBI Embed ID: ${newId}`,
                 );
             } catch (error) {
@@ -73,7 +74,7 @@ export const useOrganizationStore = defineStore("organization", {
                 return;
             }
             try {
-                response = await api.delete(`/organizations/${id}`);
+                const response = await api.delete(`/organizations/${id}`);
 
                 //remove user from local state
                 this.organizations = this.organizations.filter(
