@@ -65,5 +65,28 @@ export const useOrganizationStore = defineStore("organization", {
                 this.loading = false;
             }
         },
+
+        async deleteOrganization(id) {
+            this.loading = true;
+
+            if (!confirm("Are you sure?")) {
+                return;
+            }
+            try {
+                await api.delete(`/organizations/${id}`);
+
+                this.organizations = this.organizations.filter(
+                    (organization) => organization.id !== id,
+                );
+                console.log(`Organization ${id} deleted successfully.`);
+            } catch (error) {
+                this.errors =
+                    error.response?.data?.message ||
+                    `Failed to delete organization ${id}.`;
+                console.error(error);
+            } finally {
+                this.loading = false;
+            }
+        },
     },
 });
