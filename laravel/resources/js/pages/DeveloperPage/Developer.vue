@@ -90,6 +90,12 @@
                                 >
                                     Edit Link
                                 </button>
+                                <button
+                                    @click="confirmDelete(org.id)"
+                                    class="inline-flex items-center px-3 py-1.5 border border-slate-300 text-sm font-medium rounded-md text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all cursor-pointer"
+                                >
+                                    Delete Organization
+                                </button>
                             </td>
                         </tr>
                     </tbody>
@@ -231,6 +237,7 @@ const isModalOpen = ref(false);
 const selectedOrg = ref(null); //if null means adding
 const editValue = ref("");
 const orgName = ref("");
+const selectedOrgId = ref(null);
 
 //for editing
 const openEditModal = (org) => {
@@ -284,7 +291,6 @@ const handleSubmit = async () => {
                 selectedOrg.value.id,
                 editValue.value,
             );
-            alert("Organization updated successfully!");
             console.log("updated successfully.");
         } else {
             //create action
@@ -293,7 +299,6 @@ const handleSubmit = async () => {
                 editValue.value,
             );
             alert("Organization created successfully!");
-            console.log("created successfully.");
         }
         closeModal(); //close modal once form is properly submitted
     } catch (error) {
@@ -324,6 +329,13 @@ const handleSubmit = async () => {
             alert(`${taskLabel} refreshed successfully.`);
         }
     });
+};
+
+const confirmDelete = async (id) => {
+    selectedOrgId.value = id; //store the ID of the organization to be deleted
+    if (confirm("Are you sure you want to delete this user?")) {
+        await userStore.deleteUser(selectedOrgId.value); //call the delete action in the store
+    }
 };
 
 onMounted(() => {
