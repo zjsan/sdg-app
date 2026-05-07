@@ -87,8 +87,9 @@ class OrganizationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy()
+    public function destroy(Organization $organization)
     {
-        //
+        $organization->delete();
+        return response()->json(['message' => 'Organization deleted successfully.'],200);
     }
 }
