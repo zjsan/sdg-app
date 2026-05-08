@@ -18,11 +18,23 @@ class StoreOrganizationRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-        $this->merge([
-            'name' =>  strtoupper(trim($this->name)),
-            'slug'  =>  Str::lower($this->name),
-            'pbi_embed_id' => trim($this->pbi_embed_id),
-        ]);
+
+        $mergeData = [];
+
+        //only merge and transform if the name field is present
+        //provent unwanted overwriting of the slug
+        if ($this->has('name')) {
+            $name = strtoupper(trim($this->name));
+            $mergeData['name'] = $name;
+            $mergeData['slug'] = Str::lower($this->name);
+        }
+
+        if ($this->has('pbi_embed_id')) {
+            $mergeData['pbi_embed_id'] = trim($this->pbi_embed_id);
+        }
+
+        $this->merge($mergeData);
+
     }
 
 
@@ -39,7 +51,6 @@ class StoreOrganizationRequest extends FormRequest
         $rules = [
             'pbi_embed_id' => 'required|string|min:10',
         ];
-
 
         if ($this->isMethod('post')) {
             // Rules strictly for CREATING
