@@ -13,7 +13,7 @@ class StoreOrganizationRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        Gate::authorize('manage-pbi-links');
+        Gate::allows('manage-pbi-links');
     }
 
     protected function prepareForValidation()
