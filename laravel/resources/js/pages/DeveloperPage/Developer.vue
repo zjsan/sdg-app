@@ -326,10 +326,11 @@ const handleSubmit = async () => {
     refreshResults.forEach((result, index) => {
         const taskLabel = index === 0 ? "Organization List" : "Power BI Link";
 
-        if (result === "rejected") {
+        if (result.status === "rejected") {
             console.error(`Failed to refresh ${taskLabel}:`, result.reason);
             alert(`Failed to refresh ${taskLabel}`);
         } else {
+            //if result status is fullfilled
             console.log(`${taskLabel} refreshed successfully.`);
             alert(`${taskLabel} refreshed successfully.`);
         }
