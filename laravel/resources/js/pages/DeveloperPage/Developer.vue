@@ -333,8 +333,8 @@ const handleSubmit = async () => {
 
 const confirmDelete = async (id) => {
     selectedOrgId.value = id; //store the ID of the organization to be deleted
-    if (confirm("Are you sure you want to delete this user?")) {
-        await userStore.deleteUser(selectedOrgId.value); //call the delete action in the store
+    if (confirm("Are you sure you want to delete this organization?")) {
+        await organizationStore.deleteOrganization(selectedOrgId.value); //call the delete action in the store
     }
 };
 
