@@ -303,6 +303,7 @@ const handleSubmit = async () => {
                 orgName.value,
                 editValue.value,
             );
+            console.log("created successfully.");
             alert("Organization created successfully!");
         }
         closeModal(); //close modal once form is properly submitted
