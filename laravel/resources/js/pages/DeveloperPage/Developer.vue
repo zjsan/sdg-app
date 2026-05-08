@@ -102,7 +102,11 @@
                 </table>
             </div>
         </div>
-
+        <pre>
+Debug Loading: {{ organizationStore.loading }} (Type: {{
+                typeof organizationStore.loading
+            }})</pre
+        >
         <!-- Modal Backdrop -->
         <div
             v-if="isModalOpen"
@@ -213,6 +217,7 @@
                             <span v-if="organizationStore.loading"
                                 >Processing...</span
                             >
+
                             <span v-else>{{
                                 selectedOrg
                                     ? "Save Changes"

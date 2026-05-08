@@ -25,6 +25,8 @@ export const useOrganizationStore = defineStore("organization", {
                     error.response?.data?.message ||
                     "Failed to load organizations.";
                 console.error("Failed to fetch organizations:", error);
+            } finally {
+                this.loading = false;
             }
         },
 
