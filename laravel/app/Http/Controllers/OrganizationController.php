@@ -67,7 +67,7 @@ class OrganizationController extends Controller
             // Update the DB
             
            $updateData = [
-                'name' => $validated['name'],
+              //  'name' => $validated['name'],
                 'pbi_embed_id' => $validated['pbi_embed_id']
             ];
 
