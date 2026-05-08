@@ -58,19 +58,20 @@ class OrganizationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Organization $organization)
+    public function update(StoreOrganizationRequest $request, Organization $organization)
     {
         try{
-            // Authorize via Gate
-            Gate::authorize('manage-pbi-links');
-
             // Validate input
-            $validated = $request->validate([
-                'pbi_embed_id' => 'required|string|min:10',
-            ]);
+            $validated = $request->validated(); 
 
             // Update the DB
-            $organization->update($validated);
+            
+           $updateData = [
+                'name' => $validated['name'],
+                'pbi_embed_id' => $validated['pbi_embed_id']
+            ];
+
+            $organization->update($updateData);
 
             return response()->json([
                 'message' => "Successfully updated {$organization->name}'s dashboard.",
