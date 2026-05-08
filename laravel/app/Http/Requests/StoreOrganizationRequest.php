@@ -13,7 +13,7 @@ class StoreOrganizationRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        Gate::allows('manage-pbi-links');
+       return true;//
     }
 
     protected function prepareForValidation()
@@ -35,12 +35,23 @@ class StoreOrganizationRequest extends FormRequest
     {
         $orgId = $this->route('organization')?->id;
 
-        return [
-            //
-            'name' => 'required|string|max:255|unique:organizations,name,' . $orgId,
-            'slug' => 'required|string|max:255|unique:organizations,slug,' . $orgId,
+        // Default rules for both Create and Update
+        $rules = [
             'pbi_embed_id' => 'required|string|min:10',
-
         ];
+
+
+        if ($this->isMethod('post')) {
+            // Rules strictly for CREATING
+            $rules['name'] = 'required|string|max:255|unique:organizations,name';
+            $rules['slug'] = 'required|string|max:255|unique:organizations,slug';
+        } else {
+            // Rules strictly for UPDATING
+            // 'sometimes' means: if the key is missing from the JS payload, ignore it
+            $rules['name'] = 'sometimes|required|string|max:255|unique:organizations,name,' . $orgId;
+            $rules['slug'] = 'sometimes|required|string|max:255|unique:organizations,slug,' . $orgId;
+        }
+
+        return $rules;
     }
 }

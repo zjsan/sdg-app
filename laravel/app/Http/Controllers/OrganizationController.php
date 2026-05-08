@@ -66,12 +66,8 @@ class OrganizationController extends Controller
 
             // Update the DB
             
-           $updateData = [
-              //  'name' => $validated['name'],
-                'pbi_embed_id' => $validated['pbi_embed_id']
-            ];
-
-            $organization->update($updateData);
+            $organization->update($validated);
+        
 
             return response()->json([
                 'message' => "Successfully updated {$organization->name}'s dashboard.",
