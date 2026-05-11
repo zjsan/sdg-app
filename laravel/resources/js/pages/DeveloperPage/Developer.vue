@@ -17,11 +17,14 @@
                         active organizations.
                     </p>
                 </div>
-
-                <!-- Action Button: Now aligned to the right -->
+            </div>
+            <!-- Action Button: Now aligned to the right -->
+            <div
+                class="px-6 py-4 border-b border-slate-100 flex justify-end bg-slate-50/50"
+            >
                 <button
                     @click="openAddModal"
-                    class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-lg shadow-sm transition-all duration-200 ease-in-out transform active:scale-95 group cursor-pointer"
+                    class="ml-5 inline-flex items-center justify-center px-5 py-2.5 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-lg shadow-sm transition-all duration-200 ease-in-out transform active:scale-95 group cursor-pointer"
                 >
                     <!-- Heroicons: plus-small -->
                     <svg
