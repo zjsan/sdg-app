@@ -20,16 +20,16 @@
             </div>
             <!-- Action Button: Now aligned to the right -->
             <div
-                class="px-6 py-4 border-b border-slate-100 flex justify-end bg-slate-50/50"
+                class="flex justify-end py-4 border-b border-slate-100 flex justify-end bg-slate-50/50"
             >
                 <button
                     @click="openAddModal"
-                    class="ml-5 inline-flex items-center justify-center px-5 py-2.5 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-lg shadow-sm transition-all duration-200 ease-in-out transform active:scale-95 group cursor-pointer"
+                    class="ml-5 inline-flex items-center justify-center px-5 py-2.5 text-sm font-semibold text-white bg-indigo-600 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-lg shadow-sm transition-all duration-200 ease-in-out transform active:scale-95 group cursor-pointer"
                 >
                     <!-- Heroicons: plus-small -->
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        class="w-5 h-5 mr-2 -ml-1 transition-transform group-hover:rotate-90"
+                        class="w-5 h-5 mr-2 -ml-1"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -128,11 +128,11 @@
                 </table>
             </div>
         </div>
-        <pre>
+        <!-- <pre>
 Debug Loading: {{ organizationStore.loading }} (Type: {{
                 typeof organizationStore.loading
             }})</pre
-        >
+        > -->
         <!-- Modal Backdrop -->
         <div
             v-if="isModalOpen"
