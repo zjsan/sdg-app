@@ -30,8 +30,9 @@
             </header>
 
             <!-- SCROLLABLE CONTENT AREA -->
-            <div class="flex-1 min-h-0 overflow-y-auto">
-                <main class="p-6">
+            <div class="flex-1 min-h-0 overflow-y-auto flex flex-col">
+                <!-- added flex groww to fill all available spaces of the flex container -->
+                <main class="p-6 flex-grow">
                     <slot />
                 </main>
 
