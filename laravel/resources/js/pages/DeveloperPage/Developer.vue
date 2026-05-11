@@ -4,22 +4,43 @@
             <div
                 class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8"
             >
-                <h1 class="text-2xl font-bold text-slate-800">
-                    Power BI Link Management
-                </h1>
-                <span class="text-sm text-slate-500"
-                    >{{
-                        organizationStore.organizations.length
-                    }}
-                    Organizations</span
+                <div>
+                    <h1
+                        class="text-3xl font-extrabold text-slate-900 tracking-tight"
+                    >
+                        Power BI Link Management
+                    </h1>
+                    <p class="mt-1 text-sm text-slate-500">
+                        <span class="font-medium text-slate-700">{{
+                            organizationStore.organizations.length
+                        }}</span>
+                        active organizations.
+                    </p>
+                </div>
+
+                <!-- Action Button: Now aligned to the right -->
+                <button
+                    @click="openAddModal"
+                    class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-lg shadow-sm transition-all duration-200 ease-in-out transform active:scale-95 group cursor-pointer"
                 >
+                    <!-- Heroicons: plus-small -->
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-5 h-5 mr-2 -ml-1 transition-transform group-hover:rotate-90"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                        />
+                    </svg>
+                    Add Organization
+                </button>
             </div>
-            <button
-                @click="openAddModal"
-                class="inline-flex items-center px-3 py-1.5 border border-slate-300 text-sm font-medium rounded-md text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all cursor-pointer"
-            >
-                Add Organization
-            </button>
             <div
                 class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden"
             >
