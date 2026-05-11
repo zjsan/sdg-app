@@ -1,7 +1,9 @@
 <template>
     <Authenticated>
         <div class="p-8 max-w-6xl mx-auto">
-            <div class="flex justify-between items-center mb-6">
+            <div
+                class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8"
+            >
                 <h1 class="text-2xl font-bold text-slate-800">
                     Power BI Link Management
                 </h1>
