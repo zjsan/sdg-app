@@ -117,6 +117,9 @@
                     }}
                 </template>
 
+                <span class="text-sm text-slate-500">
+                    {{ "Editing Organization: " + selectedOrg.name }}
+                </span>
                 <div class="space-y-4">
                     <div v-if="!selectedOrg">
                         <label
@@ -194,9 +197,16 @@ const openAddModal = () => {
     isModalOpen.value = true;
 };
 
+const resetForm = () => {
+    selectedOrg.value = null;
+    editValue.value = "";
+    orgName.value = "";
+};
+
 const closeModal = () => {
     isModalOpen.value = false;
     selectedOrg.value = null;
+    resetForm();
 };
 
 const copyToClipboard = async (text) => {
