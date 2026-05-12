@@ -289,12 +289,6 @@ const closeModal = () => {
     selectedOrg.value = null;
 };
 
-const testLink = (id) => {
-    // POWER_BI_BASE_URL should ideally be an injected config or env variable
-    const baseUrl = "https://app.powerbi.com/view?r=";
-    window.open(`${baseUrl}${id}`, "_blank");
-};
-
 const copyToClipboard = async (text) => {
     try {
         await navigator.clipboard.writeText(text);
