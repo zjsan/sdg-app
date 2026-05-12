@@ -10,6 +10,8 @@ class AllowedEmails extends Model
     protected $fillable = [
         'email',
         'is_active',
+        'organization_id',
+        'role_id',
     ];
 
     public function role()
