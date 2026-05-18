@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         // high-level "can manage the system" check
-        Gate::define('manage-users', function (User $user) {
+        Gate::define('manage-allowed-emails', function (User $user) {
             return in_array($user->role?->slug, ['admin', 'developer']);
         });
 
