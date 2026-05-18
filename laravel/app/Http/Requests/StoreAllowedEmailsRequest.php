@@ -11,7 +11,14 @@ class StoreAllowedEmailsRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
+    }
+
+    public function prepareForValidation()
+    {
+        $this->merge([
+            'email'  => filter_var(strtolower(trim($this->email)), FILTER_SANITIZE_EMAIL),
+        ]);
     }
 
     /**
@@ -23,6 +30,7 @@ class StoreAllowedEmailsRequest extends FormRequest
     {
         return [
             //
+
         ];
     }
 }
