@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PowerBiController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\AllowedEmailController;
 
 Route::get('/user', function (Request $request) {
     return $request->user()->load('role');//eager loading the role relationship to include role data in the response
@@ -29,5 +30,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::apiResource('organizations', OrganizationController::class);
         
     });
+
+    // Admin and Developer routes
+    // eding of allowed emails tabble
+    Route::middleware(['can:manage-allowed-emails'])->group(function () {
+
+        // routes for GET, POST, PUT, DELETE /api/allowed-emails
+        Route::apiResource('allowed-emails', AllowedEmailController::class);
+
+    });
+
     
 });
