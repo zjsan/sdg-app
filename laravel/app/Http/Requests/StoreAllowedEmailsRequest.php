@@ -28,9 +28,14 @@ class StoreAllowedEmailsRequest extends FormRequest
      */
     public function rules(): array
     {
+        $allowedEmailId = $this->route('allowed-emails')?->id;
+
         return [
             //
-
+            'email' => 'required|email|max:255|unique:allowed_emails,email,' . $allowedEmailId,
+            'organization_id' => 'required|exists:organizations,id',
+            'role_id' => 'required|exists:roles,id',
+            'is_active' => 'required|boolean',
         ];
     }
 }
