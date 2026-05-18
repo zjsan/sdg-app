@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\AllowedEmail;
+use App\Http\Requests\StoreAllowedEmailsRequest;
 
 class AllowedEmailController extends Controller
 {
@@ -22,6 +23,7 @@ class AllowedEmailController extends Controller
     public function store(Request $request)
     {
         //
+
     }
 
     /**
