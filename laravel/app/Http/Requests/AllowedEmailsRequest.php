@@ -28,11 +28,13 @@ class StoreAllowedEmailsRequest extends FormRequest
      */
     public function rules(): array
     {
-        $allowedEmailId = $this->route('allowed-emails')?->id;
+        $allowedEmail = $this->route('allowed_email'); //if this is an update, ignore the current record's email in the unique check
+
+        $id = is_object($allowedEmail) ? $allowedEmail->id : $allowedEmail; //handle both model binding and direct id passing
 
         return [
             //
-            'email' => 'required|email|max:255|unique:allowed_emails,email,' . $allowedEmailId,
+            'email' => 'required|email|max:255|unique:allowed_emails,email,' . $id,
             'organization_id' => 'required|exists:organizations,id',
             'role_id' => 'required|exists:roles,id',
             'is_active' => 'required|boolean',
