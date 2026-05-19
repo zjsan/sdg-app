@@ -23,13 +23,22 @@ class AllowedEmailController extends Controller
     public function store(AllowedEmailsRequest $request)
     {
         //
-        $validated = $request->validated();
+        try{
+             $validated = $request->validated(); //get the validated data from the request
 
+             $allowedEmail = AllowedEmail::create($validated); //create a new record 
 
+             $allowedEmail->load(['role', 'organization']);// eager load the related role and organization data
 
-
-        
-
+             return response()->json([
+                 'message' => "Successfully added allowed email.",
+                 'allowedEmail' => $allowedEmail
+             ], 201);
+        }
+        catch (Exception $e) {
+            Log::error("Failed to add allowed email: " . $e->getMessage());
+            return response()->json(['message' => 'Failed to add allowed email: ' . $e->getMessage()], 500);
+        }   
     }
 
     /**
