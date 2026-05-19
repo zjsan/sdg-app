@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Organization;
 use Illuminate\Support\Facades\Gate;
-use App\Http\Requests\StoreOrganizationRequest;
+use App\Http\Requests\OrganizationRequest;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
@@ -23,7 +23,7 @@ class OrganizationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreOrganizationRequest $request)
+    public function store(OrganizationRequest $request)
     {
         try{
             
@@ -58,7 +58,7 @@ class OrganizationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreOrganizationRequest $request, Organization $organization)
+    public function update(OrganizationRequest $request, Organization $organization)
     {
         try{
             // Validate input

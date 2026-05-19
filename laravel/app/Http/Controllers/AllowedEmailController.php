@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\AllowedEmail;
-use App\Http\Requests\StoreAllowedEmailsRequest;
+use App\Http\Requests\AllowedEmailsRequest;
 
 class AllowedEmailController extends Controller
 {
@@ -20,11 +20,12 @@ class AllowedEmailController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreAllowedEmailsRequest $request)
+    public function store(AllowedEmailsRequest $request)
     {
         //
         $validated = $request->validated();
-        
+
+
 
 
         
