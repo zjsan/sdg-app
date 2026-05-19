@@ -14,7 +14,7 @@ class AllowedEmailController extends Controller
     public function index()
     {
         //
-        return response()->json(AllowedEmail::all());
+       return response()->json(AllowedEmail::with(['role','organization'])->get());
     }
 
     /**
@@ -24,6 +24,8 @@ class AllowedEmailController extends Controller
     {
         //
         $validated = $request->validated();
+        
+
 
         
 
