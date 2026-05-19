@@ -44,9 +44,10 @@ class AllowedEmailController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(AllowedEmail $allowedEmail)
     {
         //
+        return response()->json($allowedEmail->load(['role', 'organization']), 200);
     }
 
     /**
@@ -55,6 +56,7 @@ class AllowedEmailController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        
     }
 
     /**
