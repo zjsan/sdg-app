@@ -14,7 +14,7 @@ export const useOrganizationStore = defineStore("organization", {
             try {
                 const response = await api.get("/organizations");
                 // Debugging: Check console to see what the server actually sent
-                console.log("Backend Response:", response.data);
+                //console.log("Backend Response:", response.data);
 
                 // If backend returns a Resource, it might be response.data.data
                 this.organizations = Array.isArray(response.data)
