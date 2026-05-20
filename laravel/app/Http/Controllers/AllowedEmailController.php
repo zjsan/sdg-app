@@ -53,9 +53,28 @@ class AllowedEmailController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(AllowedEmailsRequest $request, AllowedEmail $allowedEmail)
     {
         //
+        try{
+            $validated = $request->validated(); //get the validated data from the request
+
+            $allowedEmail->update($validated); //update the record with the validated data
+
+            $allowedEmail->load(['role', 'organization']);// eager load the related role and organization data
+
+            return response()->json([
+                'message' => "Successfully updated allowed email.",
+                'allowedEmail' => $allowedEmail
+            ], 200);
+        }
+        catch(Exception $e) {
+            Log::error("Failed to update allowed email: " . $e->getMessage());
+            return response()->json(['message' => 'Failed to update allowed email: ' . $e->getMessage()], 500);
+        }
+    
+
+
         
     }
 
