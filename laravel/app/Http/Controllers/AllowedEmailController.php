@@ -23,22 +23,18 @@ class AllowedEmailController extends Controller
     public function store(AllowedEmailsRequest $request)
     {
         //
-        try{
-             $validated = $request->validated(); //get the validated data from the request
+        
+        $validated = $request->validated(); //get the validated data from the request
 
-             $allowedEmail = AllowedEmail::create($validated); //create a new record 
+        $allowedEmail = AllowedEmail::create($validated); //create a new record 
 
-             $allowedEmail->load(['role', 'organization']);// eager load the related role and organization data
+        $allowedEmail->load(['role', 'organization']);// eager load the related role and organization data
 
-             return response()->json([
-                 'message' => "Successfully added allowed email.",
-                 'allowedEmail' => $allowedEmail
-             ], 201);
-        }
-        catch (Exception $e) {
-            Log::error("Failed to add allowed email: " . $e->getMessage());
-            return response()->json(['message' => 'Failed to add allowed email: ' . $e->getMessage()], 500);
-        }   
+        return response()->json([
+            'message' => "Successfully added allowed email.",
+            'allowedEmail' => $allowedEmail
+        ], 201);
+  
     }
 
     /**
@@ -56,33 +52,29 @@ class AllowedEmailController extends Controller
     public function update(AllowedEmailsRequest $request, AllowedEmail $allowedEmail)
     {
         //
-        try{
-            $validated = $request->validated(); //get the validated data from the request
+        $validated = $request->validated(); //get the validated data from the request
 
-            $allowedEmail->update($validated); //update the record with the validated data
+        $allowedEmail->update($validated); //update the record with the validated data
 
-            $allowedEmail->load(['role', 'organization']);// eager load the related role and organization data
+        $allowedEmail->load(['role', 'organization']);// eager load the related role and organization data
 
-            return response()->json([
-                'message' => "Successfully updated allowed email.",
-                'allowedEmail' => $allowedEmail
-            ], 200);
-        }
-        catch(Exception $e) {
-            Log::error("Failed to update allowed email: " . $e->getMessage());
-            return response()->json(['message' => 'Failed to update allowed email: ' . $e->getMessage()], 500);
-        }
-    
-
-
+        return response()->json([
+            'message' => "Successfully updated allowed email.",
+            'allowedEmail' => $allowedEmail
+        ], 200);
         
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(AllowedEmail $allowedEmail)
     {
         //
+        
+        $allowedEmail->delete();
+        return response()->json(['message' => "Successfully deleted allowed email."], 200);
+
+
     }
 }
