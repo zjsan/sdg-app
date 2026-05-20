@@ -54,7 +54,7 @@ export const useAuthStore = defineStore("auth", {
 
             this.token = storedToken; //assign token to the state
 
-            console.log("Restore session triggered. Token found:", storedToken); //for debugging
+            //console.log("Restore session triggered. Token found:", storedToken); //for debugging
 
             try {
                 api.defaults.headers.common["Authorization"] =
@@ -63,7 +63,7 @@ export const useAuthStore = defineStore("auth", {
                 this.user = data;
                 this.saveUserToStorage();
                 console.log("Session restored");
-                console.log("Restored user:", this.user);
+                //console.log("Restored user:", this.user);
             } catch (error) {
                 console.error("Session restore failed:", error);
                 console.warn("Session restore failed:", error);
