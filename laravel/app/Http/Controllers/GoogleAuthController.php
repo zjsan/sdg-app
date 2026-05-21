@@ -34,18 +34,20 @@ class GoogleAuthController extends Controller
             $email = $googleUser->getEmail();
 
             //check the whitelist table
-            try{
-                 $whitelistEntry = DB::table('allowed_emails')
+            $whitelistEntry = DB::table('allowed_emails')
                 ->where('email', $email)
                 ->where('is_active', true)
                 ->first();
 
-                if (! $whitelistEntry) {
-                    // Redirect the user to a frontend route
-                    return redirect()->away(config('app.frontend_url') . '/unauthorized');
-                }
-                
-                //Fetch or Create the User
+            if (! $whitelistEntry) {
+                // Redirect the user to a frontend route
+                return redirect()->away(config('app.frontend_url') . '/unauthorized');
+            }
+            
+            //wrapping database operations in transaction for security and consistency
+            $authData = DB::transaction(function () use ($email, $googleUser, $whitelistEntry) {
+
+                // Fetch or Create the User (DB Write 1)
                 $user = User::firstOrCreate(
                     ['email' => $email],
                     [
@@ -55,36 +57,37 @@ class GoogleAuthController extends Controller
                     ]
                 );
 
-                //sync organization id for every login to ensure it stays up to date with whitelist
+                // Sync organization id and role
                 $user->update([
                     'organization_id' => $whitelistEntry->organization_id,
                     'role_id' => $whitelistEntry->role_id,
-                    'google_id' => $googleUser->getId(), // Keep ID up to date
+                    'google_id' => $googleUser->getId(), 
                 ]);
 
                 // load organization relationship to get slug for gate check
                 $orgSlug = $user->load('organization')->organization?->slug;
 
                 // check the user instance in the gate to check the user permission
+                // if error occurs, changes above will not be committed in the db
                 if (Gate::forUser($user)->denies('view-dashboard', $orgSlug)) {
-                    return redirect()->away(config('app.frontend_url') . '/unauthorized');
+                    // Throwing an exception forces the database to ROLLBACK
+                    throw new \Exception('Unauthorized organization access.');
                 }
 
-            } catch (\Throwable $e) {
-                Log::error('Database error during whitelist check', ['error' => $e->getMessage()]);
-                return response()->json([
-                    'message' => 'Something went wrong verifying your access.'
-                ], 500);
-            }
+                // Generate Sanctum token with expiry
+                $tokenResult = $user->createToken('auth_token');
+                $token = $tokenResult->plainTextToken;
 
-            // Generate Sanctum token with expiry
-            $tokenResult = $user->createToken('auth_token');
-            $token = $tokenResult->plainTextToken;
-
-            // Set token expiration (3 hours)
-            $tokenResult->accessToken->expires_at = now()->addHours(3);
-            $tokenResult->accessToken->save();
-
+                // Set token expiration (3 hours)
+                $tokenResult->accessToken->expires_at = now()->addHours(3);
+                $tokenResult->accessToken->save();
+                
+                // Return data out of the transaction block
+                return [
+                    'token' => $token,
+                    'user' => $user
+                ];
+            });
 
             // Generate a temporary session ID
             $sessionId = Str::uuid()->toString();
@@ -97,13 +100,19 @@ class GoogleAuthController extends Controller
 
             // Redirect to frontend with session_id
             return redirect()->to(config('app.frontend_url') . "/auth/callback?session_id={$sessionId}");
-       } catch (\Throwable $e) {
+        }
+        catch (\Throwable $e) {
 
         // Log actual error not shown to frontend
         Log::error('Google authentication failed', [
             'error' => $e->getMessage(),
             'trace' => $e->getTraceAsString(),
         ]);
+
+        //if the error is unauthorized organization access, redirect to specific page
+        if ($e->getMessage() === 'Unauthorized organization access.') {
+            return redirect()->away(config('app.frontend_url') . '/unauthorized');
+        }
 
         // Return dedicated error response to frontend
         return redirect()->away(config('app.frontend_url') . '/auth-error');
