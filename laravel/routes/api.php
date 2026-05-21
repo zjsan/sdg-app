@@ -13,7 +13,6 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 //auth routes
-Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');  
 
 Route::get('/auth/session/{sessionId}', [GoogleAuthController::class, 'fetchSessionData']);
