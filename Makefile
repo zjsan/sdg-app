@@ -6,7 +6,9 @@ PHP_CONT = sdg-php
 
 # 1. Full Frontend/Build Refresh
 build-fresh:
+	@echo "refreshing frontend volume to ensure a clean slate..."
 	docker volume rm sdg-app_laravel_public || true
+	@echo "building and deploying containers without cache..."
 	$(COMPOSE_PROD) build --no-cache
 	$(COMPOSE_PROD) up -d
 	$(MAKE) optimize
