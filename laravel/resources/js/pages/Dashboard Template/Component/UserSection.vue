@@ -33,14 +33,20 @@
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogCancel class="cursor-pointer"
+                    <!-- Disable cancel button if backend processing is active -->
+                    <AlertDialogCancel
+                        :disabled="isLoggingOut"
+                        class="cursor-pointer"
                         >Cancel</AlertDialogCancel
                     >
                     <AlertDialogAction
                         @click="handleLogout"
+                        :disabled="isLoggingOut"
                         class="bg-blue-400 hover:bg-blue-600 cursor-pointer"
                     >
-                        Yes, Log me out
+                        {{
+                            isLoggingOut ? "Logging out..." : "Yes, Log me out"
+                        }}
                     </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
