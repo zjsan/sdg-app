@@ -70,6 +70,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import router from "@/router";
+import { ref } from "vue";
 
 const auth = useAuthStore();
 const powerBiStore = usePowerBiStore();
