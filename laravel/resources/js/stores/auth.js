@@ -100,21 +100,34 @@ export const useAuthStore = defineStore("auth", {
          */
         async logout() {
             try {
-                await api.post("/logout");
+                const res = await api.post("/logout");
+
+                if (res.data.status === "success") {
+                    this.clearSession();
+                    return { success: true, message: res.data.message };
+                } else {
+                    throw new Error(
+                        res.data.message || "Logout failed backend validation",
+                    );
+                }
             } catch (error) {
                 console.error("Logout failed:", error);
             } finally {
-                localStorage.removeItem("token");
-                localStorage.removeItem("user");
-                delete api.defaults.headers.common["Authorization"];
-                this.user = null;
-                this.error = null;
-                this.loading = false;
-                this.token = null;
+                this.clearSession();
                 if (router.currentRoute.value.name !== "Login") {
                     router.push({ name: "Login" });
                 }
             }
+        },
+
+        clearSession() {
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            delete api.defaults.headers.common["Authorization"];
+            this.user = null;
+            this.error = null;
+            this.loading = false;
+            this.token = null;
         },
 
         async loginWithGoogle() {
