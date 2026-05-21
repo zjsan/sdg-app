@@ -94,28 +94,27 @@ class GoogleAuthController extends Controller
 
             // Store user/token pair in cache for 2 minutes
             Cache::put("google_session:{$sessionId}", [
-                'token' => $token,
-                'user' => $user,
+                'token' => $authData['token'],
+                'user' => $authData['user'],
             ], now()->addMinutes(2));
 
             // Redirect to frontend with session_id
             return redirect()->to(config('app.frontend_url') . "/auth/callback?session_id={$sessionId}");
         }
         catch (\Throwable $e) {
+            // Log actual error not shown to frontend
+            Log::error('Google authentication failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
 
-        // Log actual error not shown to frontend
-        Log::error('Google authentication failed', [
-            'error' => $e->getMessage(),
-            'trace' => $e->getTraceAsString(),
-        ]);
+            //if the error is unauthorized organization access, redirect to specific page
+            if ($e->getMessage() === 'Unauthorized organization access.') {
+                return redirect()->away(config('app.frontend_url') . '/unauthorized');
+            }
 
-        //if the error is unauthorized organization access, redirect to specific page
-        if ($e->getMessage() === 'Unauthorized organization access.') {
-            return redirect()->away(config('app.frontend_url') . '/unauthorized');
-        }
-
-        // Return dedicated error response to frontend
-        return redirect()->away(config('app.frontend_url') . '/auth-error');
+            // Return dedicated error response to frontend
+            return redirect()->away(config('app.frontend_url') . '/auth-error');
         }
     }
 
