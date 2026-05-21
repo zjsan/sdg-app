@@ -114,9 +114,6 @@ export const useAuthStore = defineStore("auth", {
                 console.error("Logout failed:", error);
             } finally {
                 this.clearSession();
-                if (router.currentRoute.value.name !== "Login") {
-                    router.push({ name: "Login" });
-                }
             }
         },
 

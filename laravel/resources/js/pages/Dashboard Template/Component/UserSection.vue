@@ -37,7 +37,7 @@
                         >Cancel</AlertDialogCancel
                     >
                     <AlertDialogAction
-                        @click="logout"
+                        @click="handleLogout"
                         class="bg-blue-400 hover:bg-blue-600 cursor-pointer"
                     >
                         Yes, Log me out
@@ -63,12 +63,38 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import router from "@/router";
 
 const auth = useAuthStore();
 const powerBiStore = usePowerBiStore();
+const isLoggingOut = ref(false); //track api call status
 
-const logout = async () => {
-    powerBiStore.broadcastLogout();
-    await auth.logout();
+const handleLogout = async () => {
+    if (isLoggingOut.value) return; //prevent multiple clicks
+
+    isLoggingOut.value = true; //set flag to prevent multiple logout attempts
+
+    try {
+        powerBiStore.broadcastLogout();
+
+        const result = await auth.logout();
+
+        if (result.success) {
+            // Optionally show a success message or redirect
+            console.log(result.message);
+        } else {
+            // Handle unexpected response structure
+            console.warn("Unexpected logout response:", result);
+        }
+    } finally {
+        isLoggingOut.value = false;
+        forceToLoginPage(); // Ensure user is redirected to login page
+    }
+};
+
+const forceToLoginPage = () => {
+    if (router.currentRoute.value.name !== "Login") {
+        router.push({ name: "Login" });
+    }
 };
 </script>
