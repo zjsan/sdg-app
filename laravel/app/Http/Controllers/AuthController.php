@@ -85,7 +85,31 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
-        return response()->json(['message' => 'Logged out and token revoked.']);
+        try {
+        $user = $request->user();
+
+        if ($user) {
+            // Revoke the token that was used to authenticate the current request
+            $user->currentAccessToken()->delete();
+
+            Log::info('User logged out successfully.', ['user_id' => $user->id]);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Successfully logged out and token revoked.'
+        ], 200);
+
+        } catch (\Throwable $e) {
+            Log::error('Logout operation failed.', [
+                'error' => $e->getMessage(),
+                'user_id' => $request->user()?->id
+            ]);
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occurred during logout.'
+            ], 500);
+        }
     }
 }
