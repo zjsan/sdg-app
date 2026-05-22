@@ -81,8 +81,8 @@ class AllowedEmailController extends Controller
     {
         //
         
-        $allowedEmail->delete();
-        return response()->json(['message' => "Successfully deleted allowed email."], 200);
+        // $allowedEmail->delete();
+        // return response()->json(['message' => "Successfully deleted allowed email."], 200);
 
 
     }
