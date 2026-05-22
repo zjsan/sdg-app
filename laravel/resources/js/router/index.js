@@ -1,17 +1,17 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import Login from "../pages/Login.vue";
-import Dashboard from "../pages/Dashboard.vue";
-import Developer from "../pages/DeveloperPage/Developer.vue";
-import NotFoundView from "../pages/NotFoundView.vue";
+import Login from "../pages/Public/Login.vue";
+import Dashboard from "../pages/Private/Dashboard.vue";
+import Developer from "../pages/Private/DeveloperPage/Developer.vue";
+import NotFoundView from "../pages/Public/NotFoundView.vue";
 import { useAuthStore } from "@/stores/auth";
-import GoogleCallback from "../pages/GoogleCallback.vue";
-import Unauthorized from "../pages/NotAuthorized.vue";
-import AuthError from "../pages/AuthError.vue";
-import SafeRedirect from "../pages/SafeRedirect.vue";
-import Manual from "../pages/Viewer Page/Manual.vue";
-import Methodology from "../pages/Viewer Page/Methodology.vue";
-import Overview from "../pages/Viewer Page/Overview.vue";
+import GoogleCallback from "../pages/Public/GoogleCallback.vue";
+import Unauthorized from "../pages/Public/NotAuthorized.vue";
+import AuthError from "../pages/Public/AuthError.vue";
+import SafeRedirect from "../pages/Public/SafeRedirect.vue";
+import Manual from "@/pages/Private/Viewer Page/Manual.vue";
+import Methodology from "@/pages/Private/Viewer Page/Methodology.vue";
+import Overview from "@/pages/Private/Viewer Page/Overview.vue";
 
 /** @type {import('vue-router').RouteRecordRaw[]} */
 const routes = [

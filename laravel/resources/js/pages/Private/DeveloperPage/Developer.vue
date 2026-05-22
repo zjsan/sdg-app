@@ -168,8 +168,8 @@
 <script setup>
 import Authenticated from "../Dashboard Template/Layout/Authenticated.vue";
 import { ref, onMounted } from "vue";
-import { usePowerBiStore } from "../../stores/powerBi.js";
-import { useOrganizationStore } from "../../stores/organization.js";
+import { usePowerBiStore } from "../../../stores/powerBi.js";
+import { useOrganizationStore } from "../../../stores/organization.js";
 import PageHeader from "../Dashboard Template/Component/PageHeader.vue";
 import AppTable from "../Dashboard Template/Component/AppTable.vue";
 import BaseModal from "../Dashboard Template/Component/BaseModal.vue";

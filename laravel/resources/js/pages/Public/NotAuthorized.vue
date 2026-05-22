@@ -8,5 +8,5 @@
 </template>
 
 <script setup>
-import AuthStatusLayout from "../pages/AuthStatusLayout.vue";
+import AuthStatusLayout from "./AuthStatusLayout.vue";
 </script>
