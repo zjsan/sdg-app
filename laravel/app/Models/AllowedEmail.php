@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AllowedEmails extends Model
+class AllowedEmail extends Model
 {
     //
     protected $fillable = [
@@ -12,6 +12,11 @@ class AllowedEmails extends Model
         'is_active',
         'organization_id',
         'role_id',
+    ];
+
+    //casting the is_active field to boolean for easier handling in the application
+    protected $casts = [
+        'is_active' => 'boolean',
     ];
 
     public function role()
