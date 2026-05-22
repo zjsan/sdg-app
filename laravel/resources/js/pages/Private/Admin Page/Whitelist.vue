@@ -44,6 +44,9 @@
                     </svg>
                     Authorize Access
                 </BaseButton>
+                <pre class="bg-black text-green-400 p-2 text-xs">
+Modal state: {{ isModalOpen }}</pre
+                >
             </div>
 
             <!-- Table Component -->

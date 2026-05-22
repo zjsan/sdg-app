@@ -117,7 +117,10 @@
                     }}
                 </template>
 
-                <span class="text-sm text-slate-500">
+                <span
+                    v-if="selectedOrg"
+                    class="text-sm text-slate-500 block mb-2"
+                >
                     {{ "Editing Organization: " + selectedOrg.name }}
                 </span>
                 <div class="space-y-4">
