@@ -7,12 +7,12 @@
             <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">
                 Allowed Emails Management
             </h1>
-            <p class="mt-1 text-sm text-slate-500">
+            <!-- <p class="mt-1 text-sm text-slate-500">
                 <span class="font-medium text-slate-700">{{
                     organizationStore.organizations.length
                 }}</span>
                 active organizations.
-            </p>
+            </p> -->
         </div>
     </div>
 </template>

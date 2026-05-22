@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import Login from "../pages/Public/Login.vue";
 import Dashboard from "../pages/Private/Dashboard.vue";
-import Developer from "../pages/Private/Developer Page/Organization.vue";
+import Organization from "../pages/Private/Developer Page/Organization.vue";
 import NotFoundView from "../pages/Public/NotFoundView.vue";
 import { useAuthStore } from "@/stores/auth";
 import GoogleCallback from "../pages/Public/GoogleCallback.vue";
@@ -12,6 +12,7 @@ import SafeRedirect from "../pages/Public/SafeRedirect.vue";
 import Manual from "@/pages/Private/Viewer Page/Manual.vue";
 import Methodology from "@/pages/Private/Viewer Page/Methodology.vue";
 import Overview from "@/pages/Private/Viewer Page/Overview.vue";
+import Whitelist from "@/pages/Private/Admin Page/Whitelist.vue";
 
 /** @type {import('vue-router').RouteRecordRaw[]} */
 const routes = [
@@ -36,9 +37,9 @@ const routes = [
     },
 
     {
-        path: "/developer",
-        name: "DeveloperPage",
-        component: Developer,
+        path: "/organization",
+        name: "Organization",
+        component: Organization,
         meta: { requiresAuth: true, role: "developer" }, // must be logged in
     },
 
@@ -61,6 +62,13 @@ const routes = [
         name: "Methodology",
         component: Methodology,
         meta: { requiresAuth: true }, // must be logged in
+    },
+
+    {
+        path: "/whitelist",
+        name: "Whitelist",
+        component: Whitelist,
+        meta: { requiresAuth: true, role: "admin" }, // must be logged in and admin
     },
 
     {

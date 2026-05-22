@@ -103,16 +103,16 @@ const menuItems = computed(() => [
 
     {
         name: "Organization Management",
-        to: "/developer",
+        to: "/organization",
         icon: "pi-code",
         visible: () => auth.isDeveloper,
     },
-    // {
-    //     name: "Admin Panel",
-    //     to: "/admin",
-    //     icon: "pi-shield",
-    //     visible: () => auth.isAdmin,
-    // },
+    {
+        name: "Whitelist Management",
+        to: "/whitelist",
+        icon: "pi-shield",
+        visible: () => auth.isAdmin,
+    },
 ]);
 const filteredMenu = computed(() => {
     return menuItems.value.filter((item) => item.visible());
