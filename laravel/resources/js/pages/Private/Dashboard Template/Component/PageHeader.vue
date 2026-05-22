@@ -4,7 +4,7 @@
         class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8"
     >
         <div>
-            <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">
+            <h1 class="text-3xl font-bold text-slate-900 tracking-tight">
                 <slot name="title" />
             </h1>
             <p class="mt-1 text-sm text-slate-500">
