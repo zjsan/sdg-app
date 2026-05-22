@@ -41,6 +41,18 @@ class AllowedEmailController extends Controller
         }
     }
 
+    public function toggleStatus( AllowedEmail $allowedEmail)
+    {
+        $allowedEmail->is_active = !$allowedEmail->is_active; // Flips between active/inactive
+        $allowedEmail->save();
+
+        return response()->json([
+            'message' => 'Status updated successfully.',
+            'is_active' => $allowedEmail->is_active, // return the new status
+            'allowedEmail' => $allowedEmail //  return the updated allowed email data
+        ], 200);
+    }
+
     /**
      * Display the specified resource.
      */
@@ -73,6 +85,7 @@ class AllowedEmailController extends Controller
             return response()->json(['message' => 'Failed to update allowed email: ' . $e->getMessage()], 500);
         }     
     }
+
 
     /**
      * Remove the specified resource from storage.
