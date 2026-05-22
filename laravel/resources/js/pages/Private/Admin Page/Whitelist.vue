@@ -150,50 +150,49 @@ Modal state: {{ isModalOpen }}</pre
                         </td>
                     </tr>
                 </template>
-
-                <!-- Modal Component for Adding Rules -->
-                <BaseModal :show="isModalOpen" @close="closeModal">
-                    <template #title> Authorize Portal Access </template>
-
-                    <div class="space-y-4 my-2">
-                        <p class="text-xs text-slate-500 leading-relaxed">
-                            Input a valid Google Account email or an entire
-                            organization domain to permit login capabilities.
-                        </p>
-
-                        <div>
-                            <label
-                                class="block text-xs font-bold uppercase text-slate-400 mb-2"
-                            >
-                                Google Identity / Domain Input
-                            </label>
-                            <input
-                                v-model="newEmailInput"
-                                type="text"
-                                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 text-sm font-mono"
-                                placeholder="e.g., employee@company.com or @company.com"
-                                @keyup.enter="handleSubmit"
-                            />
-                        </div>
-                    </div>
-
-                    <template #actions>
-                        <BaseButton variant="secondary" @click="closeModal">
-                            Cancel
-                        </BaseButton>
-                        <BaseButton
-                            :disabled="allowedEmailsStore.loading"
-                            @click="handleSubmit"
-                        >
-                            {{
-                                allowedEmailsStore.loading
-                                    ? "Saving..."
-                                    : "Grant Access"
-                            }}
-                        </BaseButton>
-                    </template>
-                </BaseModal>
             </AppTable>
+            <!-- Modal Component for Adding Rules -->
+            <BaseModal :show="isModalOpen" @close="closeModal">
+                <template #title> Authorize Portal Access </template>
+
+                <div class="space-y-4 my-2">
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        Input a valid Google Account email or an entire
+                        organization domain to permit login capabilities.
+                    </p>
+
+                    <div>
+                        <label
+                            class="block text-xs font-bold uppercase text-slate-400 mb-2"
+                        >
+                            Google Identity / Domain Input
+                        </label>
+                        <input
+                            v-model="newEmailInput"
+                            type="text"
+                            class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 text-sm font-mono"
+                            placeholder="e.g., employee@company.com or @company.com"
+                            @keyup.enter="handleSubmit"
+                        />
+                    </div>
+                </div>
+
+                <template #actions>
+                    <BaseButton variant="secondary" @click="closeModal">
+                        Cancel
+                    </BaseButton>
+                    <BaseButton
+                        :disabled="allowedEmailsStore.loading"
+                        @click="handleSubmit"
+                    >
+                        {{
+                            allowedEmailsStore.loading
+                                ? "Saving..."
+                                : "Grant Access"
+                        }}
+                    </BaseButton>
+                </template>
+            </BaseModal>
         </div>
     </Authenticated>
 </template>
@@ -214,9 +213,7 @@ const newEmailInput = ref("");
 
 // Fetch initial list on mount
 onMounted(() => {
-    if (allowedEmailsStore.fetchEmails) {
-        allowedEmailsStore.fetchEmails();
-    }
+    allowedEmailsStore.fetchAllowedEmails();
 });
 
 const openAddModal = () => {
@@ -228,4 +225,27 @@ const openAddModal = () => {
 const closeModal = () => {
     isModalOpen.value = false;
 };
+
+// const handleSubmit = async () => {
+//     if (!newEmailInput.value.trim()) return;
+
+//     try {
+//         // Adapt this method signature to match your Pinia store's add method
+//         await allowedEmailsStore.addEmail({ email: newEmailInput.value.trim() });
+//         closeModal();
+//     } catch (error) {
+//         console.error("Failed to add email to whitelist:", error);
+//     }
+// };
+
+// const confirmDelete = async (item) => {
+//     if (confirm(`Are you sure you want to revoke access for ${item.email}?`)) {
+//         try {
+//             // Adapt this method signature to match your Pinia store's delete method
+//             await allowedEmailsStore.deleteEmail(item.id);
+//         } catch (error) {
+//             console.error("Failed to revoke email access:", error);
+//         }
+//     }
+// };
 </script>
