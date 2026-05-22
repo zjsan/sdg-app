@@ -195,6 +195,7 @@
     </Authenticated>
 </template>
 <script setup>
+import { ref, onMounted } from "vue";
 import Authenticated from "../Dashboard Template/Layout/Authenticated.vue";
 import PageHeader from "../Dashboard Template/Component/PageHeader.vue";
 import AppTable from "../Dashboard Template/Component/AppTable.vue";
@@ -203,4 +204,25 @@ import BaseModal from "../Dashboard Template/Component/BaseModal.vue";
 import { useAllowedEmailsStore } from "@/stores/allowedEmails";
 
 const allowedEmailsStore = useAllowedEmailsStore();
+
+// UI States
+const isModalOpen = ref(false);
+const newEmailInput = ref("");
+
+// Fetch initial list on mount
+onMounted(() => {
+    if (allowedEmailsStore.fetchEmails) {
+        allowedEmailsStore.fetchEmails();
+    }
+});
+
+const openAddModal = () => {
+    console.log("Opening Add Modal");
+    newEmailInput.value = "";
+    isModalOpen.value = true;
+};
+
+const closeModal = () => {
+    isModalOpen.value = false;
+};
 </script>
