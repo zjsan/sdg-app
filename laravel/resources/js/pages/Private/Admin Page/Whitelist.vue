@@ -147,6 +147,49 @@
                         </td>
                     </tr>
                 </template>
+
+                <!-- Modal Component for Adding Rules -->
+                <BaseModal :show="isModalOpen" @close="closeModal">
+                    <template #title> Authorize Portal Access </template>
+
+                    <div class="space-y-4 my-2">
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            Input a valid Google Account email or an entire
+                            organization domain to permit login capabilities.
+                        </p>
+
+                        <div>
+                            <label
+                                class="block text-xs font-bold uppercase text-slate-400 mb-2"
+                            >
+                                Google Identity / Domain Input
+                            </label>
+                            <input
+                                v-model="newEmailInput"
+                                type="text"
+                                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 text-sm font-mono"
+                                placeholder="e.g., employee@company.com or @company.com"
+                                @keyup.enter="handleSubmit"
+                            />
+                        </div>
+                    </div>
+
+                    <template #actions>
+                        <BaseButton variant="secondary" @click="closeModal">
+                            Cancel
+                        </BaseButton>
+                        <BaseButton
+                            :disabled="allowedEmailsStore.loading"
+                            @click="handleSubmit"
+                        >
+                            {{
+                                allowedEmailsStore.loading
+                                    ? "Saving..."
+                                    : "Grant Access"
+                            }}
+                        </BaseButton>
+                    </template>
+                </BaseModal>
             </AppTable>
         </div>
     </Authenticated>
