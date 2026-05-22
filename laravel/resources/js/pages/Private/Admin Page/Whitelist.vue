@@ -154,26 +154,82 @@ Modal state: {{ isModalOpen }}</pre
             <!-- Modal Component for Adding Rules -->
             <BaseModal :show="isModalOpen" @close="closeModal">
                 <template #title> Authorize Portal Access </template>
+                <div class="space-y-5 my-3">
+                    <!-- Explanatory Alert Callout -->
+                    <div
+                        class="bg-indigo-50/60 border border-indigo-100 rounded-lg p-3 flex gap-3"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-5 w-5 text-indigo-600 shrink-0 mt-0.5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                        </svg>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            This system authenticates portal users via
+                            <strong class="text-slate-900 font-semibold"
+                                >Google Sign-In</strong
+                            >. The exact Google account email must match a
+                            whitelisted identity record here to log in.
+                        </p>
+                    </div>
 
-                <div class="space-y-4 my-2">
-                    <p class="text-xs text-slate-500 leading-relaxed">
-                        Input a valid Google Account email or an entire
-                        organization domain to permit login capabilities.
-                    </p>
+                    <!-- Layout Formatting Example -->
+                    <div
+                        class="bg-slate-50 border border-slate-200 rounded-lg p-3.5 space-y-2"
+                    >
+                        <span
+                            class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block"
+                            >Required Format</span
+                        >
 
+                        <div
+                            class="flex items-center justify-between text-xs py-1"
+                        >
+                            <span
+                                class="font-mono bg-white border px-1.5 py-0.5 rounded shadow-sm text-slate-700"
+                                >username@organization.com</span
+                            >
+                            <span class="text-slate-500 text-right"
+                                >Explicit personal or workspace account</span
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Input Field Container -->
                     <div>
                         <label
-                            class="block text-xs font-bold uppercase text-slate-400 mb-2"
+                            class="block text-xs font-bold uppercase tracking-wide text-slate-500 mb-2"
                         >
-                            Google Identity / Domain Input
+                            Authorized Google Email Address
                         </label>
-                        <input
-                            v-model="newEmailInput"
-                            type="text"
-                            class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 text-sm font-mono"
-                            placeholder="e.g., employee@company.com or @company.com"
-                            @keyup.enter="handleSubmit"
-                        />
+                        <div class="relative">
+                            <input
+                                v-model="newEmailInput"
+                                type="email"
+                                autofocus
+                                class="w-full pl-3 pr-3 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 outline-none bg-white text-sm font-mono placeholder:text-slate-400 transition-all"
+                                placeholder="e.g., username@organization.com"
+                                @keyup.enter="handleSubmit"
+                            />
+                        </div>
+
+                        <!-- Dynamic Live Error/Validation Helper text -->
+                        <p
+                            v-if="newEmailInput && !newEmailInput.includes('@')"
+                            class="mt-1.5 text-xs text-red-500 flex items-center gap-1"
+                        >
+                            <span class="font-bold">⚠️</span> Enter a complete
+                            email address containing an '@' symbol.
+                        </p>
                     </div>
                 </div>
 
