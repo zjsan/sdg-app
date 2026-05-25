@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\AllowedEmail;
 use App\Http\Requests\AllowedEmailsRequest;
 use Exception;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\JsonResponse;
 
 class AllowedEmailController extends Controller
@@ -14,7 +15,7 @@ class AllowedEmailController extends Controller
      * Display a listing of the resource.
      */
     public function index(): JsonResponse
-    {
+    {   
         //
        return response()->json(AllowedEmail::with(['role','organization'])->get());
     }
