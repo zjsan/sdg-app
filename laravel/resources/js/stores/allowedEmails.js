@@ -14,7 +14,7 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
             try {
                 const res = await api.get("/allowed-emails");
 
-                this.organizations = Array.isArray(res.data)
+                this.emails = Array.isArray(res.data)
                     ? res.data
                     : res.data.data;
                 console.log("Allowed Emails fetched:", this.emails); // Debugging log to check the fetched data
