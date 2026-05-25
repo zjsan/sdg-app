@@ -53,20 +53,24 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
             }
         },
 
-        async updateAllowedEmails(id, newEmail) {
+        async updateAllowedEmails(id, payload) {
             this.loading = true;
+            this.error = null;
 
             try {
-                const res = await api.put(`/allowed-emails/${id}`, newEmail);
+                const res = await api.put(`/allowed-emails/${id}`, payload);
 
-                const index = this.emails.findIndex((email) => email.id === id);
-                if (index !== -1) {
-                    this.emails[index] = res.data; // Update the local state with the updated email
+                const updatedRecord = res.data?.allowedEmail;
+                if (updatedRecord) {
+                    const index = this.emails.findIndex(
+                        (item) => item.id === id,
+                    );
+                    if (index !== -1) {
+                        this.emails[index] = updatedRecord;
+                    }
                 }
 
-                console.log(
-                    res.message || "Allowed email updated successfully.",
-                );
+                return res.data;
             } catch (error) {
                 this.errors =
                     error.response?.data?.message ||
