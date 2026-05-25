@@ -81,8 +81,8 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
             }
         },
 
+        //new UI Action tracking for the toggle status endpoint
         async toggleEmailStatus(id) {
-            // New UI Action tracking for the toggle status endpoint
             try {
                 const res = await api.patch(`/allowed-emails/${id}/toggle`);
                 const updatedRecord = res.data?.allowedEmail;
@@ -101,6 +101,7 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
 
         async deleteAllowedEmails(id) {
             this.loading = true;
+            this.error = null;
 
             if (!confirm("Are you sure?")) {
                 return;
