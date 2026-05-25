@@ -10,6 +10,7 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
     actions: {
         async fetchAllowedEmails() {
             this.loading = true;
+            this.errors = null;
 
             try {
                 const res = await api.get("/allowed-emails");
@@ -28,19 +29,25 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
             }
         },
 
-        async addAllowedEmails(email) {
+        //send data object containing { email, organization_id, role_id, is_active }
+        async addAllowedEmails(payload) {
             this.loading = true;
+            this.errors = null;
             try {
                 const res = await api.post("/allowed-emails", {
-                    email,
+                    payload,
                 });
-                this.emails.unshift(res.data); //update the local state with the new allowed email
-                console.log(res.message || "Allowed email added successfully.");
+
+                if (res.data && res.data.allowedEmail) {
+                    this.emails.unshift(res.data.allowedEmail);
+                } //update the local state with the new allowed email
+
+                return res.data;
             } catch (error) {
                 this.errors =
                     error.response?.data?.message ||
                     "Failed to add allowed email.";
-                console.error("Failed to add allowed email:", error);
+                throw error; // Rethrow the error to be handled by the caller
             } finally {
                 this.loading = false;
             }
