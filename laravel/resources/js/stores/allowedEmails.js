@@ -81,6 +81,24 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
             }
         },
 
+        async toggleEmailStatus(id) {
+            // New UI Action tracking for the toggle status endpoint
+            try {
+                const res = await api.patch(`/allowed-emails/${id}/toggle`);
+                const updatedRecord = res.data?.allowedEmail;
+                if (updatedRecord) {
+                    const index = this.emails.findIndex(
+                        (item) => item.id === id,
+                    );
+                    if (index !== -1) {
+                        this.emails[index] = updatedRecord;
+                    }
+                }
+            } catch (error) {
+                console.error("Failed to toggle status:", error);
+            }
+        },
+
         async deleteAllowedEmails(id) {
             this.loading = true;
 
