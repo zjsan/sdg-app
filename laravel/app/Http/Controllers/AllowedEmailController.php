@@ -5,13 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\AllowedEmail;
 use App\Http\Requests\AllowedEmailsRequest;
+use Exception;
+use Illuminate\Http\JsonResponse;
 
 class AllowedEmailController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): JsonResponse
     {
         //
        return response()->json(AllowedEmail::with(['role','organization'])->get());
@@ -20,7 +22,7 @@ class AllowedEmailController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(AllowedEmailsRequest $request)
+    public function store(AllowedEmailsRequest $request): JsonResponse
     {
         //
         try{
@@ -41,7 +43,7 @@ class AllowedEmailController extends Controller
         }
     }
 
-    public function toggleStatus( AllowedEmail $allowedEmail)
+    public function toggleStatus( AllowedEmail $allowedEmail): JsonResponse
     {
         $allowedEmail->is_active = !$allowedEmail->is_active; // Flips between active/inactive
         $allowedEmail->save();
@@ -56,7 +58,7 @@ class AllowedEmailController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(AllowedEmail $allowedEmail)
+    public function show(AllowedEmail $allowedEmail): JsonResponse  
     {
         //
         return response()->json($allowedEmail->load(['role', 'organization']), 200);
@@ -65,7 +67,7 @@ class AllowedEmailController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(AllowedEmailsRequest $request, AllowedEmail $allowedEmail)
+    public function update(AllowedEmailsRequest $request, AllowedEmail $allowedEmail): JsonResponse
     {
         //
         try{
@@ -90,12 +92,10 @@ class AllowedEmailController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(AllowedEmail $allowedEmail)
-    {
-        //
-        
-        // $allowedEmail->delete();
-        // return response()->json(['message' => "Successfully deleted allowed email."], 200);
+    public function destroy(AllowedEmail $allowedEmail): JsonResponse
+    {        
+        $allowedEmail->delete();
+        return response()->json(['message' => "Successfully deleted allowed email."], 200);
 
 
     }
