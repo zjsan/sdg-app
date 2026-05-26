@@ -341,8 +341,10 @@ import AppTable from "../Dashboard Template/Component/AppTable.vue";
 import BaseButton from "../Dashboard Template/Component/BaseButton.vue";
 import BaseModal from "../Dashboard Template/Component/BaseModal.vue";
 import { useAllowedEmailsStore } from "@/stores/allowedEmails";
+import { useOrganizationStore } from "@/stores/organizations";
 
 const allowedEmailsStore = useAllowedEmailsStore();
+const organizationStore = useOrganizationStore();
 
 // Local UI Management States
 const isModalOpen = ref(false);
