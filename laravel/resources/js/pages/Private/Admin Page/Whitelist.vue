@@ -341,10 +341,10 @@ import AppTable from "../Dashboard Template/Component/AppTable.vue";
 import BaseButton from "../Dashboard Template/Component/BaseButton.vue";
 import BaseModal from "../Dashboard Template/Component/BaseModal.vue";
 import { useAllowedEmailsStore } from "@/stores/allowedEmails";
-import { useOrganizationStore } from "@/stores/organizations";
+import { useLookupStore } from "@/stores/lookups";
 
 const allowedEmailsStore = useAllowedEmailsStore();
-const organizationStore = useOrganizationStore();
+const lookupStore = useLookupStore();
 
 // Local UI Management States
 const isModalOpen = ref(false);
@@ -359,23 +359,15 @@ const form = ref({
     is_active: true,
 });
 
-// Dynamic Mocks
-const mockOrganizations = ref([
-    { id: 1, name: "MMSU" },
-    { id: 2, name: "CHED" },
-    { id: 3, name: "EXTERNAL" },
-]);
-
-const mockRoles = ref([
-    { id: 1, name: "Developer" },
-    { id: 2, name: "Admin" },
-    { id: 3, name: "Viewer" },
-]);
-
 // fetch initial data on component mount
 onMounted(() => {
     allowedEmailsStore.fetchAllowedEmails();
+    lookupStore.fetchFormDependencies();
 });
+
+// Read directly from the lookup store state arrays
+const dynamicOrganizations = computed(() => lookupStore.organizations);
+const dynamicRoles = computed(() => lookupStore.roles);
 
 // substring search Filter logic operating cleanly on client-side state memory
 const filteredEmails = computed(() => {
