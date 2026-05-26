@@ -247,7 +247,7 @@
                                     -- Select Tenant Organization --
                                 </option>
                                 <option
-                                    v-for="org in mockOrganizations"
+                                    v-for="org in dynamicOrganizations"
                                     :key="org.id"
                                     :value="org.id"
                                 >
@@ -285,7 +285,7 @@
                                     -- Select Functional Permission Level --
                                 </option>
                                 <option
-                                    v-for="role in mockRoles"
+                                    v-for="role in dynamicRoles"
                                     :key="role.id"
                                     :value="role.id"
                                 >
