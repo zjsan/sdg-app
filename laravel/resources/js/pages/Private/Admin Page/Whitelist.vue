@@ -334,7 +334,7 @@
     </Authenticated>
 </template>
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import Authenticated from "../Dashboard Template/Layout/Authenticated.vue";
 import PageHeader from "../Dashboard Template/Component/PageHeader.vue";
 import AppTable from "../Dashboard Template/Component/AppTable.vue";
@@ -344,18 +344,61 @@ import { useAllowedEmailsStore } from "@/stores/allowedEmails";
 
 const allowedEmailsStore = useAllowedEmailsStore();
 
-// UI States
+// Local UI Management States
 const isModalOpen = ref(false);
-const newEmailInput = ref("");
+const searchQuery = ref("");
+const statusChangingId = ref(null);
 
-// Fetch initial list on mount
+// Form State conforming to Laravel FormRequest Validator requirements
+const form = ref({
+    email: "",
+    organization_id: "",
+    role_id: "",
+    is_active: true,
+});
+
+// Dynamic Mocks
+const mockOrganizations = ref([
+    { id: 1, name: "MMSU" },
+    { id: 2, name: "CHED" },
+    { id: 3, name: "EXTERNAL" },
+]);
+
+const mockRoles = ref([
+    { id: 1, name: "Developer" },
+    { id: 2, name: "Admin" },
+    { id: 3, name: "Viewer" },
+]);
+
+// fetch initial data on component mount
 onMounted(() => {
     allowedEmailsStore.fetchAllowedEmails();
 });
 
+// substring search Filter logic operating cleanly on client-side state memory
+const filteredEmails = computed(() => {
+    const list = allowedEmailsStore.emails || [];
+    const query = searchQuery.value.trim().toLowerCase();
+
+    if (!query) return list;
+
+    return list.filter((item) => {
+        return (
+            item.email.toLowerCase().includes(query) ||
+            item.organization?.name?.toLowerCase().includes(query) ||
+            item.role?.name?.toLowerCase().includes(query)
+        );
+    });
+});
+
+//modal control
 const openAddModal = () => {
-    console.log("Opening Add Modal");
-    newEmailInput.value = "";
+    form.value = {
+        email: "",
+        organization_id: "",
+        role_id: "",
+        is_active: true,
+    };
     isModalOpen.value = true;
 };
 
@@ -363,26 +406,53 @@ const closeModal = () => {
     isModalOpen.value = false;
 };
 
-// const handleSubmit = async () => {
-//     if (!newEmailInput.value.trim()) return;
+// form submission
+const handleSubmit = async () => {
+    if (
+        !form.value.email.trim() ||
+        !form.value.organization_id ||
+        !form.value.role_id
+    )
+        return;
 
-//     try {
-//         // Adapt this method signature to match your Pinia store's add method
-//         await allowedEmailsStore.addEmail({ email: newEmailInput.value.trim() });
-//         closeModal();
-//     } catch (error) {
-//         console.error("Failed to add email to whitelist:", error);
-//     }
-// };
+    try {
+        const payload = {
+            ...form.value,
+            email: form.value.email.trim().toLowerCase(),
+        };
+        // Execute refactored Pinia call matching Laravel store() format
+        await allowedEmailsStore.addAllowedEmails(payload);
+        closeModal();
+    } catch (error) {
+        console.error("Submission sequence error:", error);
+    }
+};
 
-// const confirmDelete = async (item) => {
-//     if (confirm(`Are you sure you want to revoke access for ${item.email}?`)) {
-//         try {
-//             // Adapt this method signature to match your Pinia store's delete method
-//             await allowedEmailsStore.deleteEmail(item.id);
-//         } catch (error) {
-//             console.error("Failed to revoke email access:", error);
-//         }
-//     }
-// };
+// status toggle handler
+const handleToggleStatus = async (item) => {
+    statusChangingId.value = item.id;
+    try {
+        // Execute the new clean reactive layout switch patch
+        await allowedEmailsStore.toggleEmailStatus(item.id);
+    } catch (error) {
+        console.error("Status modify loop exception:", error);
+    } finally {
+        statusChangingId.value = null;
+    }
+};
+
+//delete confirmation and execution
+const confirmDelete = async (item) => {
+    if (
+        confirm(
+            `Are you certain you wish to completely revoke systemic access for ${item.email}?`,
+        )
+    ) {
+        try {
+            await allowedEmailsStore.deleteAllowedEmails(item.id);
+        } catch (error) {
+            console.error("Revocation exception sequence:", error);
+        }
+    }
+};
 </script>
