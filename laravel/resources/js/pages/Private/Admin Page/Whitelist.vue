@@ -184,31 +184,12 @@
 
             <BaseModal :show="isModalOpen" @close="closeModal">
                 <template #title> Authorize Portal Access </template>
-                <div class="space-y-4 my-3 text-left">
-                    <div
-                        class="bg-indigo-50/60 border border-indigo-100 rounded-lg p-3 flex gap-3"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="h-5 w-5 text-indigo-600 shrink-0 mt-0.5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
-                        </svg>
-                        <p class="text-xs text-slate-600 leading-relaxed">
-                            This registers an explicit 1:1 user identity
-                            mapping. The exact Google account email must match
-                            this entry to successfully negotiate a session.
-                        </p>
-                    </div>
 
+                <form
+                    id="whitelistForm"
+                    @submit.prevent="handleSubmit"
+                    class="space-y-4 my-3 text-left"
+                >
                     <div>
                         <label
                             class="block text-xs font-bold uppercase tracking-wide text-slate-500 mb-1.5"
@@ -221,7 +202,7 @@
                             autofocus
                             class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 outline-none bg-white text-sm font-mono placeholder:text-slate-400 transition-all"
                             placeholder="e.g., zdsantos@mmsu.edu.ph"
-                            @keyup.enter="handleSubmit"
+                            required
                         />
                         <p
                             v-if="form.email && !form.email.includes('@')"
@@ -242,6 +223,7 @@
                             <select
                                 v-model="form.organization_id"
                                 class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 outline-none bg-white text-sm text-slate-700 transition-all appearance-none cursor-pointer"
+                                required
                             >
                                 <option value="" disabled>
                                     -- Select Tenant Organization --
@@ -254,19 +236,6 @@
                                     {{ org.name }}
                                 </option>
                             </select>
-                            <div
-                                class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400"
-                            >
-                                <svg
-                                    class="fill-current h-4 w-4"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 20 20"
-                                >
-                                    <path
-                                        d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
-                                    />
-                                </svg>
-                            </div>
                         </div>
                     </div>
 
@@ -280,6 +249,7 @@
                             <select
                                 v-model="form.role_id"
                                 class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 outline-none bg-white text-sm text-slate-700 transition-all appearance-none cursor-pointer"
+                                required
                             >
                                 <option value="" disabled>
                                     -- Select Functional Permission Level --
@@ -292,35 +262,23 @@
                                     {{ role.name }}
                                 </option>
                             </select>
-                            <div
-                                class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400"
-                            >
-                                <svg
-                                    class="fill-current h-4 w-4"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 20 20"
-                                >
-                                    <path
-                                        d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
-                                    />
-                                </svg>
-                            </div>
                         </div>
                     </div>
-                </div>
+                </form>
 
                 <template #actions>
-                    <BaseButton variant="secondary" @click="closeModal">
+                    <BaseButton
+                        type="button"
+                        variant="secondary"
+                        @click="closeModal"
+                    >
                         Cancel
                     </BaseButton>
+
                     <BaseButton
-                        :disabled="
-                            allowedEmailsStore.loading ||
-                            !form.email.includes('@') ||
-                            !form.organization_id ||
-                            !form.role_id
-                        "
-                        @click="handleSubmit"
+                        type="submit"
+                        form="whitelistForm"
+                        :disabled="allowedEmailsStore.loading"
                     >
                         {{
                             allowedEmailsStore.loading
