@@ -323,6 +323,18 @@ onMounted(() => {
     lookupStore.fetchFormDependencies();
 });
 
+// email format validation using regular experssoin
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+//  Computed validation flag
+const isEmailInvalid = computed(() => {
+    // If the input is empty, let required handle it
+    if (!form.value.email) return false;
+
+    // Returns true if the email fails the regex test
+    return !emailRegex.test(form.value.email);
+});
+
 // Read directly from the lookup store state arrays
 const dynamicOrganizations = computed(() => lookupStore.organizations);
 const dynamicRoles = computed(() => lookupStore.roles);
