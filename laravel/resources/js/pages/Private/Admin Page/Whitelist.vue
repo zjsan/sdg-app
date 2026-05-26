@@ -5,25 +5,22 @@
                 <template #title>Whitelist Management</template>
                 <template #subtitle>
                     <span class="font-medium text-slate-700">
-                        {{ allowedEmailsStore.emails?.length || 0 }}
+                        {{ filteredEmails.length }}
                     </span>
-                    authorized accounts/domains allowed via Google Sign-In.
-                </template>
-                <template #actions>
-                    <!-- Header Action Shortcut  -->
+                    of {{ allowedEmailsStore.emails?.length || 0 }} authorized
+                    identities mapped via Google Sign-In.
                 </template>
             </PageHeader>
 
-            <!-- Action Control Bar -->
             <div
-                class="flex justify-between items-center py-4 border-b border-slate-100 bg-slate-50/50 px-4 rounded-t-xl"
+                class="flex justify-between items-center py-4 border-b border-slate-100 bg-slate-50/50 px-4 rounded-t-xl mt-6"
             >
-                <!-- Search or Filter placeholder -->
                 <div class="relative w-72">
                     <input
+                        v-model="searchQuery"
                         type="text"
-                        placeholder="Search allowed emails..."
-                        class="w-full pl-3 pr-3 py-1.5 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white"
+                        placeholder="Search by email, group, or role..."
+                        class="w-full pl-3 pr-3 py-1.5 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none bg-white transition-all text-slate-700 placeholder:text-slate-400"
                     />
                 </div>
 
@@ -44,28 +41,29 @@
                     </svg>
                     Authorize Access
                 </BaseButton>
-                <pre class="bg-black text-green-400 p-2 text-xs">
-Modal state: {{ isModalOpen }}</pre
-                >
             </div>
 
-            <!-- Table Component -->
             <AppTable>
                 <template #header>
                     <th
                         class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider"
                     >
-                        Allowed Identity / Domain
+                        Whitelisted Identity
                     </th>
                     <th
                         class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider"
                     >
-                        Status
+                        Tenant Organization
                     </th>
                     <th
                         class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider"
                     >
-                        Added On
+                        System Role
+                    </th>
+                    <th
+                        class="px-6 py-4 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider"
+                    >
+                        Status Switch
                     </th>
                     <th
                         class="px-6 py-4 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider"
@@ -75,45 +73,31 @@ Modal state: {{ isModalOpen }}</pre
                 </template>
 
                 <template #body>
-                    <!-- Fallback Empty State -->
-                    <tr
-                        v-if="
-                            !allowedEmailsStore.emails ||
-                            allowedEmailsStore.emails.length === 0
-                        "
-                    >
+                    <tr v-if="filteredEmails.length === 0">
                         <td
-                            colspan="4"
+                            colspan="5"
                             class="px-6 py-12 text-center text-sm text-slate-400 italic"
                         >
-                            No emails or domains whitelisted yet. Only system
-                            admins can access.
+                            {{
+                                allowedEmailsStore.loading
+                                    ? "Synchronizing system registry..."
+                                    : "No matching whitelisted credentials found."
+                            }}
                         </td>
                     </tr>
 
-                    <!-- Dynamic Row Loop -->
                     <tr
-                        v-for="item in allowedEmailsStore.emails"
+                        v-for="item in filteredEmails"
                         :key="item.id"
-                        class="hover:bg-slate-50/80 transition-colors"
+                        class="hover:bg-slate-50/80 transition-colors border-b border-slate-100 last:border-0"
                     >
-                        <!-- Identity Column -->
                         <td class="px-6 py-4">
-                            <div class="flex items-center space-x-3">
-                                <!-- Quick visual differentiator for Domain vs Single Email -->
+                            <div class="flex items-center space-x-2.5">
                                 <span
-                                    v-if="item.email.startsWith('@')"
-                                    class="p-1.5 bg-amber-50 text-amber-600 rounded-md text-xs font-bold"
+                                    class="p-1.5 bg-indigo-50 text-indigo-600 rounded-md text-[10px] font-bold uppercase tracking-wider"
                                 >
-                                    DOM
+                                    GGL
                                 </span>
-                                <span
-                                    v-else
-                                    class="p-1.5 bg-indigo-50 text-indigo-600 rounded-md text-xs font-bold"
-                                >
-                                    USR
-                                </span>
-
                                 <span
                                     class="font-medium text-slate-900 font-mono text-sm"
                                 >
@@ -122,27 +106,73 @@ Modal state: {{ isModalOpen }}</pre
                             </div>
                         </td>
 
-                        <!-- Status Badge Column -->
+                        <td
+                            class="px-6 py-4 text-sm font-medium text-slate-700"
+                        >
+                            <div class="flex items-center gap-1.5">
+                                <span
+                                    class="w-2 h-2 rounded-full bg-sky-400"
+                                ></span>
+                                {{
+                                    item.organization?.name ||
+                                    `ID: ${item.organization_id} (Unresolved)`
+                                }}
+                            </div>
+                        </td>
+
                         <td class="px-6 py-4">
                             <span
-                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200"
+                                :class="[
+                                    'inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold tracking-wide uppercase',
+                                    item.role?.name?.toLowerCase() ===
+                                    'developer'
+                                        ? 'bg-purple-50 text-purple-700 border border-purple-200'
+                                        : item.role?.name?.toLowerCase() ===
+                                            'admin'
+                                          ? 'bg-amber-50 text-amber-700 border border-amber-200'
+                                          : 'bg-slate-100 text-slate-700 border border-slate-200',
+                                ]"
                             >
-                                <span
-                                    class="w-1.5 h-1.5 mr-1.5 bg-emerald-500 rounded-full"
-                                ></span>
-                                Active Access
+                                {{
+                                    item.role?.name ||
+                                    `Role ID: ${item.role_id}`
+                                }}
                             </span>
                         </td>
 
-                        <!-- Meta Info Column -->
-                        <td class="px-6 py-4 text-sm text-slate-500">
-                            {{ item.created_at || "N/A" }}
+                        <td class="px-6 py-4 text-center">
+                            <button
+                                @click="handleToggleStatus(item)"
+                                :disabled="statusChangingId === item.id"
+                                class="inline-flex items-center gap-2 cursor-pointer disabled:opacity-50 outline-none"
+                            >
+                                <span
+                                    :class="[
+                                        'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border transition-all duration-200',
+                                        item.is_active
+                                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                            : 'bg-rose-50 text-rose-700 border-rose-200',
+                                    ]"
+                                >
+                                    <span
+                                        :class="[
+                                            'w-1.5 h-1.5 mr-1.5 rounded-full animate-pulse',
+                                            item.is_active
+                                                ? 'bg-emerald-500'
+                                                : 'bg-rose-500',
+                                        ]"
+                                    ></span>
+                                    {{
+                                        item.is_active ? "Active" : "Suspended"
+                                    }}
+                                </span>
+                            </button>
                         </td>
 
-                        <!-- Action Controls -->
-                        <td class="px-6 py-4 text-right space-x-2">
+                        <td class="px-6 py-4 text-right">
                             <BaseButton
                                 variant="danger"
+                                size="sm"
                                 @click="confirmDelete(item)"
                             >
                                 Revoke
@@ -151,11 +181,10 @@ Modal state: {{ isModalOpen }}</pre
                     </tr>
                 </template>
             </AppTable>
-            <!-- Modal Component for Adding Rules -->
+
             <BaseModal :show="isModalOpen" @close="closeModal">
                 <template #title> Authorize Portal Access </template>
-                <div class="space-y-5 my-3">
-                    <!-- Explanatory Alert Callout -->
+                <div class="space-y-4 my-3 text-left">
                     <div
                         class="bg-indigo-50/60 border border-indigo-100 rounded-lg p-3 flex gap-3"
                     >
@@ -174,62 +203,109 @@ Modal state: {{ isModalOpen }}</pre
                             />
                         </svg>
                         <p class="text-xs text-slate-600 leading-relaxed">
-                            This system authenticates portal users via
-                            <strong class="text-slate-900 font-semibold"
-                                >Google Sign-In</strong
-                            >. The exact Google account email must match a
-                            whitelisted identity record here to log in.
+                            This registers an explicit 1:1 user identity
+                            mapping. The exact Google account email must match
+                            this entry to successfully negotiate a session.
                         </p>
                     </div>
 
-                    <!-- Layout Formatting Example -->
-                    <div
-                        class="bg-slate-50 border border-slate-200 rounded-lg p-3.5 space-y-2"
-                    >
-                        <span
-                            class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block"
-                            >Required Format</span
-                        >
-
-                        <div
-                            class="flex items-center justify-between text-xs py-1"
-                        >
-                            <span
-                                class="font-mono bg-white border px-1.5 py-0.5 rounded shadow-sm text-slate-700"
-                                >username@organization.com</span
-                            >
-                            <span class="text-slate-500 text-right"
-                                >Explicit personal or workspace account</span
-                            >
-                        </div>
-                    </div>
-
-                    <!-- Input Field Container -->
                     <div>
                         <label
-                            class="block text-xs font-bold uppercase tracking-wide text-slate-500 mb-2"
+                            class="block text-xs font-bold uppercase tracking-wide text-slate-500 mb-1.5"
                         >
                             Authorized Google Email Address
                         </label>
-                        <div class="relative">
-                            <input
-                                v-model="newEmailInput"
-                                type="email"
-                                autofocus
-                                class="w-full pl-3 pr-3 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 outline-none bg-white text-sm font-mono placeholder:text-slate-400 transition-all"
-                                placeholder="e.g., username@organization.com"
-                                @keyup.enter="handleSubmit"
-                            />
-                        </div>
-
-                        <!-- Dynamic Live Error/Validation Helper text -->
+                        <input
+                            v-model="form.email"
+                            type="email"
+                            autofocus
+                            class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 outline-none bg-white text-sm font-mono placeholder:text-slate-400 transition-all"
+                            placeholder="e.g., zdsantos@mmsu.edu.ph"
+                            @keyup.enter="handleSubmit"
+                        />
                         <p
-                            v-if="newEmailInput && !newEmailInput.includes('@')"
+                            v-if="form.email && !form.email.includes('@')"
                             class="mt-1.5 text-xs text-red-500 flex items-center gap-1"
                         >
                             <span class="font-bold">⚠️</span> Enter a complete
-                            email address containing an '@' symbol.
+                            email configuration containing an '@' symbol.
                         </p>
+                    </div>
+
+                    <div>
+                        <label
+                            class="block text-xs font-bold uppercase tracking-wide text-slate-500 mb-1.5"
+                        >
+                            Assigned Tenant Organization (Power BI Source Scope)
+                        </label>
+                        <div class="relative">
+                            <select
+                                v-model="form.organization_id"
+                                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 outline-none bg-white text-sm text-slate-700 transition-all appearance-none cursor-pointer"
+                            >
+                                <option value="" disabled>
+                                    -- Select Tenant Organization --
+                                </option>
+                                <option
+                                    v-for="org in mockOrganizations"
+                                    :key="org.id"
+                                    :value="org.id"
+                                >
+                                    {{ org.name }}
+                                </option>
+                            </select>
+                            <div
+                                class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400"
+                            >
+                                <svg
+                                    class="fill-current h-4 w-4"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                >
+                                    <path
+                                        d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+                                    />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label
+                            class="block text-xs font-bold uppercase tracking-wide text-slate-500 mb-1.5"
+                        >
+                            Functional System Role Permissions
+                        </label>
+                        <div class="relative">
+                            <select
+                                v-model="form.role_id"
+                                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 outline-none bg-white text-sm text-slate-700 transition-all appearance-none cursor-pointer"
+                            >
+                                <option value="" disabled>
+                                    -- Select Functional Permission Level --
+                                </option>
+                                <option
+                                    v-for="role in mockRoles"
+                                    :key="role.id"
+                                    :value="role.id"
+                                >
+                                    {{ role.name }}
+                                </option>
+                            </select>
+                            <div
+                                class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400"
+                            >
+                                <svg
+                                    class="fill-current h-4 w-4"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                >
+                                    <path
+                                        d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+                                    />
+                                </svg>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -238,13 +314,18 @@ Modal state: {{ isModalOpen }}</pre
                         Cancel
                     </BaseButton>
                     <BaseButton
-                        :disabled="allowedEmailsStore.loading"
+                        :disabled="
+                            allowedEmailsStore.loading ||
+                            !form.email.includes('@') ||
+                            !form.organization_id ||
+                            !form.role_id
+                        "
                         @click="handleSubmit"
                     >
                         {{
                             allowedEmailsStore.loading
-                                ? "Saving..."
-                                : "Grant Access"
+                                ? "Saving Records..."
+                                : "Grant System Access"
                         }}
                     </BaseButton>
                 </template>
