@@ -428,6 +428,7 @@ const handleSubmit = async () => {
     }
 };
 
+// add handler to check first the role if it is a developer or admin before allowing the toggle of status
 // status toggle handler
 const handleToggleStatus = async (item) => {
     statusChangingId.value = item.id;
