@@ -201,15 +201,16 @@
                             type="email"
                             autofocus
                             class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 outline-none bg-white text-sm font-mono placeholder:text-slate-400 transition-all"
-                            placeholder="e.g., zdsantos@mmsu.edu.ph"
+                            placeholder="e.g., username@gmail.com"
                             required
                         />
                         <p
-                            v-if="form.email && !form.email.includes('@')"
+                            v-if="isEmailInvalid"
                             class="mt-1.5 text-xs text-red-500 flex items-center gap-1"
                         >
-                            <span class="font-bold">⚠️</span> Enter a complete
-                            email configuration containing an '@' symbol.
+                            <span class="font-bold">⚠️</span> Please enter a
+                            valid corporate or institutional email address
+                            (e.g., name@domain.com).
                         </p>
                     </div>
 
