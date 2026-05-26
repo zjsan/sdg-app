@@ -7,6 +7,7 @@ use App\Http\Controllers\PowerBiController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\AllowedEmailController;
+use App\Http\Controllers\LookupController;
 
 Route::get('/user', function (Request $request) {
     return $request->user()->load('role');//eager loading the role relationship to include role data in the response
@@ -22,6 +23,8 @@ Route::middleware('auth:sanctum')->get('/pbi', [PowerBiController::class, 'gener
 
 Route::middleware(['auth:sanctum'])->group(function () {
     
+    Route::get('/lookups/form-dependencies', [LookupController::class, 'getFormDependencies']); //new route to fetch organization and roles
+
     // Developer-only routes
     Route::middleware(['can:manage-pbi-links'])->group(function () {
 
