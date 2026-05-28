@@ -360,6 +360,9 @@ const filteredEmails = computed(() => {
 
 //modal control
 const openAddModal = () => {
+    isEditMode.value = false; //set to false when adding new email
+    selectedId.value = null;
+
     form.value = {
         email: "",
         organization_id: "",
@@ -369,6 +372,18 @@ const openAddModal = () => {
     isModalOpen.value = true;
 };
 
+const openEditModal = (item) => {
+    isEditMode.value = true;
+    selectedId.value = item.id;
+
+    form.value = {
+        email: item.email,
+        organization_id: item.organization_id,
+        role_id: item.role_id,
+        is_active: !!item.is_active, //boolean type casting
+    };
+    isModalOpen.value = true;
+};
 const closeModal = () => {
     isModalOpen.value = false;
 };
