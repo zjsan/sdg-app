@@ -141,32 +141,24 @@
                         </td>
 
                         <td class="px-6 py-4 text-center">
-                            <button
-                                @click="handleToggleStatus(item)"
-                                :disabled="statusChangingId === item.id"
-                                class="inline-flex items-center gap-2 cursor-pointer disabled:opacity-50 outline-none"
+                            <span
+                                :class="[
+                                    'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border selection:bg-transparent',
+                                    item.is_active
+                                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                        : 'bg-rose-50 text-rose-700 border-rose-200',
+                                ]"
                             >
                                 <span
                                     :class="[
-                                        'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border transition-all duration-200',
+                                        'w-1.5 h-1.5 mr-1.5 rounded-full',
                                         item.is_active
-                                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                                            : 'bg-rose-50 text-rose-700 border-rose-200',
+                                            ? 'bg-emerald-500'
+                                            : 'bg-rose-500',
                                     ]"
-                                >
-                                    <span
-                                        :class="[
-                                            'w-1.5 h-1.5 mr-1.5 rounded-full animate-pulse',
-                                            item.is_active
-                                                ? 'bg-emerald-500'
-                                                : 'bg-rose-500',
-                                        ]"
-                                    ></span>
-                                    {{
-                                        item.is_active ? "Active" : "Suspended"
-                                    }}
-                                </span>
-                            </button>
+                                ></span>
+                                {{ item.is_active ? "Active" : "Suspended" }}
+                            </span>
                         </td>
 
                         <td class="px-6 py-4 text-right">
@@ -359,7 +351,6 @@ const lookupStore = useLookupStore();
 // Local UI Management States
 const isModalOpen = ref(false);
 const searchQuery = ref("");
-const statusChangingId = ref(null); //to track which email is currently having its status toggled or being edited
 const isEditMode = ref(false); //flag to track whether the form is in edit mode or add mode
 const selectedId = ref(null); // capture the id of the emaiil being edited
 
@@ -481,20 +472,6 @@ const handleSubmit = async () => {
         }
 
         console.error("Submission sequence error:", error);
-    }
-};
-
-// add handler to check first the role if it is a developer or admin before allowing the toggle of status
-// status toggle handler
-const handleToggleStatus = async (item) => {
-    statusChangingId.value = item.id;
-    try {
-        // Execute the new clean reactive layout switch patch
-        await allowedEmailsStore.toggleEmailStatus(item.id);
-    } catch (error) {
-        console.error("Status modify loop exception:", error);
-    } finally {
-        statusChangingId.value = null;
     }
 };
 
