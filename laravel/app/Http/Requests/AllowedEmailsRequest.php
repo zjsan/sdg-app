@@ -16,9 +16,12 @@ class AllowedEmailsRequest extends FormRequest
 
     public function prepareForValidation()
     {
-        $this->merge([
-            'email'  => filter_var(strtolower(trim($this->email)), FILTER_SANITIZE_EMAIL),
-        ]);
+       // Strictly normalize: strip white spaces and force lowercase.
+        if ($this->has('email')) {
+            $this->merge([
+                'email' => strtolower(trim($this->email)),
+            ]);
+        }
     }
 
     /**
