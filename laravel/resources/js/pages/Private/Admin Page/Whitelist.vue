@@ -195,7 +195,13 @@
             </AppTable>
 
             <BaseModal :show="isModalOpen" @close="closeModal">
-                <template #title> Authorize Portal Access </template>
+                <template #title
+                    >{{
+                        isEditMode
+                            ? "Modify Whitelist Privileges"
+                            : "Authorize Portal Access"
+                    }}
+                </template>
 
                 <form
                     id="whitelistForm"
@@ -296,7 +302,9 @@
                         {{
                             allowedEmailsStore.loading
                                 ? "Saving Records..."
-                                : "Grant System Access"
+                                : isEditMode
+                                  ? "Save Changes"
+                                  : "Grant System Access"
                         }}
                     </BaseButton>
                 </template>
