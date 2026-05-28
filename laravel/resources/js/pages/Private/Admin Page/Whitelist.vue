@@ -404,6 +404,19 @@ const handleSubmit = async () => {
             ...form.value,
             email: form.value.email.trim().toLowerCase(),
         };
+
+        //execute this block if on edit mode
+        if (isEditMode.value && selectedId.value) {
+            // Execute refactored Pinia call matching Laravel store() format
+            await allowedEmailsStore.updateAllowedEmails(
+                selectedId.value,
+                payload,
+            );
+            alert("Email updated successfully.");
+            closeModal();
+            return;
+        }
+
         // Execute refactored Pinia call matching Laravel store() format
         await allowedEmailsStore.addAllowedEmails(payload);
         alert("Email added successfully.");
