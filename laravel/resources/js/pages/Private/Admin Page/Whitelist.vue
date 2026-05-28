@@ -386,6 +386,8 @@ const openEditModal = (item) => {
 };
 const closeModal = () => {
     isModalOpen.value = false;
+    isEditMode.value = false;
+    selectedId.value = null;
 };
 
 // form submission
