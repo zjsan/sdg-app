@@ -34,7 +34,7 @@ class AllowedEmailsRequest extends FormRequest
     {
         $allowedEmail = $this->route('allowed_email'); //if this is an update, ignore the current record's email in the unique check
 
-        $id = is_object($allowedEmail) ? $allowedEmail->id : ($allowedEmail ?? 'NULL'); //handle both model binding and direct id passing 
+        $allowedEmailId = is_object($allowedEmail) ? $allowedEmail->id : ($allowedEmail ?? 'NULL'); //handle both model binding and direct id passing 
 
         return [
             'email' => [
