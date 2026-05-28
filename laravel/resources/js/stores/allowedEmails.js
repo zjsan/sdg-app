@@ -35,11 +35,11 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
             this.errors = null;
             try {
                 const res = await api.post("/allowed-emails", {
-                    payload,
+                    ...payload,
                 });
 
                 if (res.data && res.data.allowedEmail) {
-                    this.emails.unshift(res.data.allowedEmail);
+                    this.emails.push(res.data.allowedEmail);
                 } //update the local state with the new allowed email
 
                 return res.data;

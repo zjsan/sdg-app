@@ -393,6 +393,10 @@ const handleSubmit = async () => {
         alert(
             "An error occurred while processing the request. Please try again.",
         );
+        if (error.response.status === 422) {
+            console.log(error.response.data.errors); // Contains the specific validation errors
+        }
+
         console.error("Submission sequence error:", error);
     }
 };
