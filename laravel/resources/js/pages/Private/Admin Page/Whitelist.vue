@@ -387,8 +387,12 @@ const handleSubmit = async () => {
         };
         // Execute refactored Pinia call matching Laravel store() format
         await allowedEmailsStore.addAllowedEmails(payload);
+        alert("Email added successfully.");
         closeModal();
     } catch (error) {
+        alert(
+            "An error occurred while processing the request. Please try again.",
+        );
         console.error("Submission sequence error:", error);
     }
 };
