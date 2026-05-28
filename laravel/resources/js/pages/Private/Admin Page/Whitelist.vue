@@ -169,27 +169,23 @@
                             </button>
                         </td>
 
-                        <div
-                            class="flex flex-row items-center justify-end space-x-2"
-                        >
-                            <td class="px-6 py-4 text-right">
-                                <BaseButton
-                                    variant="secondary"
-                                    size="sm"
-                                    @click="openEditModal(item)"
-                                >
-                                    Edit
-                                </BaseButton>
+                        <td class="px-6 py-4 text-right">
+                            <BaseButton
+                                variant="secondary"
+                                size="sm"
+                                @click="openEditModal(item)"
+                            >
+                                Edit
+                            </BaseButton>
 
-                                <BaseButton
-                                    variant="danger"
-                                    size="sm"
-                                    @click="confirmDelete(item)"
-                                >
-                                    Revoke
-                                </BaseButton>
-                            </td>
-                        </div>
+                            <BaseButton
+                                variant="danger"
+                                size="sm"
+                                @click="confirmDelete(item)"
+                            >
+                                Revoke
+                            </BaseButton>
+                        </td>
                     </tr>
                 </template>
             </AppTable>
