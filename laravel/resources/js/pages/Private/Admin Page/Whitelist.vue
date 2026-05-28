@@ -381,8 +381,8 @@ onMounted(() => {
     lookupStore.fetchFormDependencies();
 });
 
-// email format validation using regular experssoin
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// email format validation using standard email validation regex pattern
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 //  Computed validation flag
 const isEmailInvalid = computed(() => {
