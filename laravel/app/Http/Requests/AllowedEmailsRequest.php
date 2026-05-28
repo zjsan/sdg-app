@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class AllowedEmailsRequest extends FormRequest
 {
@@ -36,11 +37,29 @@ class AllowedEmailsRequest extends FormRequest
         $id = is_object($allowedEmail) ? $allowedEmail->id : ($allowedEmail ?? 'NULL'); //handle both model binding and direct id passing 
 
         return [
-            //
-            'email' => 'required|email|max:255|unique:allowed_emails,email,' . $id,
-            'organization_id' => 'required|exists:organizations,id',
-            'role_id' => 'required|exists:roles,id',
-            'is_active' => 'required|boolean',
+            'email' => [
+                'required',
+                'string',
+                'max:255',
+                'email:rfc,dns', //deep email format validation using Laravel's built-in email rule with RFC and DNS checks
+
+                //ensure email is unique but ignore when updating the same record
+                Rule::unique('allowed_emails', 'email')->ignore($allowedEmailId),
+            ],
+            'organization_id' => [
+                'required',
+                'integer',
+                Rule::exists('organizations', 'id'), //ensure the organization_id exists in the organizations table
+            ],
+            'role_id' => [
+                'required',
+                'integer',
+                Rule::exists('roles', 'id'), //ensure the role_id exists in the roles table
+            ],
+            'is_active' => [
+                'required',
+                'boolean',
+            ],
         ];
     }
 }
