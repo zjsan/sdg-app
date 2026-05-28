@@ -308,7 +308,9 @@ const lookupStore = useLookupStore();
 // Local UI Management States
 const isModalOpen = ref(false);
 const searchQuery = ref("");
-const statusChangingId = ref(null);
+const statusChangingId = ref(null); //to track which email is currently having its status toggled or being edited
+const isEditMode = ref(false); //flag to track whether the form is in edit mode or add mode
+const selectedId = ref(null); // capture the id of the emaiil being edited
 
 // Form State conforming to Laravel FormRequest Validator requirements
 const form = ref({
