@@ -54,6 +54,15 @@ class AllowedEmailController extends Controller
         return response()->json($allowedEmail->load(['role', 'organization']), 200);
     }
 
+    //helper function to count how many active records exist for a given role 
+    //for update and delete operations
+    private function countActiveByRole($roleId)
+    {
+        return AllowedEmail::where('role_id', $roleId)
+                            ->where('is_active', true)
+                            ->count();
+    }
+
     /**
      * Update the specified resource in storage.
      */
@@ -84,9 +93,7 @@ class AllowedEmailController extends Controller
                 $willChangeRole = isset($validated['role_id']) && $validated['role_id'] != $allowedEmail->role_id;
 
                 if($willDeactivate || $willChangeRole){
-                    $activeCount = AllowedEmail::where('role_id', $allowedEmail->role_id)
-                                    ->where('is_active', true)
-                                    ->count(); //count how many active records exist for this role
+                    $activeCount = $this->countActiveByRole($allowedEmail->role_id); //count how many active records exist for this role
 
                     if($activeCount <= 1){
                         return response()->json([
@@ -131,9 +138,7 @@ class AllowedEmailController extends Controller
         $allowedEmail->load('role'); //eager load the related role data
         if(in_array(strtolower(trim($allowedEmail->role->slug)), ['admin', 'developer'])){ //check if the role is admin or developer
             
-            $activeCount = AllowedEmail::where('role_id', $allowedEmail->role_id)
-                            ->where('is_active', true)
-                            ->count(); //count how many active records exist for this role
+            $activeCount = $this->countActiveByRole($allowedEmail->role_id); //count how many active records exist for this role
 
             if ($activeCount <= 1) {
                 return response()->json([
