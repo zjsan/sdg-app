@@ -77,7 +77,7 @@ class AllowedEmailController extends Controller
             if(isset($validated['is_active']) && !$validated['is_active']){
                 
                 //compare the email in the db and the authenticated user
-                if(strtolower(trim($allowedEmail->email)) === strtolower(trim($user->email))){
+                if(strcasecmp(trim($allowedEmail->email)) === trim($user->email)){
                     return response()->json([
                         'message' => 'Security Violation: You are not permitted to deactivate your own administrative session.'
                     ], 403);
