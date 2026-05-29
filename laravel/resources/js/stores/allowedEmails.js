@@ -55,7 +55,7 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
 
         async updateAllowedEmails(id, payload) {
             this.loading = true;
-            this.error = null;
+            this.errors = null;
 
             try {
                 const res = await api.put(`/allowed-emails/${id}`, payload);
