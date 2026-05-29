@@ -54,15 +54,6 @@ class AllowedEmailController extends Controller
         return response()->json($allowedEmail->load(['role', 'organization']), 200);
     }
 
-    //helper function to count how many active records exist for a given role 
-    //for update and delete operations
-    private function countActiveByRole($roleId)
-    {
-        return AllowedEmail::where('role_id', $roleId)
-                            ->where('is_active', true)
-                            ->count();
-    }
-
     /**
      * Update the specified resource in storage.
      */
