@@ -8,6 +8,7 @@ use App\Http\Requests\AllowedEmailsRequest;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 
 class AllowedEmailController extends Controller
 {
@@ -58,9 +59,42 @@ class AllowedEmailController extends Controller
      */
     public function update(AllowedEmailsRequest $request, AllowedEmail $allowedEmail): JsonResponse
     {
-        //
+        $user = Auth::user(); //retrieve the currently authenticated user
+
         try{
             $validated = $request->validated(); //get the validated data from the request
+
+            //check if the current authenticated user is trying to deactivate their own status
+            if(isset($validated['is_active']) && !$validated['is_active']){
+                
+                //compare the email in the db and the authenticated user
+                if(strtolower(trim($allowedEmail->email)) === strtolower(trim($user->email))){
+                    return response()->json([
+                        'message' => 'Security Violation: You are not permitted to deactivate your own administrative session.'
+                    ], 403);
+                }
+            }
+
+            $targetRole = Role::find($allowedEmail->role_id); //fetch the role associated with the allowed email record
+            $isHighPrivilege = in_array(strtolower($targetRole->slug), ['admin', 'developer']); //check if the role is admin or developer
+
+            if($isHighPrivellege){
+                
+                $willDeactivate = isset($validated['is_active']) && !$validated['is_active']; //check if the update is trying to deactivate the record
+                $willChangeRole = isset($validated['role_id']) && $validated['role_id'] != $allowedEmail->role_id;
+
+                if($willDeactivate || $willChangeRole){
+                    $activeCount = AllowedEmail::where('role_id', $allowedEmail->role_id)
+                                    ->where('is_active', true)
+                                    ->count(); //count how many active records exist for this role
+
+                    if($activeCount <= 1){
+                        return response()->json([
+                            'message' => "Security Violation: This record represents the last remaining active system execution environment for the role '{$targetRole->name}'. Deactivation or modification is blocked."
+                        ], 422);
+                    }
+                }
+            }
 
             $allowedEmail->update($validated); //update the record with the validated data
 
