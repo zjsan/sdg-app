@@ -78,7 +78,7 @@ class AllowedEmailController extends Controller
             $targetRole = Role::find($allowedEmail->role_id); //fetch the role associated with the allowed email record
             $isHighPrivilege = in_array(strtolower($targetRole->slug), ['admin', 'developer']); //check if the role is admin or developer
 
-            if($isHighPrivellege){
+            if($isHighPrivilege){
                 
                 $willDeactivate = isset($validated['is_active']) && !$validated['is_active']; //check if the update is trying to deactivate the record
                 $willChangeRole = isset($validated['role_id']) && $validated['role_id'] != $allowedEmail->role_id;
@@ -117,6 +117,14 @@ class AllowedEmailController extends Controller
      */
     public function destroy(AllowedEmail $allowedEmail): JsonResponse
     {        
+        $user = Auth::user(); //retrieve the currently authenticated user
+
+        if(strtolower(trim($allowedEmail->email)) === strtolower(trim($user->email))){
+            return response()->json([
+                'message'=> 'Security Violation: Destruction of your own active whitelist record is strictly blocked.'
+            ], 403);
+        }
+
         $allowedEmail->delete();
         return response()->json(['message' => "Successfully deleted allowed email."], 200);
 
