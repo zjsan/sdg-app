@@ -119,10 +119,27 @@ class AllowedEmailController extends Controller
     {        
         $user = Auth::user(); //retrieve the currently authenticated user
 
+        //prevent users from deleting their own active whitelist record
         if(strtolower(trim($allowedEmail->email)) === strtolower(trim($user->email))){
             return response()->json([
                 'message'=> 'Security Violation: Destruction of your own active whitelist record is strictly blocked.'
             ], 403);
+        }
+
+        //check the database if the role is an admin or developer then ensure that there at least one active reecord with that role
+        //if not prevent from deleting
+        $allowedEmail->load('role'); //eager load the related role data
+        if(in_array(strtolower(trim($allowedEmail->role->slug)), ['admin', 'developer'])){ //check if the role is admin or developer
+            
+            $activeCount = AllowedEmail::where('role_id', $allowedEmail->role_id)
+                            ->where('is_active', true)
+                            ->count(); //count how many active records exist for this role
+
+            if ($activeCount <= 1) {
+                return response()->json([
+                    'message' => "Security Violation: Deletion aborted. This user is the sole active account possessing '{$allowedEmail->role->name}' system scope."
+                ], 422);
+            }
         }
 
         $allowedEmail->delete();
