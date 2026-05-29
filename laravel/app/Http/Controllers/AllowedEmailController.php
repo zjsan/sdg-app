@@ -84,20 +84,28 @@ class AllowedEmailController extends Controller
                 }
             }
 
-            $targetRole = Role::find($allowedEmail->role_id); //fetch the role associated with the allowed email record
-            $isHighPrivilege = in_array(strtolower($targetRole->slug), ['admin', 'developer']); //check if the role is admin or developer
+            //Prevent Orphaned Roles via Database Lock
+            $isHighPrivilege = in_array(strtolower($allowedEmail->role?->slug ?? ''), ['admin', 'developer']); //check if the role is admin or developer
 
             if($isHighPrivilege){
                 
                 $willDeactivate = isset($validated['is_active']) && !$validated['is_active']; //check if the update is trying to deactivate the record
-                $willChangeRole = isset($validated['role_id']) && $validated['role_id'] != $allowedEmail->role_id;
+                $willChangeRole = isset($validated['role_id']) && (int)$validated['role_id'] !== (int)$allowedEmail->role_id; //check if the update is trying to change the role to another role
 
                 if($willDeactivate || $willChangeRole){
-                    $activeCount = $this->countActiveByRole($allowedEmail->role_id); //count how many active records exist for this role
 
-                    if($activeCount <= 1){
+                    $canProceed = DB::transaction(function () use ($allowedEmail) {
+                        $activeCount = AllowedEmail::activeByRole($allowedEmail->role_id)
+
+                            ->lockForUpdate()//prevent selected rows from being modified by other transactions until this transaction is complete
+                            ->count();
+
+                        return $activeCount > 1;
+                    });
+
+                    if(!$canProceed){
                         return response()->json([
-                            'message' => "Security Violation: This record represents the last remaining active system execution environment for the role '{$targetRole->name}'. Deactivation or modification is blocked."
+                            'message' => "Security Violation: This record represents the last remaining active system execution environment for the role '{$allowedEmail->role->name}'."
                         ], 422);
                     }
                 }
@@ -105,7 +113,7 @@ class AllowedEmailController extends Controller
 
             $allowedEmail->update($validated); //update the record with the validated data
 
-            $allowedEmail->load(['role', 'organization']);// eager load the related role and organization data
+            $allowedEmail->load(['organization']);// eager load the related organization data, role is already eager loaded in the model
 
             return response()->json([
                 'message' => "Successfully updated allowed email.",
@@ -114,7 +122,7 @@ class AllowedEmailController extends Controller
         }
         catch (Exception $e) {
             Log::error("Failed to update allowed email: " . $e->getMessage());
-            return response()->json(['message' => 'Failed to update allowed email: ' . $e->getMessage()], 500);
+            return response()->json(['message' => 'An internal server error occurred while updating the record.'], 500);
         }     
     }
 
