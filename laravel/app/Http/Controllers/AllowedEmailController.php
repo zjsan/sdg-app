@@ -112,7 +112,7 @@ class AllowedEmailController extends Controller
 
                 if (!$canProceed && $currentIsHigh && ($willDeactivate || $willChangeRole)) {
                     return response()->json([
-                        'message' => "Security Violation: This record represents the last remaining active system execution environment for the role '{$allowedEmail->role->name}'."
+                        'message' => "Security Violation: This record represents the last remaining active system execution environment for this role."
                     ], 422);
                 }
             }
@@ -167,7 +167,7 @@ class AllowedEmailController extends Controller
 
             if (!$canProceed) {
                 return response()->json([
-                    'message' => "Security Violation: Deletion aborted. This user is the sole active account possessing '{$allowedEmail->role->name}' system scope."
+                    'message' => "Security Violation: Deletion aborted. This user is the sole active account possessing system scope."
                 ], 422);
             }
         }
