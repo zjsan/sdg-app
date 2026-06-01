@@ -42,12 +42,19 @@ class AllowedEmailController extends Controller
 
             return response()->json([
                 'message' => "Successfully added allowed email.",
-                'allowedEmail' => $allowedEmail
+                'allowedEmail' => new AllowedEmailResource($allowedEmail)
             ], 201);
         }
         catch (Exception $e) {
-            Log::error("Failed to create allowed email: " . $e->getMessage());
-            return response()->json(['message' => 'Failed to create allowed email: ' . $e->getMessage()], 500);
+           // Log the exact error for debugging, but keep the API response safe
+            Log::error("Failed to create allowed email: " . $e->getMessage(), [
+                'payload' => $request->except(['password']),
+                'exception' => $e
+            ]);
+
+            return response()->json([
+                'message' => 'An internal server error occurred while creating the record.'
+            ], 500);
         }
     }
 
