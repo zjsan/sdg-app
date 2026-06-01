@@ -149,7 +149,7 @@ class AllowedEmailController extends Controller
         }
 
         
-        $isHighPrivilege = in_array(strtolower($allowedEmail->role?->slug ?? ''), ['admin', 'developer']);
+        $isHighPrivillege = in_array(strtolower($allowedEmail->role?->slug ?? ''), ['admin', 'developer']);
 
         //prevent deleting the last active admin/developer only if target is currently active
         if($isHighPrivillege && $allowedEmail->is_active){
