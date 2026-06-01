@@ -92,45 +92,50 @@ class AllowedEmailController extends Controller
             }
 
             //Prevent Orphaned Roles via Database Lock
-            $isHighPrivilege = in_array(strtolower($allowedEmail->role?->slug ?? ''), ['admin', 'developer']); //check if the role is admin or developer
+            $currentIsHigh = in_array(strtolower($allowedEmail->role?->slug ?? ''), ['admin', 'developer']);
+            
+            $willDeactivate = isset($validated['is_active']) && !$validated['is_active'];
+            $willChangeRole = isset($validated['role_id']) && (int)$validated['role_id'] !== (int)$allowedEmail->role_id;
 
-            if($isHighPrivilege){
+            // Secure the transaction if they are high privilege and abandoning it, OR if they are switching roles
+            if (($currentIsHigh && ($willDeactivate || $willChangeRole)) || $willChangeRole) {
                 
-                $willDeactivate = isset($validated['is_active']) && !$validated['is_active']; //check if the update is trying to deactivate the record
-                $willChangeRole = isset($validated['role_id']) && (int)$validated['role_id'] !== (int)$allowedEmail->role_id; //check if the update is trying to change the role to another role
+                $canProceed = DB::transaction(function () use ($allowedEmail, $validated, $willChangeRole) {
+                    // Lock the old role to ensure we aren't leaving it orphaned
+                    $activeOldRoleCount = AllowedEmail::activeByRole($allowedEmail->role_id)
+                        ->lockForUpdate()
+                        ->count();
 
-                if($willDeactivate || $willChangeRole){
+                    // If moving away from a high-privilege role, ensure it wasn't the last active one
+                    return $activeOldRoleCount > 1;
+                });
 
-                    $canProceed = DB::transaction(function () use ($allowedEmail) {
-                        $activeCount = AllowedEmail::activeByRole($allowedEmail->role_id)
-
-                            ->lockForUpdate()//prevent selected rows from being modified by other transactions until this transaction is complete
-                            ->count();
-
-                        return $activeCount > 1;
-                    });
-
-                    if(!$canProceed){
-                        return response()->json([
-                            'message' => "Security Violation: This record represents the last remaining active system execution environment for the role '{$allowedEmail->role->name}'."
-                        ], 422);
-                    }
+                if (!$canProceed && $currentIsHigh && ($willDeactivate || $willChangeRole)) {
+                    return response()->json([
+                        'message' => "Security Violation: This record represents the last remaining active system execution environment for the role '{$allowedEmail->role->name}'."
+                    ], 422);
                 }
             }
 
-            $allowedEmail->update($validated); //update the record with the validated data
+            // Execute update
+            $allowedEmail->update($validated);
 
-            $allowedEmail->load(['organization']);// eager load the related organization data, role is already eager loaded in the model
+            //Force-reload all relations to drop stale in-memory model cache
+            $allowedEmail->load(['role', 'organization']); 
 
             return response()->json([
                 'message' => "Successfully updated allowed email.",
-                'allowedEmail' => new AllowedEmailResource($allowedEmail) // Structured with Resource presenter
+                'allowedEmail' => new AllowedEmailResource($allowedEmail)
             ], 200);
-        }
-        catch (Exception $e) {
-            Log::error("Failed to update allowed email: " . $e->getMessage());
+
+        } catch (Exception $e) {
+            Log::error("Failed to update allowed email: " . $e->getMessage(), [
+                'id' => $allowedEmail->id,
+                'payload' => $request->except(['password', 'password_confirmation']),
+                'exception' => $e
+            ]);
             return response()->json(['message' => 'An internal server error occurred while updating the record.'], 500);
-        }     
+        }
     }
 
 
