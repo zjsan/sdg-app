@@ -63,8 +63,10 @@ class AllowedEmailController extends Controller
      */
     public function show(AllowedEmail $allowedEmail): JsonResponse  
     {
-        //
-        return response()->json($allowedEmail->load(['role', 'organization']), 200);
+        // Ensure relations are loaded cleanly
+        $allowedEmail->loadMissing(['role', 'organization']);
+
+        return response()->json(new AllowedEmailResource($allowedEmail), 200);
     }
 
     /**
