@@ -97,8 +97,8 @@ class AllowedEmailController extends Controller
             $willDeactivate = isset($validated['is_active']) && !$validated['is_active'];
             $willChangeRole = isset($validated['role_id']) && (int)$validated['role_id'] !== (int)$allowedEmail->role_id;
 
-            // Secure the transaction if they are high privilege and abandoning it, OR if they are switching roles
-            if (($currentIsHigh && ($willDeactivate || $willChangeRole)) || $willChangeRole) {
+            // Secure the transaction if they are high privilege and abandoning it
+            if (($currentIsHigh && ($willDeactivate || $willChangeRole))) {
                 
                 $canProceed = DB::transaction(function () use ($allowedEmail, $validated, $willChangeRole) {
                     // Lock the old role to ensure we aren't leaving it orphaned
@@ -154,17 +154,15 @@ class AllowedEmailController extends Controller
         }
 
         //Prevent structural isolation of high privilege accounts    
-        $isHighPrivillege = in_array(strtolower($allowedEmail->role?->slug ?? ''), ['admin', 'developer']);
+        $isHighPrivilege = in_array(strtolower($allowedEmail->role?->slug ?? ''), ['admin', 'developer']);
 
-        //prevent deleting the last active admin/developer only if target is currently active
-        if($isHighPrivillege && $allowedEmail->is_active){
+        // 2. Structural Integrity Check
+        if ($isHighPrivilege && $allowedEmail->is_active) {
 
             $canProceed = DB::transaction(function () use ($allowedEmail){
-                $activeCount = AllowedEmail::activeByRole($allowedEmail->role_id)
-                ->lockForUpdate()
-                ->count();
-
-                return $activeCount > 1;
+                return AllowedEmail::activeByRole($allowedEmail->role_id)
+                    ->lockForUpdate()
+                    ->count() > 1;
             });
 
             if (!$canProceed) {
@@ -176,7 +174,6 @@ class AllowedEmailController extends Controller
 
         $allowedEmail->delete();
         return response()->json(['message' => "Successfully deleted allowed email."], 200);
-
 
     }
 }
