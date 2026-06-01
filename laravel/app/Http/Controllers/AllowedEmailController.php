@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\AllowedEmailResource;
 
 class AllowedEmailController extends Controller
 {
@@ -17,8 +18,13 @@ class AllowedEmailController extends Controller
      */
     public function index(): JsonResponse
     {   
-        //
-       return response()->json(AllowedEmail::with(['role','organization'])->get());
+       // Use pagination to protect server memory. Default to 15 per page.
+        $allowedEmails = AllowedEmail::with(['role', 'organization'])
+            ->latest()
+            ->paginate(request()->query('per_page', 15));
+        
+        // Collection helper automatically formats paginated responses  
+        return AllowedEmailResource::collection($allowedEmails)->response();
     }
 
     /**
