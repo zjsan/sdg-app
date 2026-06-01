@@ -124,7 +124,7 @@ class AllowedEmailController extends Controller
 
             return response()->json([
                 'message' => "Successfully updated allowed email.",
-                'allowedEmail' => $allowedEmail
+                'allowedEmail' => new AllowedEmailResource($allowedEmail) // Structured with Resource presenter
             ], 200);
         }
         catch (Exception $e) {
@@ -148,7 +148,7 @@ class AllowedEmailController extends Controller
             ], 403);
         }
 
-        
+        //Prevent structural isolation of high privilege accounts    
         $isHighPrivillege = in_array(strtolower($allowedEmail->role?->slug ?? ''), ['admin', 'developer']);
 
         //prevent deleting the last active admin/developer only if target is currently active
