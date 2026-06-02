@@ -13,6 +13,37 @@
             </PageHeader>
 
             <div
+                v-if="successMessage"
+                class="mt-4 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg text-sm flex items-center justify-between transition-all duration-300 ease-in"
+            >
+                <div class="flex items-center gap-2">
+                    <span>✅</span>
+                    <span>{{ successMessage }}</span>
+                </div>
+                <button
+                    @click="successMessage = ''"
+                    class="text-emerald-500 hover:text-emerald-700 font-bold"
+                >
+                    &times;
+                </button>
+            </div>
+
+            <div
+                v-if="errorMessage"
+                class="mt-4 p-4 bg-rose-50 border border-rose-200 text-rose-800 rounded-lg text-sm flex items-center justify-between transition-all duration-300 ease-in"
+            >
+                <div class="flex items-center gap-2">
+                    <span class="font-medium">{{ errorMessage }}</span>
+                </div>
+                <button
+                    @click="errorMessage = ''"
+                    class="text-rose-500 hover:text-rose-700 font-bold"
+                >
+                    &times;
+                </button>
+            </div>
+
+            <div
                 class="flex justify-between items-center py-4 border-b border-slate-100 bg-slate-50/50 px-4 rounded-t-xl mt-6"
             >
                 <div class="relative w-72">
@@ -53,7 +84,7 @@
                     <th
                         class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider"
                     >
-                        Tenant Organization
+                        Organization
                     </th>
                     <th
                         class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider"
@@ -63,7 +94,7 @@
                     <th
                         class="px-6 py-4 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider"
                     >
-                        Status Switch
+                        Status
                     </th>
                     <th
                         class="px-6 py-4 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider"
@@ -190,6 +221,13 @@
                             : "Authorize Portal Access"
                     }}
                 </template>
+
+                <div
+                    v-if="modalErrorMessage"
+                    class="mb-4 p-3 bg-rose-50 border border-rose-200 text-rose-800 rounded-lg text-xs font-medium"
+                >
+                    ⚠️ {{ modalErrorMessage }}
+                </div>
 
                 <form
                     id="whitelistForm"
