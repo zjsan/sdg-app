@@ -108,7 +108,7 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
             }
 
             try {
-                await api.delete(`/allowed-emails/${id}`);
+                const res = await api.delete(`/allowed-emails/${id}`);
 
                 this.emails = this.emails.filter((email) => email.id !== id); // Update local state by removing the deleted email
                 console.log(
