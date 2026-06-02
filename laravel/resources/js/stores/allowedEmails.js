@@ -42,12 +42,13 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
                     this.emails.push(res.data.allowedEmail);
                 } //update the local state with the new allowed email
 
-                return res.data;
+                return res.data; // return raw data containing backend message
             } catch (error) {
-                this.errors =
+                const errMsg =
                     error.response?.data?.message ||
                     "Failed to add allowed email.";
-                throw error; // Rethrow the error to be handled by the caller
+                this.errors = errMsg;
+                throw errMsg; // Bubble up string to component try/catch
             } finally {
                 this.loading = false;
             }
@@ -72,30 +73,13 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
 
                 return res.data;
             } catch (error) {
-                this.errors =
+                const errMsg =
                     error.response?.data?.message ||
                     "Failed to update allowed email.";
-                console.error("Failed to update allowed email:", error);
+                this.errors = errMsg;
+                throw errMsg;
             } finally {
                 this.loading = false;
-            }
-        },
-
-        //new UI Action tracking for the toggle status endpoint
-        async toggleEmailStatus(id) {
-            try {
-                const res = await api.patch(`/allowed-emails/${id}/toggle`);
-                const updatedRecord = res.data?.allowedEmail;
-                if (updatedRecord) {
-                    const index = this.emails.findIndex(
-                        (item) => item.id === id,
-                    );
-                    if (index !== -1) {
-                        this.emails[index] = updatedRecord;
-                    }
-                }
-            } catch (error) {
-                console.error("Failed to toggle status:", error);
             }
         },
 
@@ -111,14 +95,13 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
                 const res = await api.delete(`/allowed-emails/${id}`);
 
                 this.emails = this.emails.filter((email) => email.id !== id); // Update local state by removing the deleted email
-                console.log(
-                    res.message || "Allowed email deleted successfully.",
-                );
+                return res.data;
             } catch (error) {
-                this.errors =
+                const errMsg =
                     error.response?.data?.message ||
                     "Failed to delete allowed email.";
-                console.error("Failed to delete allowed email:", error);
+                this.errors = errMsg;
+                throw errMsg;
             } finally {
                 this.loading = false;
             }
