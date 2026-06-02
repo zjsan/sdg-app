@@ -18,12 +18,12 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
                 this.emails = Array.isArray(res.data)
                     ? res.data
                     : res.data.data;
-                console.log("Allowed Emails fetched:", this.emails); // Debugging log to check the fetched data
             } catch (error) {
-                this.errors =
+                const errMsg =
                     error.response?.data?.message ||
                     "Failed to load allowed emails.";
-                console.error("Failed to fetch allowed emails:", error);
+                this.errors = errMsg;
+                throw errMsg;
             } finally {
                 this.loading = false;
             }
