@@ -408,7 +408,7 @@ const form = ref({
 // fetch initial data on component mount
 onMounted(() => {
     allowedEmailsStore.fetchAllowedEmails().catch((err) => {
-        errorMessage.value = err;
+        errorMessage.value = err?.message || err || "Failed to load registry.";
     });
     lookupStore.fetchFormDependencies();
 });
