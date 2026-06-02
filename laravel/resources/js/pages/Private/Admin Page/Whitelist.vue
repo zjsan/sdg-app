@@ -354,6 +354,11 @@ const searchQuery = ref("");
 const isEditMode = ref(false); //flag to track whether the form is in edit mode or add mode
 const selectedId = ref(null); // capture the id of the emaiil being edited
 
+// Component-level feedback states
+const successMessage = ref("");
+const errorMessage = ref("");
+const modalErrorMessage = ref("");
+
 // Form State conforming to Laravel FormRequest Validator requirements
 const form = ref({
     email: "",
@@ -364,7 +369,9 @@ const form = ref({
 
 // fetch initial data on component mount
 onMounted(() => {
-    allowedEmailsStore.fetchAllowedEmails();
+    allowedEmailsStore.fetchAllowedEmails().catch((err) => {
+        errorMessage.value = err;
+    });
     lookupStore.fetchFormDependencies();
 });
 
@@ -404,6 +411,7 @@ const filteredEmails = computed(() => {
 const openAddModal = () => {
     isEditMode.value = false; //set to false when adding new email
     selectedId.value = null;
+    modalErrorMessage.value = "";
 
     form.value = {
         email: "",
@@ -417,6 +425,7 @@ const openAddModal = () => {
 const openEditModal = (item) => {
     isEditMode.value = true;
     selectedId.value = item.id;
+    modalErrorMessage.value = "";
 
     form.value = {
         email: item.email,
@@ -430,6 +439,16 @@ const closeModal = () => {
     isModalOpen.value = false;
     isEditMode.value = false;
     selectedId.value = null;
+    modalErrorMessage.value = "";
+};
+
+// clear top-level alert systems automatically after a timeout
+const flashSuccess = (msg) => {
+    successMessage.value = msg;
+    errorMessage.value = "";
+    setTimeout(() => {
+        successMessage.value = "";
+    }, 5000);
 };
 
 // form submission
@@ -454,19 +473,18 @@ const handleSubmit = async () => {
                 selectedId.value,
                 payload,
             );
-            alert("Email updated successfully.");
+            flashSuccess(data?.message || "Email updated successfully.");
             closeModal();
             return;
         }
 
         // Execute refactored Pinia call matching Laravel store() format
         await allowedEmailsStore.addAllowedEmails(payload);
-        alert("Email added successfully.");
+        flashSuccess(data?.message || "Email added successfully.");
         closeModal();
     } catch (error) {
-        alert(
-            "An error occurred while processing the request. Please try again.",
-        );
+        // Render server validation/security failures straight into the active modal layout
+        modalErrorMessage.value = errorString;
         if (error.response.status === 422) {
             console.log(error.response.data.errors); // Contains the specific validation errors
         }
@@ -483,9 +501,13 @@ const confirmDelete = async (item) => {
         )
     ) {
         try {
-            await allowedEmailsStore.deleteAllowedEmails(item.id);
-        } catch (error) {
-            console.error("Revocation exception sequence:", error);
+            const data = await allowedEmailsStore.deleteAllowedEmails(item.id);
+            flashSuccess(
+                data?.message || " clearance rule successfully dropped.",
+            );
+        } catch (errorString) {
+            errorMessage.value = errorString;
+            window.scrollTo({ top: 0, behavior: "smooth" });
         }
     }
 };
