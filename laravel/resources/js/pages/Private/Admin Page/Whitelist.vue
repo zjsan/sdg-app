@@ -17,7 +17,6 @@
                 class="mt-4 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg text-sm flex items-center justify-between transition-all duration-300 ease-in"
             >
                 <div class="flex items-center gap-2">
-                    <span>✅</span>
                     <span>{{ successMessage }}</span>
                 </div>
                 <button
