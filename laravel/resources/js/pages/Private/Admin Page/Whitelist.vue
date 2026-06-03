@@ -461,15 +461,28 @@ const openAddModal = () => {
 };
 
 const openEditModal = (item) => {
+    console.log("Organizations in Store:", dynamicOrganizations.value);
+    console.log("Item being edited:", item);
+
+    const itemOrgId = item.organization?.id || item.organization_id;
+    const itemRoleId = item.role?.id || item.role_id;
+
     isEditMode.value = true;
     selectedId.value = item.id;
     modalErrorMessage.value = "";
 
+    // Find matching lookup types dynamically to guarantee strict equality matches
+    const matchedOrg = dynamicOrganizations.value.find(
+        (o) => String(o.id) === String(itemOrgId),
+    );
+    const matchedRole = dynamicRoles.value.find(
+        (r) => String(r.id) === String(itemRoleId),
+    );
+
     form.value = {
         email: item.email,
-        organization_id:
-            item.organization_id != null ? Number(item.organization_id) : "",
-        role_id: item.role_id != null ? Number(item.role_id) : "",
+        organization_id: matchedOrg ? matchedOrg.id : "",
+        role_id: matchedRole ? matchedRole.id : "",
         is_active: !!item.is_active,
     };
     isModalOpen.value = true;
