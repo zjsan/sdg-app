@@ -467,8 +467,10 @@ const openEditModal = (item) => {
 
     form.value = {
         email: item.email,
-        organization_id: item.organization_id,
-        role_id: item.role_id,
+        organization_id: item.organization_id
+            ? String(item.organization_id)
+            : "",
+        role_id: item.role_id ? String(item.role_id) : "",
         is_active: !!item.is_active, //boolean type casting
     };
     isModalOpen.value = true;
@@ -506,25 +508,38 @@ const handleSubmit = async () => {
 
         //execute this block if on edit mode
         if (isEditMode.value && selectedId.value) {
-            // Execute refactored Pinia call matching Laravel store() format
-            await allowedEmailsStore.updateAllowedEmails(
+            // Capture returned response safely
+            const response = await allowedEmailsStore.updateAllowedEmails(
                 selectedId.value,
                 payload,
             );
-            flashSuccess(data?.message || "Email updated successfully.");
+            flashSuccess(
+                response?.data?.message ||
+                    response?.message ||
+                    "Email updated successfully.",
+            );
             closeModal();
             return;
         }
 
-        // Execute refactored Pinia call matching Laravel store() format
-        await allowedEmailsStore.addAllowedEmails(payload);
-        flashSuccess(data?.message || "Email added successfully.");
+        //execute this block if on add mode
+        const response = await allowedEmailsStore.addAllowedEmails(payload);
+        flashSuccess(
+            response?.data?.message ||
+                response?.message ||
+                "Email added successfully.",
+        );
         closeModal();
     } catch (error) {
         // Render server validation/security failures straight into the active modal layout
-        modalErrorMessage.value = errorString;
-        if (error.response.status === 422) {
-            console.log(error.response.data.errors); // Contains the specific validation errors
+        const errorText =
+            error.response?.data?.message ||
+            error.message ||
+            "An unexpected error occurred.";
+        modalErrorMessage.value = errorText;
+
+        if (error.response && error.response.status === 422) {
+            console.log(error.response.data.errors);
         }
 
         console.error("Submission sequence error:", error);
@@ -541,10 +556,13 @@ const confirmDelete = async (item) => {
         try {
             const data = await allowedEmailsStore.deleteAllowedEmails(item.id);
             flashSuccess(
-                data?.message || " clearance rule successfully dropped.",
+                data?.message || "Clearance rule successfully dropped.",
             );
         } catch (errorString) {
-            errorMessage.value = errorString;
+            errorMessage.value =
+                errorString?.message ||
+                errorString ||
+                "Failed to revoke access.";
             window.scrollTo({ top: 0, behavior: "smooth" });
         }
     }
