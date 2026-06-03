@@ -467,11 +467,10 @@ const openEditModal = (item) => {
 
     form.value = {
         email: item.email,
-        organization_id: item.organization_id
-            ? String(item.organization_id)
-            : "",
-        role_id: item.role_id ? String(item.role_id) : "",
-        is_active: !!item.is_active, //boolean type casting
+        organization_id:
+            item.organization_id != null ? Number(item.organization_id) : "",
+        role_id: item.role_id != null ? Number(item.role_id) : "",
+        is_active: !!item.is_active,
     };
     isModalOpen.value = true;
 };
@@ -504,6 +503,9 @@ const handleSubmit = async () => {
         const payload = {
             ...form.value,
             email: form.value.email.trim().toLowerCase(),
+            // Clean payload properties before passing off to Laravel API request cycle
+            organization_id: Number(form.value.organization_id),
+            role_id: Number(form.value.role_id),
         };
 
         //execute this block if on edit mode
