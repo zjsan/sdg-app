@@ -101,6 +101,11 @@ class AllowedEmailController extends Controller
             if (($currentIsHigh && ($willDeactivate || $willChangeRole))) {
                 
                 $canProceed = DB::transaction(function () use ($allowedEmail, $validated, $willChangeRole) {
+
+                    if($allowedEmail->is_active === false){
+                        return true; //if the record is already inactive, we can allow role changes without counting active records
+                    }
+                    
                     // Lock the old role to ensure we aren't leaving it orphaned
                     $activeOldRoleCount = AllowedEmail::activeByRole($allowedEmail->role_id)
                         ->lockForUpdate()
