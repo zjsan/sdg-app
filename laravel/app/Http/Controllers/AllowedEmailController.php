@@ -42,7 +42,7 @@ class AllowedEmailController extends Controller
             $allowedEmail->load(['role', 'organization']);// eager load the related role and organization data
 
             return response()->json([
-                'message' => "Successfully added allowed email.",
+                'message' => "Successfully added a new record to the whitelist.",
                 'allowedEmail' => new AllowedEmailResource($allowedEmail)
             ], 201);
         }
@@ -124,7 +124,7 @@ class AllowedEmailController extends Controller
             $allowedEmail->load(['role', 'organization']); 
 
             return response()->json([
-                'message' => "Successfully updated allowed email.",
+                'message' => "Successfully updated the database record for this whitelist entry.",
                 'allowedEmail' => new AllowedEmailResource($allowedEmail)
             ], 200);
 
@@ -174,7 +174,7 @@ class AllowedEmailController extends Controller
             }
 
             $allowedEmail->delete();
-            return response()->json(['message' => "Successfully deleted allowed email."], 200);
+            return response()->json(['message' => "Successfully deleted the whitelist entry."], 200);
         }
         catch (Exception $e) {
             // Log the exact error for your developers, keeping the API response secure
