@@ -99,37 +99,42 @@
                     </BaseButton>
                 </div>
 
-                <Table>
+                <Table class="w-full border-collapse">
                     <TableHeader>
-                        <TableRow class="bg-slate-50/70 hover:bg-slate-50/70">
+                        <TableRow
+                            class="bg-slate-50/75 border-b border-slate-100 hover:bg-slate-50/75"
+                        >
                             <TableHead
-                                class="text-[11px] font-bold uppercase tracking-wider text-slate-500"
+                                class="h-10 text-[11px] font-bold uppercase tracking-wider text-slate-500/90 pl-4"
                                 >Whitelisted Identity</TableHead
                             >
                             <TableHead
-                                class="text-[11px] font-bold uppercase tracking-wider text-slate-500"
+                                class="h-10 text-[11px] font-bold uppercase tracking-wider text-slate-500/90"
                                 >Organization</TableHead
                             >
                             <TableHead
-                                class="text-[11px] font-bold uppercase tracking-wider text-slate-500"
+                                class="h-10 text-[11px] font-bold uppercase tracking-wider text-slate-500/90"
                                 >System Role</TableHead
                             >
                             <TableHead
-                                class="text-center text-[11px] font-bold uppercase tracking-wider text-slate-500"
+                                class="h-10 text-center text-[11px] font-bold uppercase tracking-wider text-slate-500/90"
                                 >Status</TableHead
                             >
                             <TableHead
-                                class="text-center text-[11px] font-bold uppercase tracking-wider text-slate-500"
+                                class="h-10 text-center text-[11px] font-bold uppercase tracking-wider text-slate-500/90 pr-4"
                                 >Actions</TableHead
                             >
                         </TableRow>
                     </TableHeader>
 
                     <TableBody>
-                        <TableRow v-if="filteredEmails.length === 0">
+                        <TableRow
+                            v-if="filteredEmails.length === 0"
+                            class="border-b border-slate-100/80"
+                        >
                             <TableCell colspan="5" class="py-16 text-center">
                                 <div
-                                    class="flex flex-col items-center justify-center space-y-2.5"
+                                    class="flex flex-col items-center justify-center space-y-2"
                                 >
                                     <template v-if="allowedEmailsStore.loading">
                                         <div
@@ -143,12 +148,12 @@
                                     </template>
                                     <template v-else>
                                         <p
-                                            class="text-sm font-medium text-slate-500"
+                                            class="text-sm font-medium text-slate-600"
                                         >
                                             No matching whitelisted credentials
                                             found.
                                         </p>
-                                        <p class="text-xs text-slate-400/90">
+                                        <p class="text-xs text-slate-400">
                                             Verify your search keywords or
                                             configure a new access rule.
                                         </p>
@@ -160,25 +165,27 @@
                         <TableRow
                             v-for="item in filteredEmails"
                             :key="item.id"
-                            class="hover:bg-slate-50/40 transition-colors"
+                            class="border-b border-slate-100/80 hover:bg-slate-50/30 transition-colors group"
                         >
-                            <TableCell class="py-3.5">
+                            <TableCell class="py-3.5 pl-4">
                                 <span
-                                    class="font-mono text-[13px] font-medium text-slate-800 tracking-tight"
+                                    class="font-mono text-[13px] font-medium text-slate-700 tracking-tight select-all"
                                 >
                                     {{ item.email }}
                                 </span>
                             </TableCell>
 
-                            <TableCell class="font-medium py-3.5">
+                            <TableCell class="py-3.5">
                                 <div
                                     v-if="item.organization?.name"
-                                    class="flex items-center gap-2 text-slate-700 text-sm"
+                                    class="flex items-center gap-2 text-slate-600 text-[13px]"
                                 >
                                     <span
-                                        class="w-1.5 h-1.5 rounded-full bg-sky-400 shadow-sm"
+                                        class="w-1.5 h-1.5 rounded-full bg-slate-300 group-hover:bg-indigo-400 transition-colors"
                                     ></span>
-                                    {{ item.organization.name }}
+                                    <span class="font-medium text-slate-700">{{
+                                        item.organization.name
+                                    }}</span>
                                 </div>
                                 <div
                                     v-else
@@ -194,13 +201,13 @@
                             <TableCell class="py-3.5">
                                 <span
                                     :class="[
-                                        'inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold tracking-wide uppercase border',
+                                        'inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-medium tracking-normal capitalize border transition-all',
                                         item.role?.name?.toLowerCase() ===
-                                        'developer'
-                                            ? 'bg-purple-50/70 text-purple-700 border-purple-200/50'
+                                        'admin'
+                                            ? 'bg-slate-900 text-white border-slate-900'
                                             : item.role?.name?.toLowerCase() ===
-                                                'admin'
-                                              ? 'bg-amber-50/70 text-amber-700 border-amber-200/50'
+                                                'developer'
+                                              ? 'bg-indigo-50/60 text-indigo-700 border-indigo-100'
                                               : 'bg-slate-50 text-slate-600 border-slate-200',
                                     ]"
                                 >
@@ -214,10 +221,10 @@
                             <TableCell class="text-center py-3.5">
                                 <span
                                     :class="[
-                                        'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border shadow-sm/5 selection:bg-transparent',
+                                        'inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium border/40',
                                         item.is_active
-                                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                                            : 'bg-rose-50 text-rose-700 border-rose-200',
+                                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200/60'
+                                            : 'bg-rose-50 text-rose-700 border-rose-200/60',
                                     ]"
                                 >
                                     <span
@@ -234,14 +241,14 @@
                                 </span>
                             </TableCell>
 
-                            <TableCell class="text-center py-3.5">
+                            <TableCell class="text-center py-3.5 pr-4">
                                 <div
-                                    class="flex items-center justify-center gap-1.5"
+                                    class="flex items-center justify-center gap-1.5 opacity-60 group-hover:opacity-100 transition-opacity"
                                 >
                                     <button
                                         @click="openEditModal(item)"
                                         title="Edit item"
-                                        class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-slate-200 bg-white text-slate-600 shadow-sm hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/20 transition-all cursor-pointer"
+                                        class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-slate-200 bg-white text-slate-600 shadow-sm hover:bg-slate-50 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 transition-all cursor-pointer"
                                     >
                                         <i class="pi pi-file-edit text-xs"></i>
                                     </button>
@@ -249,7 +256,7 @@
                                     <button
                                         @click="confirmDelete(item)"
                                         title="Delete item"
-                                        class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-slate-200 bg-white text-slate-500 shadow-sm hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500/20 transition-all cursor-pointer"
+                                        class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-slate-200 bg-white text-slate-500 shadow-sm hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2 transition-all cursor-pointer"
                                     >
                                         <i class="pi pi-user-minus text-xs"></i>
                                     </button>
