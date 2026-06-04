@@ -1,9 +1,5 @@
 <template>
     <Teleport to="body">
-        <div class="fixed top-0 left-0 bg-red-500 text-white p-2 z-[9999]">
-            BaseModal Loaded. Prop 'show' value is: {{ show }}
-        </div>
-
         <div
             v-if="show"
             class="fixed inset-0 z-50 flex items-center justify-center p-4"
