@@ -48,7 +48,7 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
                     error.response?.data?.message ||
                     "Failed to add allowed email.";
                 this.errors = errMsg;
-                throw errMsg; // Bubble up string to component try/catch
+                throw error; // throwing the actual errror message from the backend to be handled in the component
             } finally {
                 this.loading = false;
             }
@@ -77,7 +77,7 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
                     error.response?.data?.message ||
                     "Failed to update allowed email.";
                 this.errors = errMsg;
-                throw errMsg;
+                throw error;
             } finally {
                 this.loading = false;
             }
@@ -101,7 +101,7 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
                     error.response?.data?.message ||
                     "Failed to delete allowed email.";
                 this.errors = errMsg;
-                throw errMsg;
+                throw error;
             } finally {
                 this.loading = false;
             }
