@@ -101,12 +101,27 @@
 
                 <Table>
                     <TableHeader>
-                        <TableRow>
-                            <TableHead>Whitelisted Identity</TableHead>
-                            <TableHead>Organization</TableHead>
-                            <TableHead>System Role</TableHead>
-                            <TableHead class="text-center">Status</TableHead>
-                            <TableHead class="text-center">Actions</TableHead>
+                        <TableRow class="bg-slate-50/70 hover:bg-slate-50/70">
+                            <TableHead
+                                class="text-[11px] font-bold uppercase tracking-wider text-slate-500"
+                                >Whitelisted Identity</TableHead
+                            >
+                            <TableHead
+                                class="text-[11px] font-bold uppercase tracking-wider text-slate-500"
+                                >Organization</TableHead
+                            >
+                            <TableHead
+                                class="text-[11px] font-bold uppercase tracking-wider text-slate-500"
+                                >System Role</TableHead
+                            >
+                            <TableHead
+                                class="text-center text-[11px] font-bold uppercase tracking-wider text-slate-500"
+                                >Status</TableHead
+                            >
+                            <TableHead
+                                class="text-center text-[11px] font-bold uppercase tracking-wider text-slate-500"
+                                >Actions</TableHead
+                            >
                         </TableRow>
                     </TableHeader>
 
@@ -142,26 +157,23 @@
                             </TableCell>
                         </TableRow>
 
-                        <TableRow v-for="item in filteredEmails" :key="item.id">
-                            <TableCell>
-                                <div class="flex items-center gap-3">
-                                    <span
-                                        class="inline-flex items-center justify-center px-1.5 py-0.5 bg-indigo-50/60 text-indigo-600 text-[10px] font-bold rounded border border-indigo-100/70 tracking-wider"
-                                    >
-                                        GGL
-                                    </span>
-                                    <span
-                                        class="font-medium text-slate-900 font-mono text-[13px] tracking-tight"
-                                    >
-                                        {{ item.email }}
-                                    </span>
-                                </div>
+                        <TableRow
+                            v-for="item in filteredEmails"
+                            :key="item.id"
+                            class="hover:bg-slate-50/40 transition-colors"
+                        >
+                            <TableCell class="py-3.5">
+                                <span
+                                    class="font-mono text-[13px] font-medium text-slate-800 tracking-tight"
+                                >
+                                    {{ item.email }}
+                                </span>
                             </TableCell>
 
-                            <TableCell class="font-medium">
+                            <TableCell class="font-medium py-3.5">
                                 <div
                                     v-if="item.organization?.name"
-                                    class="flex items-center gap-2 text-slate-700"
+                                    class="flex items-center gap-2 text-slate-700 text-sm"
                                 >
                                     <span
                                         class="w-1.5 h-1.5 rounded-full bg-sky-400 shadow-sm"
@@ -179,10 +191,10 @@
                                 </div>
                             </TableCell>
 
-                            <TableCell>
+                            <TableCell class="py-3.5">
                                 <span
                                     :class="[
-                                        'inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold tracking-wide uppercase border',
+                                        'inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold tracking-wide uppercase border',
                                         item.role?.name?.toLowerCase() ===
                                         'developer'
                                             ? 'bg-purple-50/70 text-purple-700 border-purple-200/50'
@@ -199,7 +211,7 @@
                                 </span>
                             </TableCell>
 
-                            <TableCell class="text-center">
+                            <TableCell class="text-center py-3.5">
                                 <span
                                     :class="[
                                         'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border shadow-sm/5 selection:bg-transparent',
@@ -222,24 +234,24 @@
                                 </span>
                             </TableCell>
 
-                            <TableCell class="text-center">
+                            <TableCell class="text-center py-3.5">
                                 <div
                                     class="flex items-center justify-center gap-1.5"
                                 >
                                     <button
                                         @click="openEditModal(item)"
                                         title="Edit item"
-                                        class="inline-flex items-center justify-center w-8 h-8 rounded-md border border-slate-200 bg-white text-slate-600 shadow-sm hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 transition-colors cursor-pointer"
+                                        class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-slate-200 bg-white text-slate-600 shadow-sm hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/20 transition-all cursor-pointer"
                                     >
-                                        <i class="pi pi-file-edit text-sm"></i>
+                                        <i class="pi pi-file-edit text-xs"></i>
                                     </button>
 
                                     <button
                                         @click="confirmDelete(item)"
                                         title="Delete item"
-                                        class="inline-flex items-center justify-center w-8 h-8 rounded-md border border-slate-200 bg-white text-slate-500 shadow-sm hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2 transition-colors cursor-pointer"
+                                        class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-slate-200 bg-white text-slate-500 shadow-sm hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500/20 transition-all cursor-pointer"
                                     >
-                                        <i class="pi pi-user-minus text-sm"></i>
+                                        <i class="pi pi-user-minus text-xs"></i>
                                     </button>
                                 </div>
                             </TableCell>
