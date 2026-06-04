@@ -223,11 +223,13 @@
                             </TableCell>
 
                             <TableCell class="text-center">
-                                <div class="flex justify-center gap-1">
+                                <div
+                                    class="flex items-center justify-center gap-1.5"
+                                >
                                     <button
                                         @click="openEditModal(item)"
                                         title="Edit item"
-                                        class="inline-flex items-center justify-center w-8 h-8 rounded-md border border-slate-200 bg-white text-slate-600 shadow-sm hover:bg-slate-50 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 transition-colors cursor-pointer"
+                                        class="inline-flex items-center justify-center w-8 h-8 rounded-md border border-slate-200 bg-white text-slate-600 shadow-sm hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 transition-colors cursor-pointer"
                                     >
                                         <i class="pi pi-file-edit text-sm"></i>
                                     </button>
@@ -235,7 +237,7 @@
                                     <button
                                         @click="confirmDelete(item)"
                                         title="Delete item"
-                                        class="inline-flex items-center justify-center w-8 h-8 rounded-md border border-slate-200 text-slate-500 shadow-sm hover:bg-slate-50 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2 transition-colors cursor-pointer"
+                                        class="inline-flex items-center justify-center w-8 h-8 rounded-md border border-slate-200 bg-white text-slate-500 shadow-sm hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2 transition-colors cursor-pointer"
                                     >
                                         <i class="pi pi-user-minus text-sm"></i>
                                     </button>
