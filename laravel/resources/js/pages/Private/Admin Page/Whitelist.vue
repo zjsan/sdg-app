@@ -106,7 +106,7 @@
                             <TableHead>Organization</TableHead>
                             <TableHead>System Role</TableHead>
                             <TableHead class="text-center">Status</TableHead>
-                            <TableHead class="text-right">Actions</TableHead>
+                            <TableHead class="text-center">Actions</TableHead>
                         </TableRow>
                     </TableHeader>
 
@@ -223,22 +223,21 @@
                             </TableCell>
 
                             <TableCell class="text-right">
-                                <div
-                                    class="flex items-center justify-end gap-1.5"
-                                >
+                                <div class="flex justify-center gap-1">
                                     <button
                                         @click="openEditModal(item)"
-                                        class="h-8 px-2.5 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:text-slate-900 transition-all focus:ring-2 focus:ring-slate-100 cursor-pointer"
+                                        title="Edit item"
+                                        class="inline-flex items-center justify-center w-8 h-8 rounded-md border border-slate-200 bg-white text-slate-600 shadow-sm hover:bg-slate-50 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 transition-colors cursor-pointer"
                                     >
-                                        <i class="pi pi-file-edit text-lg"></i>
+                                        <i class="pi pi-file-edit text-sm"></i>
                                     </button>
+
                                     <button
                                         @click="confirmDelete(item)"
-                                        class="h-8 px-2.5 bg-rose-500 border border-rose-200 rounded-lg hover:bg-rose-50 hover:border-rose-700 transition-all focus:ring-2 focus:ring-rose-100 cursor-pointer"
+                                        title="Delete item"
+                                        class="inline-flex items-center justify-center w-8 h-8 rounded-md border border-slate-200 text-slate-500 shadow-sm hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2 transition-colors cursor-pointer"
                                     >
-                                        <i
-                                            class="pi pi-user-minus text-lg text-white"
-                                        ></i>
+                                        <i class="pi pi-user-minus text-sm"></i>
                                     </button>
                                 </div>
                             </TableCell>
