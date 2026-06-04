@@ -4,7 +4,7 @@
             <PageHeader>
                 <template #title>Whitelist Management</template>
                 <template #subtitle>
-                    <span class="font-medium text-slate-700">
+                    <span class="font-semibold text-slate-900">
                         {{ filteredEmails.length }}
                     </span>
                     of {{ allowedEmailsStore.emails?.length || 0 }} authorized
@@ -12,205 +12,255 @@
                 </template>
             </PageHeader>
 
-            <div
-                v-if="successMessage"
-                class="mt-4 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg text-sm flex items-center justify-between transition-all duration-300 ease-in"
-            >
-                <div class="flex items-center gap-2">
-                    <span>{{ successMessage }}</span>
-                </div>
-                <button
-                    @click="successMessage = ''"
-                    class="text-emerald-500 hover:text-emerald-700 font-bold"
+            <div class="space-y-3">
+                <div
+                    v-if="successMessage"
+                    class="p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-sm flex items-center justify-between shadow-sm animate-in fade-in duration-200"
                 >
-                    &times;
-                </button>
-            </div>
-
-            <div
-                v-if="errorMessage"
-                class="mt-4 p-4 bg-rose-50 border border-rose-200 text-rose-800 rounded-lg text-sm flex items-center justify-between transition-all duration-300 ease-in"
-            >
-                <div class="flex items-center gap-2">
-                    <span class="font-medium">{{ errorMessage }}</span>
-                </div>
-                <button
-                    @click="errorMessage = ''"
-                    class="text-rose-500 hover:text-rose-700 font-bold"
-                >
-                    &times;
-                </button>
-            </div>
-
-            <div
-                class="flex justify-between items-center py-4 border-b border-slate-100 bg-slate-50/50 px-4 rounded-t-xl mt-6"
-            >
-                <div class="relative w-72">
-                    <input
-                        v-model="searchQuery"
-                        type="text"
-                        placeholder="Search by email, group, or role..."
-                        class="w-full pl-3 pr-3 py-1.5 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none bg-white transition-all text-slate-700 placeholder:text-slate-400"
-                    />
-                </div>
-
-                <BaseButton @click="openAddModal">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="w-5 h-5 mr-1.5 -ml-1"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
+                    <div class="flex items-center gap-2">
+                        <span class="font-medium">{{ successMessage }}</span>
+                    </div>
+                    <button
+                        @click="successMessage = ''"
+                        class="text-emerald-400 hover:text-emerald-600 transition-colors text-lg font-semibold px-1"
                     >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
+                        &times;
+                    </button>
+                </div>
+
+                <div
+                    v-if="errorMessage"
+                    class="p-4 bg-rose-50 border border-rose-200 text-rose-800 rounded-xl text-sm flex items-center justify-between shadow-sm animate-in fade-in duration-200"
+                >
+                    <div class="flex items-center gap-2">
+                        <span class="font-medium">{{ errorMessage }}</span>
+                    </div>
+                    <button
+                        @click="errorMessage = ''"
+                        class="text-rose-400 hover:text-rose-600 transition-colors text-lg font-semibold px-1"
+                    >
+                        &times;
+                    </button>
+                </div>
+            </div>
+
+            <div
+                class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden"
+            >
+                <div
+                    class="flex flex-col sm:flex-row justify-between items-center gap-4 p-4 bg-slate-50/50 border-b border-slate-200/60"
+                >
+                    <div class="relative w-full sm:w-80">
+                        <span
+                            class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-4 w-4"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                                />
+                            </svg>
+                        </span>
+                        <input
+                            v-model="searchQuery"
+                            type="text"
+                            placeholder="Search by email, group, or role..."
+                            class="w-full pl-9 pr-4 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none bg-white transition-all text-slate-700 placeholder:text-slate-400/90 shadow-inner"
                         />
-                    </svg>
-                    Authorize Access
-                </BaseButton>
-            </div>
+                    </div>
 
-            <AppTable>
-                <template #header>
-                    <th
-                        class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider"
+                    <BaseButton
+                        @click="openAddModal"
+                        class="w-full sm:w-auto shadow-sm shadow-indigo-500/10"
                     >
-                        Whitelisted Identity
-                    </th>
-                    <th
-                        class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider"
-                    >
-                        Organization
-                    </th>
-                    <th
-                        class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider"
-                    >
-                        System Role
-                    </th>
-                    <th
-                        class="px-6 py-4 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider"
-                    >
-                        Status
-                    </th>
-                    <th
-                        class="px-6 py-4 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider"
-                    >
-                        Actions
-                    </th>
-                </template>
-
-                <template #body>
-                    <tr v-if="filteredEmails.length === 0">
-                        <td
-                            colspan="5"
-                            class="px-6 py-12 text-center text-sm text-slate-400 italic"
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="w-4 h-4 mr-2 -ml-0.5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            stroke-width="2.5"
                         >
-                            {{
-                                allowedEmailsStore.loading
-                                    ? "Synchronizing system registry..."
-                                    : "No matching whitelisted credentials found."
-                            }}
-                        </td>
-                    </tr>
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M12 4v16m8-8H4"
+                            />
+                        </svg>
+                        Authorize Access
+                    </BaseButton>
+                </div>
 
-                    <tr
-                        v-for="item in filteredEmails"
-                        :key="item.id"
-                        class="hover:bg-slate-50/80 transition-colors border-b border-slate-100 last:border-0"
-                    >
-                        <td class="px-6 py-4">
-                            <div class="flex items-center space-x-2.5">
-                                <span
-                                    class="p-1.5 bg-indigo-50 text-indigo-600 rounded-md text-[10px] font-bold uppercase tracking-wider"
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Whitelisted Identity</TableHead>
+                            <TableHead>Organization</TableHead>
+                            <TableHead>System Role</TableHead>
+                            <TableHead class="text-center">Status</TableHead>
+                            <TableHead class="text-right">Actions</TableHead>
+                        </TableRow>
+                    </TableHeader>
+
+                    <TableBody>
+                        <TableRow v-if="filteredEmails.length === 0">
+                            <TableCell colspan="5" class="py-16 text-center">
+                                <div
+                                    class="flex flex-col items-center justify-center space-y-2.5"
                                 >
-                                    GGL
-                                </span>
-                                <span
-                                    class="font-medium text-slate-900 font-mono text-sm"
+                                    <template v-if="allowedEmailsStore.loading">
+                                        <div
+                                            class="h-5 w-5 animate-spin rounded-full border-2 border-slate-200 border-t-indigo-600"
+                                        ></div>
+                                        <p
+                                            class="text-sm font-medium text-slate-500"
+                                        >
+                                            Synchronizing system registry...
+                                        </p>
+                                    </template>
+                                    <template v-else>
+                                        <p
+                                            class="text-sm font-medium text-slate-500"
+                                        >
+                                            No matching whitelisted credentials
+                                            found.
+                                        </p>
+                                        <p class="text-xs text-slate-400/90">
+                                            Verify your search keywords or
+                                            configure a new access rule.
+                                        </p>
+                                    </template>
+                                </div>
+                            </TableCell>
+                        </TableRow>
+
+                        <TableRow v-for="item in filteredEmails" :key="item.id">
+                            <TableCell>
+                                <div class="flex items-center gap-3">
+                                    <span
+                                        class="inline-flex items-center justify-center px-1.5 py-0.5 bg-indigo-50/60 text-indigo-600 text-[10px] font-bold rounded border border-indigo-100/70 tracking-wider"
+                                    >
+                                        GGL
+                                    </span>
+                                    <span
+                                        class="font-medium text-slate-900 font-mono text-[13px] tracking-tight"
+                                    >
+                                        {{ item.email }}
+                                    </span>
+                                </div>
+                            </TableCell>
+
+                            <TableCell class="font-medium">
+                                <div
+                                    v-if="item.organization?.name"
+                                    class="flex items-center gap-2 text-slate-700"
                                 >
-                                    {{ item.email }}
-                                </span>
-                            </div>
-                        </td>
+                                    <span
+                                        class="w-1.5 h-1.5 rounded-full bg-sky-400 shadow-sm"
+                                    ></span>
+                                    {{ item.organization.name }}
+                                </div>
+                                <div
+                                    v-else
+                                    class="text-xs text-slate-400 italic font-normal"
+                                >
+                                    ID: {{ item.organization_id }}
+                                    <span class="not-italic opacity-70"
+                                        >(Unresolved Scope)</span
+                                    >
+                                </div>
+                            </TableCell>
 
-                        <td
-                            class="px-6 py-4 text-sm font-medium text-slate-700"
-                        >
-                            <div class="flex items-center gap-1.5">
-                                <span
-                                    class="w-2 h-2 rounded-full bg-sky-400"
-                                ></span>
-                                {{
-                                    item.organization?.name ||
-                                    `ID: ${item.organization_id} (Unresolved)`
-                                }}
-                            </div>
-                        </td>
-
-                        <td class="px-6 py-4">
-                            <span
-                                :class="[
-                                    'inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold tracking-wide uppercase',
-                                    item.role?.name?.toLowerCase() ===
-                                    'developer'
-                                        ? 'bg-purple-50 text-purple-700 border border-purple-200'
-                                        : item.role?.name?.toLowerCase() ===
-                                            'admin'
-                                          ? 'bg-amber-50 text-amber-700 border border-amber-200'
-                                          : 'bg-slate-100 text-slate-700 border border-slate-200',
-                                ]"
-                            >
-                                {{
-                                    item.role?.name ||
-                                    `Role ID: ${item.role_id}`
-                                }}
-                            </span>
-                        </td>
-
-                        <td class="px-6 py-4 text-center">
-                            <span
-                                :class="[
-                                    'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border selection:bg-transparent',
-                                    item.is_active
-                                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                                        : 'bg-rose-50 text-rose-700 border-rose-200',
-                                ]"
-                            >
+                            <TableCell>
                                 <span
                                     :class="[
-                                        'w-1.5 h-1.5 mr-1.5 rounded-full',
-                                        item.is_active
-                                            ? 'bg-emerald-500'
-                                            : 'bg-rose-500',
+                                        'inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold tracking-wide uppercase border',
+                                        item.role?.name?.toLowerCase() ===
+                                        'developer'
+                                            ? 'bg-purple-50/70 text-purple-700 border-purple-200/50'
+                                            : item.role?.name?.toLowerCase() ===
+                                                'admin'
+                                              ? 'bg-amber-50/70 text-amber-700 border-amber-200/50'
+                                              : 'bg-slate-50 text-slate-600 border-slate-200',
                                     ]"
-                                ></span>
-                                {{ item.is_active ? "Active" : "Suspended" }}
-                            </span>
-                        </td>
+                                >
+                                    {{
+                                        item.role?.name ||
+                                        `Role ID: ${item.role_id}`
+                                    }}
+                                </span>
+                            </TableCell>
 
-                        <td class="px-6 py-4 text-right">
-                            <BaseButton
-                                variant="secondary"
-                                size="sm"
-                                @click="openEditModal(item)"
-                            >
-                                Edit
-                            </BaseButton>
+                            <TableCell class="text-center">
+                                <span
+                                    :class="[
+                                        'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border shadow-sm/5 selection:bg-transparent',
+                                        item.is_active
+                                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                            : 'bg-rose-50 text-rose-700 border-rose-200',
+                                    ]"
+                                >
+                                    <span
+                                        :class="[
+                                            'w-1.5 h-1.5 mr-1.5 rounded-full',
+                                            item.is_active
+                                                ? 'bg-emerald-500'
+                                                : 'bg-rose-500',
+                                        ]"
+                                    ></span>
+                                    {{
+                                        item.is_active ? "Active" : "Suspended"
+                                    }}
+                                </span>
+                            </TableCell>
 
-                            <BaseButton
-                                variant="danger"
-                                size="sm"
-                                @click="confirmDelete(item)"
-                            >
-                                Revoke
-                            </BaseButton>
-                        </td>
-                    </tr>
-                </template>
-            </AppTable>
+                            <TableCell class="text-right">
+                                <div
+                                    class="flex items-center justify-end gap-1.5"
+                                >
+                                    <button
+                                        @click="openEditModal(item)"
+                                        class="h-8 px-2.5 text-xs font-medium text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:text-slate-900 transition-all focus:ring-2 focus:ring-slate-100"
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
+                                        @click="confirmDelete(item)"
+                                        class="h-8 px-2.5 text-xs font-medium text-rose-600 bg-white border border-slate-200 rounded-lg hover:bg-rose-50 hover:border-rose-200 transition-all focus:ring-2 focus:ring-rose-100"
+                                    >
+                                        Revoke
+                                    </button>
+                                </div>
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+
+                <div
+                    class="flex flex-col sm:flex-row items-center justify-between px-6 py-4 bg-slate-50/40 border-t border-slate-200/80 gap-4"
+                >
+                    <div class="text-xs text-slate-500 font-medium">
+                        Showing
+                        <span class="text-slate-800 font-semibold">1</span> to
+                        <span class="text-slate-800 font-semibold">{{
+                            filteredEmails.length
+                        }}</span>
+                        of
+                        <span class="text-slate-800 font-semibold">{{
+                            filteredEmails.length
+                        }}</span>
+                        entries
+                    </div>
+                </div>
+            </div>
 
             <BaseModal :show="isModalOpen" @close="closeModal">
                 <template #title
@@ -381,6 +431,14 @@ import BaseButton from "../Dashboard Template/Component/BaseButton.vue";
 import BaseModal from "../Dashboard Template/Component/BaseModal.vue";
 import { useAllowedEmailsStore } from "@/stores/allowedEmails";
 import { useLookupStore } from "@/stores/lookups";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 
 const allowedEmailsStore = useAllowedEmailsStore();
 const lookupStore = useLookupStore();
