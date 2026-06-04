@@ -85,11 +85,7 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
 
         async deleteAllowedEmails(id) {
             this.loading = true;
-            this.error = null;
-
-            if (!confirm("Are you sure?")) {
-                return;
-            }
+            this.errors = null;
 
             try {
                 const res = await api.delete(`/allowed-emails/${id}`);
