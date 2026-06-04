@@ -21,7 +21,6 @@ class AllowedEmailController extends Controller
     {   
        // Use pagination to protect server memory. Default to 15 per page.
         $allowedEmails = AllowedEmail::with(['role', 'organization'])
-            ->latest()
             ->paginate(request()->query('per_page', 15));
         
         // Collection helper automatically formats paginated responses  
