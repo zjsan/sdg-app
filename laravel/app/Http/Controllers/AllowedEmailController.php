@@ -163,12 +163,23 @@ class AllowedEmailController extends Controller
             $isHighPrivilege = in_array(strtolower($allowedEmail->role?->slug ?? ''), ['admin', 'developer']);
 
             // 2. Structural Integrity Check
-            if ($isHighPrivilege && $allowedEmail->is_active) {
+            if ($isHighPrivilege) {
 
                 $canProceed = DB::transaction(function () use ($allowedEmail){
-                    return AllowedEmail::activeByRole($allowedEmail->role_id)
+
+                    //check if the record being deeleted is active, we must check first if there are other active records with
+                    // the same role before deleting
+                    if($allowedEmail->is_active){
+                         return AllowedEmail::activeByRole($allowedEmail->role_id)
                         ->lockForUpdate()
                         ->count() > 1;
+                    }
+
+                    //delete the record if it is already inactive
+                    //but check if there are other active records with the same role to avoid orphaning the role
+                    return AllowedEmail::activeByRole($allowedEmail->role_id)
+                        ->lockForUpdate()
+                        ->count() >= 1;
                 });
 
                 if (!$canProceed) {
