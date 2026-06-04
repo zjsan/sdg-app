@@ -512,6 +512,9 @@ const handleSubmit = async () => {
         return;
 
     try {
+        // clear any old UI validation state before firing a new request
+        modalErrorMessage.value = "";
+
         const payload = {
             ...form.value,
             email: form.value.email.trim().toLowerCase(),
@@ -545,13 +548,18 @@ const handleSubmit = async () => {
         );
         closeModal();
     } catch (error) {
-        // Render server validation/security failures straight into the active modal layout
+        // console.log("Full Axios Error Object:", error);
+        // console.log("Server Response Data:", error.response?.data);
+
+        // backend error messages, backend message, axious error message, or a fallback string
         const errorText =
             error.response?.data?.message ||
             error.message ||
             "An unexpected error occurred.";
+
         modalErrorMessage.value = errorText;
 
+        //capture 422 validation errors
         if (error.response && error.response.status === 422) {
             console.log(error.response.data.errors);
         }
@@ -573,10 +581,11 @@ const confirmDelete = async (item) => {
                 data?.message || "Clearance rule successfully dropped.",
             );
         } catch (errorString) {
+            // console.log("Full Axios Error Object:", errorString);
+            // console.log("Server Response Data:", errorString.response?.data);
             errorMessage.value =
-                errorString?.message ||
-                errorString ||
-                "Failed to revoke access.";
+                errorString.response?.data?.message || errorString?.message;
+            ("Failed to revoke access.");
             window.scrollTo({ top: 0, behavior: "smooth" });
         }
     }
