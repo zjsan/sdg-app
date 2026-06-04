@@ -228,15 +228,17 @@
                                 >
                                     <button
                                         @click="openEditModal(item)"
-                                        class="h-8 px-2.5 text-xs font-medium text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:text-slate-900 transition-all focus:ring-2 focus:ring-slate-100"
+                                        class="h-8 px-2.5 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:text-slate-900 transition-all focus:ring-2 focus:ring-slate-100 cursor-pointer"
                                     >
-                                        Edit
+                                        <i class="pi pi-file-edit text-lg"></i>
                                     </button>
                                     <button
                                         @click="confirmDelete(item)"
-                                        class="h-8 px-2.5 text-xs font-medium text-rose-600 bg-white border border-slate-200 rounded-lg hover:bg-rose-50 hover:border-rose-200 transition-all focus:ring-2 focus:ring-rose-100"
+                                        class="h-8 px-2.5 bg-rose-500 border border-rose-200 rounded-lg hover:bg-rose-50 hover:border-rose-700 transition-all focus:ring-2 focus:ring-rose-100 cursor-pointer"
                                     >
-                                        Revoke
+                                        <i
+                                            class="pi pi-user-minus text-lg text-white"
+                                        ></i>
                                     </button>
                                 </div>
                             </TableCell>
