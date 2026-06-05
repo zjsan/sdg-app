@@ -299,79 +299,114 @@
                     @submit.prevent="handleSubmit"
                     class="space-y-4 my-3 text-left"
                 >
-                    <div>
-                        <label
-                            class="block text-xs font-bold uppercase tracking-wide text-slate-500 mb-1.5"
-                        >
-                            Authorized Google Email Address
-                        </label>
-                        <Input
-                            v-model="form.email"
-                            type="email"
-                            autofocus
-                            class="h-10 font-mono text-sm placeholder:text-slate-400 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none bg-white transition-all text-slate-700 placeholder:text-slate-400/90 shadow-inner"
-                            placeholder="username@domain.com"
-                            required
-                        />
-                        <p
-                            v-if="isEmailInvalid"
-                            class="mt-1.5 text-xs text-red-500 flex items-center gap-1"
-                        >
-                            <span class="font-bold">⚠️</span> Please enter a
-                            valid corporate or institutional email address
-                            (e.g., name@domain.com).
-                        </p>
-                    </div>
-
-                    <div>
-                        <label
-                            class="block text-xs font-bold uppercase tracking-wide text-slate-500 mb-1.5"
-                        >
-                            Assigned Tenant Organization (Power BI Source Scope)
-                        </label>
-                        <div class="relative">
-                            <select
-                                v-model="form.organization_id"
-                                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 outline-none bg-white text-sm text-slate-700 transition-all appearance-none cursor-pointer"
-                                required
+                    <div class="space-y-5">
+                        <div class="flex flex-col">
+                            <label
+                                for="email"
+                                class="text-sm font-medium text-slate-700 mb-1.5"
                             >
-                                <option value="" disabled>
-                                    -- Select Tenant Organization --
-                                </option>
-                                <option
-                                    v-for="org in dynamicOrganizations"
-                                    :key="org.id"
-                                    :value="org.id"
-                                >
-                                    {{ org.name }}
-                                </option>
-                            </select>
+                                Authorized Google Email Address
+                            </label>
+                            <Input
+                                id="email"
+                                v-model="form.email"
+                                type="email"
+                                autofocus
+                                :class="[
+                                    'h-10 px-3.5 font-mono text-[13px] bg-white text-slate-800 rounded-lg border shadow-sm transition-all outline-none placeholder:text-slate-400',
+                                    isEmailInvalid
+                                        ? 'border-red-300 focus:ring-2 focus:ring-red-500/10 focus:border-red-500'
+                                        : 'border-slate-200 focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500',
+                                ]"
+                                placeholder="username@domain.com"
+                                required
+                            />
+                            <p
+                                v-if="isEmailInvalid"
+                                class="mt-2 text-xs text-red-600 flex items-center gap-1.5 font-medium animate-fadeIn"
+                            >
+                                <i
+                                    class="pi pi-exclamation-circle text-sm text-red-500"
+                                ></i>
+                                Please enter a valid corporate or institutional
+                                email address.
+                            </p>
                         </div>
-                    </div>
 
-                    <div>
-                        <label
-                            class="block text-xs font-bold uppercase tracking-wide text-slate-500 mb-1.5"
-                        >
-                            Functional System Role Permissions
-                        </label>
-                        <div class="relative">
-                            <select
-                                v-model="form.role_id"
-                                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 outline-none bg-white text-sm text-slate-700 transition-all appearance-none cursor-pointer"
-                                required
+                        <div class="flex flex-col">
+                            <label
+                                for="org"
+                                class="text-sm font-medium text-slate-700 mb-1"
                             >
-                                <option value="" disabled>
-                                    -- Select Functional Permission Level --
-                                </option>
-                                <option
-                                    v-for="role in dynamicRoles"
-                                    :key="role.id"
-                                    :value="role.id"
+                                Assigned Tenant Organization
+                            </label>
+                            <div class="relative w-full group">
+                                <select
+                                    id="org"
+                                    v-model="form.organization_id"
+                                    class="w-full h-10 pl-3.5 pr-10 border border-slate-200 rounded-lg bg-white text-sm text-slate-800 shadow-sm outline-none transition-all appearance-none cursor-pointer focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500"
+                                    required
                                 >
-                                    {{ role.name }}
-                                </option>
-                            </select>
+                                    <option value="" disabled selected>
+                                        Select tenant organization...
+                                    </option>
+                                    <option
+                                        v-for="org in dynamicOrganizations"
+                                        :key="org.id"
+                                        :value="org.id"
+                                    >
+                                        {{ org.name }}
+                                    </option>
+                                </select>
+                                <div
+                                    class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400 group-hover:text-slate-500 transition-colors"
+                                >
+                                    <i
+                                        class="pi pi-chevron-down text-[10px]"
+                                    ></i>
+                                </div>
+                            </div>
+                            <span
+                                class="mt-1.5 text-xs text-slate-400/90 leading-normal"
+                            >
+                                Configures data visibility access limits to the
+                                Power BI Source Scope pipeline.
+                            </span>
+                        </div>
+
+                        <div class="flex flex-col">
+                            <label
+                                for="role"
+                                class="text-sm font-medium text-slate-700 mb-1"
+                            >
+                                Functional System Role Permissions
+                            </label>
+                            <div class="relative w-full group">
+                                <select
+                                    id="role"
+                                    v-model="form.role_id"
+                                    class="w-full h-10 pl-3.5 pr-10 border border-slate-200 rounded-lg bg-white text-sm text-slate-800 shadow-sm outline-none transition-all appearance-none cursor-pointer focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500"
+                                    required
+                                >
+                                    <option value="" disabled selected>
+                                        Select functional permission level...
+                                    </option>
+                                    <option
+                                        v-for="role in dynamicRoles"
+                                        :key="role.id"
+                                        :value="role.id"
+                                    >
+                                        {{ role.name }}
+                                    </option>
+                                </select>
+                                <div
+                                    class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400 group-hover:text-slate-500 transition-colors"
+                                >
+                                    <i
+                                        class="pi pi-chevron-down text-[10px]"
+                                    ></i>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
