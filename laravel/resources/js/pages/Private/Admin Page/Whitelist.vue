@@ -506,6 +506,10 @@ const successMessage = ref("");
 const errorMessage = ref("");
 const modalErrorMessage = ref("");
 
+// --- PAGINATION STATE ---
+const currentPage = ref(1);
+const itemsPerPage = ref(10);
+
 // Form State conforming to Laravel FormRequest Validator requirements
 const form = ref({
     email: "",
