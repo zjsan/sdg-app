@@ -99,39 +99,32 @@
                     </BaseButton>
                 </div>
 
-                <Table class="w-full border-collapse">
-                    <TableHeader>
-                        <TableRow
-                            class="bg-slate-50/75 border-b border-slate-100 hover:bg-slate-50/75"
+                <AppTable>
+                    <template #header>
+                        <TableHead
+                            class="h-10 text-[11px] font-bold uppercase tracking-wider text-slate-500/90 pl-4"
+                            >Whitelisted Identity</TableHead
                         >
-                            <TableHead
-                                class="h-10 text-[11px] font-bold uppercase tracking-wider text-slate-500/90 pl-4"
-                                >Whitelisted Identity</TableHead
-                            >
-                            <TableHead
-                                class="h-10 text-[11px] font-bold uppercase tracking-wider text-slate-500/90"
-                                >Organization</TableHead
-                            >
-                            <TableHead
-                                class="h-10 text-[11px] font-bold uppercase tracking-wider text-slate-500/90"
-                                >System Role</TableHead
-                            >
-                            <TableHead
-                                class="h-10 text-center text-[11px] font-bold uppercase tracking-wider text-slate-500/90"
-                                >Status</TableHead
-                            >
-                            <TableHead
-                                class="h-10 text-center text-[11px] font-bold uppercase tracking-wider text-slate-500/90 pr-4"
-                                >Actions</TableHead
-                            >
-                        </TableRow>
-                    </TableHeader>
+                        <TableHead
+                            class="h-10 text-[11px] font-bold uppercase tracking-wider text-slate-500/90"
+                            >Organization</TableHead
+                        >
+                        <TableHead
+                            class="h-10 text-[11px] font-bold uppercase tracking-wider text-slate-500/90"
+                            >System Role</TableHead
+                        >
+                        <TableHead
+                            class="h-10 text-center text-[11px] font-bold uppercase tracking-wider text-slate-500/90"
+                            >Status</TableHead
+                        >
+                        <TableHead
+                            class="h-10 text-center text-[11px] font-bold uppercase tracking-wider text-slate-500/90 pr-4"
+                            >Actions</TableHead
+                        >
+                    </template>
 
-                    <TableBody>
-                        <TableRow
-                            v-if="filteredEmails.length === 0"
-                            class="border-b border-slate-100/80"
-                        >
+                    <template #body>
+                        <TableRow v-if="filteredEmails.length === 0">
                             <TableCell colspan="5" class="py-16 text-center">
                                 <div
                                     class="flex flex-col items-center justify-center space-y-2"
@@ -163,9 +156,10 @@
                         </TableRow>
 
                         <TableRow
+                            v-else
                             v-for="item in filteredEmails"
                             :key="item.id"
-                            class="border-b border-slate-100/80 hover:bg-slate-50/30 transition-colors group"
+                            class="hover:bg-slate-50/30 transition-colors group"
                         >
                             <TableCell class="py-3.5 pl-4">
                                 <span
@@ -263,8 +257,8 @@
                                 </div>
                             </TableCell>
                         </TableRow>
-                    </TableBody>
-                </Table>
+                    </template>
+                </AppTable>
 
                 <div
                     class="flex flex-col sm:flex-row items-center justify-between px-6 py-4 bg-slate-50/40 border-t border-slate-200/80 gap-4"

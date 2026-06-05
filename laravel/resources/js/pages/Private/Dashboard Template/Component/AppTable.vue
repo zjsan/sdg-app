@@ -1,7 +1,5 @@
 <template>
-    <div
-        class="w-full bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden transition-all duration-200"
-    >
+    <div class="w-full bg-white transition-all duration-200">
         <div class="w-full overflow-x-auto scrolling-touch">
             <table class="w-full border-collapse text-left align-middle">
                 <thead
