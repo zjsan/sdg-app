@@ -1,17 +1,21 @@
-<!-- components/AppTable.vue -->
 <template>
     <div
-        class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden"
+        class="w-full bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden transition-all duration-200"
     >
-        <table class="min-w-full divide-y divide-slate-200">
-            <thead class="bg-slate-50">
-                <tr>
-                    <slot name="header" />
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-slate-200">
-                <slot name="body" />
-            </tbody>
-        </table>
+        <div class="w-full overflow-x-auto scrolling-touch">
+            <table class="w-full border-collapse text-left align-middle">
+                <thead
+                    class="bg-slate-50/75 border-b border-slate-100 select-none"
+                >
+                    <tr class="hover:bg-slate-50/75 transition-colors">
+                        <slot name="header" />
+                    </tr>
+                </thead>
+
+                <tbody class="divide-y divide-slate-100/80">
+                    <slot name="body" />
+                </tbody>
+            </table>
+        </div>
     </div>
 </template>
