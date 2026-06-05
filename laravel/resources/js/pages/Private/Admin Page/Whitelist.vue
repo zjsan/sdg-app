@@ -583,7 +583,7 @@ const modalErrorMessage = ref("");
 
 // --- PAGINATION STATE ---
 const currentPage = ref(1);
-const itemsPerPage = ref(10);
+const itemsPerPage = ref(15);
 
 // Calculate Total Pages based on filtered results
 const totalPages = computed(() => {
