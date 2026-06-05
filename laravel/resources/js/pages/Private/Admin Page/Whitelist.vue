@@ -510,6 +510,57 @@ const modalErrorMessage = ref("");
 const currentPage = ref(1);
 const itemsPerPage = ref(10);
 
+// Calculate Total Pages based on filtered results
+const totalPages = computed(() => {
+    return Math.ceil(filteredEmails.value.length / itemsPerPage.value) || 1
+})
+
+// Slice the Filtered Emails array for the current active viewport
+const paginatedEmails = computed(() => {
+    const start = (currentPage.value - 1) * itemsPerPage.value
+    const end = start + itemsPerPage.value
+
+    // We base this on filteredEmails so search results are also paginated beautifully!
+    return filteredEmails.value.slice(start, end)
+})
+
+// Dynamic Display Index Metas, example Showing 1 to 10 of 43 entries"
+const rangeStart = computed(() => {
+    if (filteredEmails.value.length === 0) return 0
+    return (currentPage.value - 1) * itemsPerPage.value + 1
+})
+
+const rangeEnd = computed(() => {
+    const potentialEnd = currentPage.value * itemsPerPage.value
+    return potentialEnd > filteredEmails.value.length
+        ? filteredEmails.value.length
+        : potentialEnd
+})
+
+// --- PAGINATION NAVIGATION ACTIONS ---
+const prevPage = () => {
+    if (currentPage.value > 1) {
+        currentPage.value--
+    }
+}
+
+const nextPage = () => {
+    if (currentPage.value < totalPages.value) {
+        currentPage.value++
+    }
+}
+
+const goToPage = (Number(page)) => {
+    if (page >= 1 && page <= totalPages.value) {
+        currentPage.value = page
+    }
+}
+
+// Reset to page 1 instantly when search query updates
+watch(searchQuery, () => {
+    currentPage.value = 1
+})
+
 // Form State conforming to Laravel FormRequest Validator requirements
 const form = ref({
     email: "",
