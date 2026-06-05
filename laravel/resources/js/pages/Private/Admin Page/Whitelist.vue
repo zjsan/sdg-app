@@ -157,7 +157,7 @@
 
                         <TableRow
                             v-else
-                            v-for="item in filteredEmails"
+                            v-for="item in paginatedEmails"
                             :key="item.id"
                             class="hover:bg-slate-50/30 transition-colors group"
                         >
@@ -474,7 +474,7 @@
     </Authenticated>
 </template>
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import Authenticated from "../Dashboard Template/Layout/Authenticated.vue";
 import PageHeader from "../Dashboard Template/Component/PageHeader.vue";
 import AppTable from "../Dashboard Template/Component/AppTable.vue";
