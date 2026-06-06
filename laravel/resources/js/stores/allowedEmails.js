@@ -12,12 +12,17 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
         errors: null,
     }),
     actions: {
-        async fetchAllowedEmails() {
+        async fetchAllowedEmails(page = 1, perPage = 15) {
             this.loading = true;
             this.errors = null;
 
             try {
-                const res = await api.get("/allowed-emails");
+                const res = await axios.get("/api/allowed-emails", {
+                    params: {
+                        page: page,
+                        per_page: perPage,
+                    },
+                });
 
                 this.emails = Array.isArray(res.data)
                     ? res.data
