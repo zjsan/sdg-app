@@ -550,6 +550,7 @@
 </template>
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
+import { storeToRefs } from "pinia";
 import Authenticated from "../Dashboard Template/Layout/Authenticated.vue";
 import PageHeader from "../Dashboard Template/Component/PageHeader.vue";
 import AppTable from "../Dashboard Template/Component/AppTable.vue";
@@ -581,50 +582,33 @@ const successMessage = ref("");
 const errorMessage = ref("");
 const modalErrorMessage = ref("");
 
-// --- PAGINATION STATE ---
-const currentPage = ref(1);
-const itemsPerPage = ref(15);
+//extract states from the store while maintaining reactivity
+const {
+    emails,
+    currentPage,
+    itemsPerPage,
+    lastPage,
+    totalItems,
+    loading,
+    errors,
+} = storeToRefs(allowedEmailsStore);
 
-// Calculate Total Pages based on filtered results
-// if no filtered results, default to  1 page
-const totalPages = computed(() => {
-    return Math.ceil(filteredEmails.value.length / itemsPerPage.value) || 1;
-});
-
-// return the subset of emails to display on the current page based on paginaation state
-const paginatedEmails = computed(() => {
-    const start = (currentPage.value - 1) * itemsPerPage.value;
-    const end = start + itemsPerPage.value;
-
-    // We base this on filteredEmails so search results are also paginated beautifully!
-    return filteredEmails.value.slice(start, end);
-});
-
-// Dynamic Display Index Metas, example Showing 1 to 10 of 43 entries"
-const rangeStart = computed(() => {
-    if (filteredEmails.value.length === 0) return 0;
-    return (currentPage.value - 1) * itemsPerPage.value + 1;
-});
-
-//prevent UI bug, check potential range end against the filtered emails
-// if potential end exceeds the filtered emails length, display the filtered emails instead
-const rangeEnd = computed(() => {
-    const potentialEnd = currentPage.value * itemsPerPage.value;
-    return potentialEnd > filteredEmails.value.length
-        ? filteredEmails.value.length
-        : potentialEnd;
+// Reset to page 1 instantly when search query updates
+// watch store's current page
+watch(currentPage, (newPage) => {
+    emailStore.fetchAllowedEmails(newPage, itemsPerPage.value);
 });
 
 // --- PAGINATION NAVIGATION ACTIONS ---
 const prevPage = () => {
     if (currentPage.value > 1) {
-        currentPage.value--;
+        currentPage.value--; // Changing this triggers the watch() block above!
     }
 };
 
 const nextPage = () => {
-    if (currentPage.value < totalPages.value) {
-        currentPage.value++;
+    if (currentPage.value < lastPage.value) {
+        currentPage.value++; // Changing this triggers the watch() block above!
     }
 };
 
@@ -637,11 +621,6 @@ const goToPage = (page) => {
     }
 };
 
-// Reset to page 1 instantly when search query updates
-watch(searchQuery, () => {
-    currentPage.value = 1;
-});
-
 // Form State conforming to Laravel FormRequest Validator requirements
 const form = ref({
     email: "",
@@ -652,9 +631,12 @@ const form = ref({
 
 // fetch initial data on component mount
 onMounted(() => {
-    allowedEmailsStore.fetchAllowedEmails().catch((err) => {
-        errorMessage.value = err?.message || err || "Failed to load registry.";
-    });
+    allowedEmailsStore
+        .fetchAllowedEmails(currentPage.value, itemsPerPage.value)
+        .catch((err) => {
+            errorMessage.value =
+                err?.message || err || "Failed to load registry.";
+        });
     lookupStore.fetchFormDependencies();
 });
 

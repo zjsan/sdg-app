@@ -6,8 +6,8 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
         emails: [],
         currentPage: 1,
         itemsPerPage: 15,
-        lastPage: 1,
-        totalItems: 0, //for disabling next button when on the last page
+        lastPage: 1, //for disabling next button when on the last page
+        totalItems: 0,
         loading: false,
         errors: null,
     }),
@@ -29,7 +29,7 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
                     ? res.data
                     : res.data.data;
 
-                this.currentPage = res.data.current_page;
+                this.currentPage = res.data.meta.current_page;
                 this.totalItems = res.data.meta.total;
                 this.itemsPerPage = res.data.meta.per_page;
                 this.lastPage = res.data.meta.last_page;
