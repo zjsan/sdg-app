@@ -1,9 +1,13 @@
 import { defineStore } from "pinia";
 import api from "@/plugins/axios";
+import { ref } from "vue";
 
 export const useAllowedEmailsStore = defineStore("allowedEmails", {
     state: () => ({
         emails: [],
+        currentPage: ref(1),
+        itemsPerPage: ref(15),
+        lastPage: ref(1), //for disabling next button when on the last page
         loading: false,
         errors: null,
     }),
