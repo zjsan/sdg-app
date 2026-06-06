@@ -586,11 +586,12 @@ const currentPage = ref(1);
 const itemsPerPage = ref(15);
 
 // Calculate Total Pages based on filtered results
+// if no filtered results, default to  1 page
 const totalPages = computed(() => {
     return Math.ceil(filteredEmails.value.length / itemsPerPage.value) || 1;
 });
 
-// Slice the Filtered Emails array for the current active viewport
+// return the subset of emails to display on the current page based on paginaation state
 const paginatedEmails = computed(() => {
     const start = (currentPage.value - 1) * itemsPerPage.value;
     const end = start + itemsPerPage.value;
@@ -605,6 +606,8 @@ const rangeStart = computed(() => {
     return (currentPage.value - 1) * itemsPerPage.value + 1;
 });
 
+//prevent UI bug, check potential range end against the filtered emails
+// if potential end exceeds the filtered emails length, display the filtered emails instead
 const rangeEnd = computed(() => {
     const potentialEnd = currentPage.value * itemsPerPage.value;
     return potentialEnd > filteredEmails.value.length
@@ -625,6 +628,7 @@ const nextPage = () => {
     }
 };
 
+//used for clicking on specific page numbers in pagination controls in the component templpate
 const goToPage = (page) => {
     const pageNumber = Number(page);
 
