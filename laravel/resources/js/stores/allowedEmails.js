@@ -24,9 +24,15 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
                     },
                 });
 
+                console.log("API Response:", res.data); // Debugging log
                 this.emails = Array.isArray(res.data)
                     ? res.data
                     : res.data.data;
+
+                this.currentPage = res.data.current_page;
+                this.totalItems = res.data.meta.total;
+                this.itemsPerPage = res.data.meta.per_page;
+                this.lastPage = res.data.meta.last_page;
             } catch (error) {
                 const errMsg =
                     error.response?.data?.message ||
