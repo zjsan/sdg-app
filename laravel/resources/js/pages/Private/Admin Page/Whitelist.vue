@@ -157,7 +157,7 @@
 
                         <TableRow
                             v-else
-                            v-for="item in paginatedEmails"
+                            v-for="item in emails"
                             :key="item.id"
                             class="hover:bg-slate-50/30 transition-colors group"
                         >
