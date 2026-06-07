@@ -24,7 +24,7 @@ api.interceptors.request.use(
     },
 );
 
-//Add global interceptor for handling expired/unauthorized tokens
+//global interceptor for handling expired/unauthorized tokens
 api.interceptors.response.use(
     (response) => response,
     async (error) => {
@@ -36,7 +36,6 @@ api.interceptors.response.use(
         const status = error.response.status;
         const requestUrl = error.config?.url;
 
-        // IMPORTANT:
         // Do NOT trigger global 401 handler for the logout request.
         if (requestUrl === "/logout") {
             return Promise.reject(error);
