@@ -17,7 +17,7 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
             this.errors = null;
 
             try {
-                const res = await axios.get("/api/allowed-emails", {
+                const res = await api.get("/api/allowed-emails", {
                     params: {
                         page: page,
                         per_page: perPage,
