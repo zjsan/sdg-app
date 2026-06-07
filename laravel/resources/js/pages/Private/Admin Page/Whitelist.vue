@@ -596,7 +596,7 @@ const {
 // Reset to page 1 instantly when search query updates
 // watch store's current page
 watch(currentPage, (newPage) => {
-    emailStore.fetchAllowedEmails(newPage, itemsPerPage.value);
+    allowedEmailsStore.fetchAllowedEmails(newPage, itemsPerPage.value);
 });
 
 // --- PAGINATION NAVIGATION ACTIONS ---
@@ -616,7 +616,7 @@ const nextPage = () => {
 const goToPage = (page) => {
     const pageNumber = Number(page);
 
-    if (pageNumber >= 1 && pageNumber <= totalPages.value) {
+    if (pageNumber >= 1 && pageNumber <= totalItems.value) {
         currentPage.value = pageNumber;
     }
 };
