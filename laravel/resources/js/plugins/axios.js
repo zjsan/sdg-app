@@ -4,17 +4,25 @@ import { useAuthStore } from "@/stores/auth";
 
 // Create a reusable axios instance
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL + '/api', // Laravel API base
+    baseURL: import.meta.env.VITE_API_URL + "/api", // Laravel API base
     headers: {
         "X-Requested-With": "XMLHttpRequest",
     },
 });
 
-// Automatically attach token if present
-const token = localStorage.getItem("token");
-if (token) {
-    api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-}
+// intercepts every outgoing request and grabs the freshest token available
+api.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            config.headers["Authorization"] = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    },
+);
 
 //Add global interceptor for handling expired/unauthorized tokens
 api.interceptors.response.use(
@@ -51,7 +59,7 @@ api.interceptors.response.use(
         }
 
         return Promise.reject(error);
-    }
+    },
 );
 
 export default api;
