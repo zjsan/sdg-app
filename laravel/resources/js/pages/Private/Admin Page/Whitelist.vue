@@ -309,7 +309,7 @@
 
                     <div class="hidden md:flex items-center gap-1">
                         <button
-                            v-for="page in totalPages"
+                            v-for="page in lastPage"
                             :key="page"
                             @click="goToPage(page)"
                             :class="[
@@ -326,12 +326,12 @@
                     <span
                         class="text-xs font-medium text-slate-500 md:hidden px-2"
                     >
-                        Page {{ currentPage }} of {{ totalPages }}
+                        Page {{ currentPage }} of {{ lastPage }}
                     </span>
 
                     <button
                         @click="nextPage"
-                        :disabled="currentPage === totalPages"
+                        :disabled="currentPage === lastPage"
                         class="inline-flex items-center justify-center min-w-8 h-8 px-2 rounded-lg border border-slate-200 bg-white text-slate-600 text-xs font-medium shadow-sm transition-all hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white disabled:cursor-not-allowed cursor-pointer select-none"
                     >
                         Next
@@ -599,6 +599,16 @@ watch(currentPage, (newPage) => {
     allowedEmailsStore.fetchAllowedEmails(newPage, itemsPerPage.value);
 });
 
+const rangeStart = computed(() => {
+    if (totalItems.value === 0) return 0;
+    return (currentPage.value - 1) * itemsPerPage.value + 1;
+});
+
+const rangeEnd = computed(() => {
+    const end = currentPage.value * itemsPerPage.value;
+    return end > totalItems.value ? totalItems.value : end;
+});
+
 // --- PAGINATION NAVIGATION ACTIONS ---
 const prevPage = () => {
     if (currentPage.value > 1) {
@@ -616,7 +626,7 @@ const nextPage = () => {
 const goToPage = (page) => {
     const pageNumber = Number(page);
 
-    if (pageNumber >= 1 && pageNumber <= totalItems.value) {
+    if (pageNumber >= 1 && pageNumber <= lastPage.value) {
         currentPage.value = pageNumber;
     }
 };
