@@ -622,6 +622,32 @@ const goToPage = (page) => {
     }
 };
 
+//sliding window pagination logic to show a subset of page numbers
+const visiblePages = computed(() => {
+    const current = currentPage.value;
+    const last = lastPage.value;
+    const delta = 2; // Number of pages to show before and after current page
+
+    let left = current - delta;
+    let right = current + delta;
+    let range = [];
+
+    // Adjust boundaries
+    if (left < 1) {
+        left = 1;
+        right = Math.min(1 + delta * 2, last);
+    }
+    if (right > last) {
+        right = last;
+        left = Math.max(1, last - delta * 2);
+    }
+
+    for (let i = left; i <= right; i++) {
+        range.push(i);
+    }
+    return range;
+});
+
 const rangeStart = computed(() => {
     if (totalItems.value === 0) return 0;
     return (currentPage.value - 1) * itemsPerPage.value + 1;
