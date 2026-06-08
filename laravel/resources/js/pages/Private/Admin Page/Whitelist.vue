@@ -583,7 +583,7 @@ const errorMessage = ref("");
 const modalErrorMessage = ref("");
 
 //extract states from the store while maintaining reactivity
-const { emails, currentPage, itemsPerPage, lastPage, totalItems } =
+const { emails, currentPage, itemsPerPage, lastPage, totalItems, loading } =
     storeToRefs(allowedEmailsStore);
 
 const loadPage = async (pageNumber) => {
