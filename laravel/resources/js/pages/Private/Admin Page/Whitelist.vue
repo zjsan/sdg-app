@@ -309,7 +309,21 @@
 
                     <div class="hidden md:flex items-center gap-1">
                         <button
-                            v-for="page in lastPage"
+                            v-if="visiblePages[0] > 1"
+                            @click="goToPage(1)"
+                            class="w-8 h-8 rounded-lg text-xs font-semibold border bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                        >
+                            1
+                        </button>
+
+                        <span
+                            v-if="visiblePages[0] > 2"
+                            class="text-slate-400 text-xs px-1"
+                            >...</span
+                        >
+
+                        <button
+                            v-for="page in visiblePages"
                             :key="page"
                             @click="goToPage(page)"
                             :class="[
@@ -320,6 +334,25 @@
                             ]"
                         >
                             {{ page }}
+                        </button>
+
+                        <span
+                            v-if="
+                                visiblePages[visiblePages.length - 1] <
+                                lastPage - 1
+                            "
+                            class="text-slate-400 text-xs px-1"
+                            >...</span
+                        >
+
+                        <button
+                            v-if="
+                                visiblePages[visiblePages.length - 1] < lastPage
+                            "
+                            @click="goToPage(lastPage)"
+                            class="w-8 h-8 rounded-lg text-xs font-semibold border bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                        >
+                            {{ lastPage }}
                         </button>
                     </div>
 
