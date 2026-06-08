@@ -586,34 +586,51 @@ const modalErrorMessage = ref("");
 const { emails, currentPage, itemsPerPage, lastPage, totalItems } =
     storeToRefs(allowedEmailsStore);
 
-// Reset to page 1 instantly when search query updates
-// watch store's current page
-watch(currentPage, (newPage) => {
-    allowedEmailsStore.fetchAllowedEmails(newPage, itemsPerPage.value);
-});
-
-const rangeStart = computed(() => {
-    if (totalItems.value === 0) return 0;
-    return (currentPage.value - 1) * itemsPerPage.value + 1;
-});
-
-const rangeEnd = computed(() => {
-    const end = currentPage.value * itemsPerPage.value;
-    return end > totalItems.value ? totalItems.value : end;
-});
+const loadPage = async (pageNumber) => {
+    try {
+        await allowedEmailsStore.fetchAllowedEmails(
+            pageNumber,
+            itemsPerPage.value,
+        );
+    } catch (err) {
+        errorMessage.value = err?.message || err || "Failed to load registry.";
+    }
+};
 
 // --- PAGINATION NAVIGATION ACTIONS ---
 const prevPage = () => {
     if (currentPage.value > 1) {
-        currentPage.value--; // Changing this triggers the watch()
+        loadPage(currentPage.value - 1);
     }
 };
 
 const nextPage = () => {
     if (currentPage.value < lastPage.value) {
-        currentPage.value++; // Changing this triggers the watch()
+        loadPage(currentPage.value + 1);
     }
 };
+
+const goToPage = (page) => {
+    const pageNumber = Number(page);
+    if (
+        pageNumber >= 1 &&
+        pageNumber <= lastPage.value &&
+        pageNumber !== currentPage.value
+    ) {
+        loadPage(pageNumber);
+    }
+};
+
+// fetch initial data on component mount
+onMounted(() => {
+    allowedEmailsStore
+        .fetchAllowedEmails(currentPage.value, itemsPerPage.value)
+        .catch((err) => {
+            errorMessage.value =
+                err?.message || err || "Failed to load registry.";
+        });
+    lookupStore.fetchFormDependencies();
+});
 
 //used for clicking on specific page numbers in pagination controls in the component templpate
 const goToPage = (page) => {
@@ -630,17 +647,6 @@ const form = ref({
     organization_id: "",
     role_id: "",
     is_active: true,
-});
-
-// fetch initial data on component mount
-onMounted(() => {
-    allowedEmailsStore
-        .fetchAllowedEmails(currentPage.value, itemsPerPage.value)
-        .catch((err) => {
-            errorMessage.value =
-                err?.message || err || "Failed to load registry.";
-        });
-    lookupStore.fetchFormDependencies();
 });
 
 // email format validation using standard email validation regex pattern
