@@ -634,12 +634,7 @@ const rangeEnd = computed(() => {
 
 // fetch initial data on component mount
 onMounted(() => {
-    allowedEmailsStore
-        .fetchAllowedEmails(currentPage.value, itemsPerPage.value)
-        .catch((err) => {
-            errorMessage.value =
-                err?.message || err || "Failed to load registry.";
-        });
+    loadPage(currentPage.value);
     lookupStore.fetchFormDependencies();
 });
 
