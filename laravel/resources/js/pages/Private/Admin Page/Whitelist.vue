@@ -610,6 +610,7 @@ const nextPage = () => {
     }
 };
 
+//used for clicking on specific page numbers in pagination controls in the component templpate
 const goToPage = (page) => {
     const pageNumber = Number(page);
     if (
@@ -621,6 +622,16 @@ const goToPage = (page) => {
     }
 };
 
+const rangeStart = computed(() => {
+    if (totalItems.value === 0) return 0;
+    return (currentPage.value - 1) * itemsPerPage.value + 1;
+});
+
+const rangeEnd = computed(() => {
+    const end = currentPage.value * itemsPerPage.value;
+    return end > totalItems.value ? totalItems.value : end;
+});
+
 // fetch initial data on component mount
 onMounted(() => {
     allowedEmailsStore
@@ -631,15 +642,6 @@ onMounted(() => {
         });
     lookupStore.fetchFormDependencies();
 });
-
-//used for clicking on specific page numbers in pagination controls in the component templpate
-const goToPage = (page) => {
-    const pageNumber = Number(page);
-
-    if (pageNumber >= 1 && pageNumber <= lastPage.value) {
-        currentPage.value = pageNumber;
-    }
-};
 
 // Form State conforming to Laravel FormRequest Validator requirements
 const form = ref({
