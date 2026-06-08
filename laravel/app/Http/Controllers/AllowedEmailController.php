@@ -20,11 +20,15 @@ class AllowedEmailController extends Controller
     public function index(): JsonResponse
     {   
        // Use pagination to protect server memory. Default to 15 per page.
+
+        $perPage = (int) $request->query('per_page', 15);//validate per page parameter
+
+        //eager load then paginate
         $allowedEmails = AllowedEmail::with(['role', 'organization'])
-            ->paginate(request()->query('per_page', 15));
-        
-        // Collection helper automatically formats paginated responses  
-        return AllowedEmailResource::collection($allowedEmails)->response();
+        ->paginate($perPage);
+
+        // return the paginated colllection of emails 
+        return response()->json(AllowedEmailResource::collection($allowedEmails)->getData());
     }
 
     /**
