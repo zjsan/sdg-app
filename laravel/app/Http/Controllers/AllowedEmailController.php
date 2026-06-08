@@ -21,14 +21,19 @@ class AllowedEmailController extends Controller
     {   
        // Use pagination to protect server memory. Default to 15 per page.
 
-        $perPage = (int) $request->query('per_page', 15);//validate per page parameter
+        //validate per page parameter
+        //check if it is integer and greater than 0, and set a maximum limit of 100 to prevent abuse
+        $perPage = min((int) $request->query('per_page', 15), 100); 
+        if ($perPage <= 0) {
+            $perPage = 15;
+        }
 
         //eager load then paginate
         $allowedEmails = AllowedEmail::with(['role', 'organization'])
         ->paginate($perPage);
 
         // return the paginated colllection of emails 
-        return response()->json(AllowedEmailResource::collection($allowedEmails)->getData());
+        return AllowedEmailResource::collection($allowedEmails)->response();
     }
 
     /**
