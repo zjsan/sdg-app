@@ -24,21 +24,26 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
                     },
                 });
 
+                const payload = res.data; //extract response data from the controller
+
+                this.emails = payload.data || []; //
                 console.log("API Response:", res.data); // Debugging log
+
                 this.emails = Array.isArray(res.data)
                     ? res.data
                     : res.data.data;
 
-                this.currentPage = res.data.meta.current_page;
-                this.totalItems = res.data.meta.total;
-                this.itemsPerPage = res.data.meta.per_page;
-                this.lastPage = res.data.meta.last_page;
+                // Update pagination state based on the response meta data
+                this.currentPage = payload.meta?.current_page || 1;
+                this.totalItems = payload.meta?.total || 0;
+                this.itemsPerPage = payload.meta?.per_page || perPage;
+                this.lastPage = payload.meta?.last_page || 1;
             } catch (error) {
                 const errMsg =
                     error.response?.data?.message ||
                     "Failed to load allowed emails.";
                 this.errors = errMsg;
-                throw errMsg;
+                throw error;
             } finally {
                 this.loading = false;
             }
