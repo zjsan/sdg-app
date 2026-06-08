@@ -124,7 +124,7 @@
                     </template>
 
                     <template #body>
-                        <TableRow v-if="filteredEmails.length === 0">
+                        <TableRow v-if="emails.length === 0">
                             <TableCell colspan="5" class="py-16 text-center">
                                 <div
                                     class="flex flex-col items-center justify-center space-y-2"
