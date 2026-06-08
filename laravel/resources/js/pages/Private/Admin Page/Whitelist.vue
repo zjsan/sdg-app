@@ -583,15 +583,8 @@ const errorMessage = ref("");
 const modalErrorMessage = ref("");
 
 //extract states from the store while maintaining reactivity
-const {
-    emails,
-    currentPage,
-    itemsPerPage,
-    lastPage,
-    totalItems,
-    loading,
-    errors,
-} = storeToRefs(allowedEmailsStore);
+const { emails, currentPage, itemsPerPage, lastPage, totalItems } =
+    storeToRefs(allowedEmailsStore);
 
 // Reset to page 1 instantly when search query updates
 // watch store's current page
@@ -612,13 +605,13 @@ const rangeEnd = computed(() => {
 // --- PAGINATION NAVIGATION ACTIONS ---
 const prevPage = () => {
     if (currentPage.value > 1) {
-        currentPage.value--; // Changing this triggers the watch() block above!
+        currentPage.value--; // Changing this triggers the watch()
     }
 };
 
 const nextPage = () => {
     if (currentPage.value < lastPage.value) {
-        currentPage.value++; // Changing this triggers the watch() block above!
+        currentPage.value++; // Changing this triggers the watch()
     }
 };
 
