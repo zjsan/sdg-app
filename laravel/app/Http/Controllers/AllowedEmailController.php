@@ -17,7 +17,7 @@ class AllowedEmailController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {   
        // Use pagination to protect server memory. Default to 15 per page.
 
