@@ -276,7 +276,7 @@
                         }}</span>
                         of
                         <span class="text-slate-800 font-semibold">{{
-                            filteredEmails.length
+                            totalItems
                         }}</span>
                         entries
                     </div>
