@@ -45,6 +45,11 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
                 this.itemsPerPage = payload.meta?.per_page || perPage;
                 this.lastPage = payload.meta?.last_page || 1;
             } catch (error) {
+                if (axios.isCancel(error) || error.name === "CanceledError") {
+                    console.log("Request safely aborted.");
+                    return; // Exit silently. Do NOT throw, do NOT set error states.
+                }
+
                 const errMsg =
                     error.response?.data?.message ||
                     "Failed to load allowed emails.";
