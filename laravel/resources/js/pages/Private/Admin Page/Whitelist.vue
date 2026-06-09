@@ -307,6 +307,7 @@
                         Prev
                     </button>
 
+                    <!--sliding window pagination-->
                     <div class="hidden md:flex items-center gap-1">
                         <button
                             v-if="visiblePages[0] > 1"
@@ -665,7 +666,7 @@ const visiblePages = computed(() => {
     let right = current + delta;
     let range = [];
 
-    // Adjust boundaries
+    // Adjust boundaries for potential edge cases near the start or end of the page range
     if (left < 1) {
         left = 1;
         right = Math.min(1 + delta * 2, last);
