@@ -629,6 +629,11 @@ const loadPage = async (pageNumber, searchKeyword = searchQuery.value) => {
             searchKeyword,
         );
     } catch (err) {
+        // ignore errors caused by the AbortController
+        if (err?.name === "AbortError" || err?.code === "ERR_CANCELED") {
+            return;
+        }
+
         errorMessage.value = err?.message || err || "Failed to load registry.";
     }
 };
