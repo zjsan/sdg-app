@@ -21,8 +21,8 @@ class GoogleAuthController extends Controller
     {
         return Socialite::driver('google')
         ->stateless()
-        // CRITICAL: Add the 'prompt' parameter to force Google to show the login/consent screen
-        ->with(['prompt' => 'select_account']) // or 'consent'
+        // adding the 'prompt' parameter to force Google to show the login/consent screen
+        ->with(['prompt' => 'select_account']) 
         ->redirect();
     }
 

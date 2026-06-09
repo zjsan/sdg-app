@@ -11,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\AllowedEmailResource;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Query\Builder;
 
 class AllowedEmailController extends Controller
 {
@@ -35,9 +36,23 @@ class AllowedEmailController extends Controller
 
         //server-side searching by email, role name, or organization name
         if(!empty($search)){
-            
+           $query->where(function (Builder $subQuery) use ($search) {
+
+            $subQuery->where('email', 'LIKE', "%{$search}%")
+
+                // Search within the 'role' relationship table
+                ->orWhereHas('role', function (Builder $roleQuery) use ($search) {
+                    $roleQuery->where('name', 'LIKE', "%{$search}%");
+                })
+                // Search within the 'organization' relationship table
+                ->orWhereHas('organization', function (Builder $orgQuery) use ($search) {
+                    $orgQuery->where('name', 'LIKE', "%{$search}%");
+                });
+        });
         }
-    
+
+        $allowedEmails = $query->paginate($perPage);
+        
         // return the paginated colllection of emails 
         return AllowedEmailResource::collection($allowedEmails)->response();
     }
