@@ -12,7 +12,7 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
         errors: null,
     }),
     actions: {
-        async fetchAllowedEmails(page = 1, perPage = 15) {
+        async fetchAllowedEmails(page = 1, perPage = 15, search = "") {
             this.loading = true;
             this.errors = null;
 
@@ -21,19 +21,15 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
                     params: {
                         page: page,
                         per_page: perPage,
+                        search: search, // Optional search query parameter
                     },
                 });
 
                 const payload = res.data; //extract response data from the controller
-
-                this.emails = payload.data || []; //
-                console.log("API Response:", res.data); // Debugging log
-
-                this.emails = Array.isArray(res.data)
-                    ? res.data
-                    : res.data.data;
+                console.log("API Response:", payload); // Debugging log
 
                 // Update pagination state based on the response meta data
+                this.emails = payload.data || [];
                 this.currentPage = payload.meta?.current_page || 1;
                 this.totalItems = payload.meta?.total || 0;
                 this.itemsPerPage = payload.meta?.per_page || perPage;
