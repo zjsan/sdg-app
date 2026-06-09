@@ -601,6 +601,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
+import debounce from "lodash/debounce"; //for debouncing search input
 
 const allowedEmailsStore = useAllowedEmailsStore();
 const lookupStore = useLookupStore();
@@ -620,16 +621,26 @@ const modalErrorMessage = ref("");
 const { emails, currentPage, itemsPerPage, lastPage, totalItems, loading } =
     storeToRefs(allowedEmailsStore);
 
-const loadPage = async (pageNumber) => {
+const loadPage = async (pageNumber, searchKeyword = searchQuery.value) => {
     try {
         await allowedEmailsStore.fetchAllowedEmails(
             pageNumber,
             itemsPerPage.value,
+            searchKeyword,
         );
     } catch (err) {
         errorMessage.value = err?.message || err || "Failed to load registry.";
     }
 };
+
+//watch searchQuery with debounce to avoid excessive API calls while typing
+const debouncedSearch = debounce((newQuery) => {
+    loadPage(1, newQuery);
+}, 350);
+
+watch(searchQuery, (newVal) => {
+    debouncedSearch(newVal);
+});
 
 // --- PAGINATION NAVIGATION ACTIONS ---
 const prevPage = () => {
