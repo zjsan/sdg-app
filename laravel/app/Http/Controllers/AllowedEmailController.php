@@ -28,10 +28,16 @@ class AllowedEmailController extends Controller
             $perPage = 15;
         }
 
-        //eager load then paginate
-        $allowedEmails = AllowedEmail::with(['role', 'organization'])
-        ->paginate($perPage);
+        $search = $request->query('search');//fetch the search query parameter in the url for server-side searching
 
+        //fetch the allowed emails with their related role and organization data, ordered by latest
+        $query = AllowedEmail::with(['role', 'organization'])->latest();
+
+        //server-side searching by email, role name, or organization name
+        if(!empty($search)){
+            
+        }
+    
         // return the paginated colllection of emails 
         return AllowedEmailResource::collection($allowedEmails)->response();
     }
