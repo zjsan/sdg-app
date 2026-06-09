@@ -635,6 +635,12 @@ const loadPage = async (pageNumber, searchKeyword = searchQuery.value) => {
 
 //watch searchQuery with debounce to avoid excessive API calls while typing
 const debouncedSearch = debounce((newQuery) => {
+    //prevent api call if the new query is the same as the previous query after trimming whitespace
+    if (newQuery.trim() === previousQuery.value.trim()) {
+        return;
+    }
+
+    previousQuery.value = newQuery; //update the previous query reference to the new query
     loadPage(1, newQuery);
 }, 350);
 
