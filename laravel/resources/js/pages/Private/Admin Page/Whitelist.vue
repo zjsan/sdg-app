@@ -583,7 +583,7 @@
     </Authenticated>
 </template>
 <script setup>
-import { ref, computed, onMounted, watch } from "vue";
+import { ref, computed, onMounted, watch, onUnmounted } from "vue";
 import { storeToRefs } from "pinia";
 import Authenticated from "../Dashboard Template/Layout/Authenticated.vue";
 import PageHeader from "../Dashboard Template/Component/PageHeader.vue";
@@ -633,7 +633,7 @@ const loadPage = async (pageNumber, searchKeyword = searchQuery.value) => {
     }
 };
 
-//watch searchQuery with debounce to avoid excessive API calls while typing
+//debounced search function to limit API calls while typing in the search input
 const debouncedSearch = debounce((newQuery) => {
     //prevent api call if the new query is the same as the previous query after trimming whitespace
     if (newQuery.trim() === previousQuery.value.trim()) {
@@ -644,8 +644,14 @@ const debouncedSearch = debounce((newQuery) => {
     loadPage(1, newQuery);
 }, 350);
 
+//watch the searchQuery for changes and trigger the debounced search function
 watch(searchQuery, (newVal) => {
     debouncedSearch(newVal);
+});
+
+//clean up the debounced function on component unmount
+onUnmounted(() => {
+    debouncedSearch.cancel();
 });
 
 // --- PAGINATION NAVIGATION ACTIONS ---

@@ -10,11 +10,20 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
         totalItems: 0,
         loading: false,
         errors: null,
+        currentAbortController: null, // to manage request cancellation
     }),
     actions: {
         async fetchAllowedEmails(page = 1, perPage = 15, search = "") {
             this.loading = true;
             this.errors = null;
+
+            //if there's an ongoing request, abort it before starting a new one
+            if (this.currentAbortController) {
+                this.currentAbortController.abort();
+            }
+
+            //create a new AbortController for the current request
+            this.currentAbortController = new AbortController();
 
             try {
                 const res = await api.get("/allowed-emails", {
@@ -23,6 +32,7 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
                         per_page: perPage,
                         search: search, // Optional search query parameter
                     },
+                    signal: this.currentAbortController.signal, // attach the abort signal to the request
                 });
 
                 const payload = res.data; //extract response data from the controller
