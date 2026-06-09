@@ -11,7 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\AllowedEmailResource;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
 
 class AllowedEmailController extends Controller
 {
@@ -52,7 +52,7 @@ class AllowedEmailController extends Controller
         }
 
         $allowedEmails = $query->paginate($perPage);
-        
+
         // return the paginated colllection of emails 
         return AllowedEmailResource::collection($allowedEmails)->response();
     }
