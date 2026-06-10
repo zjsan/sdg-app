@@ -22,8 +22,8 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
                 this.currentAbortController.abort();
             }
 
-            //create a new AbortController for the current request
-            this.currentAbortController = new AbortController();
+            const controller = new AbortController();
+            this.currentAbortController = controller;
 
             try {
                 const res = await api.get("/allowed-emails", {
@@ -38,12 +38,14 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
                 const payload = res.data; //extract response data from the controller
                 console.log("API Response:", payload); // Debugging log
 
-                // Update pagination state based on the response meta data
-                this.emails = payload.data || [];
-                this.currentPage = payload.meta?.current_page || 1;
-                this.totalItems = payload.meta?.total || 0;
-                this.itemsPerPage = payload.meta?.per_page || perPage;
-                this.lastPage = payload.meta?.last_page || 1;
+                // ensure we only update the state if the request wasn't aborted
+                if (!controller.signal.aborted) {
+                    const payload = res.data;
+                    this.emails = payload.data || [];
+                    this.currentPage = payload.meta?.current_page || 1;
+                    this.totalItems = payload.meta?.total || 0;
+                    this.lastPage = payload.meta?.last_page || 1;
+                }
             } catch (error) {
                 if (api.isCancel(error) || error.name === "CanceledError") {
                     console.log("Request safely aborted.");
@@ -57,8 +59,8 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
                 this.errors = errMsg;
                 throw error;
             } finally {
-                //only set loading to false if the request wasn't aborted
-                if (!this.currentAbortController?.signal.aborted) {
+                //only set loading to false if the current request is the one that just finished
+                if (this.currentAbortController === controller) {
                     this.loading = false;
                 }
             }

@@ -609,7 +609,6 @@ const lookupStore = useLookupStore();
 // Local UI Management States
 const isModalOpen = ref(false);
 const searchQuery = ref("");
-const previousQuery = ref(""); //track the last search query to prevent redundant API calls on identical input
 const isEditMode = ref(false); //flag to track whether the form is in edit mode or add mode
 const selectedId = ref(null); // capture the id of the emaiil being edited
 
@@ -619,7 +618,7 @@ const errorMessage = ref("");
 const modalErrorMessage = ref("");
 
 //extract states from the store while maintaining reactivity
-const { emails, currentPage, itemsPerPage, lastPage, totalItems, loading } =
+const { emails, currentPage, itemsPerPage, lastPage, totalItems } =
     storeToRefs(allowedEmailsStore);
 
 const loadPage = async (pageNumber, searchKeyword = searchQuery.value) => {
@@ -642,7 +641,7 @@ const debouncedSearch = debounce((targetQuery) => {
 
 //watch the searchQuery for changes and trigger the debounced search function
 watch(searchQuery, (newVal, oldVal) => {
-    if (newVal.trim() === oldVal.trim()) {
+    if (newVal.trim() === oldVal?.trim()) {
         return; //if the new search query is the same as the previous one, do not trigger a new search
     }
     debouncedSearch(newVal);
