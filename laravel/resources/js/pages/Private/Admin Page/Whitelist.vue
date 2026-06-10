@@ -609,6 +609,7 @@ const lookupStore = useLookupStore();
 // Local UI Management States
 const isModalOpen = ref(false);
 const searchQuery = ref("");
+const previousQuery = ref(""); //track the last search query to prevent redundant API calls on identical input
 const isEditMode = ref(false); //flag to track whether the form is in edit mode or add mode
 const selectedId = ref(null); // capture the id of the emaiil being edited
 
@@ -623,17 +624,13 @@ const { emails, currentPage, itemsPerPage, lastPage, totalItems, loading } =
 
 const loadPage = async (pageNumber, searchKeyword = searchQuery.value) => {
     try {
+        errorMessage.value = ""; //clear any existing error messages before attempting to load new data
         await allowedEmailsStore.fetchAllowedEmails(
             pageNumber,
             itemsPerPage.value,
             searchKeyword,
         );
     } catch (err) {
-        // ignore errors caused by the AbortController
-        if (err?.name === "AbortError" || err?.code === "ERR_CANCELED") {
-            return;
-        }
-
         errorMessage.value = err?.message || err || "Failed to load registry.";
     }
 };
