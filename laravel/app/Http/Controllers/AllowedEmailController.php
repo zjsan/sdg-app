@@ -36,19 +36,21 @@ class AllowedEmailController extends Controller
 
         //server-side searching by email, role name, or organization name
         if(!empty($search)){
-           $query->where(function (Builder $subQuery) use ($search) {
 
-            $subQuery->where('email', 'LIKE', "%{$search}%")
+            //perform left join to include role and organizaation data for searching
+            //selecting only the allowed_emails id to avoid issues
+            $query->leftJoin('roles', 'allowed_emails.role_id', '=', 'roles.id')
+                 ->leftJoin('organizations', 'allowed_emails.organization_id', '=', 'organizations.id');
 
-                // Search within the 'role' relationship table
-                ->orWhereHas('role', function (Builder $roleQuery) use ($search) {
-                    $roleQuery->where('name', 'LIKE', "%{$search}%");
-                })
-                // Search within the 'organization' relationship table
-                ->orWhereHas('organization', function (Builder $orgQuery) use ($search) {
-                    $orgQuery->where('name', 'LIKE', "%{$search}%");
-                });
-        });
+            //filtering the results based on the search query
+            $query->where(function (Builder $subQuery) use ($search){
+                    $subQuery->where('allowed_emails.email', 'LIKE', "%{$search}%")
+                            ->orWhere('roles.name', 'LIKE', "%{$search}%")
+                            ->orWhere('organizations.name', 'LIKE', "%{$search}%");
+            });
+            
+            //selecting all columns from allowed_emails 
+            $query->select('allowed_emails.*');
         }
 
         $allowedEmails = $query->paginate($perPage);
