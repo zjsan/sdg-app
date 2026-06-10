@@ -45,18 +45,22 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
                 this.itemsPerPage = payload.meta?.per_page || perPage;
                 this.lastPage = payload.meta?.last_page || 1;
             } catch (error) {
-                if (axios.isCancel(error) || error.name === "CanceledError") {
+                if (api.isCancel(error) || error.name === "CanceledError") {
                     console.log("Request safely aborted.");
-                    return; // Exit silently. Do NOT throw, do NOT set error states.
+                    return; // Exit silently.
                 }
 
+                //handle backend/network errors
                 const errMsg =
                     error.response?.data?.message ||
                     "Failed to load allowed emails.";
                 this.errors = errMsg;
                 throw error;
             } finally {
-                this.loading = false;
+                //only set loading to false if the request wasn't aborted
+                if (!this.currentAbortController?.signal.aborted) {
+                    this.loading = false;
+                }
             }
         },
 
