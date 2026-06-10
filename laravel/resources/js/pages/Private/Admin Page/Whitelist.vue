@@ -636,18 +636,15 @@ const loadPage = async (pageNumber, searchKeyword = searchQuery.value) => {
 };
 
 //debounced search function to limit API calls while typing in the search input
-const debouncedSearch = debounce((newQuery) => {
-    //prevent api call if the new query is the same as the previous query after trimming whitespace
-    if (newQuery.trim() === previousQuery.value.trim()) {
-        return;
-    }
-
-    previousQuery.value = newQuery; //update the previous query reference to the new query
-    loadPage(1, newQuery);
-}, 350);
+const debouncedSearch = debounce((targetQuery) => {
+    loadPage(1, targetQuery);
+}, 500);
 
 //watch the searchQuery for changes and trigger the debounced search function
-watch(searchQuery, (newVal) => {
+watch(searchQuery, (newVal, oldVal) => {
+    if (newVal.trim() === oldVal.trim()) {
+        return; //if the new search query is the same as the previous one, do not trigger a new search
+    }
     debouncedSearch(newVal);
 });
 
