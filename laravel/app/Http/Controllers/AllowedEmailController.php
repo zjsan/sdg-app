@@ -20,19 +20,21 @@ class AllowedEmailController extends Controller
      */
     public function index(Request $request): JsonResponse
     {   
-       // Use pagination to protect server memory. Default to 15 per page.
-
         //validate per page parameter
+        $perPage = (int) $request->query('per_page', 15);
+
         //check if it is integer and greater than 0, and set a maximum limit of 100 to prevent abuse
-        $perPage = min((int) $request->query('per_page', 15), 100); 
-        if ($perPage <= 0) {
-            $perPage = 15;
+        if ($perPage <= 0 || $perPage > 100) {
+            $perPage = 15; // fallback to default 
         }
 
         $search = $request->query('search');//fetch the search query parameter in the url for server-side searching
 
-        //fetch the allowed emails with their related role and organization data, ordered by latest
-        $query = AllowedEmail::with(['role', 'organization'])->latest();
+        //fetch the allowed emails with their related role and organization data, ordered by asc
+        $query = AllowedEmail::query()
+        ->select('allowed_emails.*')
+        ->with(['role', 'organization'])
+        ->orderBy('allowed_emails.created_at', 'asc');
 
         //server-side searching by email, role name, or organization name
         if(!empty($search)){
@@ -49,8 +51,6 @@ class AllowedEmailController extends Controller
                             ->orWhere('organizations.name', 'LIKE', "%{$search}%");
             });
             
-            //selecting all columns from allowed_emails 
-            $query->select('allowed_emails.*');
         }
 
         $allowedEmails = $query->paginate($perPage);
