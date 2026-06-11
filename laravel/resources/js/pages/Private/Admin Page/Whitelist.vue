@@ -724,6 +724,7 @@ const visiblePages = computed(() => {
     return range;
 });
 
+//item range counters
 const rangeStart = computed(() => {
     if (totalItems.value === 0) return 0;
     return (currentPage.value - 1) * itemsPerPage.value + 1;
