@@ -34,27 +34,23 @@ class AllowedEmailController extends Controller
         $search = $request->query('search');//fetch the search query parameter in the url for server-side searching
 
         //fetch the allowed emails with their related role and organization data
-        $query = AllowedEmail::query()
-        ->select('allowed_emails.*') 
-        ->with(['role', 'organization']);
+        $query = AllowedEmail::query()->with(['role', 'organization']);
 
         //server-side searching by email, role name, or organization name
-        if(!empty($search)){
-
-            //perform left join to include role and organizaation data for searching
-            //selecting only the allowed_emails id to avoid issues
-            $query->leftJoin('roles', 'allowed_emails.role_id', '=', 'roles.id')
-              ->leftJoin('organizations', 'allowed_emails.organization_id', '=', 'organizations.id')
-              
-              //perform the search on email, role name, and organization name with case-insensitive partial matching
-              ->where(function (Builder $subQuery) use ($search) {
-                  $subQuery->where('allowed_emails.email', 'LIKE', "%{$search}%")
-                           ->orWhere('roles.name', 'LIKE', "%{$search}%")
-                           ->orWhere('organizations.name', 'LIKE', "%{$search}%");
-              });
-            
-        }
-
+        if (!empty($search)) {
+            $query->where(function (Builder $subQuery) use ($search) {
+                $subQuery->where('email', 'LIKE', "%{$search}%")
+                    
+                    // Query relation records cleanly via isolated subqueries
+                    ->orWhereHas('role', function (Builder $roleQuery) use ($search) {
+                        $roleQuery->where('name', 'LIKE', "%{$search}%");
+                    })
+                    ->orWhereHas('organization', function (Builder $orgQuery) use ($search) {
+                        $orgQuery->where('name', 'LIKE', "%{$search}%");
+                    });
+            });
+        }  
+        
         //apply default ordering by creation date, showing oldest entries first
         $query->orderBy('allowed_emails.created_at', 'asc');
 
