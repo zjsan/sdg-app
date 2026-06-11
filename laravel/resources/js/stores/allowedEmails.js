@@ -5,7 +5,7 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
     state: () => ({
         emails: [],
         currentPage: 1,
-        itemsPerPage: 15,
+        itemsPerPage: 10,
         lastPage: 1, //for disabling next button when on the last page
         totalItems: 0,
         loading: false,
@@ -13,7 +13,7 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
         currentAbortController: null, // to manage request cancellation
     }),
     actions: {
-        async fetchAllowedEmails(page = 1, perPage = 15, search = "") {
+        async fetchAllowedEmails(page = 1, perPage = 10, search = "") {
             this.loading = true;
             this.errors = null;
 
