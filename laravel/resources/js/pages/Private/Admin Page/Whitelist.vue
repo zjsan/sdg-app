@@ -611,6 +611,7 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import debounce from "lodash/debounce"; //for debouncing search input
+import { usePagination } from "@/composables/usePagination";
 
 const allowedEmailsStore = useAllowedEmailsStore();
 const lookupStore = useLookupStore();
@@ -627,21 +628,34 @@ const errorMessage = ref("");
 const modalErrorMessage = ref("");
 
 //extract states from the store while maintaining reactivity
-const { emails, currentPage, itemsPerPage, lastPage, totalItems } =
-    storeToRefs(allowedEmailsStore);
+const { emails } = storeToRefs(allowedEmailsStore);
 
 const loadPage = async (pageNumber, searchKeyword = searchQuery.value) => {
     try {
         errorMessage.value = ""; //clear any existing error messages before attempting to load new data
         await allowedEmailsStore.fetchAllowedEmails(
             pageNumber,
-            itemsPerPage.value,
+            allowedEmailsStore.itemsPerPage,
             searchKeyword,
         );
     } catch (err) {
         errorMessage.value = err?.message || err || "Failed to load registry.";
     }
 };
+
+// Custom pagination composable to manage pagination state and logic
+const {
+    currentPage,
+    lastPage,
+    totalItems,
+    isLoading,
+    visiblePages,
+    rangeStart,
+    rangeEnd,
+    prevPage,
+    nextPage,
+    goToPage,
+} = usePagination(allowedEmailsStore, loadPage);
 
 //debounced search function to limit API calls while typing in the search input
 const debouncedSearch = debounce((targetQuery) => {
