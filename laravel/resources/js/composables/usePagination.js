@@ -8,6 +8,18 @@ export function usePagination(store) {
     const totalItems = computed(() => store.totalItems);
     const isLoading = computed(() => store.loading);
 
+    // Centralize the execution of a page change
+    const executePageChange = (pageNumber) => {
+        if (onPageChange) {
+            onPageChange(pageNumber);
+        } else {
+            // Otherwise, fall back to direct store execution
+            if (store.fetchAllowedEmails) store.fetchAllowedEmails(pageNumber);
+            else if (store.fetchOrganizations)
+                store.fetchOrganizations(pageNumber);
+        }
+    };
+
     // Core Navigation Actions
     const prevPage = () => {
         if (isLoading.value) return;
@@ -46,12 +58,12 @@ export function usePagination(store) {
     const visiblePages = computed(() => {
         const current = currentPage.value;
         const last = lastPage.value;
-        const delta = 1; // Easily tweakable block size
+        const delta = 2; // Easily tweakable block size
 
         let start = Math.max(1, current - delta);
         let end = Math.min(last, current + delta);
 
-        // Extra cushioning to ensure consistent width when clicking boundaries
+        // Extra protection to ensure consistent width when clicking boundaries
         if (current - start < delta) {
             end = Math.min(last, end + (delta - (current - start)));
         }
