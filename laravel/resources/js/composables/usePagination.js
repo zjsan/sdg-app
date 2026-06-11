@@ -1,5 +1,6 @@
 import { computed } from "vue";
 
+//need to fix pagination problem when filter is applied
 export function usePagination(store) {
     // Map reactive values directly from whatever store is passed in
     const currentPage = computed(() => store.currentPage);
