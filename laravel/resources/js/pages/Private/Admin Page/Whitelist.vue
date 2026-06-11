@@ -663,12 +663,20 @@ onUnmounted(() => {
 
 // --- PAGINATION NAVIGATION ACTIONS ---
 const prevPage = () => {
+    if (allowedEmailsStore.loading) {
+        return; //prevent navigating to another page while a load is in progress
+    }
+
     if (currentPage.value > 1) {
         loadPage(currentPage.value - 1);
     }
 };
 
 const nextPage = () => {
+    if (allowedEmailsStore.loading) {
+        return; //prevent navigating to another page while a load is in progress
+    }
+
     if (currentPage.value < lastPage.value) {
         loadPage(currentPage.value + 1);
     }
@@ -676,6 +684,10 @@ const nextPage = () => {
 
 //used for clicking on specific page numbers in pagination controls in the component templpate
 const goToPage = (page) => {
+    if (allowedEmailsStore.loading) {
+        return; //prevent navigating to another page while a load is in progress
+    }
+
     const pageNumber = Number(page);
     if (
         pageNumber >= 1 &&
