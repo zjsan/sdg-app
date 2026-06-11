@@ -260,6 +260,7 @@
                     </template>
                 </AppTable>
 
+                <!--pagination control-->
                 <div
                     class="flex flex-col sm:flex-row items-center justify-between px-6 py-4 bg-slate-50/40 border-t border-slate-200/80 gap-4"
                 >
@@ -280,110 +281,118 @@
                         }}</span>
                         entries
                     </div>
-                </div>
 
-                <div
-                    class="flex items-center gap-1.5 order-1 sm:order-2 w-full sm:w-auto justify-end"
-                >
-                    <button
-                        @click="prevPage"
-                        :disabled="currentPage === 1"
-                        class="inline-flex items-center justify-center min-w-8 h-8 px-2 rounded-lg border border-slate-200 bg-white text-slate-600 text-xs font-medium shadow-sm transition-all hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white disabled:cursor-not-allowed cursor-pointer select-none"
+                    <div
+                        class="flex items-center gap-1.5 order-1 sm:order-2 w-full sm:w-auto justify-end"
                     >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="w-3.5 h-3.5 mr-1"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            stroke-width="2"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M15 19l-7-7 7-7"
-                            />
-                        </svg>
-                        Prev
-                    </button>
-
-                    <!--sliding window pagination-->
-                    <div class="hidden md:flex items-center gap-1">
                         <button
-                            v-if="visiblePages[0] > 1"
-                            @click="goToPage(1)"
-                            class="w-8 h-8 rounded-lg text-xs font-semibold border bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                            @click="prevPage"
+                            :disabled="
+                                currentPage === 1 || allowedEmailsStore.loading
+                            "
+                            class="inline-flex items-center justify-center min-w-8 h-8 px-2 rounded-lg border border-slate-200 bg-white text-slate-600 text-xs font-medium shadow-sm transition-all hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white disabled:cursor-not-allowed cursor-pointer select-none"
                         >
-                            1
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="w-3.5 h-3.5 mr-1"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M15 19l-7-7 7-7"
+                                />
+                            </svg>
+                            Prev
                         </button>
 
+                        <div class="hidden md:flex items-center gap-1">
+                            <button
+                                v-if="visiblePages[0] > 1"
+                                @click="goToPage(1)"
+                                :disabled="allowedEmailsStore.loading"
+                                class="w-8 h-8 rounded-lg text-xs font-semibold border bg-white text-slate-600 border-slate-200 hover:bg-slate-50 disabled:opacity-50"
+                            >
+                                1
+                            </button>
+
+                            <span
+                                v-if="visiblePages[0] > 2"
+                                class="text-slate-400 text-xs px-1"
+                                >...</span
+                            >
+
+                            <button
+                                v-for="page in visiblePages"
+                                :key="page"
+                                @click="goToPage(page)"
+                                :disabled="allowedEmailsStore.loading"
+                                :class="[
+                                    'w-8 h-8 rounded-lg text-xs font-semibold border transition-all cursor-pointer select-none',
+                                    currentPage === page
+                                        ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm shadow-indigo-500/10'
+                                        : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 disabled:opacity-50',
+                                ]"
+                            >
+                                {{ page }}
+                            </button>
+
+                            <span
+                                v-if="
+                                    visiblePages[visiblePages.length - 1] <
+                                    lastPage - 1
+                                "
+                                class="text-slate-400 text-xs px-1"
+                                >...</span
+                            >
+
+                            <button
+                                v-if="
+                                    visiblePages[visiblePages.length - 1] <
+                                    lastPage
+                                "
+                                @click="goToPage(lastPage)"
+                                :disabled="allowedEmailsStore.loading"
+                                class="w-8 h-8 rounded-lg text-xs font-semibold border bg-white text-slate-600 border-slate-200 hover:bg-slate-50 disabled:opacity-50"
+                            >
+                                {{ lastPage }}
+                            </button>
+                        </div>
+
                         <span
-                            v-if="visiblePages[0] > 2"
-                            class="text-slate-400 text-xs px-1"
-                            >...</span
+                            class="text-xs font-medium text-slate-500 md:hidden px-2"
                         >
+                            Page {{ currentPage }} of {{ lastPage }}
+                        </span>
 
                         <button
-                            v-for="page in visiblePages"
-                            :key="page"
-                            @click="goToPage(page)"
-                            :class="[
-                                'w-8 h-8 rounded-lg text-xs font-semibold border transition-all cursor-pointer select-none',
-                                currentPage === page
-                                    ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm shadow-indigo-500/10'
-                                    : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50',
-                            ]"
-                        >
-                            {{ page }}
-                        </button>
-
-                        <span
-                            v-if="
-                                visiblePages[visiblePages.length - 1] <
-                                lastPage - 1
+                            @click="nextPage"
+                            :disabled="
+                                currentPage === lastPage ||
+                                allowedEmailsStore.loading
                             "
-                            class="text-slate-400 text-xs px-1"
-                            >...</span
+                            class="inline-flex items-center justify-center min-w-8 h-8 px-2 rounded-lg border border-slate-200 bg-white text-slate-600 text-xs font-medium shadow-sm transition-all hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white disabled:cursor-not-allowed cursor-pointer select-none"
                         >
-
-                        <button
-                            v-if="
-                                visiblePages[visiblePages.length - 1] < lastPage
-                            "
-                            @click="goToPage(lastPage)"
-                            class="w-8 h-8 rounded-lg text-xs font-semibold border bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
-                        >
-                            {{ lastPage }}
+                            Next
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="w-3.5 h-3.5 ml-1"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M9 5l7 7-7 7"
+                                />
+                            </svg>
                         </button>
                     </div>
-
-                    <span
-                        class="text-xs font-medium text-slate-500 md:hidden px-2"
-                    >
-                        Page {{ currentPage }} of {{ lastPage }}
-                    </span>
-
-                    <button
-                        @click="nextPage"
-                        :disabled="currentPage === lastPage"
-                        class="inline-flex items-center justify-center min-w-8 h-8 px-2 rounded-lg border border-slate-200 bg-white text-slate-600 text-xs font-medium shadow-sm transition-all hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white disabled:cursor-not-allowed cursor-pointer select-none"
-                    >
-                        Next
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="w-3.5 h-3.5 ml-1"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            stroke-width="2"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M9 5l7 7-7 7"
-                            />
-                        </svg>
-                    </button>
                 </div>
             </div>
 
