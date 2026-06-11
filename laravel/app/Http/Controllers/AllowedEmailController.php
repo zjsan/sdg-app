@@ -20,12 +20,15 @@ class AllowedEmailController extends Controller
      */
     public function index(Request $request): JsonResponse
     {   
+       
+        $defaultPerPage = 10;
+
         //validate per page parameter
-        $perPage = (int) $request->query('per_page', 15);
+        $perPage = (int) $request->query('per_page', $defaultPerPage);
 
         //check if it is integer and greater than 0, and set a maximum limit of 100 to prevent abuse
         if ($perPage <= 0 || $perPage > 100) {
-            $perPage = 15; // fallback to default 
+            $perPage = $defaultPerPage; // fallback to default 
         }
 
         $search = $request->query('search');//fetch the search query parameter in the url for server-side searching
