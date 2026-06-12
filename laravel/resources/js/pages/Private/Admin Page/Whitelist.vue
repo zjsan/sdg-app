@@ -681,7 +681,12 @@ onUnmounted(() => {
     console.log(
         "Component unmounted, cancelling pending debounced search calls.",
     );
-    debouncedSearch.cancel();
+    debouncedSearch.cancel(); //cancel any pending debounce calls
+
+    //cancel any api request upon unmount
+    if (allowedEmailsStore.currentAbortController) {
+        allowedEmailsStore.currentAbortController.abort();
+    }
 });
 
 // fetch initial data on component mount
