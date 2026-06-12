@@ -672,11 +672,15 @@ watch(searchQuery, (newVal, oldVal) => {
 
 //clean up the debounced function on component unmount
 onUnmounted(() => {
+    console.log(
+        "Component unmounted, cancelling pending debounced search calls.",
+    );
     debouncedSearch.cancel();
 });
 
 // fetch initial data on component mount
 onMounted(() => {
+    console.log("Component mounted, loading initial data.");
     loadPage(currentPage.value);
     lookupStore.fetchFormDependencies();
 });
