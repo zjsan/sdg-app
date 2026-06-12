@@ -1,7 +1,7 @@
 import { computed } from "vue";
 
-//need to fix pagination problem when filter is applied
-export function usePagination(store) {
+//accepting the store and the optional onPageChange callback function to remember the last page number
+export function usePagination(store, onPageChange = null) {
     // Map reactive values directly from whatever store is passed in
     const currentPage = computed(() => store.currentPage);
     const lastPage = computed(() => store.lastPage);
@@ -12,6 +12,7 @@ export function usePagination(store) {
     // Centralize the execution of a page change
     const executePageChange = (pageNumber) => {
         if (onPageChange) {
+            //runs the component loadpage function to preserve the search query and other filters when changing pages
             onPageChange(pageNumber);
         } else {
             // Otherwise, fall back to direct store execution
@@ -25,18 +26,14 @@ export function usePagination(store) {
     const prevPage = () => {
         if (isLoading.value) return;
         if (currentPage.value > 1) {
-            store.fetchAllowedEmails
-                ? store.fetchAllowedEmails(currentPage.value - 1)
-                : store.fetchData(currentPage.value - 1);
+            executePageChange(currentPage.value - 1);
         }
     };
 
     const nextPage = () => {
         if (isLoading.value) return;
         if (currentPage.value < lastPage.value) {
-            store.fetchAllowedEmails
-                ? store.fetchAllowedEmails(currentPage.value + 1)
-                : store.fetchData(currentPage.value + 1);
+            executePageChange(currentPage.value + 1);
         }
     };
 
@@ -48,10 +45,7 @@ export function usePagination(store) {
             pageNumber <= lastPage.value &&
             pageNumber !== currentPage.value
         ) {
-            // Dynamically call the store's data fetch method
-            if (store.fetchAllowedEmails) store.fetchAllowedEmails(pageNumber);
-            else if (store.fetchOrganizations)
-                store.fetchOrganizations(pageNumber);
+            executePageChange(pageNumber);
         }
     };
 
