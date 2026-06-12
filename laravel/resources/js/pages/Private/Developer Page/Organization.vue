@@ -193,14 +193,14 @@ const successMessage = ref("");
 const errorMessage = ref("");
 
 //extract states from the store while maintaining reactivity
-const { emails } = storeToRefs(allowedEmailsStore);
+const { organizations } = storeToRefs(organizationStore);
 
 const loadPage = async (pageNumber, searchKeyword = searchQuery.value) => {
     try {
         errorMessage.value = ""; //clear any existing error messages before attempting to load new data
-        await allowedEmailsStore.fetchAllowedEmails(
+        await organizationStore.fetchOrganizations(
             pageNumber,
-            allowedEmailsStore.itemsPerPage,
+            organizationStore.itemsPerPage,
             searchKeyword,
         );
     } catch (err) {
