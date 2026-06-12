@@ -8,13 +8,15 @@ use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\OrganizationRequest;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Builder;
+use App\Http\Resources\OrganizationResource;
 
 class OrganizationController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
          $defaultPerPage = 10;
 
@@ -26,6 +28,22 @@ class OrganizationController extends Controller
             $perPage = $defaultPerPage; // fallback to default 
         }
 
+        $search = $request->query('search');//fetch the search query parameter in the url for server-side searching
+
+        $query = Organization::query()->withCount('allowedEmails'); // eager load the count of allowed emails for each organization
+
+        if(!empty($search)){
+            $query->where(function (Builder $subQuery) use ($search){
+                $subQuery->where('name', 'LIKE', "%{$search}%")
+                    ->orWhere('slug', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $query->orderBy('organizations.created_at', 'asc');
+
+        $organizations = $query->paginate($perPage);
+
+        return OrganizationResource::collection($organizations)->response();
     }
 
     /**
