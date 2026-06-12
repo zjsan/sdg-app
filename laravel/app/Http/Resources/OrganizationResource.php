@@ -19,7 +19,7 @@ class OrganizationResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug, 
             
-            // This safely appends the count if loaded, or defaults to 0
+            // safely appends the count if loaded, or defaults to 0
             'allowed_emails_count' => (int) $this->allowed_emails_count ?? 0,
             
             'created_at' => $this->created_at?->toIso8601String(),
