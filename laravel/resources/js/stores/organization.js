@@ -5,8 +5,13 @@ export const useOrganizationStore = defineStore("organization", {
     // other options...
     state: () => ({
         organizations: [],
+        currentPage: 1,
+        itemsPerPage: 10,
+        lastPage: 1, //for disabling next button when on the last page
+        totalItems: 0,
         loading: false,
         errors: null,
+        currentAbortController: null, // to manage request cancellation
     }),
     actions: {
         async fetchOrganizations() {
