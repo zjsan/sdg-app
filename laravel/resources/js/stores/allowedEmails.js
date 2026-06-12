@@ -32,7 +32,7 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
                         per_page: perPage,
                         search: search, // Optional search query parameter
                     },
-                    signal: this.currentAbortController.signal, // attach the abort signal to the request
+                    signal: controller.signal, //track the local reference of the abort controller for this specific request
                 });
 
                 const payload = res.data; //extract response data from the controller
@@ -45,11 +45,21 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
                     this.currentPage = payload.meta?.current_page || 1;
                     this.totalItems = payload.meta?.total || 0;
                     this.lastPage = payload.meta?.last_page || 1;
+
+                    //clean up the abort controller reference since the request has completed
+                    if (this.currentAbortController === controller) {
+                        this.currentAbortController = null;
+                    }
                 }
             } catch (error) {
-                if (api.isCancel(error) || error.name === "CanceledError") {
+                //handle request cancellation separately to avoid showing error messages for aborted requests
+                if (
+                    error.name === "AbortError" ||
+                    error.name === "CanceledError" ||
+                    api.isCancel(error)
+                ) {
                     console.log("Request safely aborted.");
-                    return; // Exit silently.
+                    return; // Graceful exit
                 }
 
                 //handle backend/network errors
@@ -60,7 +70,10 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
                 throw error;
             } finally {
                 //only set loading to false if the current request is the one that just finished
-                if (this.currentAbortController === controller) {
+                if (
+                    this.currentAbortController === controller ||
+                    this.currentAbortController === null
+                ) {
                     this.loading = false;
                 }
             }
