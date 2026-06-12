@@ -188,6 +188,26 @@ const editValue = ref("");
 const orgName = ref("");
 const selectedOrgId = ref(null);
 
+// Component-level feedback states
+const successMessage = ref("");
+const errorMessage = ref("");
+
+//extract states from the store while maintaining reactivity
+const { emails } = storeToRefs(allowedEmailsStore);
+
+const loadPage = async (pageNumber, searchKeyword = searchQuery.value) => {
+    try {
+        errorMessage.value = ""; //clear any existing error messages before attempting to load new data
+        await allowedEmailsStore.fetchAllowedEmails(
+            pageNumber,
+            allowedEmailsStore.itemsPerPage,
+            searchKeyword,
+        );
+    } catch (err) {
+        errorMessage.value = err?.message || err || "Failed to load registry.";
+    }
+};
+
 //for editing
 const openEditModal = (org) => {
     selectedOrg.value = org;
