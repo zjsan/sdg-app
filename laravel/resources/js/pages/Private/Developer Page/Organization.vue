@@ -177,6 +177,8 @@ import PageHeader from "../Dashboard Template/Component/PageHeader.vue";
 import AppTable from "../Dashboard Template/Component/AppTable.vue";
 import BaseModal from "../Dashboard Template/Component/BaseModal.vue";
 import BaseButton from "../Dashboard Template/Component/BaseButton.vue";
+import debounce from "lodash/debounce"; //for debouncing search input
+import { usePagination } from "@/composables/usePagination";
 
 const pbiStore = usePowerBiStore();
 const organizationStore = useOrganizationStore();
