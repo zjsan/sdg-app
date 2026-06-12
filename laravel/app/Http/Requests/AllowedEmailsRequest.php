@@ -40,8 +40,9 @@ class AllowedEmailsRequest extends FormRequest
             'email' => [
                 'required',
                 'string',
+                'lowercase',
                 'max:255',
-                'email:rfc,dns', //deep email format validation using Laravel's built-in email rule with RFC and DNS checks
+                'email:rfc', // Strict RFC formatting
 
                 //ensure email is unique but ignore when updating the same record
                 Rule::unique('allowed_emails', 'email')->ignore($allowedEmailId),
