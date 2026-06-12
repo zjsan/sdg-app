@@ -664,10 +664,16 @@ const debouncedSearch = debounce((targetQuery) => {
 
 //watch the searchQuery for changes and trigger the debounced search function
 watch(searchQuery, (newVal, oldVal) => {
-    if (newVal.trim() === oldVal?.trim()) {
-        return; //if the new search query is the same as the previous one, do not trigger a new search
+    //trim the search query to prevent unnecessary API calls on whitespace changes
+    //fall back to empty string if newVal or oldVal is null or undefined to prevent errors
+    const currentText = newVal?.trim() || "";
+    const previousText = oldVal?.trim() || "";
+
+    if (currentText === previousText) {
+        return;
     }
-    debouncedSearch(newVal);
+
+    debouncedSearch(currentText);
 });
 
 //clean up the debounced function on component unmount
