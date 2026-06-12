@@ -14,24 +14,67 @@ export const useOrganizationStore = defineStore("organization", {
         currentAbortController: null, // to manage request cancellation
     }),
     actions: {
-        async fetchOrganizations() {
+        async fetchOrganizations(page = 1, perPage = 10, search = "") {
+            this.errors = null;
             this.loading = true;
-            try {
-                const response = await api.get("/organizations");
-                // Debugging: Check console to see what the server actually sent
-                //console.log("Backend Response:", response.data);
 
-                // If backend returns a Resource, it might be response.data.data
-                this.organizations = Array.isArray(response.data)
-                    ? response.data
-                    : response.data.data;
+            //intializing a new abort controller for new request and assigning it to the store's state to track it
+            const controller = new AbortController();
+            this.currentAbortController = controller;
+
+            try {
+                const response = await api.get("/organizations", {
+                    params: {
+                        page,
+                        per_page: perPage,
+                        search,
+                    },
+                    signal: controller.signal, //track the local reference of the abort controller for this specific request
+                });
+
+                const payload = response.data; //extract response data from the controller
+                console.log("API Response:", payload); // Debugging log
+
+                //update only the states if the request are not aborted
+                if (!controller.signal.aborted) {
+                    // If backend returns a Resource, it might be response.data.data
+                    this.organizations = payload.data || [];
+
+                    // Update pagination info
+                    this.currentPage = page;
+                    this.itemsPerPage = perPage;
+                    this.lastPage = response.data.last_page || 1;
+                    this.totalItems = response.data.total || 0;
+
+                    //clean up the abort controller reference since the request has completed
+                    if (this.currentAbortController === controller) {
+                        this.currentAbortController = null;
+                    }
+                }
             } catch (error) {
-                this.errors =
+                //handle request cancellation separately to avoid showing error messages for aborted requests
+                if (
+                    error.name === "AbortError" ||
+                    error.name === "CanceledError" ||
+                    api.isCancel(error)
+                ) {
+                    console.log("Request safely aborted.");
+                    return; // Graceful exit
+                }
+                //handle backend/network errors
+                const errMsg =
                     error.response?.data?.message ||
-                    "Failed to load organizations.";
-                console.error("Failed to fetch organizations:", error);
+                    "Failed to load allowed emails.";
+                this.errors = errMsg;
+                throw error;
             } finally {
-                this.loading = false;
+                //only set loading to false if the current request is the one that just finished
+                if (
+                    this.currentAbortController === controller ||
+                    this.currentAbortController === null
+                ) {
+                    this.loading = false;
+                }
             }
         },
 
