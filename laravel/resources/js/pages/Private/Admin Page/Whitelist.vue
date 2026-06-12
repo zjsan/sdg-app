@@ -692,7 +692,8 @@ onUnmounted(() => {
 // fetch initial data on component mount
 onMounted(() => {
     console.log("Component mounted, loading initial data.");
-    loadPage(currentPage.value);
+
+    loadPage(currentPage.value, searchQuery.value.trim() || ""); //caputre the initial search query value to ensure the first load respects any default search state
     lookupStore.fetchFormDependencies();
 });
 
