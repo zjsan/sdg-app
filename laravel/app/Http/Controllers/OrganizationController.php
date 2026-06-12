@@ -16,8 +16,16 @@ class OrganizationController extends Controller
      */
     public function index()
     {
-        //fetch the contents of the organization table 
-        return response()->json(Organization::all());
+         $defaultPerPage = 10;
+
+        //validate per page parameter
+        $perPage = (int) $request->query('per_page', $defaultPerPage);
+
+        //check if it is integer and greater than 0, and set a maximum limit of 100 to prevent abuse
+        if ($perPage <= 0 || $perPage > 100) {
+            $perPage = $defaultPerPage; // fallback to default 
+        }
+
     }
 
     /**
