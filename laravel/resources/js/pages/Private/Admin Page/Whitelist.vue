@@ -4,11 +4,7 @@
             <PageHeader>
                 <template #title>Whitelist Management</template>
                 <template #subtitle>
-                    <span class="font-semibold text-slate-900">
-                        {{ filteredEmails.length }}
-                    </span>
-                    of {{ allowedEmailsStore.emails?.length || 0 }} authorized
-                    identities mapped via Google Sign-In.
+                    Authorized identities mapped via Google Sign-In.
                 </template>
             </PageHeader>
 
