@@ -18,6 +18,7 @@ class OrganizationResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'slug' => $this->slug, 
+            'pbi_embed_id' => $this->pbi_embed_id,
             
             // safely appends the count if loaded, or defaults to 0
             'allowed_emails_count' => (int) $this->allowed_emails_count ?? 0,
