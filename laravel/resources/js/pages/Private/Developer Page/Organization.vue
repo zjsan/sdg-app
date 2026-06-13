@@ -200,6 +200,7 @@ const searchQuery = ref("");
 // Component-level feedback states
 const successMessage = ref("");
 const errorMessage = ref("");
+const modalErrorMessage = ref("");
 
 //extract states from the store while maintaining reactivity
 const { organizations } = storeToRefs(organizationStore);
