@@ -71,98 +71,108 @@
                         />
                     </div>
 
-                    <BaseButton @click="openAddModal">
+                    <BaseButton
+                        @click="openAddModal"
+                        class="w-full sm:w-auto shadow-sm shadow-indigo-500/10"
+                    >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            class="w-5 h-5 mr-2 -ml-1"
+                            class="w-4 h-4 mr-2 -ml-0.5"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
+                            stroke-width="2.5"
                         >
                             <path
                                 stroke-linecap="round"
                                 stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                                d="M12 4v16m8-8H4"
                             />
                         </svg>
-                        Add Organization
+                        Authorize Access
                     </BaseButton>
                 </div>
-            </div>
+                <!-- 2. Reusable Table -->
+                <AppTable>
+                    <template #header>
+                        <TableHead
+                            class="h-10 text-[11px] font-bold uppercase tracking-wider text-slate-500/90 pl-4"
+                        >
+                            Organization
+                        </TableHead>
 
-            <!-- 2. Reusable Table -->
-            <AppTable>
-                <template #header>
-                    <th
-                        class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider"
-                    >
-                        Organization
-                    </th>
-                    <th
-                        class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider"
-                    >
-                        Embed Configuration
-                    </th>
-                    <th
-                        class="px-6 py-4 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider"
-                    >
-                        Action
-                    </th>
-                </template>
+                        <TableHead
+                            class="h-10 text-[11px] font-bold uppercase tracking-wider text-slate-500/90"
+                        >
+                            Embed Configuration
+                        </TableHead>
 
-                <template #body>
-                    <tr
-                        v-for="org in organizationStore.organizations"
-                        :key="org.id"
-                        class="hover:bg-slate-50 transition-colors"
-                    >
-                        <td class="px-6 py-4">
-                            <div class="font-semibold text-slate-900">
-                                {{ org.name }}
-                            </div>
-                            <div class="text-xs text-slate-400">
-                                ID: {{ org.id }}
-                            </div>
-                        </td>
+                        <TableHead
+                            class="h-10 text-center text-[11px] font-bold uppercase tracking-wider text-slate-500/90 pr-4"
+                        >
+                            Actions
+                        </TableHead>
+                    </template>
 
-                        <td class="px-6 py-4">
-                            <div
-                                v-if="org.pbi_embed_id"
-                                class="flex items-center space-x-2"
-                            >
+                    <template #body>
+                        <TableRow
+                            v-for="org in organizationStore.organizations"
+                            :key="org.id"
+                            class="hover:bg-slate-50 transition-colors"
+                        >
+                            <td class="px-6 py-4">
+                                <div class="font-semibold text-slate-900">
+                                    {{ org.name }}
+                                </div>
+                                <div class="text-xs text-slate-400">
+                                    ID: {{ org.id }}
+                                </div>
+                            </td>
+
+                            <td class="px-6 py-4">
+                                <div
+                                    v-if="org.pbi_embed_id"
+                                    class="flex items-center space-x-2"
+                                >
+                                    <span
+                                        class="px-2 py-1 bg-indigo-50 text-indigo-700 rounded text-xs font-mono"
+                                    >
+                                        {{
+                                            org.pbi_embed_id.substring(0, 15)
+                                        }}...
+                                    </span>
+                                    <button
+                                        @click="
+                                            copyToClipboard(org.pbi_embed_id)
+                                        "
+                                        class="text-xs text-blue-600 hover:text-indigo-800"
+                                    >
+                                        Copy
+                                    </button>
+                                </div>
                                 <span
-                                    class="px-2 py-1 bg-indigo-50 text-indigo-700 rounded text-xs font-mono"
+                                    v-else
+                                    class="text-sm text-slate-400 italic"
+                                    >No link configured</span
                                 >
-                                    {{ org.pbi_embed_id.substring(0, 15) }}...
-                                </span>
-                                <button
-                                    @click="copyToClipboard(org.pbi_embed_id)"
-                                    class="text-xs text-blue-600 hover:text-indigo-800"
-                                >
-                                    Copy
-                                </button>
-                            </div>
-                            <span v-else class="text-sm text-slate-400 italic"
-                                >No link configured</span
-                            >
-                        </td>
+                            </td>
 
-                        <td class="px-6 py-4 text-right space-x-2">
-                            <BaseButton
-                                variant="secondary"
-                                @click="openEditModal(org)"
-                                >Edit Link</BaseButton
-                            >
-                            <BaseButton
-                                variant="secondary"
-                                @click="confirmDelete(org.id)"
-                                >Delete</BaseButton
-                            >
-                        </td>
-                    </tr>
-                </template>
-            </AppTable>
+                            <td class="px-6 py-4 text-right space-x-2">
+                                <BaseButton
+                                    variant="secondary"
+                                    @click="openEditModal(org)"
+                                    >Edit Link</BaseButton
+                                >
+                                <BaseButton
+                                    variant="secondary"
+                                    @click="confirmDelete(org.id)"
+                                    >Delete</BaseButton
+                                >
+                            </td>
+                        </TableRow>
+                    </template>
+                </AppTable>
+            </div>
 
             <!-- 3. Reusable Modal -->
             <BaseModal :show="isModalOpen" @close="closeModal">
