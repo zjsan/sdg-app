@@ -170,7 +170,7 @@
 </template>
 <script setup>
 import Authenticated from "../Dashboard Template/Layout/Authenticated.vue";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { usePowerBiStore } from "../../../stores/powerBi.js";
 import { useOrganizationStore } from "../../../stores/organization.js";
 import PageHeader from "../Dashboard Template/Component/PageHeader.vue";
@@ -243,6 +243,18 @@ watch(searchQuery, (newVal, oldVal) => {
 
 onMounted(() => {
     loadPage(currentPage.value, searchQuery.value.trim() || "");
+});
+
+onUnmounted(() => {
+    console.log(
+        "Component unmounted, cancelling pending debounced search calls.",
+    );
+    debouncedSearch.cancel(); //cancel any pending debounce calls
+
+    //cancel any api request upon unmount
+    if (organizationStore.currentAbortController) {
+        organizationStore.currentAbortController.abort();
+    }
 });
 
 //for editing
