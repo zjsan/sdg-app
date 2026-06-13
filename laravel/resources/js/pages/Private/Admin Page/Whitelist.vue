@@ -717,22 +717,6 @@ const isEmailInvalid = computed(() => {
 const dynamicOrganizations = computed(() => lookupStore.organizations);
 const dynamicRoles = computed(() => lookupStore.roles);
 
-// substring search Filter logic operating cleanly on client-side state memory
-const filteredEmails = computed(() => {
-    const list = allowedEmailsStore.emails || [];
-    const query = searchQuery.value.trim().toLowerCase();
-
-    if (!query) return list;
-
-    return list.filter((item) => {
-        return (
-            item.email.toLowerCase().includes(query) ||
-            item.organization?.name?.toLowerCase().includes(query) ||
-            item.role?.name?.toLowerCase().includes(query)
-        );
-    });
-});
-
 //modal control
 const openAddModal = () => {
     isEditMode.value = false; //set to false when adding new email

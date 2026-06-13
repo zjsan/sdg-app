@@ -12,6 +12,12 @@
                 </template>
             </PageHeader>
 
+            <Input
+                v-model="searchQuery"
+                type="text"
+                placeholder="Search by email, group, or role..."
+                class="w-full pl-9 pr-4 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none bg-white transition-all text-slate-700 placeholder:text-slate-400/90 shadow-inner"
+            />
             <div
                 class="flex justify-end py-4 border-b border-slate-100 flex justify-end bg-slate-50/50"
             >
@@ -170,7 +176,7 @@
 </template>
 <script setup>
 import Authenticated from "../Dashboard Template/Layout/Authenticated.vue";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted, watch } from "vue";
 import { usePowerBiStore } from "../../../stores/powerBi.js";
 import { useOrganizationStore } from "../../../stores/organization.js";
 import PageHeader from "../Dashboard Template/Component/PageHeader.vue";
@@ -179,6 +185,8 @@ import BaseModal from "../Dashboard Template/Component/BaseModal.vue";
 import BaseButton from "../Dashboard Template/Component/BaseButton.vue";
 import debounce from "lodash/debounce"; //for debouncing search input
 import { usePagination } from "@/composables/usePagination";
+import { Input } from "@/components/ui/input";
+import { storeToRefs } from "pinia";
 
 const pbiStore = usePowerBiStore();
 const organizationStore = useOrganizationStore();
@@ -187,10 +195,12 @@ const selectedOrg = ref(null); //if null means adding
 const editValue = ref("");
 const orgName = ref("");
 const selectedOrgId = ref(null);
+const searchQuery = ref("");
 
 // Component-level feedback states
 const successMessage = ref("");
 const errorMessage = ref("");
+const modalErrorMessage = ref("");
 
 //extract states from the store while maintaining reactivity
 const { organizations } = storeToRefs(organizationStore);
@@ -207,6 +217,55 @@ const loadPage = async (pageNumber, searchKeyword = searchQuery.value) => {
         errorMessage.value = err?.message || err || "Failed to load registry.";
     }
 };
+
+// Custom pagination composable to manage pagination state and logic
+const {
+    currentPage,
+    lastPage,
+    totalItems,
+    isLoading,
+    visiblePages,
+    rangeStart,
+    rangeEnd,
+    prevPage,
+    nextPage,
+    goToPage,
+} = usePagination(organizationStore, loadPage);
+
+//debounced search function to limit API calls while typing in the search input
+const debouncedSearch = debounce((targetQuery) => {
+    loadPage(1, targetQuery);
+}, 500);
+
+//watch the searchQuery for changes and trigger the debounced search function
+watch(searchQuery, (newVal, oldVal) => {
+    //trim the search query to prevent unnecessary API calls on whitespace changes
+    //fall back to empty string if newVal or oldVal is null or undefined to prevent errors
+    const currentText = newVal?.trim() || "";
+    const previousText = oldVal?.trim() || "";
+
+    if (currentText === previousText) {
+        return;
+    }
+
+    debouncedSearch(currentText);
+});
+
+onMounted(() => {
+    loadPage(currentPage.value, searchQuery.value.trim() || "");
+});
+
+onUnmounted(() => {
+    console.log(
+        "Component unmounted, cancelling pending debounced search calls.",
+    );
+    debouncedSearch.cancel(); //cancel any pending debounce calls
+
+    //cancel any api request upon unmount
+    if (organizationStore.currentAbortController) {
+        organizationStore.currentAbortController.abort();
+    }
+});
 
 //for editing
 const openEditModal = (org) => {
@@ -306,11 +365,19 @@ const handleSubmit = async () => {
 const confirmDelete = async (id) => {
     selectedOrgId.value = id; //store the ID of the organization to be deleted
     if (confirm("Are you sure you want to delete this organization?")) {
-        await organizationStore.deleteOrganization(selectedOrgId.value); //call the delete action in the store
+        try {
+            const data = await organizationStore.deleteOrganization(
+                selectedOrgId.value,
+            ); //call the delete action in the store
+            flashSuccess(
+                data?.message || "Clearance rule successfully dropped.",
+            );
+        } catch {
+            errorMessage.value =
+                errorString.response?.data?.message || errorString?.message;
+            ("Failed to revoke access.");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
     }
 };
-
-onMounted(() => {
-    organizationStore.fetchOrganizations();
-});
 </script>
