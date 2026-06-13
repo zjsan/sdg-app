@@ -176,7 +176,7 @@
 </template>
 <script setup>
 import Authenticated from "../Dashboard Template/Layout/Authenticated.vue";
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, watch } from "vue";
 import { usePowerBiStore } from "../../../stores/powerBi.js";
 import { useOrganizationStore } from "../../../stores/organization.js";
 import PageHeader from "../Dashboard Template/Component/PageHeader.vue";
@@ -186,6 +186,7 @@ import BaseButton from "../Dashboard Template/Component/BaseButton.vue";
 import debounce from "lodash/debounce"; //for debouncing search input
 import { usePagination } from "@/composables/usePagination";
 import { Input } from "@/components/ui/input";
+import { storeToRefs } from "pinia";
 
 const pbiStore = usePowerBiStore();
 const organizationStore = useOrganizationStore();
