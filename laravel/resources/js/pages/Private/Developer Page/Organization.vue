@@ -208,6 +208,20 @@ const loadPage = async (pageNumber, searchKeyword = searchQuery.value) => {
     }
 };
 
+// Custom pagination composable to manage pagination state and logic
+const {
+    currentPage,
+    lastPage,
+    totalItems,
+    isLoading,
+    visiblePages,
+    rangeStart,
+    rangeEnd,
+    prevPage,
+    nextPage,
+    goToPage,
+} = usePagination(organizationStore, loadPage);
+
 //for editing
 const openEditModal = (org) => {
     selectedOrg.value = org;
