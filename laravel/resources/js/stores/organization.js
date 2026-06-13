@@ -18,6 +18,11 @@ export const useOrganizationStore = defineStore("organization", {
             this.errors = null;
             this.loading = true;
 
+            //clear ongoing request before starting new one
+            if (this.currentAbortController) {
+                this.currentAbortController.abort();
+            }
+
             //intializing a new abort controller for new request and assigning it to the store's state to track it
             const controller = new AbortController();
             this.currentAbortController = controller;
@@ -41,10 +46,10 @@ export const useOrganizationStore = defineStore("organization", {
                     this.organizations = payload.data || [];
 
                     // Update pagination info
-                    this.currentPage = page;
-                    this.itemsPerPage = perPage;
-                    this.lastPage = response.data.last_page || 1;
-                    this.totalItems = response.data.total || 0;
+                    this.currentPage = payload.meta?.current_page || page;
+                    this.itemsPerPage = payload.meta?.per_page || perPage;
+                    this.lastPage = payload.meta?.last_page || 1;
+                    this.totalItems = payload.meta?.total || 0;
 
                     //clean up the abort controller reference since the request has completed
                     if (this.currentAbortController === controller) {
@@ -58,13 +63,13 @@ export const useOrganizationStore = defineStore("organization", {
                     error.name === "CanceledError" ||
                     api.isCancel(error)
                 ) {
-                    console.log("Request safely aborted.");
+                    console.log("Organizations fetch request safely aborted.");
                     return; // Graceful exit
                 }
                 //handle backend/network errors
                 const errMsg =
                     error.response?.data?.message ||
-                    "Failed to load allowed emails.";
+                    "Failed to load organizations.";
                 this.errors = errMsg;
                 throw error;
             } finally {
