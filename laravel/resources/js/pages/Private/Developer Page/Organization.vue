@@ -222,6 +222,11 @@ const {
     goToPage,
 } = usePagination(organizationStore, loadPage);
 
+//debounced search function to limit API calls while typing in the search input
+const debouncedSearch = debounce((targetQuery) => {
+    loadPage(1, targetQuery);
+}, 500);
+
 //for editing
 const openEditModal = (org) => {
     selectedOrg.value = org;
