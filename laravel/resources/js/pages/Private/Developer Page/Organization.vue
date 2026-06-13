@@ -12,6 +12,12 @@
                 </template>
             </PageHeader>
 
+            <Input
+                v-model="searchQuery"
+                type="text"
+                placeholder="Search by email, group, or role..."
+                class="w-full pl-9 pr-4 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none bg-white transition-all text-slate-700 placeholder:text-slate-400/90 shadow-inner"
+            />
             <div
                 class="flex justify-end py-4 border-b border-slate-100 flex justify-end bg-slate-50/50"
             >
@@ -179,6 +185,7 @@ import BaseModal from "../Dashboard Template/Component/BaseModal.vue";
 import BaseButton from "../Dashboard Template/Component/BaseButton.vue";
 import debounce from "lodash/debounce"; //for debouncing search input
 import { usePagination } from "@/composables/usePagination";
+import { Input } from "@/components/ui/input";
 
 const pbiStore = usePowerBiStore();
 const organizationStore = useOrganizationStore();
@@ -187,6 +194,7 @@ const selectedOrg = ref(null); //if null means adding
 const editValue = ref("");
 const orgName = ref("");
 const selectedOrgId = ref(null);
+const searchQuery = ref("");
 
 // Component-level feedback states
 const successMessage = ref("");
