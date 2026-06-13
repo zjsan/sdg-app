@@ -365,7 +365,20 @@ const handleSubmit = async () => {
 const confirmDelete = async (id) => {
     selectedOrgId.value = id; //store the ID of the organization to be deleted
     if (confirm("Are you sure you want to delete this organization?")) {
-        await organizationStore.deleteOrganization(selectedOrgId.value); //call the delete action in the store
+        {
+        try {
+            const data = await organizationStore.deleteOrganization(selectedOrgId.value); //call the delete action in the store
+            flashSuccess(
+                data?.message || "Clearance rule successfully dropped.",
+            );
+        } catch (errorString) {
+            // console.log("Full Axios Error Object:", errorString);
+            // console.log("Server Response Data:", errorString.response?.data);
+            errorMessage.value =
+                errorString.response?.data?.message || errorString?.message;
+            ("Failed to revoke access.");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
     }
 };
 </script>
