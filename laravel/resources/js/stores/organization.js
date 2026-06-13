@@ -18,6 +18,10 @@ export const useOrganizationStore = defineStore("organization", {
             this.errors = null;
             this.loading = true;
 
+            if (this.currentAbortController) {
+                this.currentAbortController.abort();
+            }
+
             //intializing a new abort controller for new request and assigning it to the store's state to track it
             const controller = new AbortController();
             this.currentAbortController = controller;
