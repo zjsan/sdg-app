@@ -241,6 +241,10 @@ watch(searchQuery, (newVal, oldVal) => {
     debouncedSearch(currentText);
 });
 
+onMounted(() => {
+    loadPage(currentPage.value, searchQuery.value.trim() || "");
+});
+
 //for editing
 const openEditModal = (org) => {
     selectedOrg.value = org;
@@ -342,8 +346,4 @@ const confirmDelete = async (id) => {
         await organizationStore.deleteOrganization(selectedOrgId.value); //call the delete action in the store
     }
 };
-
-onMounted(() => {
-    organizationStore.fetchOrganizations();
-});
 </script>
