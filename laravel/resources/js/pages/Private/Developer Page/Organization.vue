@@ -4,20 +4,39 @@
             <!-- 1. Page Header -->
             <PageHeader>
                 <template #title>Power BI Link Management</template>
-                <template #subtitle>
-                    <span class="font-medium text-slate-700">
-                        {{ organizationStore.organizations.length }}
-                    </span>
-                    active organizations.
-                </template>
             </PageHeader>
 
-            <Input
-                v-model="searchQuery"
-                type="text"
-                placeholder="Search by email, group, or role..."
-                class="w-full pl-9 pr-4 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none bg-white transition-all text-slate-700 placeholder:text-slate-400/90 shadow-inner"
-            />
+            <div class="space-y-3">
+                <div
+                    v-if="successMessage"
+                    class="p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-sm flex items-center justify-between shadow-sm animate-in fade-in duration-200"
+                >
+                    <div class="flex items-center gap-2">
+                        <span class="font-medium">{{ successMessage }}</span>
+                    </div>
+                    <button
+                        @click="successMessage = ''"
+                        class="text-emerald-400 hover:text-emerald-600 transition-colors text-lg font-semibold px-1"
+                    >
+                        &times;
+                    </button>
+                </div>
+
+                <div
+                    v-if="errorMessage"
+                    class="p-4 bg-rose-50 border border-rose-200 text-rose-800 rounded-xl text-sm flex items-center justify-between shadow-sm animate-in fade-in duration-200"
+                >
+                    <div class="flex items-center gap-2">
+                        <span class="font-medium">{{ errorMessage }}</span>
+                    </div>
+                    <button
+                        @click="errorMessage = ''"
+                        class="text-rose-400 hover:text-rose-600 transition-colors text-lg font-semibold px-1"
+                    >
+                        &times;
+                    </button>
+                </div>
+            </div>
             <div
                 class="flex justify-end py-4 border-b border-slate-100 flex justify-end bg-slate-50/50"
             >
