@@ -212,6 +212,51 @@
                         </TableRow>
                     </template>
                 </AppTable>
+
+                <!--Pagination control-->
+                <div
+                    class="flex flex-col sm:flex-row items-center justify-between px-6 py-4 bg-slate-50/40 border-t border-slate-200/80 gap-4"
+                >
+                    <div
+                        class="text-xs text-slate-500 font-medium order-2 sm:order-1"
+                    >
+                        Showing
+                        <span class="text-slate-800 font-semibold">
+                            {{ rangeStart }}
+                        </span>
+                        to
+                        <span class="text-slate-800 font-semibold">
+                            {{ rangeEnd }}
+                        </span>
+                        of
+                        <span class="text-slate-800 font-semibold">
+                            {{ totalItems }}
+                        </span>
+                        organizations
+                    </div>
+
+                    <div class="flex items-center gap-1.5 order-1 sm:order-2">
+                        <button
+                            @click="prevPage"
+                            :disabled="currentPage === 1"
+                            class="inline-flex items-center justify-center min-w-8 h-8 px-2 rounded-lg border border-slate-200 bg-white text-slate-600 text-xs font-medium shadow-sm transition-all hover:bg-slate-50 disabled:opacity-40"
+                        >
+                            Prev
+                        </button>
+
+                        <span class="text-xs font-medium text-slate-500">
+                            Page {{ currentPage }} of {{ lastPage }}
+                        </span>
+
+                        <button
+                            @click="nextPage"
+                            :disabled="currentPage === lastPage"
+                            class="inline-flex items-center justify-center min-w-8 h-8 px-2 rounded-lg border border-slate-200 bg-white text-slate-600 text-xs font-medium shadow-sm transition-all hover:bg-slate-50 disabled:opacity-40"
+                        >
+                            Next
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <!-- Modal -->
