@@ -1,46 +1,22 @@
 <template>
     <Authenticated>
         <div class="p-8 max-w-6xl mx-auto">
-            <!-- 1. Page Header -->
             <PageHeader>
                 <template #title>Power BI Link Management</template>
+
+                <template #subtitle>
+                    Manage Power BI embed configurations across
+                    <span class="font-semibold text-slate-700">
+                        {{ organizationStore.organizations.length }}
+                    </span>
+                    registered organizations.
+                </template>
             </PageHeader>
-
-            <div class="space-y-3">
-                <div
-                    v-if="successMessage"
-                    class="p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-sm flex items-center justify-between shadow-sm animate-in fade-in duration-200"
-                >
-                    <div class="flex items-center gap-2">
-                        <span class="font-medium">{{ successMessage }}</span>
-                    </div>
-                    <button
-                        @click="successMessage = ''"
-                        class="text-emerald-400 hover:text-emerald-600 transition-colors text-lg font-semibold px-1"
-                    >
-                        &times;
-                    </button>
-                </div>
-
-                <div
-                    v-if="errorMessage"
-                    class="p-4 bg-rose-50 border border-rose-200 text-rose-800 rounded-xl text-sm flex items-center justify-between shadow-sm animate-in fade-in duration-200"
-                >
-                    <div class="flex items-center gap-2">
-                        <span class="font-medium">{{ errorMessage }}</span>
-                    </div>
-                    <button
-                        @click="errorMessage = ''"
-                        class="text-rose-400 hover:text-rose-600 transition-colors text-lg font-semibold px-1"
-                    >
-                        &times;
-                    </button>
-                </div>
-            </div>
 
             <div
                 class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden"
             >
+                <!-- Toolbar -->
                 <div
                     class="flex flex-col sm:flex-row justify-between items-center gap-4 p-4 bg-slate-50/50 border-b border-slate-200/60"
                 >
@@ -63,10 +39,11 @@
                                 />
                             </svg>
                         </span>
+
                         <Input
                             v-model="searchQuery"
                             type="text"
-                            placeholder="Search by email, group, or role..."
+                            placeholder="Search organization..."
                             class="w-full pl-9 pr-4 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none bg-white transition-all text-slate-700 placeholder:text-slate-400/90 shadow-inner"
                         />
                     </div>
@@ -89,10 +66,12 @@
                                 d="M12 4v16m8-8H4"
                             />
                         </svg>
-                        Authorize Access
+
+                        Add Organization
                     </BaseButton>
                 </div>
-                <!-- 2. Reusable Table -->
+
+                <!-- Table -->
                 <AppTable>
                     <template #header>
                         <TableHead
@@ -115,119 +94,243 @@
                     </template>
 
                     <template #body>
+                        <!-- Empty State -->
+                        <TableRow
+                            v-if="organizationStore.organizations.length === 0"
+                        >
+                            <TableCell colspan="3" class="py-16 text-center">
+                                <div
+                                    class="flex flex-col items-center justify-center space-y-2"
+                                >
+                                    <template v-if="organizationStore.loading">
+                                        <div
+                                            class="h-5 w-5 animate-spin rounded-full border-2 border-slate-200 border-t-indigo-600"
+                                        ></div>
+
+                                        <p
+                                            class="text-sm font-medium text-slate-500"
+                                        >
+                                            Loading organizations...
+                                        </p>
+                                    </template>
+
+                                    <template v-else>
+                                        <p
+                                            class="text-sm font-medium text-slate-600"
+                                        >
+                                            No organizations found.
+                                        </p>
+
+                                        <p class="text-xs text-slate-400">
+                                            Add an organization to configure
+                                            Power BI access.
+                                        </p>
+                                    </template>
+                                </div>
+                            </TableCell>
+                        </TableRow>
+
+                        <!-- Rows -->
                         <TableRow
                             v-for="org in organizationStore.organizations"
+                            v-else
                             :key="org.id"
-                            class="hover:bg-slate-50 transition-colors"
+                            class="hover:bg-slate-50/30 transition-colors group"
                         >
-                            <td class="px-6 py-4">
-                                <div class="font-semibold text-slate-900">
-                                    {{ org.name }}
-                                </div>
-                                <div class="text-xs text-slate-400">
-                                    ID: {{ org.id }}
-                                </div>
-                            </td>
+                            <TableCell class="py-3.5 pl-4">
+                                <div class="flex flex-col">
+                                    <span
+                                        class="font-medium text-[13px] text-slate-700"
+                                    >
+                                        {{ org.name }}
+                                    </span>
 
-                            <td class="px-6 py-4">
+                                    <span class="text-xs text-slate-400">
+                                        ID: {{ org.id }}
+                                    </span>
+                                </div>
+                            </TableCell>
+
+                            <TableCell class="py-3.5">
                                 <div
                                     v-if="org.pbi_embed_id"
-                                    class="flex items-center space-x-2"
+                                    class="flex items-center gap-2"
                                 >
                                     <span
-                                        class="px-2 py-1 bg-indigo-50 text-indigo-700 rounded text-xs font-mono"
+                                        class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-medium border bg-indigo-50/60 text-indigo-700 border-indigo-100 font-mono"
                                     >
                                         {{
-                                            org.pbi_embed_id.substring(0, 15)
-                                        }}...
+                                            org.pbi_embed_id.length > 25
+                                                ? org.pbi_embed_id.substring(
+                                                      0,
+                                                      25,
+                                                  ) + "..."
+                                                : org.pbi_embed_id
+                                        }}
                                     </span>
+
                                     <button
                                         @click="
                                             copyToClipboard(org.pbi_embed_id)
                                         "
-                                        class="text-xs text-blue-600 hover:text-indigo-800"
+                                        title="Copy embed ID"
+                                        class="inline-flex items-center justify-center w-7 h-7 rounded-lg border border-slate-200 bg-white text-slate-500 shadow-sm hover:bg-slate-50 hover:text-slate-900 transition-all"
                                     >
-                                        Copy
+                                        <i class="pi pi-copy text-xs"></i>
                                     </button>
                                 </div>
-                                <span
-                                    v-else
-                                    class="text-sm text-slate-400 italic"
-                                    >No link configured</span
-                                >
-                            </td>
 
-                            <td class="px-6 py-4 text-right space-x-2">
-                                <BaseButton
-                                    variant="secondary"
-                                    @click="openEditModal(org)"
-                                    >Edit Link</BaseButton
+                                <div
+                                    v-else
+                                    class="text-xs text-slate-400 italic"
                                 >
-                                <BaseButton
-                                    variant="secondary"
-                                    @click="confirmDelete(org.id)"
-                                    >Delete</BaseButton
+                                    No embed configuration assigned.
+                                </div>
+                            </TableCell>
+
+                            <TableCell class="text-center py-3.5 pr-4">
+                                <div
+                                    class="flex items-center justify-center gap-1.5 opacity-60 group-hover:opacity-100 transition-opacity"
                                 >
-                            </td>
+                                    <button
+                                        @click="openEditModal(org)"
+                                        title="Edit link"
+                                        class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-slate-200 bg-white text-slate-600 shadow-sm hover:bg-slate-50 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 transition-all cursor-pointer"
+                                    >
+                                        <i class="pi pi-file-edit text-xs"></i>
+                                    </button>
+
+                                    <button
+                                        @click="confirmDelete(org.id)"
+                                        title="Delete organization"
+                                        class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-slate-200 bg-white text-slate-500 shadow-sm hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2 transition-all cursor-pointer"
+                                    >
+                                        <i class="pi pi-trash text-xs"></i>
+                                    </button>
+                                </div>
+                            </TableCell>
                         </TableRow>
                     </template>
                 </AppTable>
+
+                <!--Pagination control-->
+                <div
+                    class="flex flex-col sm:flex-row items-center justify-between px-6 py-4 bg-slate-50/40 border-t border-slate-200/80 gap-4"
+                >
+                    <div
+                        class="text-xs text-slate-500 font-medium order-2 sm:order-1"
+                    >
+                        Showing
+                        <span class="text-slate-800 font-semibold">
+                            {{ rangeStart }}
+                        </span>
+                        to
+                        <span class="text-slate-800 font-semibold">
+                            {{ rangeEnd }}
+                        </span>
+                        of
+                        <span class="text-slate-800 font-semibold">
+                            {{ totalItems }}
+                        </span>
+                        organizations
+                    </div>
+
+                    <div class="flex items-center gap-1.5 order-1 sm:order-2">
+                        <button
+                            @click="prevPage"
+                            :disabled="currentPage === 1"
+                            class="inline-flex items-center justify-center min-w-8 h-8 px-2 rounded-lg border border-slate-200 bg-white text-slate-600 text-xs font-medium shadow-sm transition-all hover:bg-slate-50 disabled:opacity-40"
+                        >
+                            Prev
+                        </button>
+
+                        <span class="text-xs font-medium text-slate-500">
+                            Page {{ currentPage }} of {{ lastPage }}
+                        </span>
+
+                        <button
+                            @click="nextPage"
+                            :disabled="currentPage === lastPage"
+                            class="inline-flex items-center justify-center min-w-8 h-8 px-2 rounded-lg border border-slate-200 bg-white text-slate-600 text-xs font-medium shadow-sm transition-all hover:bg-slate-50 disabled:opacity-40"
+                        >
+                            Next
+                        </button>
+                    </div>
+                </div>
             </div>
 
-            <!-- 3. Reusable Modal -->
+            <!-- Modal -->
             <BaseModal :show="isModalOpen" @close="closeModal">
                 <template #title>
                     {{
                         selectedOrg
-                            ? "Update Embed Link"
+                            ? "Update Embed Configuration"
                             : "Add New Organization"
                     }}
                 </template>
 
-                <span
-                    v-if="selectedOrg"
-                    class="text-sm text-slate-500 block mb-2"
-                >
-                    {{ "Editing Organization: " + selectedOrg.name }}
-                </span>
-                <div class="space-y-4">
-                    <div v-if="!selectedOrg">
+                <div class="space-y-5 my-3 text-left">
+                    <div
+                        v-if="selectedOrg"
+                        class="p-3 rounded-lg bg-slate-50 border border-slate-200 text-sm text-slate-600"
+                    >
+                        Editing organization:
+                        <span class="font-medium text-slate-800">
+                            {{ selectedOrg.name }}
+                        </span>
+                    </div>
+
+                    <div v-if="!selectedOrg" class="flex flex-col">
                         <label
-                            class="block text-xs font-bold uppercase text-slate-400 mb-2"
-                            >Organization Name</label
+                            class="text-sm font-medium text-slate-700 mb-1.5"
                         >
-                        <input
+                            Organization Name
+                        </label>
+
+                        <Input
                             v-model="orgName"
                             type="text"
-                            class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50"
                             placeholder="e.g. CHED"
+                            class="h-10 px-3.5 bg-white text-slate-800 rounded-lg border border-slate-200 shadow-sm transition-all outline-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500"
                         />
                     </div>
 
-                    <div>
+                    <div class="flex flex-col">
                         <label
-                            class="block text-xs font-bold uppercase text-slate-400 mb-2"
-                            >Power BI Embed ID / URL</label
+                            class="text-sm font-medium text-slate-700 mb-1.5"
                         >
+                            Power BI Embed ID / URL
+                        </label>
+
                         <textarea
                             v-model="editValue"
-                            rows="4"
-                            class="w-full px-3 py-2 font-mono text-sm border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50"
+                            rows="5"
+                            class="w-full px-3.5 py-2.5 font-mono text-[13px] bg-white text-slate-800 rounded-lg border border-slate-200 shadow-sm transition-all outline-none resize-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500"
+                            placeholder="Paste Power BI embed URL or embed ID..."
                         ></textarea>
+
+                        <span class="mt-1.5 text-xs text-slate-400">
+                            This value will be used when rendering the Power BI
+                            report for the selected organization.
+                        </span>
                     </div>
                 </div>
 
                 <template #actions>
-                    <BaseButton variant="secondary" @click="closeModal"
-                        >Cancel</BaseButton
+                    <BaseButton variant="secondary" @click="closeModal">
+                        Cancel
+                    </BaseButton>
+
+                    <BaseButton
+                        @click="handleSubmit"
+                        :disabled="organizationStore.loading"
                     >
-                    <BaseButton @click="handleSubmit">
                         {{
                             organizationStore.loading
-                                ? "Processing..."
+                                ? "Saving..."
                                 : selectedOrg
                                   ? "Save Changes"
-                                  : "Create"
+                                  : "Create Organization"
                         }}
                     </BaseButton>
                 </template>
@@ -248,6 +351,14 @@ import debounce from "lodash/debounce"; //for debouncing search input
 import { usePagination } from "@/composables/usePagination";
 import { Input } from "@/components/ui/input";
 import { storeToRefs } from "pinia";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 
 const pbiStore = usePowerBiStore();
 const organizationStore = useOrganizationStore();
