@@ -213,7 +213,6 @@
                     </template>
                 </AppTable>
 
-                <!--Pagination control-->
                 <!--pagination control-->
                 <div
                     class="flex flex-col sm:flex-row items-center justify-between px-6 py-4 bg-slate-50/40 border-t border-slate-200/80 gap-4"
@@ -450,6 +449,17 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const pbiStore = usePowerBiStore();
 const organizationStore = useOrganizationStore();
