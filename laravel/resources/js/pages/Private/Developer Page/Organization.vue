@@ -214,6 +214,7 @@
                 </AppTable>
 
                 <!--Pagination control-->
+                <!--pagination control-->
                 <div
                     class="flex flex-col sm:flex-row items-center justify-between px-6 py-4 bg-slate-50/40 border-t border-slate-200/80 gap-4"
                 >
@@ -221,39 +222,129 @@
                         class="text-xs text-slate-500 font-medium order-2 sm:order-1"
                     >
                         Showing
-                        <span class="text-slate-800 font-semibold">
-                            {{ rangeStart }}
-                        </span>
+                        <span class="text-slate-800 font-semibold">{{
+                            rangeStart
+                        }}</span>
                         to
-                        <span class="text-slate-800 font-semibold">
-                            {{ rangeEnd }}
-                        </span>
+                        <span class="text-slate-800 font-semibold">{{
+                            rangeEnd
+                        }}</span>
                         of
-                        <span class="text-slate-800 font-semibold">
-                            {{ totalItems }}
-                        </span>
-                        organizations
+                        <span class="text-slate-800 font-semibold">{{
+                            totalItems
+                        }}</span>
+                        entries
                     </div>
 
-                    <div class="flex items-center gap-1.5 order-1 sm:order-2">
+                    <div
+                        class="flex items-center gap-1.5 order-1 sm:order-2 w-full sm:w-auto justify-end"
+                    >
                         <button
                             @click="prevPage"
-                            :disabled="currentPage === 1"
-                            class="inline-flex items-center justify-center min-w-8 h-8 px-2 rounded-lg border border-slate-200 bg-white text-slate-600 text-xs font-medium shadow-sm transition-all hover:bg-slate-50 disabled:opacity-40"
+                            :disabled="
+                                currentPage === 1 || organizationStore.loading
+                            "
+                            class="inline-flex items-center justify-center min-w-8 h-8 px-2 rounded-lg border border-slate-200 bg-white text-slate-600 text-xs font-medium shadow-sm transition-all hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white disabled:cursor-not-allowed cursor-pointer select-none"
                         >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="w-3.5 h-3.5 mr-1"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M15 19l-7-7 7-7"
+                                />
+                            </svg>
                             Prev
                         </button>
 
-                        <span class="text-xs font-medium text-slate-500">
+                        <div class="hidden md:flex items-center gap-1">
+                            <button
+                                v-if="visiblePages[0] > 1"
+                                @click="goToPage(1)"
+                                :disabled="organizationStore.loading"
+                                class="w-8 h-8 rounded-lg text-xs font-semibold border bg-white text-slate-600 border-slate-200 hover:bg-slate-50 disabled:opacity-50"
+                            >
+                                1
+                            </button>
+
+                            <span
+                                v-if="visiblePages[0] > 2"
+                                class="text-slate-400 text-xs px-1"
+                                >...</span
+                            >
+
+                            <button
+                                v-for="page in visiblePages"
+                                :key="page"
+                                @click="goToPage(page)"
+                                :disabled="organizationStore.loading"
+                                :class="[
+                                    'w-8 h-8 rounded-lg text-xs font-semibold border transition-all cursor-pointer select-none',
+                                    currentPage === page
+                                        ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm shadow-indigo-500/10'
+                                        : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 disabled:opacity-50',
+                                ]"
+                            >
+                                {{ page }}
+                            </button>
+
+                            <span
+                                v-if="
+                                    visiblePages[visiblePages.length - 1] <
+                                    lastPage - 1
+                                "
+                                class="text-slate-400 text-xs px-1"
+                                >...</span
+                            >
+
+                            <button
+                                v-if="
+                                    visiblePages[visiblePages.length - 1] <
+                                    lastPage
+                                "
+                                @click="goToPage(lastPage)"
+                                :disabled="organizationStore.loading"
+                                class="w-8 h-8 rounded-lg text-xs font-semibold border bg-white text-slate-600 border-slate-200 hover:bg-slate-50 disabled:opacity-50"
+                            >
+                                {{ lastPage }}
+                            </button>
+                        </div>
+
+                        <span
+                            class="text-xs font-medium text-slate-500 md:hidden px-2"
+                        >
                             Page {{ currentPage }} of {{ lastPage }}
                         </span>
 
                         <button
                             @click="nextPage"
-                            :disabled="currentPage === lastPage"
-                            class="inline-flex items-center justify-center min-w-8 h-8 px-2 rounded-lg border border-slate-200 bg-white text-slate-600 text-xs font-medium shadow-sm transition-all hover:bg-slate-50 disabled:opacity-40"
+                            :disabled="
+                                currentPage === lastPage ||
+                                organizationStore.loading
+                            "
+                            class="inline-flex items-center justify-center min-w-8 h-8 px-2 rounded-lg border border-slate-200 bg-white text-slate-600 text-xs font-medium shadow-sm transition-all hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white disabled:cursor-not-allowed cursor-pointer select-none"
                         >
                             Next
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="w-3.5 h-3.5 ml-1"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M9 5l7 7-7 7"
+                                />
+                            </svg>
                         </button>
                     </div>
                 </div>
