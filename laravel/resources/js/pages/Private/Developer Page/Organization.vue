@@ -7,7 +7,7 @@
                 <template #subtitle>
                     Manage Power BI embed configurations across
                     <span class="font-semibold text-slate-700">
-                        {{ organizationStore.organizations.length }}
+                        {{ organizations.totalItems }}
                     </span>
                     registered organizations.
                 </template>
@@ -95,9 +95,7 @@
 
                     <template #body>
                         <!-- Empty State -->
-                        <TableRow
-                            v-if="organizationStore.organizations.length === 0"
-                        >
+                        <TableRow v-if="organizations.length === 0">
                             <TableCell colspan="3" class="py-16 text-center">
                                 <div
                                     class="flex flex-col items-center justify-center space-y-2"
@@ -132,7 +130,7 @@
 
                         <!-- Rows -->
                         <TableRow
-                            v-for="org in organizationStore.organizations"
+                            v-for="org in organizations"
                             v-else
                             :key="org.id"
                             class="hover:bg-slate-50/30 transition-colors group"
