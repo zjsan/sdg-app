@@ -141,11 +141,14 @@ export const useOrganizationStore = defineStore("organization", {
                     response.message ||
                         `Organization ${id} deleted successfully.`,
                 );
+
+                return response.data || response; //return response to the component
             } catch (error) {
                 this.errors =
                     error.response?.data?.message ||
                     `Failed to delete organization ${id}.`;
                 console.error(error);
+                throw error;
             } finally {
                 this.loading = false;
             }
