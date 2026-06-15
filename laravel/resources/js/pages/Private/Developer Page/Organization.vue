@@ -695,6 +695,7 @@ const executeDelete = async () => {
     if (!selectedOrgId.value) return;
 
     isDeleting.value = true;
+    errorMessage.value = ""; //clear any previous error
 
     try {
         const data = await organizationStore.deleteOrganization(
@@ -705,11 +706,12 @@ const executeDelete = async () => {
         // Reset state on successful execution
         selectedOrgId.value = null;
     } catch (error) {
+        console.error("Component caught error:", error);
+
         errorMessage.value =
-            errorString.response?.data?.message ||
-            errorString?.message ||
-            error.message;
-        ("Failed to revoke access.");
+            error.response?.data?.message ||
+            error.message ||
+            "Failed to revoke access.";
         window.scrollTo({ top: 0, behavior: "smooth" });
     } finally {
         isDeleting.value = false;
