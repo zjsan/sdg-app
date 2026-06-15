@@ -13,6 +13,39 @@
                 </template>
             </PageHeader>
 
+            <!--UI success and error alert messages-->
+            <div class="space-y-3">
+                <div
+                    v-if="successMessage"
+                    class="p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-sm flex items-center justify-between shadow-sm animate-in fade-in duration-200"
+                >
+                    <div class="flex items-center gap-2">
+                        <span class="font-medium">{{ successMessage }}</span>
+                    </div>
+                    <button
+                        @click="successMessage = ''"
+                        class="text-emerald-400 hover:text-emerald-600 transition-colors text-lg font-semibold px-1"
+                    >
+                        &times;
+                    </button>
+                </div>
+
+                <div
+                    v-if="errorMessage"
+                    class="p-4 bg-rose-50 border border-rose-200 text-rose-800 rounded-xl text-sm flex items-center justify-between shadow-sm animate-in fade-in duration-200"
+                >
+                    <div class="flex items-center gap-2">
+                        <span class="font-medium">{{ errorMessage }}</span>
+                    </div>
+                    <button
+                        @click="errorMessage = ''"
+                        class="text-rose-400 hover:text-rose-600 transition-colors text-lg font-semibold px-1"
+                    >
+                        &times;
+                    </button>
+                </div>
+            </div>
+
             <div
                 class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden"
             >
