@@ -237,11 +237,11 @@
                                             </AlertDialogHeader>
 
                                             <AlertDialogFooter
-                                                class="mt-6 gap-2 sm:gap-0"
+                                                class="mt-6 flex flex-col-reverse sm:flex-row sm:justify-end gap-3 sm:gap-2"
                                             >
                                                 <AlertDialogCancel
                                                     :disabled="isDeleting"
-                                                    class="cursor-pointer border-slate-200 text-slate-700 hover:bg-slate-50"
+                                                    class="mt-0 cursor-pointer border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors"
                                                 >
                                                     Cancel
                                                 </AlertDialogCancel>
