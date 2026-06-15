@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import api from "@/plugins/axios";
+import { NIL } from "uuid";
 
 export const useOrganizationStore = defineStore("organization", {
     // other options...
@@ -85,6 +86,8 @@ export const useOrganizationStore = defineStore("organization", {
 
         async createOrganization(name, pbi_embed_id) {
             this.loading = true;
+            this.errors.null;
+
             try {
                 const response = await api.post("/organizations", {
                     name,
@@ -102,8 +105,10 @@ export const useOrganizationStore = defineStore("organization", {
             }
         },
 
-        async UpdateOrganizations(id, newId) {
+        async updateOrganizations(id, newId) {
             this.loading = true;
+            this.errors = null;
+
             try {
                 const response = await api.put(`/organizations/${id}`, {
                     pbi_embed_id: newId,
@@ -124,10 +129,7 @@ export const useOrganizationStore = defineStore("organization", {
 
         async deleteOrganization(id) {
             this.loading = true;
-
-            if (!confirm("Are you sure?")) {
-                return;
-            }
+            this.errors = null;
             try {
                 const response = await api.delete(`/organizations/${id}`);
 
