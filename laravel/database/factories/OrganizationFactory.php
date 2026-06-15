@@ -24,9 +24,9 @@ class OrganizationFactory extends Factory
 
         return [
             //
-            'name' => $name,
+            'name' => Str::upper($name),
             'slug' => Str::slug($name),
-            'pbi_embed' => fake()->uuid(),
+            'pbi_embed_id' => fake()->uuid(),
         ];
     }
 }
