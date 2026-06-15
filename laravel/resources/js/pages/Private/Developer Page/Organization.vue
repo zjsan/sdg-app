@@ -632,6 +632,15 @@ const copyToClipboard = async (text) => {
     }
 };
 
+// clear top-level alert systems automatically after a timeout
+const flashSuccess = (msg) => {
+    successMessage.value = msg;
+    errorMessage.value = "";
+    setTimeout(() => {
+        successMessage.value = "";
+    }, 5000);
+};
+
 const handleSubmit = async () => {
     //  console.log("ID:", id, "New PBI ID:", newId);
 
