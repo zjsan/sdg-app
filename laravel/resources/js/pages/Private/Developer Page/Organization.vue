@@ -192,6 +192,7 @@
                                 <div
                                     class="flex items-center justify-center gap-1.5 opacity-60 group-hover:opacity-100 transition-opacity"
                                 >
+                                    <!--Edit button and form trigger-->
                                     <button
                                         @click="openEditModal(org)"
                                         title="Edit link"
@@ -200,13 +201,69 @@
                                         <i class="pi pi-file-edit text-xs"></i>
                                     </button>
 
-                                    <button
-                                        @click="confirmDelete(org.id)"
-                                        title="Delete organization"
-                                        class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-slate-200 bg-white text-slate-500 shadow-sm hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2 transition-all cursor-pointer"
-                                    >
-                                        <i class="pi pi-trash text-xs"></i>
-                                    </button>
+                                    <!--delete dialog box-->
+                                    <AlertDialog>
+                                        <AlertDialogTrigger as-child>
+                                            <button
+                                                @click="selectedOrgId = org.id"
+                                                title="Delete organization"
+                                                class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-slate-200 bg-white text-slate-500 shadow-sm hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2 transition-all cursor-pointer"
+                                            >
+                                                <i
+                                                    class="pi pi-trash text-xs"
+                                                ></i>
+                                            </button>
+                                        </AlertDialogTrigger>
+
+                                        <AlertDialogContent
+                                            class="max-w-[400px]"
+                                        >
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle
+                                                    class="text-xl font-semibold text-slate-900"
+                                                >
+                                                    Delete Organization?
+                                                </AlertDialogTitle>
+                                                <AlertDialogDescription
+                                                    class="text-sm text-slate-500 mt-2 leading-relaxed"
+                                                >
+                                                    This action cannot be
+                                                    undone. This will
+                                                    permanently delete the
+                                                    organization and remove all
+                                                    associated data from our
+                                                    servers.
+                                                </AlertDialogDescription>
+                                            </AlertDialogHeader>
+
+                                            <AlertDialogFooter
+                                                class="mt-6 gap-2 sm:gap-0"
+                                            >
+                                                <AlertDialogCancel
+                                                    :disabled="isDeleting"
+                                                    class="cursor-pointer border-slate-200 text-slate-700 hover:bg-slate-50"
+                                                >
+                                                    Cancel
+                                                </AlertDialogCancel>
+
+                                                <AlertDialogAction
+                                                    @click="executeDelete"
+                                                    :disabled="isDeleting"
+                                                    class="bg-rose-600 hover:bg-rose-700 text-white shadow-sm focus:ring-rose-500 transition-colors cursor-pointer disabled:opacity-70"
+                                                >
+                                                    <template v-if="isDeleting">
+                                                        <i
+                                                            class="pi pi-spinner animate-spin mr-2 text-xs"
+                                                        ></i>
+                                                        Deleting...
+                                                    </template>
+                                                    <template v-else>
+                                                        Delete Organization
+                                                    </template>
+                                                </AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
                                 </div>
                             </TableCell>
                         </TableRow>
