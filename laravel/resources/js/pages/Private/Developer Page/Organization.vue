@@ -531,6 +531,7 @@ const searchQuery = ref("");
 const successMessage = ref("");
 const errorMessage = ref("");
 const modalErrorMessage = ref("");
+const isDeleting = ref(false);
 
 //extract states from the store while maintaining reactivity
 const { organizations } = storeToRefs(organizationStore);
@@ -696,22 +697,21 @@ const executeDelete = async () => {
     if (!selectedOrgId.value) return;
 
     isDeleting.value = true;
+
     try {
         const data = await organizationStore.deleteOrganization(
             selectedOrgId.value,
-        );
-
+        ); //call the delete action in the store
         flashSuccess(data?.message || "Organization successfully deleted.");
 
         // Reset state on successful execution
         selectedOrgId.value = null;
     } catch (error) {
-        // Safe assignment checking for error payload
         errorMessage.value =
-            error.response?.data?.message ||
-            error.message ||
-            "Failed to revoke access.";
-
+            errorString.response?.data?.message ||
+            errorString?.message ||
+            error.message;
+        ("Failed to revoke access.");
         window.scrollTo({ top: 0, behavior: "smooth" });
     } finally {
         isDeleting.value = false;
