@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
  */
-class OrganizaationFactory extends Factory
+class OrganizationFactory extends Factory
 {
     protected $model = Organization::class;
 
