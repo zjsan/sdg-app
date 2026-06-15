@@ -692,22 +692,29 @@ const handleSubmit = async () => {
     });
 };
 
-const confirmDelete = async (id) => {
-    selectedOrgId.value = id; //store the ID of the organization to be deleted
-    if (confirm("Are you sure you want to delete this organization?")) {
-        try {
-            const data = await organizationStore.deleteOrganization(
-                selectedOrgId.value,
-            ); //call the delete action in the store
-            flashSuccess(
-                data?.message || "Clearance rule successfully dropped.",
-            );
-        } catch {
-            errorMessage.value =
-                errorString.response?.data?.message || errorString?.message;
-            ("Failed to revoke access.");
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        }
+const executeDelete = async () => {
+    if (!selectedOrgId.value) return;
+
+    isDeleting.value = true;
+    try {
+        const data = await organizationStore.deleteOrganization(
+            selectedOrgId.value,
+        );
+
+        flashSuccess(data?.message || "Organization successfully deleted.");
+
+        // Reset state on successful execution
+        selectedOrgId.value = null;
+    } catch (error) {
+        // Safe assignment checking for error payload
+        errorMessage.value =
+            error.response?.data?.message ||
+            error.message ||
+            "Failed to revoke access.";
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    } finally {
+        isDeleting.value = false;
     }
 };
 </script>
