@@ -45,22 +45,23 @@ class OrganizationRequest extends FormRequest
      */
     public function rules(): array
     {
-        $orgId = $this->route('organization')?->id;
+        $routeParam = $this->route('organization');
+        $orgId = is_object($routeParam) ? $routeParam->id : $routeParam;
 
         // Default rules for both Create and Update
         $rules = [
-            'pbi_embed_id' => 'required|string|min:10',
+            'pbi_embed_id' => 'required|string|min:10|max:255',
         ];
 
         if ($this->isMethod('post')) {
             // Rules strictly for CREATING
-            $rules['name'] = 'required|string|max:255|unique:organizations,name';
-            $rules['slug'] = 'required|string|max:255|unique:organizations,slug';
+            $rules['name'] = 'required|string|min:3|max:255|unique:organizations,name';
+            $rules['slug'] = 'required|string|min:3|max:255|unique:organizations,slug';
         } else {
             // Rules strictly for UPDATING
             // 'sometimes' means: if the key is missing from the JS payload, ignore it
-            $rules['name'] = 'sometimes|required|string|max:255|unique:organizations,name,' . $orgId;
-            $rules['slug'] = 'sometimes|required|string|max:255|unique:organizations,slug,' . $orgId;
+            $rules['name'] = 'sometimes|required|string|min:3|max:255|unique:organizations,name,' . $orgId;
+            $rules['slug'] = 'sometimes|required|string|min:3|max:255|unique:organizations,slug,' . $orgId;
         }
 
         return $rules;
