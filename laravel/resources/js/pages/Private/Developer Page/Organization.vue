@@ -527,6 +527,7 @@ import BaseModal from "../Dashboard Template/Component/BaseModal.vue";
 import BaseButton from "../Dashboard Template/Component/BaseButton.vue";
 import debounce from "lodash/debounce"; //for debouncing search input
 import { usePagination } from "@/composables/usePagination";
+import { useNotification } from "@/composables/useNotification.js";
 import { Input } from "@/components/ui/input";
 import { storeToRefs } from "pinia";
 import {
@@ -559,8 +560,14 @@ const selectedOrgId = ref(null);
 const searchQuery = ref("");
 
 // Component-level feedback states
-const successMessage = ref("");
-const errorMessage = ref("");
+const {
+    successMessage,
+    errorMessage,
+    flashSuccess,
+    flashError,
+    clearNotifications,
+} = useNotification();
+
 const modalErrorMessage = ref("");
 const isDeleting = ref(false);
 
@@ -663,15 +670,6 @@ const copyToClipboard = async (text) => {
         console.error("Failed to copy: ", err);
         alert("Failed to copy to clipboard.");
     }
-};
-
-// clear top-level alert systems automatically after a timeout
-const flashSuccess = (msg) => {
-    successMessage.value = msg;
-    errorMessage.value = "";
-    setTimeout(() => {
-        successMessage.value = "";
-    }, 5000);
 };
 
 const handleSubmit = async () => {
