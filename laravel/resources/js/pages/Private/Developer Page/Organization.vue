@@ -673,10 +673,9 @@ const copyToClipboard = async (text) => {
 };
 
 const handleSubmit = async () => {
-    //  console.log("ID:", id, "New PBI ID:", newId);
-
+    //clean validation using the notification composable
     if (!editValue.value || (!selectedOrg.value && !orgName.value)) {
-        alert("Please fill in all required fields.");
+        flashError("Please fill in all required fields.");
         return;
     }
 
@@ -686,26 +685,61 @@ const handleSubmit = async () => {
     modalErrorMessage.value = "";
 
     try {
+        let response;
+
         if (isUpdate) {
             //update action
-            const response = await organizationStore.updateOrganizations(
+            response = await organizationStore.updateOrganizations(
                 selectedOrg.value.id,
                 editValue.value,
             );
-            flashSuccess(response.data?.message || "Updated successfully.");
+            console.log("updated successfully");
         } else {
             //create action
-            const response = await organizationStore.createOrganization(
+            response = await organizationStore.createOrganization(
                 orgName.value,
                 editValue.value,
             );
             console.log("created successfully.");
+        }
+
+        const tasks = [organizationStore.fetchOrganizations()]; //always refresh org list after add/edit
+
+        // only force refresh power bi link when the operation is update
+        //this avoid uncessarry refresh
+        if (isUpdate) {
+            tasks.push(pbiStore.forceRefresh());
+        }
+
+        const refreshResults = await Promise.allSettled(tasks); //wait for all refresh tasks to complete
+
+        //evaluating background tasks
+        let refreshFailed = false;
+        refreshResults.forEach((result, index) => {
+            const taskLabel =
+                index === 0 ? "Organization List" : "Power BI Link";
+            if (result.status === "rejected") {
+                console.error(`Failed to refresh ${taskLabel}:`, result.reason);
+                refreshFailed = true;
+            }
+        });
+
+        closeModal(); //close modal once form is properly submitted
+
+        // If background tasks failed, append a warning to the success message
+        if (refreshFailed) {
             flashSuccess(
-                response.data?.message || "Organization added successfully!",
+                "Changes saved, but some data views are still updating in the background.",
+            );
+        } else {
+            flashSuccess(
+                response.data?.message ||
+                    `${isUpdate ? "Updated" : "Added"} successfully.`,
             );
         }
-        closeModal(); //close modal once form is properly submitted
     } catch (error) {
+        console.error("Form submission failed:", error);
+
         // backend error messages, backend message, axious error message, or a fallback string
         const errorText =
             error.response?.data?.message ||
@@ -713,32 +747,7 @@ const handleSubmit = async () => {
             "An unexpected error occurred.";
 
         modalErrorMessage.value = errorText;
-        return; //exit on failure
     }
-
-    const tasks = [organizationStore.fetchOrganizations()]; //always refresh org list after add/edit
-
-    // only force refresh power bi link when the operation is update
-    //this avoid uncessarry refresh
-    if (isUpdate) {
-        tasks.push(pbiStore.forceRefresh());
-    }
-
-    const refreshResults = await Promise.allSettled(tasks); //wait for all refresh tasks to complete
-
-    //log corresponding result for each task
-    refreshResults.forEach((result, index) => {
-        const taskLabel = index === 0 ? "Organization List" : "Power BI Link";
-
-        if (result.status === "rejected") {
-            console.error(`Failed to refresh ${taskLabel}:`, result.reason);
-            alert(`Failed to refresh ${taskLabel}`);
-        } else {
-            //if result status is fullfilled
-            console.log(`${taskLabel} refreshed successfully.`);
-            alert(`${taskLabel} refreshed successfully.`);
-        }
-    });
 };
 
 const executeDelete = async () => {
