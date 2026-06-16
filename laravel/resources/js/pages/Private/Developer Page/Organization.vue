@@ -682,27 +682,37 @@ const handleSubmit = async () => {
 
     const isUpdate = !!selectedOrg.value; //true if editing, false if adding
 
+    clearNotifications();
+    modalErrorMessage.value = "";
+
     try {
         if (isUpdate) {
             //update action
-            await organizationStore.UpdateOrganizations(
+            const response = await organizationStore.updateOrganizations(
                 selectedOrg.value.id,
                 editValue.value,
             );
-            console.log("updated successfully.");
+            flashSuccess(response.data?.message || "Updated successfully.");
         } else {
             //create action
-            await organizationStore.createOrganization(
+            const response = await organizationStore.createOrganization(
                 orgName.value,
                 editValue.value,
             );
             console.log("created successfully.");
-            alert("Organization created successfully!");
+            flashSuccess(
+                response.data?.message || "Organization added successfully!",
+            );
         }
         closeModal(); //close modal once form is properly submitted
     } catch (error) {
-        console.error("Error updating organization: ", error);
-        alert("Failed to update organization. Please try again.");
+        // backend error messages, backend message, axious error message, or a fallback string
+        const errorText =
+            error.response?.data?.message ||
+            error.message ||
+            "An unexpected error occurred.";
+
+        modalErrorMessage.value = errorText;
         return; //exit on failure
     }
 
