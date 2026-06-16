@@ -112,7 +112,14 @@ class OrganizationController extends Controller
      */
     public function destroy(Organization $organization)
     {
-        $organization->delete();
-        return response()->json(['message' => 'Organization deleted successfully.'],200);
+        try{
+            $organization->delete();
+            return response()->json(['message' => 'Organization deleted successfully.'],200);
+        }
+        catch(Exception $e){
+            Log::error("Failed to delete organization: " . $e->getMessage());
+            return response()->json(['message' => 'Failed to delete organization: ' . $e->getMessage()], 500);
+        }
+       
     }
 }
