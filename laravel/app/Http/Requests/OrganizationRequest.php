@@ -24,9 +24,9 @@ class OrganizationRequest extends FormRequest
         //only merge and transform if the name field is present
         //provent unwanted overwriting of the slug
         if ($this->has('name')) {
-            $name = strtoupper(trim($this->name));
+            $name = strtoupper(preg_replace('/\s+/', ' ', trim($this->name)));
             $mergeData['name'] = $name;
-            $mergeData['slug'] = Str::lower($this->name);
+            $mergeData['slug'] = Str::slug($this->name);
         }
 
         if ($this->has('pbi_embed_id')) {
