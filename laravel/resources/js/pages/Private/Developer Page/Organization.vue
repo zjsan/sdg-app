@@ -650,6 +650,12 @@ const openAddModal = () => {
     isModalOpen.value = true;
 };
 
+//local state tracking for field errors
+const formErrors = ref({
+    name: "",
+    pbi_embed_id: "",
+});
+
 const resetForm = () => {
     selectedOrg.value = null;
     editValue.value = "";
