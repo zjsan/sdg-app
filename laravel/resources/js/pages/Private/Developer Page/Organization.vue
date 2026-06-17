@@ -761,14 +761,14 @@ const handleSubmit = async () => {
             //update action
             response = await organizationStore.updateOrganizations(
                 selectedOrg.value.id,
-                cleanOrgPBI.value,
+                cleanOrgPBI,
             );
             console.log("updated successfully");
         } else {
             //create action
             response = await organizationStore.createOrganization(
-                cleanOrgName.value,
-                cleanOrgPBI.value,
+                cleanOrgName,
+                cleanOrgPBI,
             );
             console.log("created successfully.");
         }
