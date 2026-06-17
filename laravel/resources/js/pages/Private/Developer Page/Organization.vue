@@ -549,6 +549,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { validate } from "uuid";
 
 const pbiStore = usePowerBiStore();
 const organizationStore = useOrganizationStore();
@@ -694,7 +695,7 @@ const validateForm = (param) => {
         hasFrontendErrors = true;
     }
 
-    return { currentName, currentPbiId }; //returning the validated organization name and powerbi embed id
+    return { currentName, currentPbiId, hasFrontendErrors }; //returning the validated organization name and powerbi embed id
 };
 
 const resetForm = () => {
@@ -730,6 +731,14 @@ const handleSubmit = async () => {
 
     clearNotifications();
     modalErrorMessage.value = "";
+    formErrors.value = { name: "", pbi_embed_id: "" };
+
+    const { cleanOrgName, cleanOrgPBI, validateError } = validateForm(isUpdate);
+
+    //stop further execution if there are errors during the validation
+    if (validateError) {
+        return;
+    }
 
     try {
         let response;
