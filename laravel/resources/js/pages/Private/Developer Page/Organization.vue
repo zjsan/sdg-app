@@ -820,7 +820,7 @@ const handleSubmit = async () => {
             if (laravelErrors.pbi_embed_id) {
                 formErrors.value.pbi_embed_id = laravelErrors.pbi_embed_id[0];
             }
-        else{
+        } else {
             // backend error messages, backend message, axious error message, or a fallback string
             const errorText =
                 error.response?.data?.message ||
