@@ -669,45 +669,46 @@ const formErrors = ref({
     pbi_embed_id: "",
 });
 
-const validateForm = (param) => {
-    const currentName = param ? selectedOrg.value?.name : orgName.value?.trim();
-    const currentPbiId = editValue.value?.trim();
+const validateForm = (isUpdate) => {
+    const cleanOrgName = isUpdate
+        ? selectedOrg.value?.name
+        : orgName.value?.trim();
+    const cleanOrgPBI = editValue.value?.trim();
 
-    let hasFrontendErrors = false; //error flag
+    let validateError = false; //error flag
 
     //validation rules
-
     //cases in the name problem
-    if (!param) {
-        if (!currentName) {
+    if (!isUpdate) {
+        if (!cleanOrgName) {
             formErrors.value.name = "Organization name is required.";
-            hasFrontendErrors = true;
-        } else if (currentName < 3) {
+            validateError = true;
+        } else if (cleanOrgName.length < 3) {
             formErrors.value.name =
                 "Organization name must be at least 3 characters.";
-            hasFrontendErrors = true;
-        } else {
+            validateError = true;
+        } else if (cleanOrgName.length > 255) {
             formErrors.value.name =
                 "Organization name cannot exceed 255 characters.";
-            hasFrontendErrors = true;
+            validateError = true;
         }
     }
 
     //cases for the power bi
-    if (!currentPbiId) {
+    if (!cleanOrgPBI) {
         formErrors.value.pbi_embed_id = "Power BI Embed ID is required.";
-        hasFrontendErrors = true;
-    } else if (currentPbiId.length < 10) {
+        validateError = true;
+    } else if (cleanOrgPBI.length < 10) {
         formErrors.value.pbi_embed_id =
             "Power BI Embed ID must be at least 10 characters.";
-        hasFrontendErrors = true;
-    } else {
+        validateError = true;
+    } else if (cleanOrgPBI.length > 255) {
         formErrors.value.pbi_embed_id =
             "Power BI Embed ID cannot exceed 255 characters.";
-        hasFrontendErrors = true;
+        validateError = true;
     }
 
-    return { currentName, currentPbiId, hasFrontendErrors }; //returning the validated organization name and powerbi embed id
+    return { cleanOrgName, cleanOrgPBI, validateError }; //returning the validated organization name and powerbi embed id
 };
 
 const resetForm = () => {
