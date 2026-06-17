@@ -693,6 +693,8 @@ const validateForm = (param) => {
             "Power BI Embed ID cannot exceed 255 characters.";
         hasFrontendErrors = true;
     }
+
+    return { currentName, currentPbiId }; //returning the validated organization name and powerbi embed id
 };
 
 const resetForm = () => {
