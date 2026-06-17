@@ -743,22 +743,24 @@ const handleSubmit = async () => {
     try {
         let response;
 
+        //CRUD Execution Block
         if (isUpdate) {
             //update action
             response = await organizationStore.updateOrganizations(
                 selectedOrg.value.id,
-                editValue.value,
+                cleanOrgPBI.value,
             );
             console.log("updated successfully");
         } else {
             //create action
             response = await organizationStore.createOrganization(
-                orgName.value,
-                editValue.value,
+                cleanOrgName.value,
+                cleanOrgPBI.value,
             );
             console.log("created successfully.");
         }
 
+        //Backend Processes Execution Block
         const tasks = [organizationStore.fetchOrganizations()]; //always refresh org list after add/edit
 
         // only force refresh power bi link when the operation is update
