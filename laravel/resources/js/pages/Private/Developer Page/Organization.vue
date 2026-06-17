@@ -474,7 +474,12 @@
                                 v-model="orgName"
                                 type="text"
                                 placeholder="e.g. CHED"
-                                class="h-10 px-3.5 bg-white text-slate-800 rounded-lg border border-slate-200 shadow-sm transition-all outline-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500"
+                                :class="[
+                                    'h-10 px-3.5 bg-white text-slate-800 rounded-lg border shadow-sm transition-all outline-none',
+                                    hasError && !orgName
+                                        ? 'border-red-300 focus:ring-2 focus:ring-red-500/10 focus:border-red-500'
+                                        : 'border-slate-200 focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500',
+                                ]"
                                 required
                             />
                             <p
@@ -495,8 +500,13 @@
                             <textarea
                                 v-model="editValue"
                                 rows="5"
-                                class="w-full px-3.5 py-2.5 font-mono text-[13px] bg-white text-slate-800 rounded-lg border border-slate-200 shadow-sm transition-all outline-none resize-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500"
-                                placeholder="Paste Power BI embed URL or embed ID..."
+                                :class="[
+                                    'w-full px-3.5 py-2.5 font-mono text-[13px] bg-white text-slate-800 rounded-lg border shadow-sm transition-all outline-none resize-none',
+                                    hasError && !editValue
+                                        ? 'border-red-300 focus:ring-2 focus:ring-red-500/10 focus:border-red-500'
+                                        : 'border-slate-200 focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500',
+                                ]"
+                                placeholder="Paste Power BI embed ID..."
                                 required
                             ></textarea>
 
@@ -728,7 +738,8 @@ const resetForm = () => {
 
 const closeModal = () => {
     isModalOpen.value = false;
-    selectedOrg.value = null;
+    hasError.value = false;
+    formErrors.value = { name: "", pbi_embed_id: "" };
     resetForm();
 };
 
