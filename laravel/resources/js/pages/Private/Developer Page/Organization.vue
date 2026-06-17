@@ -591,6 +591,7 @@ const {
 
 const modalErrorMessage = ref("");
 const isDeleting = ref(false);
+const hasError = ref(false); //for updating input styles for invalid input
 
 //extract states from the store while maintaining reactivity
 const { organizations } = storeToRefs(organizationStore);
@@ -742,22 +743,25 @@ const copyToClipboard = async (text) => {
 };
 
 const handleSubmit = async () => {
+    //resetting flags before start of validation and crud execution
+    clearNotifications();
+    modalErrorMessage.value = "";
+    hasError.value = false;
+    formErrors.value = { name: "", pbi_embed_id: "" };
+
     //clean validation using the notification composable
     if (!editValue.value || (!selectedOrg.value && !orgName.value)) {
         modalErrorMessage.value = "Please fill in all required fields.";
+        hasError.value = true;
         return;
     }
 
     const isUpdate = !!selectedOrg.value; //true if editing, false if adding
-
-    clearNotifications();
-    modalErrorMessage.value = "";
-    formErrors.value = { name: "", pbi_embed_id: "" };
-
     const { cleanOrgName, cleanOrgPBI, validateError } = validateForm(isUpdate);
 
     //stop further execution if there are errors during the validation
     if (validateError) {
+        hasError.value = true;
         return;
     }
 
@@ -841,6 +845,21 @@ const handleSubmit = async () => {
         }
     }
 };
+
+watch([orgName, editValue], () => {
+    if (hasError.value) {
+        hasError.value = false;
+        modalErrorMessage.value = "";
+    }
+});
+
+// Clear everything when closing/opening modal
+watch(isModalOpen, (isOpen) => {
+    if (!isOpen) {
+        hasError.value = false;
+        modalErrorMessage.value = "";
+    }
+});
 
 const executeDelete = async () => {
     if (!selectedOrgId.value) return;
