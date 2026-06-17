@@ -798,13 +798,25 @@ const handleSubmit = async () => {
     } catch (error) {
         console.error("Form submission failed:", error);
 
-        // backend error messages, backend message, axious error message, or a fallback string
-        const errorText =
-            error.response?.data?.message ||
-            error.message ||
-            "An unexpected error occurred.";
+        if (error.response?.status === 422 && error.response?.data?.errors) {
+            const laravelErrors = error.response.data.errors;
 
-        modalErrorMessage.value = errorText;
+            // Map backend validation errors
+            if (laravelErrors.name) {
+                formErrors.value.name = laravelErrors.name[0]; // Take first rule error
+            }
+            if (laravelErrors.pbi_embed_id) {
+                formErrors.value.pbi_embed_id = laravelErrors.pbi_embed_id[0];
+            }
+        else{
+            // backend error messages, backend message, axious error message, or a fallback string
+            const errorText =
+                error.response?.data?.message ||
+                error.message ||
+                "An unexpected error occurred.";
+
+            modalErrorMessage.value = errorText;
+        }
     }
 };
 
