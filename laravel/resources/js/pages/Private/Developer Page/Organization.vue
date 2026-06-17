@@ -656,6 +656,45 @@ const formErrors = ref({
     pbi_embed_id: "",
 });
 
+const validateForm = (param) => {
+    const currentName = param ? selectedOrg.value?.name : orgName.value?.trim();
+    const currentPbiId = editValue.value?.trim();
+
+    let hasFrontendErrors = false; //error flag
+
+    //validation rules
+
+    //cases in the name problem
+    if (!param) {
+        if (!currentName) {
+            formErrors.value.name = "Organization name is required.";
+            hasFrontendErrors = true;
+        } else if (currentName < 3) {
+            formErrors.value.name =
+                "Organization name must be at least 3 characters.";
+            hasFrontendErrors = true;
+        } else {
+            formErrors.value.name =
+                "Organization name cannot exceed 255 characters.";
+            hasFrontendErrors = true;
+        }
+    }
+
+    //cases for the power bi
+    if (!currentPbiId) {
+        formErrors.value.pbi_embed_id = "Power BI Embed ID is required.";
+        hasFrontendErrors = true;
+    } else if (currentPbiId.length < 10) {
+        formErrors.value.pbi_embed_id =
+            "Power BI Embed ID must be at least 10 characters.";
+        hasFrontendErrors = true;
+    } else {
+        formErrors.value.pbi_embed_id =
+            "Power BI Embed ID cannot exceed 255 characters.";
+        hasFrontendErrors = true;
+    }
+};
+
 const resetForm = () => {
     selectedOrg.value = null;
     editValue.value = "";
