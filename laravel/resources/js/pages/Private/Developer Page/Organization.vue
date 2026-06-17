@@ -471,6 +471,12 @@
                             placeholder="e.g. CHED"
                             class="h-10 px-3.5 bg-white text-slate-800 rounded-lg border border-slate-200 shadow-sm transition-all outline-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500"
                         />
+                        <p
+                            v-if="formErrors.name"
+                            class="mt-1 text-xs text-red-600 font-medium"
+                        >
+                            {{ formErrors.name }}
+                        </p>
                     </div>
 
                     <div class="flex flex-col">
@@ -491,6 +497,12 @@
                             This value will be used when rendering the Power BI
                             report for the selected organization.
                         </span>
+                        <p
+                            v-if="formErrors.pbi_embed_id"
+                            class="mt-1 text-xs text-red-600 font-medium"
+                        >
+                            {{ formErrors.pbi_embed_id }}
+                        </p>
                     </div>
                 </div>
 
