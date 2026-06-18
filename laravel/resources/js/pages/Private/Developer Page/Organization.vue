@@ -761,7 +761,9 @@ const handleSubmit = async () => {
     //resetting flags before start of validation and crud execution
     clearNotifications();
     modalErrorMessage.value = "";
-    hasError.value = false;
+    hasError.value = false; //general error state for the inputs
+    hasErrorOrgName.value = false;
+    hasErrorPbi.value = false;
     formErrors.value = { name: "", pbi_embed_id: "" };
 
     //clean validation using the notification composable
@@ -772,11 +774,17 @@ const handleSubmit = async () => {
     }
 
     const isUpdate = !!selectedOrg.value; //true if editing, false if adding
-    const { cleanOrgName, cleanOrgPBI, validateError } = validateForm(isUpdate);
+    const { cleanOrgName, cleanOrgPBI, orgNameError, pbiError } =
+        validateForm(isUpdate);
 
     //stop further execution if there are errors during the validation
-    if (validateError) {
-        hasError.value = true;
+    if (orgNameError) {
+        hasErrorOrgName.value = true;
+        return;
+    }
+
+    if (pbiError) {
+        hasErrorPbi.value = true;
         return;
     }
 
