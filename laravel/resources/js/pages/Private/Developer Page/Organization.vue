@@ -763,16 +763,18 @@ const handleSubmit = async () => {
     formErrors.value = { name: "", pbi_embed_id: "" };
 
     //clean validation using the notification composable
-    if (!editValue.value || (!selectedOrg.value && !orgName.value)) {
-        modalErrorMessage.value = "Please fill in all required fields.";
-        hasError.value = true;
+    // if (!editValue.value || (!selectedOrg.value && !orgName.value)) {
+    //     modalErrorMessage.value = "Please fill in all required fields.";
+    //     hasError.value = true;
 
-        // Populate granular helper strings manually for the initial empty check
-        if (!selectedOrg.value && !orgName.value)
-            formErrors.value.name = "Required";
-        if (!editValue.value) formErrors.value.pbi_embed_id = "Required";
-        return;
-    }
+    //     // Populate granular helper strings manually for the initial empty check
+    //     if (!selectedOrg.value && !orgName.value)
+    //         formErrors.value.name = "Please fill in the required field.";
+    //     if (!editValue.value)
+    //         formErrors.value.pbi_embed_id =
+    //             "Please fill in the required field.";
+    //     return;
+    // }
 
     const isUpdate = !!selectedOrg.value; //true if editing, false if adding
     const { cleanOrgName, cleanOrgPBI, validateError } = validateForm(isUpdate);
