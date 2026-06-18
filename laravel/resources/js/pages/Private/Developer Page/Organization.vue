@@ -866,21 +866,11 @@ const handleSubmit = async () => {
     }
 };
 
-//error clearing mechanims
-
 //input watcher
 watch([orgName, editValue], () => {
     hasError.value = false;
     modalErrorMessage.value = "";
     formErrors.value = { name: "", pbi_embed_id: "" };
-});
-
-// Clear everything when closing/opening modal
-watch(isModalOpen, (isOpen) => {
-    if (!isOpen) {
-        hasError.value = false;
-        modalErrorMessage.value = "";
-    }
 });
 
 const executeDelete = async () => {
