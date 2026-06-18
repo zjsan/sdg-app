@@ -105,12 +105,13 @@ export const useOrganizationStore = defineStore("organization", {
             }
         },
 
-        async updateOrganizations(id, newId) {
+        async updateOrganizations(id, name, newId) {
             this.loading = true;
             this.errors = null;
 
             try {
                 const response = await api.put(`/organizations/${id}`, {
+                    name: name,
                     pbi_embed_id: newId,
                 });
                 console.log(
@@ -122,6 +123,7 @@ export const useOrganizationStore = defineStore("organization", {
                     error.response?.data?.message ||
                     `Failed to update organization ${id}.`;
                 console.error(error);
+                throw error;
             } finally {
                 this.loading = false;
             }
