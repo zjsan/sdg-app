@@ -660,6 +660,8 @@ onUnmounted(() => {
 
 //for editing
 const openEditModal = (org) => {
+    resetForm(); //clear any states
+
     selectedOrg.value = org;
     orgName.value = org.name || ""; // populate the name input field with the current org name
     editValue.value = org.pbi_embed_id || ""; // Initialize with current value
@@ -668,8 +670,7 @@ const openEditModal = (org) => {
 
 //adding
 const openAddModal = () => {
-    selectedOrg.value = null; // Ensure it's null
-    editValue.value = ""; // Clear the input
+    resetForm();
     isModalOpen.value = true;
 };
 
@@ -725,12 +726,13 @@ const resetForm = () => {
     selectedOrg.value = null;
     editValue.value = "";
     orgName.value = "";
+    formErrors.value = { name: "", pbi_embed_id: "" };
+    modalErrorMessage.value = "";
 };
 
 const closeModal = () => {
     isModalOpen.value = false;
     hasError.value = false;
-    formErrors.value = { name: "", pbi_embed_id: "" };
     resetForm();
 };
 
