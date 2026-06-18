@@ -697,41 +697,41 @@ const validateForm = (isUpdate) => {
     const cleanOrgPBI = editValue.value?.trim();
 
     let validateError = false; //error flag
-    let orgNameError = false;
-    let pbiError = false;
+    // let orgNameError = false;
+    // let pbiError = false;
 
     //validation rules
     //cases in the name problem
     if (!isUpdate) {
         if (!cleanOrgName) {
             formErrors.value.name = "Organization name is required.";
-            orgNameError = true;
+            validateError = true;
         } else if (cleanOrgName.length < 3) {
             formErrors.value.name =
                 "Organization name must be at least 3 characters.";
-            orgNameError = true;
+            validateError = true;
         } else if (cleanOrgName.length > 255) {
             formErrors.value.name =
                 "Organization name cannot exceed 255 characters.";
-            orgNameError = true;
+            validateError = true;
         }
     }
 
     //cases for the power bi
     if (!cleanOrgPBI) {
         formErrors.value.pbi_embed_id = "Power BI Embed ID is required.";
-        pbiError = true;
+        validateError = true;
     } else if (cleanOrgPBI.length < 10) {
         formErrors.value.pbi_embed_id =
             "Power BI Embed ID must be at least 10 characters.";
-        pbiError = true;
+        validateError = true;
     } else if (cleanOrgPBI.length > 255) {
         formErrors.value.pbi_embed_id =
             "Power BI Embed ID cannot exceed 255 characters.";
-        pbiError = true;
+        validateError = true;
     }
 
-    return { cleanOrgName, cleanOrgPBI, orgNameError, pbiError }; //returning the validated organization name and powerbi embed id
+    return { cleanOrgName, cleanOrgPBI, validateError }; //returning the validated organization name and powerbi embed id
 };
 
 const resetForm = () => {
