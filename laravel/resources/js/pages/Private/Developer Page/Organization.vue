@@ -866,17 +866,14 @@ const handleSubmit = async () => {
     }
 };
 
-watch(
-    [orgName, editValue],
-    () => {
-        if (hasError.value) {
-            hasError.value = false;
-            modalErrorMessage.value = "";
-            formErrors.value = { name: "", pbi_embed_id: "" };
-        }
-    },
-    { deep: true }, //deep tracking guarantees nested string shifts are caught
-);
+//error clearing mechanims
+
+//input watcher
+watch([orgName, editValue], () => {
+    hasError.value = false;
+    modalErrorMessage.value = "";
+    formErrors.value = { name: "", pbi_embed_id: "" };
+});
 
 // Clear everything when closing/opening modal
 watch(isModalOpen, (isOpen) => {
