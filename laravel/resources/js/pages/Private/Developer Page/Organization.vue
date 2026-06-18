@@ -680,7 +680,6 @@ const openAddModal = () => {
     selectedOrg.value = null; // Ensure it's null
     editValue.value = ""; // Clear the input
     hasError.value = "";
-    formErrors.value = { name: "", pbi_embed_id: "" };
     isModalOpen.value = true;
 };
 
@@ -774,17 +773,11 @@ const handleSubmit = async () => {
     }
 
     const isUpdate = !!selectedOrg.value; //true if editing, false if adding
-    const { cleanOrgName, cleanOrgPBI, orgNameError, pbiError } =
-        validateForm(isUpdate);
+    const { cleanOrgName, cleanOrgPBI, validateError } = validateForm(isUpdate);
 
     //stop further execution if there are errors during the validation
-    if (orgNameError) {
-        hasErrorOrgName.value = true;
-        return;
-    }
-
-    if (pbiError) {
-        hasErrorPbi.value = true;
+    if (validateError) {
+        hasError.value = true;
         return;
     }
 
