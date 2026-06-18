@@ -476,7 +476,7 @@
                                 placeholder="e.g. CHED"
                                 :class="[
                                     'h-10 px-3.5 bg-white text-slate-800 rounded-lg border shadow-sm transition-all outline-none',
-                                    hasErrorOrgName
+                                    formErrors.name
                                         ? 'border-red-300 focus:ring-2 focus:ring-red-500/10 focus:border-red-500'
                                         : 'border-slate-200 focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500',
                                 ]"
@@ -502,7 +502,7 @@
                                 rows="5"
                                 :class="[
                                     'w-full px-3.5 py-2.5 font-mono text-[13px] bg-white text-slate-800 rounded-lg border shadow-sm transition-all outline-none resize-none',
-                                    hasErrorPbi
+                                    formErrors.pbi_embed_id
                                         ? 'border-red-300 focus:ring-2 focus:ring-red-500/10 focus:border-red-500'
                                         : 'border-slate-200 focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500',
                                 ]"
@@ -679,7 +679,6 @@ const openEditModal = (org) => {
 const openAddModal = () => {
     selectedOrg.value = null; // Ensure it's null
     editValue.value = ""; // Clear the input
-    hasError.value = "";
     isModalOpen.value = true;
 };
 
@@ -696,8 +695,6 @@ const validateForm = (isUpdate) => {
     const cleanOrgPBI = editValue.value?.trim();
 
     let validateError = false; //error flag
-    // let orgNameError = false;
-    // let pbiError = false;
 
     //validation rules
     //cases in the name problem
@@ -761,8 +758,8 @@ const handleSubmit = async () => {
     clearNotifications();
     modalErrorMessage.value = "";
     hasError.value = false; //general error state for the inputs
-    hasErrorOrgName.value = false;
-    hasErrorPbi.value = false;
+    // hasErrorOrgName.value = false;
+    // hasErrorPbi.value = false;
     formErrors.value = { name: "", pbi_embed_id: "" };
 
     //clean validation using the notification composable
