@@ -453,17 +453,7 @@
                     class="space-y-5 my-3 text-left"
                 >
                     <div class="space-y-5 my-3 text-left">
-                        <div
-                            v-if="selectedOrg"
-                            class="p-3 rounded-lg bg-slate-50 border border-slate-200 text-sm text-slate-600"
-                        >
-                            Editing organization:
-                            <span class="font-medium text-slate-800">
-                                {{ selectedOrg.name }}
-                            </span>
-                        </div>
-
-                        <div v-if="!selectedOrg" class="flex flex-col">
+                        <div class="flex flex-col">
                             <label
                                 class="text-sm font-medium text-slate-700 mb-1.5"
                             >
