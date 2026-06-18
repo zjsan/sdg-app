@@ -766,6 +766,11 @@ const handleSubmit = async () => {
     if (!editValue.value || (!selectedOrg.value && !orgName.value)) {
         modalErrorMessage.value = "Please fill in all required fields.";
         hasError.value = true;
+
+        // Populate granular helper strings manually for the initial empty check
+        if (!selectedOrg.value && !orgName.value)
+            formErrors.value.name = "Required";
+        if (!editValue.value) formErrors.value.pbi_embed_id = "Required";
         return;
     }
 
