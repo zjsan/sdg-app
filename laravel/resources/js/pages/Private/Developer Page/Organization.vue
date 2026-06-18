@@ -661,6 +661,7 @@ onUnmounted(() => {
 //for editing
 const openEditModal = (org) => {
     selectedOrg.value = org;
+    orgName.value = org.name || ""; // populate the name input field with the current org name
     editValue.value = org.pbi_embed_id || ""; // Initialize with current value
     isModalOpen.value = true;
 };
