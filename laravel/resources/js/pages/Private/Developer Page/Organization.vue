@@ -768,6 +768,7 @@ const handleSubmit = async () => {
             //update action
             response = await organizationStore.updateOrganizations(
                 selectedOrg.value.id,
+                cleanOrgName,
                 cleanOrgPBI,
             );
             console.log("updated successfully");
