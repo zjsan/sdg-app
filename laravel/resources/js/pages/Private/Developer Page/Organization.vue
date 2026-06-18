@@ -681,28 +681,24 @@ const formErrors = ref({
 });
 
 const validateForm = (isUpdate) => {
-    const cleanOrgName = isUpdate
-        ? selectedOrg.value?.name
-        : orgName.value?.trim();
+    const cleanOrgName = orgName.value?.trim();
     const cleanOrgPBI = editValue.value?.trim();
 
     let validateError = false; //error flag
 
     //validation rules
     //cases in the name problem
-    if (!isUpdate) {
-        if (!cleanOrgName) {
-            formErrors.value.name = "Organization name is required.";
-            validateError = true;
-        } else if (cleanOrgName.length < 3) {
-            formErrors.value.name =
-                "Organization name must be at least 3 characters.";
-            validateError = true;
-        } else if (cleanOrgName.length > 255) {
-            formErrors.value.name =
-                "Organization name cannot exceed 255 characters.";
-            validateError = true;
-        }
+    if (!cleanOrgName) {
+        formErrors.value.name = "Organization name is required.";
+        validateError = true;
+    } else if (cleanOrgName.length < 3) {
+        formErrors.value.name =
+            "Organization name must be at least 3 characters.";
+        validateError = true;
+    } else if (cleanOrgName.length > 255) {
+        formErrors.value.name =
+            "Organization name cannot exceed 255 characters.";
+        validateError = true;
     }
 
     //cases for the power bi
