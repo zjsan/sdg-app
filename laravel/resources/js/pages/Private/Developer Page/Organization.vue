@@ -476,7 +476,7 @@
                                 placeholder="e.g. CHED"
                                 :class="[
                                     'h-10 px-3.5 bg-white text-slate-800 rounded-lg border shadow-sm transition-all outline-none',
-                                    hasError && !orgName
+                                    hasError
                                         ? 'border-red-300 focus:ring-2 focus:ring-red-500/10 focus:border-red-500'
                                         : 'border-slate-200 focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500',
                                 ]"
@@ -502,7 +502,7 @@
                                 rows="5"
                                 :class="[
                                     'w-full px-3.5 py-2.5 font-mono text-[13px] bg-white text-slate-800 rounded-lg border shadow-sm transition-all outline-none resize-none',
-                                    hasError && !editValue
+                                    hasError
                                         ? 'border-red-300 focus:ring-2 focus:ring-red-500/10 focus:border-red-500'
                                         : 'border-slate-200 focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500',
                                 ]"
@@ -679,6 +679,8 @@ const openEditModal = (org) => {
 const openAddModal = () => {
     selectedOrg.value = null; // Ensure it's null
     editValue.value = ""; // Clear the input
+    hasError.value = "";
+    formErrors.value = { name: "", pbi_embed_id: "" };
     isModalOpen.value = true;
 };
 
@@ -695,39 +697,41 @@ const validateForm = (isUpdate) => {
     const cleanOrgPBI = editValue.value?.trim();
 
     let validateError = false; //error flag
+    let orgNameError = false;
+    let pbiError = false;
 
     //validation rules
     //cases in the name problem
     if (!isUpdate) {
         if (!cleanOrgName) {
             formErrors.value.name = "Organization name is required.";
-            validateError = true;
+            orgNameError = true;
         } else if (cleanOrgName.length < 3) {
             formErrors.value.name =
                 "Organization name must be at least 3 characters.";
-            validateError = true;
+            orgNameError = true;
         } else if (cleanOrgName.length > 255) {
             formErrors.value.name =
                 "Organization name cannot exceed 255 characters.";
-            validateError = true;
+            orgNameError = true;
         }
     }
 
     //cases for the power bi
     if (!cleanOrgPBI) {
         formErrors.value.pbi_embed_id = "Power BI Embed ID is required.";
-        validateError = true;
+        pbiError = true;
     } else if (cleanOrgPBI.length < 10) {
         formErrors.value.pbi_embed_id =
             "Power BI Embed ID must be at least 10 characters.";
-        validateError = true;
+        pbiError = true;
     } else if (cleanOrgPBI.length > 255) {
         formErrors.value.pbi_embed_id =
             "Power BI Embed ID cannot exceed 255 characters.";
-        validateError = true;
+        pbiError = true;
     }
 
-    return { cleanOrgName, cleanOrgPBI, validateError }; //returning the validated organization name and powerbi embed id
+    return { cleanOrgName, cleanOrgPBI, orgNameError, pbiError }; //returning the validated organization name and powerbi embed id
 };
 
 const resetForm = () => {
