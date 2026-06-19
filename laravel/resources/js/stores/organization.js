@@ -105,18 +105,18 @@ export const useOrganizationStore = defineStore("organization", {
             }
         },
 
-        async updateOrganizations(id, name, newId) {
+        async updateOrganizations(id, name, embedId) {
             this.loading = true;
             this.errors = null;
 
             try {
                 const response = await api.put(`/organizations/${id}`, {
                     name: name,
-                    pbi_embed_id: newId,
+                    pbi_embed_id: embedId,
                 });
                 console.log(
                     response.message,
-                    `Organization ${id} updated with new PBI Embed ID: ${newId}`,
+                    `Organization ${id} updated with new PBI Embed ID: ${embedId}`,
                 );
             } catch (error) {
                 this.errors =
