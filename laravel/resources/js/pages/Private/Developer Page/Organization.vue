@@ -814,7 +814,8 @@ const handleSubmit = async () => {
             );
         } else {
             flashSuccess(
-                response.data?.message ||
+                response?.data?.message ||
+                    response?.message ||
                     `${isUpdate ? "Updated" : "Added"} successfully.`,
             );
         }
