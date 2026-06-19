@@ -680,7 +680,7 @@ const formErrors = ref({
     pbi_embed_id: "",
 });
 
-const validateForm = (isUpdate) => {
+const validateForm = () => {
     const cleanOrgName = orgName.value?.trim();
     const cleanOrgPBI = editValue.value?.trim();
 
@@ -752,7 +752,7 @@ const handleSubmit = async () => {
     formErrors.value = { name: "", pbi_embed_id: "" };
 
     const isUpdate = !!selectedOrg.value; //true if editing, false if adding
-    const { cleanOrgName, cleanOrgPBI, validateError } = validateForm(isUpdate);
+    const { cleanOrgName, cleanOrgPBI, validateError } = validateForm();
 
     //stop further execution if there are errors during the validation
     if (validateError) {
