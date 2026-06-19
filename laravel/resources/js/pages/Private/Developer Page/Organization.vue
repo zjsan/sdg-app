@@ -237,7 +237,7 @@
                                         <AlertDialogTrigger as-child>
                                             <button
                                                 @click="selectedOrgId = org.id"
-                                                title="Delete organization"
+                                                title="Deactivate organization"
                                                 class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-slate-200 bg-white text-slate-500 shadow-sm hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2 transition-all cursor-pointer"
                                             >
                                                 <i
@@ -253,17 +253,20 @@
                                                 <AlertDialogTitle
                                                     class="text-xl font-semibold text-slate-900"
                                                 >
-                                                    Delete Organization?
+                                                    Are you sure?
                                                 </AlertDialogTitle>
+
                                                 <AlertDialogDescription
                                                     class="text-sm text-slate-500 mt-2 leading-relaxed"
                                                 >
-                                                    This action cannot be
-                                                    undone. This will
-                                                    permanently delete the
-                                                    organization and remove all
-                                                    associated data from our
-                                                    servers.
+                                                    This will deactivate the
+                                                    organization and safely hide
+                                                    it from all active client
+                                                    dashboard dropdowns.
+                                                    Associated data maps (like
+                                                    whitelisted emails) will
+                                                    remain preserved and can be
+                                                    restored later.
                                                 </AlertDialogDescription>
                                             </AlertDialogHeader>
 
@@ -286,10 +289,10 @@
                                                         <i
                                                             class="pi pi-spinner animate-spin mr-2 text-xs"
                                                         ></i>
-                                                        Deleting...
+                                                        Deactivating...
                                                     </template>
                                                     <template v-else>
-                                                        Delete Organization
+                                                        Yes, Deactivate
                                                     </template>
                                                 </AlertDialogAction>
                                             </AlertDialogFooter>
