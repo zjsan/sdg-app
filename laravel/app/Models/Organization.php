@@ -14,6 +14,9 @@ class Organization extends Model
     //
     protected $fillable = ['name', 'slug', 'pbi_embed_id'];//whitelist these fields for mass assignment
 
+    // Dates array ensures deleted_at is cast to a Carbon instance automatically
+    protected $dates = ['deleted_at'];
+    
     public function users() {
         return $this->hasMany(User::class);
     }
