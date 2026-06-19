@@ -85,10 +85,12 @@ export const useOrganizationStore = defineStore("organization", {
         },
 
         async createOrganization(name, pbi_embed_id) {
+            this.errors = null;
             this.loading = true;
-            this.errors.null;
 
             try {
+                console.log(name);
+                console.log(pbi_embed_id);
                 const response = await api.post("/organizations", {
                     name,
                     pbi_embed_id,
@@ -100,6 +102,7 @@ export const useOrganizationStore = defineStore("organization", {
                     error.response?.data?.message ||
                     "Failed to create organization.";
                 console.error("Failed to create organization:", error);
+                throw error;
             } finally {
                 this.loading = false;
             }
@@ -123,6 +126,7 @@ export const useOrganizationStore = defineStore("organization", {
                     error.response?.data?.message ||
                     `Failed to update organization ${id}.`;
                 console.error(error);
+                //
                 throw error;
             } finally {
                 this.loading = false;

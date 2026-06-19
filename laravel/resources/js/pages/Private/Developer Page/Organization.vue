@@ -774,6 +774,8 @@ const handleSubmit = async () => {
             console.log("updated successfully");
         } else {
             //create action
+            console.log(cleanOrgName);
+            console.log(cleanOrgPBI);
             response = await organizationStore.createOrganization(
                 cleanOrgName,
                 cleanOrgPBI,
