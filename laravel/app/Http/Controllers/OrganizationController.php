@@ -137,6 +137,32 @@ class OrganizationController extends Controller
         }
        
     }
+
+    
+    // backend logic for the archive tab of the soft delete function 
+    // need to create the UI workflow for this
+    //for quick emergency restore run : php artisan tinker -> App\Models\Organization::withTrashed()->where('name', 'CHED')->restore();
+    public function archived()
+    {
+        // Fetch ONLY organizations that have been soft deleted
+        $archivedOrgs = Organization::onlyTrashed()->get();
+        
+        return response()->json([
+            'data' => $archivedOrgs
+        ], 200);
+    }
+
+    public function restore($id)
+    {
+        // Find the record even if it's trashed, and revive it
+        $organization = Organization::withTrashed()->findOrFail($id);
+        $organization->restore();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => "{$organization->name} has been successfully restored."
+        ], 200);
+    }
 }
 
 
