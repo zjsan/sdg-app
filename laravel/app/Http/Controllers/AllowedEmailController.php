@@ -181,51 +181,42 @@ class AllowedEmailController extends Controller
      */
     public function destroy(AllowedEmail $allowedEmail): JsonResponse
     {        
-        $user = Auth::user(); //retrieve the currently authenticated user
+        $user = Auth::user(); 
 
-        try{
-             //prevent users from deleting their own active whitelist record
-            if (strcasecmp(trim($allowedEmail->email), trim($user->email)) === 0){
+        try {
+            // Prevent self-deletion
+            if (strcasecmp(trim($allowedEmail->email), trim($user->email)) === 0) {
                 return response()->json([
                     'message'=> 'Security Violation: Destruction of your own active whitelist record is strictly blocked.'
                 ], 403);
             }
 
-            //Prevent structural isolation of high privilege accounts    
             $isHighPrivilege = in_array(strtolower($allowedEmail->role?->slug ?? ''), ['admin', 'developer']);
 
-            // 2. Structural Integrity Check
-            if ($isHighPrivilege) {
+            // Structural Integrity Check (Only critical if the target record is currently active)
+            if ($isHighPrivilege && $allowedEmail->is_active) {
 
-                $canProceed = DB::transaction(function () use ($allowedEmail){
-
-                    //check if the record being deeleted is active, we must check first if there are other active records with
-                    // the same role before deleting
-                    if($allowedEmail->is_active){
-                         return AllowedEmail::activeByRole($allowedEmail->role_id)
+                $canProceed = DB::transaction(function () use ($allowedEmail) {
+                    // Scope this count to the specific organization to avoid global mixing
+                    return AllowedEmail::where('organization_id', $allowedEmail->organization_id)
+                        ->activeByRole($allowedEmail->role_id)
                         ->lockForUpdate()
                         ->count() > 1;
-                    }
-
-                    //delete the record if it is already inactive
-                    //but check if there are other active records with the same role to avoid orphaning the role
-                    return AllowedEmail::activeByRole($allowedEmail->role_id)
-                        ->lockForUpdate()
-                        ->count() >= 1;
                 });
 
                 if (!$canProceed) {
                     return response()->json([
-                        'message' => "Security Violation: Deletion aborted. This user is the sole active account possessing system scope."
+                        'message' => "Security Violation: Deletion aborted. This user is the sole active account possessing system scope for this organization."
                     ], 422);
                 }
             }
 
+            // Execution 
             $allowedEmail->delete();
+            
             return response()->json(['message' => "Successfully deleted the whitelist entry."], 200);
-        }
-        catch (Exception $e) {
-            // Log the exact error for your developers, keeping the API response secure
+
+        } catch (Exception $e) {
             Log::error("Failed to delete allowed email: " . $e->getMessage(), [
                 'id' => $allowedEmail->id,
                 'email' => $allowedEmail->email,
@@ -236,6 +227,5 @@ class AllowedEmailController extends Controller
                 'message' => 'An internal server error occurred while attempting to delete the record.'
             ], 500);
         }
-       
     }
 }
