@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 use App\Http\Resources\OrganizationResource;
+use Illuminate\Database\QueryException;
 
 class OrganizationController extends Controller
 {
@@ -113,8 +114,22 @@ class OrganizationController extends Controller
     public function destroy(Organization $organization)
     {
         try{
-            $organization->delete();
-            return response()->json(['message' => 'Organization deleted successfully.'],200);
+
+            $organization->delete(); //triggers a soft deletion in db
+
+            return response()->json([
+            'status' => 'success',
+            'message' => 'Organization deactivated and removed from active views successfully.'
+        ], 200);
+        }
+        catch (QueryException $e) {
+
+            // Gracefully catch database exceptions (like foreign key blocks)
+            Log::error("Database integrity block on deleting organization: " . $e->getMessage());
+            return response()->json([
+                'message' => 'Cannot delete organization due to protected active database connections.'
+            ], 422);
+            
         }
         catch(Exception $e){
             Log::error("Failed to delete organization: " . $e->getMessage());
@@ -123,3 +138,5 @@ class OrganizationController extends Controller
        
     }
 }
+
+
