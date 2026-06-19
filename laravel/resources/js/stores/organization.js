@@ -96,7 +96,7 @@ export const useOrganizationStore = defineStore("organization", {
                     pbi_embed_id,
                 });
                 this.organizations.push(response.data); //update the local state with the new organization
-                return response.message || "Organization created successfully.";
+                return response;
             } catch (error) {
                 this.errors =
                     error.response?.data?.message ||
@@ -121,6 +121,7 @@ export const useOrganizationStore = defineStore("organization", {
                     response.message,
                     `Organization ${id} updated with new PBI Embed ID: ${embedId}`,
                 );
+                return response;
             } catch (error) {
                 this.errors =
                     error.response?.data?.message ||
