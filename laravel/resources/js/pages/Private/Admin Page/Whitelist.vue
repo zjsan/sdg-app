@@ -152,8 +152,8 @@
                         </TableRow>
 
                         <TableRow
-                            v-else
                             v-for="item in emails"
+                            v-else
                             :key="item.id"
                             class="hover:bg-slate-50/30 transition-colors group"
                         >
