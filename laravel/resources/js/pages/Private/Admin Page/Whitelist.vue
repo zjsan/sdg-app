@@ -243,13 +243,74 @@
                                         <i class="pi pi-file-edit text-xs"></i>
                                     </button>
 
-                                    <button
-                                        @click="confirmDelete(item)"
-                                        title="Delete item"
-                                        class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-slate-200 bg-white text-slate-500 shadow-sm hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2 transition-all cursor-pointer"
-                                    >
-                                        <i class="pi pi-user-minus text-xs"></i>
-                                    </button>
+                                    <AlertDialog>
+                                        <AlertDialogTrigger as-child>
+                                            <button
+                                                @click="
+                                                    selectedItemId = item.id
+                                                "
+                                                title="Delete item"
+                                                class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-slate-200 bg-white text-slate-500 shadow-sm hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2 transition-all cursor-pointer"
+                                            >
+                                                <i
+                                                    class="pi pi-user-minus text-xs"
+                                                ></i>
+                                            </button>
+                                        </AlertDialogTrigger>
+
+                                        <AlertDialogContent
+                                            class="max-w-[400px]"
+                                        >
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle
+                                                    class="text-xl font-semibold text-slate-900"
+                                                >
+                                                    Remove from Whitelist?
+                                                </AlertDialogTitle>
+
+                                                <AlertDialogDescription
+                                                    class="text-sm text-slate-500 mt-2 leading-relaxed"
+                                                >
+                                                    This will permanently remove
+                                                    <span
+                                                        class="font-medium text-slate-800 font-mono"
+                                                        >{{ item.email }}</span
+                                                    >
+                                                    from the whitelist. They
+                                                    will immediately lose access
+                                                    to their associated
+                                                    dashboard views.
+                                                </AlertDialogDescription>
+                                            </AlertDialogHeader>
+
+                                            <AlertDialogFooter
+                                                class="mt-6 flex flex-col-reverse sm:flex-row sm:justify-end gap-3 sm:gap-2"
+                                            >
+                                                <AlertDialogCancel
+                                                    :disabled="isDeleting"
+                                                    class="mt-0 cursor-pointer border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors"
+                                                >
+                                                    Cancel
+                                                </AlertDialogCancel>
+
+                                                <AlertDialogAction
+                                                    @click="executeDelete"
+                                                    :disabled="isDeleting"
+                                                    class="bg-rose-600 hover:bg-rose-700 text-white shadow-sm focus:ring-rose-500 transition-colors cursor-pointer disabled:opacity-70"
+                                                >
+                                                    <template v-if="isDeleting">
+                                                        <i
+                                                            class="pi pi-spinner animate-spin mr-2 text-xs"
+                                                        ></i>
+                                                        Removing...
+                                                    </template>
+                                                    <template v-else>
+                                                        Yes, Remove
+                                                    </template>
+                                                </AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
                                 </div>
                             </TableCell>
                         </TableRow>
