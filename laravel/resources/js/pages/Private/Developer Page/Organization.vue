@@ -274,7 +274,9 @@
                                                 class="mt-6 flex flex-col-reverse sm:flex-row sm:justify-end gap-3 sm:gap-2"
                                             >
                                                 <AlertDialogCancel
-                                                    :disabled="isDeleting"
+                                                    :disabled="
+                                                        organizationStore.loading
+                                                    "
                                                     class="mt-0 cursor-pointer border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors"
                                                 >
                                                     Cancel
@@ -282,10 +284,16 @@
 
                                                 <AlertDialogAction
                                                     @click="executeDelete"
-                                                    :disabled="isDeleting"
+                                                    :disabled="
+                                                        organizationStore.loading
+                                                    "
                                                     class="bg-rose-600 hover:bg-rose-700 text-white shadow-sm focus:ring-rose-500 transition-colors cursor-pointer disabled:opacity-70"
                                                 >
-                                                    <template v-if="isDeleting">
+                                                    <template
+                                                        v-if="
+                                                            organizationStore.loading
+                                                        "
+                                                    >
                                                         <i
                                                             class="pi pi-spinner animate-spin mr-2 text-xs"
                                                         ></i>
@@ -593,7 +601,6 @@ const {
 } = useNotification();
 
 const modalErrorMessage = ref("");
-const isDeleting = ref(false);
 const hasError = ref(false); //for updating input styles for invalid input
 
 //extract states from the store while maintaining reactivity
@@ -858,7 +865,6 @@ watch([orgName, editValue], () => {
 const executeDelete = async () => {
     if (!selectedOrgId.value) return;
 
-    isDeleting.value = true;
     clearNotifications();
 
     try {
@@ -878,8 +884,6 @@ const executeDelete = async () => {
             "Failed to revoke access.";
 
         flashError(apiError);
-    } finally {
-        isDeleting.value = false;
     }
 };
 </script>
