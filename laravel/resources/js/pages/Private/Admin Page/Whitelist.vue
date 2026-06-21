@@ -915,25 +915,33 @@ const handleSubmit = async () => {
 };
 
 //delete confirmation and execution
-const confirmDelete = async (item) => {
-    if (
-        confirm(
-            `Are you certain you wish to completely revoke systemic access for ${item.email}?`,
-        )
-    ) {
-        try {
-            const data = await allowedEmailsStore.deleteAllowedEmails(item.id);
-            flashSuccess(
-                data?.message || "Clearance rule successfully dropped.",
-            );
-        } catch (errorString) {
-            // console.log("Full Axios Error Object:", errorString);
-            // console.log("Server Response Data:", errorString.response?.data);
-            errorMessage.value =
-                errorString.response?.data?.message || errorString?.message;
-            ("Failed to revoke access.");
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        }
+const executeDelete = async () => {
+    // ensure we actually have an ID selected
+    if (!selectedId.value) return;
+
+    try {
+        isDeleting.value = true;
+        errorMessage.value = ""; // Reset any stale errors
+
+        // Execute the Pinia store action using our saved state ID
+        const data = await allowedEmailsStore.deleteAllowedEmails(
+            selectedId.value,
+        );
+
+        flashSuccess(data?.message || "Clearance rule successfully dropped.");
+
+        // Reset the selected ID state to cleanly close/reset things
+        selectedItemId.value = null;
+    } catch (errorString) {
+        errorMessage.value =
+            errorString.response?.data?.message ||
+            errorString?.message ||
+            "Failed to revoke access.";
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    } finally {
+        // Always turn off the loading spinner, even on error
+        isDeleting.value = false;
     }
 };
 </script>
