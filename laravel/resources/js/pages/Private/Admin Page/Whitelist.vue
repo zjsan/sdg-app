@@ -246,9 +246,7 @@
                                     <AlertDialog>
                                         <AlertDialogTrigger as-child>
                                             <button
-                                                @click="
-                                                    selectedItemId = item.id
-                                                "
+                                                @click="selectedId = item.id"
                                                 title="Delete item"
                                                 class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-slate-200 bg-white text-slate-500 shadow-sm hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2 transition-all cursor-pointer"
                                             >
@@ -287,7 +285,9 @@
                                                 class="mt-6 flex flex-col-reverse sm:flex-row sm:justify-end gap-3 sm:gap-2"
                                             >
                                                 <AlertDialogCancel
-                                                    :disabled="isDeleting"
+                                                    :disabled="
+                                                        allowedEmailsStore.loading
+                                                    "
                                                     class="mt-0 cursor-pointer border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors"
                                                 >
                                                     Cancel
@@ -295,10 +295,16 @@
 
                                                 <AlertDialogAction
                                                     @click="executeDelete"
-                                                    :disabled="isDeleting"
+                                                    :disabled="
+                                                        allowedEmailsStore.loading
+                                                    "
                                                     class="bg-rose-600 hover:bg-rose-700 text-white shadow-sm focus:ring-rose-500 transition-colors cursor-pointer disabled:opacity-70"
                                                 >
-                                                    <template v-if="isDeleting">
+                                                    <template
+                                                        v-if="
+                                                            allowedEmailsStore.loading
+                                                        "
+                                                    >
                                                         <i
                                                             class="pi pi-spinner animate-spin mr-2 text-xs"
                                                         ></i>
@@ -917,10 +923,12 @@ const handleSubmit = async () => {
 //delete confirmation and execution
 const executeDelete = async () => {
     // ensure we actually have an ID selected
+
+    console.log(selectedId.value);
     if (!selectedId.value) return;
 
     try {
-        isDeleting.value = true;
+        // isDeleting.value = true;
         errorMessage.value = ""; // Reset any stale errors
 
         // Execute the Pinia store action using our saved state ID
@@ -939,9 +947,6 @@ const executeDelete = async () => {
             "Failed to revoke access.";
 
         window.scrollTo({ top: 0, behavior: "smooth" });
-    } finally {
-        // Always turn off the loading spinner, even on error
-        isDeleting.value = false;
     }
 };
 </script>
