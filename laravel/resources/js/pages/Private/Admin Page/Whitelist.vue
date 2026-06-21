@@ -263,13 +263,13 @@
                                                 <AlertDialogTitle
                                                     class="text-xl font-semibold text-slate-900"
                                                 >
-                                                    Remove from Whitelist?
+                                                    Deactivate clearance rule?
                                                 </AlertDialogTitle>
 
                                                 <AlertDialogDescription
                                                     class="text-sm text-slate-500 mt-2 leading-relaxed"
                                                 >
-                                                    This will permanently remove
+                                                    This will suspend
                                                     <span
                                                         class="font-medium text-slate-800 font-mono"
                                                         >{{ item.email }}</span
@@ -278,9 +278,17 @@
                                                     will immediately lose access
                                                     to their associated
                                                     dashboard views.
+                                                    <span
+                                                        class="block mt-2 font-normal text-slate-400"
+                                                    >
+                                                        The record remains
+                                                        safely preserved and can
+                                                        be restored or
+                                                        re-activated at any
+                                                        time.
+                                                    </span>
                                                 </AlertDialogDescription>
                                             </AlertDialogHeader>
-
                                             <AlertDialogFooter
                                                 class="mt-6 flex flex-col-reverse sm:flex-row sm:justify-end gap-3 sm:gap-2"
                                             >
@@ -311,7 +319,7 @@
                                                         Removing...
                                                     </template>
                                                     <template v-else>
-                                                        Yes, Remove
+                                                        Yes, Deactivate
                                                     </template>
                                                 </AlertDialogAction>
                                             </AlertDialogFooter>
