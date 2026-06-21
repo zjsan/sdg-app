@@ -931,7 +931,7 @@ const executeDelete = async () => {
         flashSuccess(data?.message || "Clearance rule successfully dropped.");
 
         // Reset the selected ID state to cleanly close/reset things
-        selectedItemId.value = null;
+        selectedId.value = null;
     } catch (errorString) {
         errorMessage.value =
             errorString.response?.data?.message ||
