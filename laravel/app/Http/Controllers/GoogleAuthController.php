@@ -53,6 +53,7 @@ class GoogleAuthController extends Controller
                     [
                         'name' => $googleUser->getName(),
                         'google_id' => $googleUser->getId(),
+                        'avatar_url' => $googleUser->getAvatar(),
                         'email_verified_at' => now(),
                     ]
                 );
@@ -62,6 +63,7 @@ class GoogleAuthController extends Controller
                     'organization_id' => $whitelistEntry->organization_id,
                     'role_id' => $whitelistEntry->role_id,
                     'google_id' => $googleUser->getId(), 
+                    'avatar_url' => $googleUser->getAvatar(),
                 ]);
 
                 // load organization relationship to get slug for gate check
