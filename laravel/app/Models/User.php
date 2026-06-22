@@ -69,4 +69,12 @@ class User extends Authenticatable
     public function organization() {
         return $this->belongsTo(Organization::class);
     }
+
+    /**
+     * Get the user's avatar URL or a fallback placeholder.
+     */
+    public function getAvatarUrlAttribute(): string
+    {
+        return $this->avatar_url ?? 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&color=7F9CF5&background=EBF4FF';
+    }
 }
