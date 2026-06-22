@@ -1,10 +1,24 @@
 <template>
     <div class="p-[17.8px] border-t border-gray-200 flex-shrink-0">
         <div class="flex items-center p-2 mb-3">
-            <div
-                class="h-8 w-8 bg-blue-200 rounded-full mr-3 flex items-center justify-center text-sm font-bold text-blue-800"
-            >
-                {{ auth.user?.name ? auth.user.name.charAt(0) : "U" }}
+            <div class="h-8 w-8 mr-3 flex-shrink-0">
+                <img
+                    v-if="auth.user?.avatar_url"
+                    :src="auth.user.avatar_url"
+                    :alt="auth.user?.name"
+                    class="h-full w-full object-cover rounded-full"
+                    referrerpolicy="no-referrer"
+                />
+                <div
+                    v-else
+                    class="h-full w-full bg-blue-200 rounded-full flex items-center justify-center text-sm font-bold text-blue-800"
+                >
+                    {{
+                        auth.user?.name
+                            ? auth.user.name.charAt(0).toUpperCase()
+                            : "U"
+                    }}
+                </div>
             </div>
             <div class="overflow-hidden">
                 <div class="text-sm font-semibold truncate">
