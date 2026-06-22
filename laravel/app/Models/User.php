@@ -29,6 +29,10 @@ class User extends Authenticatable
         'role_id',
     ];
 
+    protected $appends = [
+    'avatar_url',
+    ];
+
     /**
      * The attributes that should be hidden for serialization.
      *

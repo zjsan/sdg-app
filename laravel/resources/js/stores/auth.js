@@ -63,6 +63,7 @@ export const useAuthStore = defineStore("auth", {
                 this.saveUserToStorage();
                 console.log("Session restored");
                 //console.log("Restored user:", this.user);
+                console.log("Fetched user data:", data);
             } catch (error) {
                 console.error("Session restore failed:", error);
                 console.warn("Session restore failed:", error);
