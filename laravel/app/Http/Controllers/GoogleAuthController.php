@@ -87,7 +87,7 @@ class GoogleAuthController extends Controller
                 // Return data out of the transaction block
                 return [
                     'token' => $token,
-                    'user' => $user
+                    'user' => $user->refresh() //force load appends/columns
                 ];
             });
 
