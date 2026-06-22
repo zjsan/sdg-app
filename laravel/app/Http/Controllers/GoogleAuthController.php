@@ -76,6 +76,8 @@ class GoogleAuthController extends Controller
                     throw new \Exception('Unauthorized organization access.');
                 }
 
+                $user->tokens()->delete(); //revoke old tokens 
+
                 // Generate Sanctum token with expiry
                 $tokenResult = $user->createToken('auth_token');
                 $token = $tokenResult->plainTextToken;
