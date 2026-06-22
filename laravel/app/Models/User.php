@@ -29,9 +29,7 @@ class User extends Authenticatable
         'role_id',
     ];
 
-    protected $appends = [
-    'avatar_url',
-    ];
+    protected $appends = [];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -79,6 +77,6 @@ class User extends Authenticatable
      */
     public function getAvatarUrlAttribute(): string
     {
-        return $this->avatar_url ?? 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&color=7F9CF5&background=EBF4FF';
+       return $value ?? 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&color=7F9CF5&background=EBF4FF';
     }
 }
