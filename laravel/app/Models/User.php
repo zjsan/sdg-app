@@ -77,6 +77,13 @@ class User extends Authenticatable
      */
     public function getAvatarUrlAttribute(): string
     {
-       return $value ?? 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&color=7F9CF5&background=EBF4FF';
+        $rawAvatar = $this->attributes['avatar_url'] ?? '';
+
+        // Check if the avatar is empty or contains Google's default empty placeholder
+        if (empty($rawAvatar) || str_contains($rawAvatar, 'googleusercontent.com/profile/picture')) {
+            return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&color=7F9CF5&background=EBF4FF';
+        }
+
+        return $rawAvatar;
     }
 }
