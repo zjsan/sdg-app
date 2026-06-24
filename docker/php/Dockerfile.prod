@@ -86,3 +86,13 @@ RUN sed -i 's/\r$//' /usr/local/bin/docker-entrypoint.sh && \
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD ["php-fpm"]
+
+# ============================
+# Stage 4 — Production Nginx
+# ============================
+FROM nginx:stable-alpine
+
+# Copy refined configuration directly into the Nginx image layer
+COPY ./docker/nginx/prod.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80 443
