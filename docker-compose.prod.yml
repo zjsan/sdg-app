@@ -41,7 +41,9 @@ services:
       - laravel_public:/var/www/laravel/public
 
   nginx:
-    image: nginx:stable
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile.prod
     container_name: sdg-nginx
     restart: unless-stopped
     ports:
@@ -51,12 +53,11 @@ services:
       php:
         condition: service_healthy
     volumes:
-      - ./docker/nginx/prod.conf:/etc/nginx/conf.d/default.conf
       - ./docker/nginx/ssl:/etc/nginx/ssl:ro # SSL certificates
       - laravel_storage:/var/www/laravel/storage
       - laravel_public:/var/www/laravel/public
     networks:
-      sdgapp_net:
+      - sdgapp_net
 
 networks:
   sdgapp_net:
