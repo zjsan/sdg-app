@@ -5,11 +5,13 @@ services:
     image: mysql:8.0
     container_name: sdgapp-mysql
     restart: unless-stopped
+    env_file: # Tell Docker Compose to look at Laravel .env file for variable substitution
+      - ./laravel/.env
     environment:
-      MYSQL_ROOT_PASSWORD: r00tProd_SDG_App_db!@#Xq
-      MYSQL_DATABASE: sdg_db
-      MYSQL_USER: sdg_app_user
-      MYSQL_PASSWORD: SDG_App_Db_10F!3kLp@
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
