@@ -21,6 +21,7 @@ services:
     build:
       context: .
       dockerfile: docker/php/Dockerfile.prod # Production Dockerfile
+      target: php_env
       args:
         VITE_API_URL: ${VITE_API_URL}
     container_name: sdg-php
@@ -44,6 +45,7 @@ services:
     build:
       context: .
       dockerfile: docker/php/Dockerfile.prod
+      target: nginx_env
     container_name: sdg-nginx
     restart: unless-stopped
     ports:
