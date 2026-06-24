@@ -67,10 +67,10 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # --- IMPORTANT CHANGES HERE ---
 
 # 1. Copy everything from the composer_build stage (Code + Optimized Vendor)
-COPY --from=composer_build /var/www/laravel /var/www/laravel
+COPY --from=composer_build --chown=www-data:www-data /var/www/laravel /var/www/laravel
 
 # 2. Copy the assets from node stage
-COPY --from=node_build /var/www/laravel/public/build ./public/build
+COPY --from=node_build --chown=www-data:www-data /var/www/laravel/public/build ./public/build
 
 # 3. Wipe stale caches that might have been copied from your host machine
 RUN rm -f bootstrap/cache/config.php bootstrap/cache/packages.php bootstrap/cache/services.php
