@@ -18,7 +18,7 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 COPY laravel/composer.json composer.json
 COPY laravel/composer.lock composer.lock
 
-# 1. Install dependencies (no-scripts because code isn't here yet)
+# 1. Install dependencies 
 RUN composer install --no-dev --prefer-dist --no-interaction --no-scripts --no-autoloader
 
 # 2. Copy the actual app code into this stage
