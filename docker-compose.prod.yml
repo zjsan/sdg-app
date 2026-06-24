@@ -22,12 +22,12 @@ services:
       context: .
       dockerfile: docker/php/Dockerfile.prod # Production Dockerfile
       args:
-        VITE_API_URL: https://sdg-dashboard.ddnsfree.com
+        VITE_API_URL: ${VITE_API_URL}
     container_name: sdg-php
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "php-fpm -t || exit 1"]
-      interval: 5s
+      test: ["CMD", "cgi-fcgi", "-bind", "-connect", "127.0.0.1:9000"]
+      interval: 10s
       timeout: 3s
       retries: 5
     depends_on:
