@@ -4,13 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Organization;
+use App\Models\AllowedEmail;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\OrganizationRequest;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 use App\Http\Resources\OrganizationResource;
 use Illuminate\Database\QueryException;
+use Exception;
 
 class OrganizationController extends Controller
 {
@@ -138,7 +141,6 @@ class OrganizationController extends Controller
        
     }
 
-    
     // backend logic for the archive tab of the soft delete function 
     // need to create the UI workflow for this
     //for quick emergency restore run : php artisan tinker -> App\Models\Organization::withTrashed()->where('name', 'CHED')->restore();
