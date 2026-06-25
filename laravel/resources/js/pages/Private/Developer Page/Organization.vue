@@ -657,9 +657,9 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-    console.log(
-        "Component unmounted, cancelling pending debounced search calls.",
-    );
+    // console.log(
+    //     "Component unmounted, cancelling pending debounced search calls.",
+    // );
     debouncedSearch.cancel(); //cancel any pending debounce calls
 
     //cancel any api request upon unmount

@@ -63,7 +63,7 @@ export const useAuthStore = defineStore("auth", {
                 this.saveUserToStorage();
                 console.log("Session restored");
                 //console.log("Restored user:", this.user);
-                console.log("Fetched user data:", data);
+                // console.log("Fetched user data:", data);
             } catch (error) {
                 console.error("Session restore failed:", error);
                 console.warn("Session restore failed:", error);
@@ -84,7 +84,7 @@ export const useAuthStore = defineStore("auth", {
                     `Bearer ${this.token}`;
                 const { data } = await api.get("/user");
 
-                console.log("Fetched user data:", data);
+                // console.log("Fetched user data:", data);
                 this.user = data;
                 this.saveUserToStorage();
                 this.initialized = true;

@@ -39,7 +39,7 @@ export const useOrganizationStore = defineStore("organization", {
                 });
 
                 const payload = response.data; //extract response data from the controller
-                console.log("API Response:", payload); // Debugging log
+                // console.log("API Response:", payload); // Debugging log
 
                 //update only the states if the request are not aborted
                 if (!controller.signal.aborted) {
