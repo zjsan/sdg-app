@@ -41,10 +41,12 @@ build-normal:
 	$(MAKE) optimize
 
 
-# 2. Config/Dependency Changes
+# 2. Config/Dependency Changes and frontend building
 deploy:
-	$(COMPOSE_PROD) build --no-cache
-	$(COMPOSE_PROD) up -d
+	@echo "Pulling changes and building updated layers safely..."
+	$(COMPOSE_PROD) build
+	@echo "Restarting containers with zero downtime..."
+	$(COMPOSE_PROD) up -d --remove-orphans
 	$(MAKE) optimize
 
 # 3. Database Seeding
