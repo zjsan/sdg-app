@@ -4,9 +4,12 @@ set -e
 echo "Starting Laravel production entrypoint..."
 
 
-# Copy fresh Vite compiled assets into the shared public volume
-echo "Syncing production assets..."
-cp -RT /var/www/laravel/public/build /var/www/laravel/public/build
+echo "Syncing production assets from image to shared volume..."
+# Ensure the destination directory exists inside the volume
+mkdir -p /var/www/laravel/public/build
+
+# Copy from the unmasked /tmp/build folder into the shared volume
+cp -a /tmp/build/. /var/www/laravel/public/build/
 echo "Frontend Assets done"
 
 # 1. Protect against Docker mount bugs
