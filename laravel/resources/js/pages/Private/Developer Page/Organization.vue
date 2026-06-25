@@ -260,12 +260,16 @@
                                                     class="text-sm text-slate-500 mt-2 leading-relaxed"
                                                 >
                                                     This will deactivate the
-                                                    organization and safely hide
-                                                    it from all active client
-                                                    dashboard dropdowns.
-                                                    Associated data maps (like
-                                                    whitelisted emails) will
-                                                    remain preserved and can be
+                                                    <span
+                                                        class="font-medium text-slate-800 font-mono"
+                                                        >{{ org.name }}</span
+                                                    >
+                                                    and safely hide it from all
+                                                    active client dashboard
+                                                    dropdowns. Associated data
+                                                    maps (like whitelisted
+                                                    emails) will remain
+                                                    preserved and can be
                                                     restored later.
                                                 </AlertDialogDescription>
                                             </AlertDialogHeader>
