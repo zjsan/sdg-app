@@ -3,6 +3,11 @@ set -e
 
 echo "Starting Laravel production entrypoint..."
 
+
+# Copy fresh Vite compiled assets into the shared public volume
+echo "Syncing production assets..."
+cp -R /var/www/laravel/public/build /var/www/laravel/public/
+
 # 1. Protect against Docker mount bugs
 if [ -d "/var/www/laravel/.env" ]; then
     echo "CRITICAL: .env is a directory. Check Docker volume mounts!"
