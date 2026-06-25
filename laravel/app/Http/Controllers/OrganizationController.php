@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 use App\Http\Resources\OrganizationResource;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
 use Exception;
 
 class OrganizationController extends Controller
