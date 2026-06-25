@@ -6,7 +6,8 @@ echo "Starting Laravel production entrypoint..."
 
 # Copy fresh Vite compiled assets into the shared public volume
 echo "Syncing production assets..."
-cp -R /var/www/laravel/public/build /var/www/laravel/public/
+cp -RT /var/www/laravel/public/build /var/www/laravel/public/build
+echo "Frontend Assets done"
 
 # 1. Protect against Docker mount bugs
 if [ -d "/var/www/laravel/.env" ]; then
