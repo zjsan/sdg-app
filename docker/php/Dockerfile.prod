@@ -72,6 +72,9 @@ COPY --from=composer_build --chown=www-data:www-data /var/www/laravel /var/www/l
 # 2. Copy the assets from node stage
 COPY --from=node_build --chown=www-data:www-data /var/www/laravel/public/build ./public/build
 
+#saving a copy of the fresh frontend assets builds into a temporary folder then the entrypoint will pull it and force inject into the volume
+COPY --from=node_build /var/www/laravel/public/build /tmp/build 
+
 # 3. Wipe stale caches that might have been copied from  host machine
 RUN rm -f bootstrap/cache/config.php bootstrap/cache/packages.php bootstrap/cache/services.php
 
