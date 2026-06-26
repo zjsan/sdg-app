@@ -144,10 +144,22 @@ class OrganizationController extends Controller
                     throw new Exception('SelfDeletionViolation', 403);
                 }
 
+                //prevention for deleting last high privellege accounts
+                //need to adjust this part if ever added new high privellege role
+                $highPrivilegeCount = $criticalWhitelists->filter(function ($allowedEmail) {
+                    return in_array(strtolower($allowedEmail->role?->slug ?? ''), ['admin', 'developer']);
+                })->count();
 
+                //only proceed if the organization does not contains active admins/developer
+                //this block ensure that we also soft deleting the child whitelisted items
+                if ($highPrivilegeCount > 0) {
+                    // Cascade soft delete to associated whitelist records so they aren't orphaned
+                    AllowedEmail::where('organization_id', $organization->id)->delete();
+                }
+
+                //if none of the contraints where met, safely trigger the deletion
+                $organization->delete(); //triggers a soft deletion in db
             });
-
-            $organization->delete(); //triggers a soft deletion in db
 
             return response()->json([
             'status' => 'success',
