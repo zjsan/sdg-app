@@ -29,12 +29,12 @@ class AppServiceProvider extends ServiceProvider
 
         // high-level "can manage the system" check
         Gate::define('manage-allowed-emails', function (User $user) {
-            return in_array($user->role?->slug, ['admin', 'developer']);
+            return in_array(strtolower(trim($user->role?->slug ?? '')), ['admin', 'developer']);
         });
 
         // can touch the Power BI links check
         Gate::define('manage-pbi-links', function (User $user) {
-            return $user->role?->slug === 'developer';
+            return in_array(strtolower(trim($user->role?->slug ?? '')), ['admin', 'developer']);
         });
 
     }
