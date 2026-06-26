@@ -178,6 +178,8 @@ class AllowedEmailController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     * Note: the delete operation is following the soft deletion pattern.
+     * In the organization table when an organization is deleted, its following children will also be deleted
      */
     public function destroy(AllowedEmail $allowedEmail): JsonResponse
     {        

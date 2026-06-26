@@ -113,8 +113,10 @@ class OrganizationController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified resource from storage. The function is using a Cascade Soft Deletion to remove its children in the 
+     * whitelist table. While, the operation is following the architecture of soft deletion instead of hard deletion
      */
+    
     public function destroy(Organization $organization)
     {
         try{
