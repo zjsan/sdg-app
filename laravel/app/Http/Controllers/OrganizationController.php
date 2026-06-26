@@ -124,6 +124,7 @@ class OrganizationController extends Controller
 
         try{
 
+            //check the database and fetch the organization that has active whitelist entries
             DB::transaction(function () use ($organization, $user){
                 
                 //prevention to restrict self deletion of organization
@@ -132,6 +133,11 @@ class OrganizationController extends Controller
                     ->where('is_active', true)
                     ->lockForUpdate()
                     ->get();
+
+                //check if the current user belongs to the 
+                $currentUserRecord = $criticalWhitelists->first(function ($allowedEmail) use ($user){
+                   return strcasecmp(trim($allowedEmail->email), trim($user->email)) === 0;
+                });
             });
 
             $organization->delete(); //triggers a soft deletion in db
