@@ -169,11 +169,18 @@ class OrganizationController extends Controller
             ], 200);
         }
         catch (Exception $e) {
-            // Handle custom domain exceptions thrown inside the transaction
+
+            // Handle custom domain exceptions thrown inside the transaction mapping http responses
             if ($e->getMessage() === 'SelfDeletionViolation') {
                 return response()->json([
                     'message' => 'Security Violation: Deactivating an organization associated with your own active session is strictly blocked.'
                 ], 403);
+            }
+
+            if ($e->getMessage() === 'ActiveManagementViolation') {
+                return response()->json([
+                    'message' => 'Deletion Aborted: This organization still contains active administrators or developers. Please deactivate or reassign these users before deleting the organization.'
+                ], 422);
             }
 
             Log::error("Failed to safely delete organization: " . $e->getMessage(), [
