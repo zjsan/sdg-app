@@ -132,6 +132,7 @@ class OrganizationController extends Controller
                 //  lock the organization's high-privilege whitelist records during this assessment
                 // fetch ALL whitelist entries for this organization (Active and Inactive)
                 $allWhitelists = AllowedEmail::where('organization_id', $organization->id)
+                    ->with('role') //eager loaded the role column
                     ->lockForUpdate() //prevent race conditions
                     ->get();
 
