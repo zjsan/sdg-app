@@ -24,12 +24,12 @@ export const useAuthStore = defineStore("auth", {
             //console.log("Full User Object in Store:", state.user); //debugging log to check user data structure
             const slug = state.user?.role?.slug || null;
             console.log("Checking role:", slug);
-            return slug === "developer";
+            return slug.trim().toLowerCase() === "developer";
         },
         isAdmin: (state) => {
             const slug = state.user?.role?.slug || null;
             console.log("Checking role:", slug);
-            return ["admin", "developer"].includes(slug);
+            return ["admin", "developer"].includes(slug.trim().toLowerCase());
         },
     },
 
