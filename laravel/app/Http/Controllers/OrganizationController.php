@@ -96,13 +96,12 @@ class OrganizationController extends Controller
             $validated = $request->validated(); 
 
             // Update the DB
-            
             $organization->update($validated);
         
 
             return response()->json([
                 'message' => "Successfully updated {$organization->name}'s dashboard.",
-                'organization' => $organization
+                'organization' => new OrganizationResource($organization)
             ]);
 
         } catch (Exception $e) {
