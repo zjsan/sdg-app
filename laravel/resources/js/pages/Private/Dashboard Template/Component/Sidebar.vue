@@ -105,7 +105,7 @@ const menuItems = computed(() => [
         name: "Organization Management",
         to: "/organization",
         icon: "pi-code",
-        visible: () => auth.isDeveloper,
+        visible: () => auth.isAdmin,
     },
     {
         name: "Whitelist Management",

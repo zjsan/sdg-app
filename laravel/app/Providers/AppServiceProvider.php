@@ -36,6 +36,5 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('manage-pbi-links', function (User $user) {
             return in_array(strtolower(trim($user->role?->slug ?? '')), ['admin', 'developer']);
         });
-
     }
 }
