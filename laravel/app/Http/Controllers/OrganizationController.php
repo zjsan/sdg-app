@@ -117,7 +117,7 @@ class OrganizationController extends Controller
      * whitelist table. While, the operation is following the architecture of soft deletion instead of hard deletion
      */
     
-    public function destroy(Organization $organization)
+    public function destroy(Organization $organization): JsonResponse
     {
 
         $user = Auth::user(); //get the currently login user
@@ -127,16 +127,19 @@ class OrganizationController extends Controller
             //check the database and fetch the organization that has active whitelist entries
             DB::transaction(function () use ($organization, $user){
                 
-                //prevention to restrict self deletion of organization
-                // lock the organization's high-privilege whitelist records during this assessment
-                $criticalWhitelists = AllowedEmail::where('organization_id', $organization->id)
-                    ->where('is_active', true)
-                    ->lockForUpdate()
+                  /**
+                 * prevention to restrict self deletion of organization
+                 * lock the organization's high-privilege whitelist records during this assessment
+                 */
+
+                // fetch ALL whitelist entries for this organization (Active and Inactive)
+                $allWhitelists = AllowedEmail::where('organization_id', $organization->id)
+                    ->lockForUpdate() //prevent race conditions
                     ->get();
 
                 //check if the current user belongs to the organization being deleted
-                $currentUserRecord = $criticalWhitelists->first(function ($allowedEmail) use ($user){
-                   return strcasecmp(trim($allowedEmail->email), trim($user->email)) === 0;
+                $currentUserRecord = $allWhitelists->first(function ($allowedEmail) use ($user) {
+                    return strcasecmp(trim($allowedEmail->email), trim($user->email)) === 0;
                 });
 
                 //throw an error if self-deletion
@@ -150,7 +153,6 @@ class OrganizationController extends Controller
                     return in_array(strtolower($allowedEmail->role?->slug ?? ''), ['admin', 'developer']);
                 })->count();
 
-                //only proceed if the organization does not contains active admins/developer
                 //this block ensure that we also soft deleting the child whitelisted items
                 if ($highPrivilegeCount > 0) {
                     // Cascade soft delete to associated whitelist records so they aren't orphaned
