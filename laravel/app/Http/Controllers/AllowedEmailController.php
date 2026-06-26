@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\AllowedEmailResource;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
+use App\Models\Role;
 
 class AllowedEmailController extends Controller
 {
@@ -122,6 +123,25 @@ class AllowedEmailController extends Controller
                     ], 403);
                 }
             }
+
+            //Check if the current authenticated user is trying to demote their own role
+            if (isset($validated['role_id']) && (int)$validated['role_id'] !== (int)$allowedEmail->role_id) {
+            
+                // 1. Is this record the logged-in user?
+                if (strcasecmp(trim($allowedEmail->email), trim($user->email)) === 0) {
+                    
+                    // 2. Fetch the slug of the NEW role they are requesting to see if it's a 'viewer'
+                    // (Alternatively, you can check against a specific integer ID if preferred)
+                    $newRole = Role::find($validated['role_id']);
+                    
+                    if ($newRole && strtolower(trim($newRole->slug)) === 'viewer') {
+                        return response()->json([
+                            'message' => 'Security Violation: You are not permitted to demote your own account or strip your administrative privileges.'
+                        ], 403);
+                    }
+                }
+            }
+            
 
             //Prevent Orphaned Roles via Database Lock
             $currentIsHigh = in_array(strtolower($allowedEmail->role?->slug ?? ''), ['admin', 'developer']);
