@@ -25,13 +25,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     
     Route::get('/lookups/form-dependencies', [LookupController::class, 'getFormDependencies']); //new route to fetch organization and roles
 
-    // Developer-only routes
-    Route::middleware(['can:manage-pbi-links'])->group(function () {
+    // // Developer-only routes
+    // Route::middleware(['can:manage-pbi-links'])->group(function () {
 
-        // routes for GET, POST, PUT, DELETE /api/organizations
-        Route::apiResource('organizations', OrganizationController::class);
+    //     // routes for GET, POST, PUT, DELETE /api/organizations
+    //     Route::apiResource('organizations', OrganizationController::class);
         
-    });
+    // });
 
     // Admin and Developer routes
     // eding of allowed emails tabble
@@ -39,7 +39,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
         // routes for GET, POST, PUT, DELETE /api/allowed-emails
         Route::apiResource('allowed-emails', AllowedEmailController::class);
-
+        Route::apiResource('organizations', OrganizationController::class); //organization management
     });
 
     
