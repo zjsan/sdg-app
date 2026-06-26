@@ -127,11 +127,9 @@ class OrganizationController extends Controller
             //check the database and fetch the organization that has active whitelist entries
             DB::transaction(function () use ($organization, $user){
                 
-                  /**
-                 * prevention to restrict self deletion of organization
-                 * lock the organization's high-privilege whitelist records during this assessment
-                 */
-
+                  
+                //  prevention to restrict self deletion of organization
+                //  lock the organization's high-privilege whitelist records during this assessment
                 // fetch ALL whitelist entries for this organization (Active and Inactive)
                 $allWhitelists = AllowedEmail::where('organization_id', $organization->id)
                     ->lockForUpdate() //prevent race conditions
@@ -147,20 +145,22 @@ class OrganizationController extends Controller
                     throw new Exception('SelfDeletionViolation', 403);
                 }
 
-                //prevention for deleting last high privellege accounts
+                //prevention for deleting last active high privellege accounts
                 //need to adjust this part if ever added new high privellege role
-                $highPrivilegeCount = $criticalWhitelists->filter(function ($allowedEmail) {
-                    return in_array(strtolower($allowedEmail->role?->slug ?? ''), ['admin', 'developer']);
-                })->count();
+                $activeHighPrivilegeCount = $allWhitelists->filter(function ($allowedEmail) {
+                    $isHighPrivilege = in_array(strtolower($allowedEmail->role?->slug ?? ''), ['admin', 'developer']);
+                    return $isHighPrivilege && $allowedEmail->is_active;
+                })->count(); //count only records that are BOTH high-privilege AND currently active
 
-                //this block ensure that we also soft deleting the child whitelisted items
-                if ($highPrivilegeCount > 0) {
-                    // Cascade soft delete to associated whitelist records so they aren't orphaned
-                    AllowedEmail::where('organization_id', $organization->id)->delete();
+                // if active admins/developers exist, block the entire operation immediately
+                if ($activeHighPrivilegeCount > 0) {
+                    throw new Exception('ActiveManagementViolation', 422);
                 }
 
-                //if none of the contraints where met, safely trigger the deletion
+                // cascade soft-delete ALL remaining records (inactive admins & low-privilege entries)
+                AllowedEmail::where('organization_id', $organization->id)->delete();
                 $organization->delete(); //triggers a soft deletion in db
+
             });
 
             return response()->json([
