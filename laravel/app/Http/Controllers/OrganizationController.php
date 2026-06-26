@@ -162,24 +162,28 @@ class OrganizationController extends Controller
             });
 
             return response()->json([
-            'status' => 'success',
-            'message' => 'Organization deactivated and removed from active views successfully.'
-        ], 200);
+                'status' => 'success',
+                'message' => 'Organization deactivated and removed from active views successfully.'
+            ], 200);
         }
-        catch (QueryException $e) {
+        catch (Exception $e) {
+            // Handle custom domain exceptions thrown inside the transaction
+            if ($e->getMessage() === 'SelfDeletionViolation') {
+                return response()->json([
+                    'message' => 'Security Violation: Deactivating an organization associated with your own active session is strictly blocked.'
+                ], 403);
+            }
 
-            // Gracefully catch database exceptions (like foreign key blocks)
-            Log::error("Database integrity block on deleting organization: " . $e->getMessage());
+            Log::error("Failed to safely delete organization: " . $e->getMessage(), [
+                'organization_id' => $organization->id,
+                'user_id' => $user?->id,
+                'trace' => $e->getTraceAsString()
+            ]);
+
             return response()->json([
-                'message' => 'Cannot delete organization due to protected active database connections.'
-            ], 422);
-            
-        }
-        catch(Exception $e){
-            Log::error("Failed to delete organization: " . $e->getMessage());
-            return response()->json(['message' => 'Failed to delete organization: ' . $e->getMessage()], 500);
-        }
-       
+                'message' => 'An internal server error occurred while attempting to safely delete the organization.'
+            ], 500);
+        }   
     }
 
     // backend logic for the archive tab of the soft delete function 
