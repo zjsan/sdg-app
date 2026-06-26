@@ -40,7 +40,7 @@ const routes = [
         path: "/organization",
         name: "Organization",
         component: Organization,
-        meta: { requiresAuth: true, role: "developer" }, // must be logged in
+        meta: { requiresAuth: true, role: "admin" }, // must be logged in
     },
 
     {
@@ -161,13 +161,12 @@ router.beforeEach(async (to, from) => {
 
     //  Role-Based Access Control
     if (to.meta.role && auth.isAuthenticated) {
-        const userRole = auth.user?.role?.slug;
+        // Standardize the required role string (e.g., "admin" -> "isAdmin", "developer" -> "isDeveloper")
+        const requiredRole = to.meta.role.trim().toLowerCase();
+        const getterName = `is${requiredRole.charAt(0).toUpperCase() + requiredRole.slice(1)}`;
 
-        if (to.meta.role === "developer" && !auth.isDeveloper) {
-            return { name: "NotAuthorized" };
-        }
-
-        if (to.meta.role === "admin" && !auth.isAdmin) {
+        // Check if the getter exists on our auth store and if the user fails the check
+        if (auth[getterName] !== undefined && !auth[getterName]) {
             return { name: "NotAuthorized" };
         }
     }
