@@ -134,10 +134,17 @@ class OrganizationController extends Controller
                     ->lockForUpdate()
                     ->get();
 
-                //check if the current user belongs to the 
+                //check if the current user belongs to the organization being deleted
                 $currentUserRecord = $criticalWhitelists->first(function ($allowedEmail) use ($user){
                    return strcasecmp(trim($allowedEmail->email), trim($user->email)) === 0;
                 });
+
+                //throw an error if self-deletion
+                if ($currentUserRecord) {
+                    throw new Exception('SelfDeletionViolation', 403);
+                }
+
+
             });
 
             $organization->delete(); //triggers a soft deletion in db
