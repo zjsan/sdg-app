@@ -119,7 +119,20 @@ class OrganizationController extends Controller
     
     public function destroy(Organization $organization)
     {
+
+        $user = Auth::user(); //get the currently login user
+
         try{
+
+            DB::transaction(function () use ($organization, $user){
+                
+                //prevention to restrict self deletion of organization
+                // lock the organization's high-privilege whitelist records during this assessment
+                $criticalWhitelists = AllowedEmail::where('organization_id', $organization->id)
+                    ->where('is_active', true)
+                    ->lockForUpdate()
+                    ->get();
+            });
 
             $organization->delete(); //triggers a soft deletion in db
 
