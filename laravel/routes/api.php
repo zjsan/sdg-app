@@ -16,6 +16,12 @@ Route::get('/user', function (Request $request) {
 //auth routes
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');  
 
+// token self destruct endpoint
+Route::post('/auth/security-logout', function (Request $request) {
+    $request->user()->tokens()->delete();
+    return response()->json(['status' => 'cleared']);
+})->middleware('auth:sanctum');
+
 Route::get('/auth/session/{sessionId}', [GoogleAuthController::class, 'fetchSessionData']);
 
 // Protected route to get Power BI embed URL
