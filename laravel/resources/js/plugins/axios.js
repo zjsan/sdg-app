@@ -30,32 +30,20 @@ api.interceptors.response.use(
     async (error) => {
         const auth = useAuthStore();
 
-        // Ignore errors with no response
+        // Ignore errors with no server response (e.g., network down)
         if (!error.response) return Promise.reject(error);
 
         const status = error.response.status;
         const requestUrl = error.config?.url;
 
-        // Do NOT trigger global 401 handler for the logout request.
+        // Do NOT trigger global error redirect behaviors for explicit logout attempts.
         if (requestUrl === "/logout") {
             return Promise.reject(error);
         }
 
-        //Handle Unauthenticated (Stale/Expired Session)
-        if (error.response && error.response.status === 401) {
-            auth.clearSession();
-            router.push({
-                name: "Login",
-                query: { sessionExpired: "true" },
-            });
-            return Promise.reject(error);
-        }
-
-        //HANDLE PRIVILEGE CHANGES (Just-In-Time 403 Check)
-        if (error.response && error.response.status === 403) {
-            // Check if they are currently logged in before showing the countdown
+        // HANDLE PRIVILEGE CHANGES (Just-In-Time 403 Check)
+        if (status === 403) {
             if (auth.isAuthenticated) {
-                // Trigger a global UI event, custom ref, or notification framework banner
                 auth.triggerSecurityCountdown(
                     "Security Notice: Your administrative access privileges have changed. Re-authenticating in 10 seconds...",
                 );
@@ -64,22 +52,33 @@ api.interceptors.response.use(
                 setTimeout(() => {
                     auth.clearSession();
                     window.location.href = "/login";
-                }, 10000); // 10 seconds
+                }, 10000);
 
-                // Block the default error handling so the user only sees your countdown banner
+                // Block the default UI error rendering
                 return new Promise(() => {});
             }
         }
 
-        //normal expiration of the cache token
+        //HANDLE UNAUTHENTICATED / EXPIRED SESSIONS (401 Check)
         if (status === 401) {
             console.warn("Session expired or unauthorized access detected.");
 
-            // Prevent repeating logout multiple times
+            // If a token exists locally, try to cleanly notify backend of termination
             if (auth.token) {
-                await auth.logout();
+                try {
+                    await auth.logout();
+                } catch (logoutError) {
+                    console.error(
+                        "Silent background logout failed:",
+                        logoutError,
+                    );
+                }
             }
 
+            // Wipe local cache state if logout didn't fully catch it
+            auth.clearSession();
+
+            // Redirect to Login if they aren't already there
             if (router.currentRoute.value.name !== "Login") {
                 router.push({
                     name: "Login",
