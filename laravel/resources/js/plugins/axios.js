@@ -41,6 +41,13 @@ api.interceptors.response.use(
             return Promise.reject(error);
         }
 
+        //Handle Unauthenticated (Stale/Expired Session)
+        if (error.response && error.response.status === 401) {
+            auth.clearSession();
+            window.location.href = "/login";
+            return Promise.reject(error);
+        }
+
         if (status === 401) {
             console.warn("Session expired or unauthorized access detected.");
 
