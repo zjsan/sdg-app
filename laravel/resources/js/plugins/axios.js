@@ -44,10 +44,34 @@ api.interceptors.response.use(
         //Handle Unauthenticated (Stale/Expired Session)
         if (error.response && error.response.status === 401) {
             auth.clearSession();
-            window.location.href = "/login";
+            router.push({
+                name: "Login",
+                query: { sessionExpired: "true" },
+            });
             return Promise.reject(error);
         }
 
+        //HANDLE PRIVILEGE CHANGES (Just-In-Time 403 Check)
+        if (error.response && error.response.status === 403) {
+            // Check if they are currently logged in before showing the countdown
+            if (auth.isAuthenticated) {
+                // Trigger a global UI event, custom ref, or notification framework banner
+                auth.triggerSecurityCountdown(
+                    "Security Notice: Your administrative access privileges have changed. Re-authenticating in 10 seconds...",
+                );
+
+                // Start the 10-second grace period completely on the client side
+                setTimeout(() => {
+                    auth.clearSession();
+                    window.location.href = "/login";
+                }, 10000); // 10 seconds
+
+                // Block the default error handling so the user only sees your countdown banner
+                return new Promise(() => {});
+            }
+        }
+
+        //normal expiration of the cache token
         if (status === 401) {
             console.warn("Session expired or unauthorized access detected.");
 
