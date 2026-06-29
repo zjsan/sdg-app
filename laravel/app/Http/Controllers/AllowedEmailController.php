@@ -177,8 +177,32 @@ class AllowedEmailController extends Controller
             // Execute update
             $allowedEmail->update($validated);
 
+            //Synchronize the change to the active users table if the user exists
+            $correspondingUser = User::where('email', $allowedEmail->email)->first();
+
+            if ($correspondingUser) {
+                $userUpdatePayload = [];
+                
+                if (isset($validated['role_id'])) {
+                    $userUpdatePayload['role_id'] = $validated['role_id'];
+                }
+                if (isset($validated['organization_id'])) {
+                    $userUpdatePayload['organization_id'] = $validated['organization_id'];
+                }
+                
+                if (!empty($userUpdatePayload)) {
+                    $correspondingUser->update($userUpdatePayload);
+                }
+
+                //If role or status changed, terminate their active token sessions
+                if ($willChangeRole || $willDeactivate) {
+                    $correspondingUser->tokens()->delete();
+                }
+            }
+
             //Force-reload all relations to drop stale in-memory model cache
             $allowedEmail->load(['role', 'organization']); 
+
 
             return response()->json([
                 'message' => "Successfully updated the database record for this whitelist entry.",
