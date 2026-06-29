@@ -9,6 +9,8 @@ export const useAuthStore = defineStore("auth", {
         token: localStorage.getItem("token") || null, // persist token
         error: null, // for error handling
         initialized: false, // to track if restoreSession has been attempted
+        securityWarningMessage: null,
+        isSecurityRedirecting: false,
     }),
 
     /**
@@ -118,6 +120,12 @@ export const useAuthStore = defineStore("auth", {
             }
         },
 
+        // Action to invoke the countdown state from the Interceptor
+        triggerSecurityCountdown(message) {
+            this.securityWarningMessage = message;
+            this.isSecurityRedirecting = true;
+        },
+
         clearSession() {
             localStorage.removeItem("token");
             localStorage.removeItem("user");
@@ -126,6 +134,10 @@ export const useAuthStore = defineStore("auth", {
             this.error = null;
             this.loading = false;
             this.token = null;
+
+            // Reset security states on wipe
+            this.securityWarningMessage = null;
+            this.isSecurityRedirecting = false;
         },
 
         async loginWithGoogle() {
