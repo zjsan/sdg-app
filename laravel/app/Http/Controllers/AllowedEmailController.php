@@ -194,9 +194,13 @@ class AllowedEmailController extends Controller
                     $correspondingUser->update($userUpdatePayload);
                 }
 
-                //If role or status changed, terminate their active token sessions
+                //If role or status changed, broadcast the security alert event.
                 if ($willChangeRole || $willDeactivate) {
-                    $correspondingUser->tokens()->delete();
+                    $msg = $willDeactivate 
+                        ? "Your account access has been deactivated by an administrator."
+                        : "Your access privileges have been modified.";
+
+                    broadcast(new UserPermissionsChanged($correspondingUser, $msg));
                 }
             }
 
