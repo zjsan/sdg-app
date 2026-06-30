@@ -47,7 +47,7 @@ class AllowedEmailsRequest extends FormRequest
                 //ensure email is unique but ignore when updating the same record
                 Rule::unique('allowed_emails', 'email')
                     ->ignore($allowedEmailId)
-                    ->whereNull('deleted_at') //consider the uniqueness if it is not soft deleted
+                    ->whereNull('deleted_at') //consider the uniqueness if it is not soft deleted   
             ],
             'organization_id' => [
                 'required',
