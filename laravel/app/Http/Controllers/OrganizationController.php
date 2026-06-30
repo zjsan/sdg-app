@@ -152,17 +152,26 @@ class OrganizationController extends Controller
                     return $isHighPrivilege && $allowedEmail->is_active;
                 });
 
-                if($targetHighPrivilegeRecords->count() > 0){
+                if($targetHighPrivilegeRecords->isNotEmpty()){
 
-                    //loop through each high-privellege record inside the target organization to verify global system counts
-                    foreach($targetHighPrivilegeRecords as $targetRecord){
-                        $globalCount = AllowedEmail::activeByRole($targetRecord->role_id)->count();
+                    //get the unique Role IDs that are actually being affected
+                    $affectedRoleIds = $targetHighPrivilegeRecords->pluck('role_id')->unique();
+                    
+                    // query the global counts for just those specific roles in ONE database hit
+                    $globalCounts = AllowedEmail::whereIn('role_id', $affectedRoleIds)
+                        ->where('is_active', true) // Assuming this is what activeByRole does under the hood
+                        ->groupBy('role_id')
+                        ->selectRaw('role_id, count(*) as total')
+                        ->pluck('total', 'role_id');
 
-                        //if the user is the last remaining manager of that role in the entire syste, abort the operation
-                        if($globalCount <= 1){
+                    //Verify if any affected role falls to 1 or 0 globally
+                    foreach($affectedRoleIds as $roleId){
+                        $currentGlobalCount = $globalCounts[$roleId] ?? 0;
+
+                        if ($currentGlobalCount <= 1) {
                             throw new Exception('ActiveManagementViolation', 422);
                         }
-                    }
+                    }   
                 }
 
                 //extract the email string of the allwhitelist collection then convert it into an array
