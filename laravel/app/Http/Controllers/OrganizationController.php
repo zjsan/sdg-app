@@ -59,9 +59,6 @@ class OrganizationController extends Controller
         try{
             // Trim and clean input strings
             $validated = $request->validated();
-            if (isset($validated['name'])) {
-                $validated['name'] = trim($validated['name']);
-            }
 
             return DB::transaction(function () use ($validated) {
                 // Execute the creation within an isolated block
@@ -107,7 +104,18 @@ class OrganizationController extends Controller
             $validated = $request->validated(); 
 
             // Update the DB
-            $organization->update($validated);
+            $updatedOrganization = DB::transaction(function () use ($validated, $organization) {
+                
+                // Re-fetch the live instance from the database and lock the row until the transaction finishes
+                $lockedOrganization = Organization::where('id', $organization->id)
+                    ->lockForUpdate()
+                    ->firstOrFail();
+
+                // Apply updates to the locked row
+                $lockedOrganization->update($validated);
+
+                return $lockedOrganization;
+            });
         
 
             return response()->json([
@@ -115,11 +123,19 @@ class OrganizationController extends Controller
                 'organization' => new OrganizationResource($organization)
             ]);
 
-        } catch (Exception $e) {
+        }
+        catch (QueryException $e) {
+            if ($e->getCode() == 23000) {
+                return response()->json([
+                    'message' => 'Conflict: Another active organization is already using this name.'
+                ], 409);
+            }
+            throw $e;
+        } 
+        catch (Exception $e) {
             Log::error("Failed to update organization: " . $e->getMessage());
             return response()->json(['message' => 'Failed to update organization: ' . $e->getMessage()], 500);
-        }
-        
+        }   
     }
 
     /**
