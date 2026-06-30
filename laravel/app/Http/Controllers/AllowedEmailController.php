@@ -290,10 +290,23 @@ class AllowedEmailController extends Controller
                 }
             }
 
-            // Execution 
-            $allowedEmail->delete();
+            //delete execution with syncing of users table for deletion of active token
+            DB::transaction(function () use ($allowedEmail){
+
+                // Find the corresponding live user if they exist
+                $correspondingUser = User::where('email', $allowedEmail->email)->first();
+
+                if($correspondingUser){
+
+                    // Instantly revoke all active API tokens so they are kicked out
+                    $correspondingUser->tokens()->delete();
+                    $correspondingUser->update(['role_id' => null]); // Remove their roles
+                }
+                // Execute the eloquent soft-delete on the whitelist model
+                $allowedEmail->delete();
+            });
             
-            return response()->json(['message' => "Successfully deleted the whitelist entry."], 200);
+            return response()->json(['message' => "Successfully archived the whitelist entry."], 200);
 
         } catch (Exception $e) {
             Log::error("Failed to delete allowed email: " . $e->getMessage(), [
