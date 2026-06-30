@@ -119,8 +119,8 @@ class OrganizationController extends Controller
         
 
             return response()->json([
-                'message' => "Successfully updated {$organization->name}'s dashboard.",
-                'organization' => new OrganizationResource($organization)
+                'message' => "Successfully updated {$updatedOrganization->name}'s dashboard.",
+                'organization' => new OrganizationResource($updatedOrganization)
             ]);
 
         }
