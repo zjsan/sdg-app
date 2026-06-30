@@ -57,12 +57,14 @@ class OrganizationController extends Controller
     public function store(OrganizationRequest $request): JsonResponse
     {
         try{
-            
-            return DB::transaction(function () use ($request) {
+            // Trim and clean input strings
+            $validated = $request->validated();
+            if (isset($validated['name'])) {
+                $validated['name'] = trim($validated['name']);
+            }
 
-                //retrive the clean and validated data
-                $validated = $request->validated();
-
+            return DB::transaction(function () use ($validated) {
+                // Execute the creation within an isolated block
                 $organization = Organization::create($validated);
 
                 return response()->json([
@@ -70,6 +72,15 @@ class OrganizationController extends Controller
                     'organization' => new OrganizationResource($organization)
                 ], 201);
             });
+        }
+        catch (QueryException $e) {
+            // Catch unique constraint collisions (SQL state 23000) for duplicate entries
+            if ($e->getCode() == 23000) {
+                return response()->json([
+                    'message' => 'Conflict: An organization with this identical naming configuration already exists.'
+                ], 409); // 409 Conflict
+            }
+            throw $e;
         }
         catch (Exception $e) {
             Log::error("Failed to create organization: " . $e->getMessage());
