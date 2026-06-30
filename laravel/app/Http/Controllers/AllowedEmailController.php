@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Database\QueryException;
 
 class AllowedEmailController extends Controller
 {
@@ -69,9 +70,30 @@ class AllowedEmailController extends Controller
     {
         //
         try{
-            $validated = $request->validated(); //get the validated data from the request
 
-            $allowedEmail = AllowedEmail::create($validated); //create a new record 
+            $validated = $request->validated();//get the validated data from the request
+
+            // Standardize email trim and casing to prevent sneaky variations
+            $validated['email'] = strtolower(trim($validated['email'])); 
+
+            //Race Condition Protection & Creation Layer
+            $allowedEmail = DB::transaction(function () use ($validated) {
+            
+                // Create the whitelist record safely
+                $record = AllowedEmail::create($validated);
+
+                // If the user already registered via Google OAuth previously
+                //update their user record to immediately mirror their assigned role/org.
+                $correspondingUser = User::where('email', $validated['email'])->first();
+
+                if($correspondingUser){
+                    $correspondingUser->update([
+                    'role_id' => $validated['role_id'],
+                    'organization_id' => $validated['organization_id'] ?? null,
+                    ]);
+                }
+                return $record;
+            });
 
             $allowedEmail->load(['role', 'organization']);// eager load the related role and organization data
 
@@ -79,6 +101,16 @@ class AllowedEmailController extends Controller
                 'message' => "Successfully added a new record to the whitelist.",
                 'allowedEmail' => new AllowedEmailResource($allowedEmail)
             ], 201);
+        }
+        catch(QueryException $e){
+            // Catch SQL unique constraint violations code 23000 (Duplicate entry)
+            if ($e->getCode() == 23000) {
+                return response()->json([
+                    'message' => 'Conflict: This email address is already registered on the whitelist.'
+                ], 409); // 409 Conflict status code
+            }
+            
+            throw $e; // Re-throw if it's a completely different database issue
         }
         catch (Exception $e) {
            // Log the exact error for debugging, but keep the API response safe
