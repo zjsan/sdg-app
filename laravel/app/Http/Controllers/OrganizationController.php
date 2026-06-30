@@ -180,17 +180,22 @@ class OrganizationController extends Controller
                 if(!empty($emailsToEvict)){
 
                     // Find all users connected to these whitelisted records
-                    $correspondingUsers = User::whereIn('email', $emailsToEvict)->get();
+                    //Grab only the IDs and Emails of users to minimize memory footprint
+                    $correspondingUsers = User::whereIn('email', $emailsToEvict)->get(['id', 'email']);
 
-                    if($correspondingUsers > 0){
-                        //delete their tokens and the system access
-                        forEach($correspondingUsers as $cUsers){
-                            $cUser->tokens()->delete(); // Wipe their session keys instantly
-                            $cUser->update(['role_id' => null]); // Sever their app authorization access structure
-                        }
+                    if($correspondingUsers->isNotEmpty()){
+                        $userIds = $correspondingUsers->pluck('id')->toArray();
+                       
+                        //Mass-delete all Sanctum tokens for these users in ONE query
+                        DB::table('personal_access_tokens')
+                            ->where('tokenable_type', User::class)
+                            ->whereIn('tokenable_id', $userIds)
+                            ->delete();
+                        
+                        //Mass-update all user roles to null in ONE query
+                        User::whereIn('id', $userIds)->update(['role_id' => null]);
                     }  
                 }
-
                 // cascade soft-delete ALL remaining records
                 AllowedEmail::where('organization_id', $organization->id)->delete();
                 $organization->delete(); //triggers a soft deletion in db
