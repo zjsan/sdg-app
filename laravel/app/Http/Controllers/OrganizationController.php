@@ -159,7 +159,8 @@ class OrganizationController extends Controller
                     
                     // query the global counts for just those specific roles in ONE database hit
                     $globalCounts = AllowedEmail::whereIn('role_id', $affectedRoleIds)
-                        ->where('is_active', true) // Assuming this is what activeByRole does under the hood
+                        ->where('is_active', true) 
+                        ->whereNull('deleted_at')//fully ignore archived entries
                         ->groupBy('role_id')
                         ->selectRaw('role_id, count(*) as total')
                         ->pluck('total', 'role_id');
