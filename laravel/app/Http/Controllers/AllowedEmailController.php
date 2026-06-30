@@ -13,6 +13,7 @@ use App\Http\Resources\AllowedEmailResource;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\Role;
+use App\Models\User;
 
 class AllowedEmailController extends Controller
 {
