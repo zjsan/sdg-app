@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rule;
 
 class OrganizationRequest extends FormRequest
 {
@@ -55,13 +56,26 @@ class OrganizationRequest extends FormRequest
 
         if ($this->isMethod('post')) {
             // Rules strictly for CREATING
-            $rules['name'] = 'required|string|min:3|max:255|unique:organizations,name';
-            $rules['slug'] = 'required|string|min:3|max:255|unique:organizations,slug';
+            // ignore soft-deleted rows
+            $rules['name'] = [
+                'required', 'string', 'min:3', 'max:255',
+                 Rule::unique('organizations', 'name')->whereNull('deleted_at')
+            ];
+            $rules['slug'] = [
+                'required', 'string', 'min:3', 'max:255',
+                 Rule::unique('organizations', 'slug')->whereNull('deleted_at')
+            ];
         } else {
             // Rules strictly for UPDATING
-            // 'sometimes' means: if the key is missing from the JS payload, ignore it
-            $rules['name'] = 'sometimes|required|string|min:3|max:255|unique:organizations,name,' . $orgId;
-            $rules['slug'] = 'sometimes|required|string|min:3|max:255|unique:organizations,slug,' . $orgId;
+            // Ignore current record ID AND ignore soft-deleted records
+            $rules['name'] = [
+                'sometimes', 'required', 'string', 'min:3', 'max:255',
+                 Rule::unique('organizations', 'name')->ignore($orgId)->whereNull('deleted_at')
+            ];
+            $rules['slug'] = [
+                'sometimes', 'required', 'string', 'min:3', 'max:255',
+                 Rule::unique('organizations', 'slug')->ignore($orgId)->whereNull('deleted_at')
+            ];
         }
 
         return $rules;
