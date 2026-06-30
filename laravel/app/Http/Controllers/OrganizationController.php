@@ -165,9 +165,24 @@ class OrganizationController extends Controller
                     }
                 }
 
-                
+                //extract the email string of the allwhitelist collection then convert it into an array
+                $emailsToEvict = $allWhitelists->pluck('email')->toArray();
 
-                // cascade soft-delete ALL remaining records (inactive admins & low-privilege entries)
+                if(!empty($emailsToEvict)){
+
+                    // Find all users connected to these whitelisted records
+                    $correspondingUsers = User::whereIn('email', $emailsToEvict)->get();
+
+                    if($correspondingUsers > 0){
+                        //delete their tokens and the system access
+                        forEach($correspondingUsers as $cUsers){
+                            $cUser->tokens()->delete(); // Wipe their session keys instantly
+                            $cUser->update(['role_id' => null]); // Sever their app authorization access structure
+                        }
+                    }  
+                }
+
+                // cascade soft-delete ALL remaining records
                 AllowedEmail::where('organization_id', $organization->id)->delete();
                 $organization->delete(); //triggers a soft deletion in db
 
