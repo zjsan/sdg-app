@@ -145,17 +145,27 @@ class OrganizationController extends Controller
                     throw new Exception('SelfDeletionViolation', 403);
                 }
 
-                //prevention for deleting last active high privellege accounts
-                //need to adjust this part if ever added new high privellege role
-                $activeHighPrivilegeCount = $allWhitelists->filter(function ($allowedEmail) {
+                // Count how many high privilege records exist inside this specific target organization
+                //adjust the role for new roles in the future
+                $targetHighPrivilegeRecords = $allWhitelists->filter(function ($allowedEmail) {
                     $isHighPrivilege = in_array(strtolower($allowedEmail->role?->slug ?? ''), ['admin', 'developer']);
                     return $isHighPrivilege && $allowedEmail->is_active;
-                })->count(); //count only records that are BOTH high-privilege AND currently active
+                });
 
-                // if active admins/developers exist, block the entire operation immediately
-                if ($activeHighPrivilegeCount > 0) {
-                    throw new Exception('ActiveManagementViolation', 422);
+                if($targetHighPrivilegeRecords->count() > 0){
+
+                    //loop through each high-privellege record inside the target organization to verify global system counts
+                    foreach($targetHighPrivilegeRecords as $targetRecord){
+                        $globalCount = AllowedEmail::activeByRole($targetRecord->role_id)->count();
+
+                        //if the user is the last remaining manager of that role in the entire syste, abort the operation
+                        if($globalCount <= 1){
+                            throw new Exception('ActiveManagementViolation', 422);
+                        }
+                    }
                 }
+
+                
 
                 // cascade soft-delete ALL remaining records (inactive admins & low-privilege entries)
                 AllowedEmail::where('organization_id', $organization->id)->delete();
