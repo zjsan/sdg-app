@@ -47,7 +47,7 @@ class AllowedEmailsSeeder extends Seeder
             ['email' => 'nfirme@ched.gov.ph', 'organization_id' => $chedId, 'role_id'=> $viewerRole, 'is_active' => true],
 
             //external
-            ['email' => 'zjsantos25@gmail.com','organization_id' => $externalId, 'role_id'=> $devRole, 'is_active' => true],
+            // ['email' => 'zjsantos25@gmail.com','organization_id' => $externalId, 'role_id'=> $devRole, 'is_active' => true],
            // ['email' => 'ninanisperos519@gmail.com', 'organization_id' => $externalId,'role_id'=> $viewerRole, 'is_active' => true],
         ];
 
