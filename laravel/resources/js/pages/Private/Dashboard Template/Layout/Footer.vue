@@ -15,8 +15,8 @@
                         A data-driven platform for analyzing the performance of
                         Philippine Higher Education Institutions (HEIs) across
                         the United Nations Sustainable Development Goals (SDGs).
-                        Developed and maintained by the
-                        <strong>MMSU Analytics Team</strong>.
+                        The dashboard is developed and maintained by the
+                        <strong>MMSU SDG Analytics Team</strong>.
                     </p>
                 </div>
 
