@@ -1,5 +1,8 @@
 <template>
-    <div class="p-[27.8px] border-t border-gray-200 flex-shrink-0">
+    <div
+        v-if="auth.user"
+        class="p-[27.8px] border-t border-gray-200 flex-shrink-0"
+    >
         <div class="flex items-center p-2 mb-3">
             <div class="h-8 w-8 mr-3 flex-shrink-0">
                 <img
