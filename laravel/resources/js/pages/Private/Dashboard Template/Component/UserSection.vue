@@ -13,8 +13,8 @@
                     referrerpolicy="no-referrer"
                 />
             </div>
-            <div class="overflow-hidden">
-                <div class="text-sm font-semibold truncate">
+            <div class="min-w-0 flex-1">
+                <div class="text-sm font-semibold whitespace-nowrap">
                     {{ auth.user?.name || "Guest" }}
                 </div>
                 <div class="text-xs text-gray-500 truncate">
