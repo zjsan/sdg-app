@@ -4,7 +4,7 @@
             <div class="h-8 w-8 mr-3 flex-shrink-0">
                 <img
                     v-if="auth.user?.avatar_url"
-                    :src="auth.user.avatar_url"
+                    :src="auth.user?.avatar_url"
                     :alt="auth.user?.name"
                     class="h-full w-full object-cover rounded-full"
                     referrerpolicy="no-referrer"
