@@ -49,6 +49,20 @@ deploy:
 	$(COMPOSE_PROD) up -d --remove-orphans
 	$(MAKE) optimize
 
+deploy-seed-emails:
+	@echo "Pulling changes and building updated layers safely..."
+	$(COMPOSE_PROD) build
+	@echo "Restarting containers with zero downtime..."
+	$(COMPOSE_PROD) up -d --remove-orphans
+	$(MAKE) update-whitelist
+
+deploy-seed-roles:
+	@echo "Pulling changes and building updated layers safely..."
+	$(COMPOSE_PROD) build
+	@echo "Restarting containers with zero downtime..."
+	$(COMPOSE_PROD) up -d --remove-orphans
+	$(MAKE) update-roles
+
 # 3. Database Seeding
 seed:
 	$(COMPOSE_PROD) build --no-cache
@@ -86,12 +100,16 @@ refresh-links:
 	@echo "Power BI links have been synchronized successfully."
 
 update-whitelist:
-	$(COMPOSE_PROD) build --no-cache
-	$(COMPOSE_PROD) up -d
 	docker exec $(PHP_CONT) php artisan db:seed --class=AllowedEmailsSeeder --force
-	
+
 	$(MAKE) optimize
 	@echo "Allowed emails have been updated successfully."
+
+update-roles:
+	docker exec $(PHP_CONT) php artisan db:seed --class=RoleSeeder --force
+
+	$(MAKE) optimize
+	@echo "Roles have been updated successfully."
 
 # Helper: Optimization logic
 optimize:
