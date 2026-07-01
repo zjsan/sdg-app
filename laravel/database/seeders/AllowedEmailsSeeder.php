@@ -36,9 +36,18 @@ class AllowedEmailsSeeder extends Seeder
             ['email' => 'lhaquino@mmsu.edu.ph', 'organization_id' => $mmsuId, 'role_id'=> $viewerRole, 'is_active' => true],
 
             //ched
+            ['email' => 'cnferrer@ched.gov.ph', 'organization_id' => $chedId, 'role_id'=> $viewerRole, 'is_active' => true],
+            ['email' => 'mgutierrez@ched.gov.ph', 'organization_id' => $chedId, 'role_id'=> $viewerRole,'is_active' => true],
+            ['email' => 'abunag@ched.gov.ph', 'organization_id' => $chedId, 'role_id'=> $viewerRole, 'is_active' => true],
+            ['email' => 'jdlagman@ched.gov.ph', 'organization_id' => $chedId, 'role_id'=> $viewerRole, 'is_active' => true],
+            ['email' => 'egviste@ched.gov.ph', 'organization_id' => $chedId, 'role_id'=> $viewerRole, 'is_active' => true],
+            ['email' => 'jrestanislao@ched.gov.ph', 'organization_id' => $chedId, 'role_id'=> $viewerRole, 'is_active' => true],
+            ['email' => 'aflores@ched.gov.ph', 'organization_id' => $chedId, 'role_id'=> $viewerRole, 'is_active' => true],
+            ['email' => 'jaguerrero@ched.gov.ph', 'organization_id' => $chedId, 'role_id'=> $viewerRole, 'is_active' => true],
+            ['email' => 'nfirme@ched.gov.ph', 'organization_id' => $chedId, 'role_id'=> $viewerRole, 'is_active' => true],
 
             //external
-            ['email' => 'zjsantos25@gmail.com','organization_id' => $externalId, 'role_id'=> $viewerRole, 'is_active' => true],
+            ['email' => 'zjsantos25@gmail.com','organization_id' => $externalId, 'role_id'=> $devRole, 'is_active' => true],
            // ['email' => 'ninanisperos519@gmail.com', 'organization_id' => $externalId,'role_id'=> $viewerRole, 'is_active' => true],
         ];
 
