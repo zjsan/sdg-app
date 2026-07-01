@@ -15,6 +15,8 @@
                         A data-driven platform for analyzing the performance of
                         Philippine Higher Education Institutions (HEIs) across
                         the United Nations Sustainable Development Goals (SDGs).
+                        Developed and maintained by the
+                        <strong>MMSU Analytics Team</strong>.
                     </p>
                 </div>
 
@@ -28,7 +30,6 @@
                     >
                         {{ item.name }}
                     </router-link>
-                  
                 </div>
 
                 <!-- Right: Attribution -->
@@ -73,12 +74,10 @@ const menuItems = [
         name: "Methodology",
         to: "/methodology",
         icon: "pi-sitemap",
-
     },
 ];
 
 const filteredMenu = computed(() => {
     return menuItems.filter((item) => item.name);
 });
-
 </script>
