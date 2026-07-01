@@ -31,7 +31,7 @@ export const useAuthStore = defineStore("auth", {
         isAdmin: (state) => {
             const slug = state.user?.role?.slug || null;
             console.log("Checking role:", slug);
-            return ["admin", "developer"].includes(slug.trim().toLowerCase());
+            return ["admin", "developer"].includes(slug?.trim().toLowerCase());
         },
     },
 
