@@ -26,8 +26,7 @@ return [
     'http://local.sdg-dashboard.com',
 
      //production ip address
-    'http://13.251.136.207',  
-    'https://13.251.136.207', // Production URL
+    #'https://13.251.136.207', // Production URL
     'https://sdg-dashboard.ddnsfree.com', // Production URL
      ], 
 
