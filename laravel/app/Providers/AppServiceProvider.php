@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,6 +23,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if (app()->environment('production')) {
+            URL::forceScheme('https');
+        }
         // check if user belongs to a specific organization by slug
         Gate::define('view-dashboard', function (User $user, string $org_slug) {
             return $user->organization?->slug === $org_slug;
