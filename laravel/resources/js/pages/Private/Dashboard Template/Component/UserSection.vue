@@ -3,21 +3,35 @@
         v-if="auth.user"
         class="p-[27.8px] border-t border-gray-200 flex-shrink-0"
     >
-        <div class="flex items-center p-2 mb-3">
+        <div class="flex items-center p-2 mb-1 min-w-0">
+            <!-- Avatar -->
             <div class="h-8 w-8 mr-3 flex-shrink-0">
                 <img
                     v-if="auth.user?.avatar_url"
                     :src="auth.user?.avatar_url"
-                    :alt="auth.user?.name"
-                    class="h-full w-full object-cover rounded-full"
+                    :alt="`Profile picture of ${auth.user?.name}`"
+                    class="h-full w-full object-cover rounded-full bg-gray-100"
                     referrerpolicy="no-referrer"
                 />
             </div>
+
+            <!-- User Info Wrapper -->
             <div class="min-w-0 flex-1">
-                <div class="text-sm font-semibold whitespace-nowrap">
+                <!-- Name -->
+                <div
+                    class="text-sm font-semibold text-gray-900 truncate"
+                    :title="auth.user?.name"
+                    aria-label="User name"
+                >
                     {{ auth.user?.name || "Guest" }}
                 </div>
-                <div class="text-xs text-gray-500 truncate">
+
+                <!-- Email -->
+                <div
+                    class="text-xs text-gray-500 truncate mt-0.5"
+                    :title="auth.user?.email"
+                    aria-label="User email"
+                >
                     {{ auth.user?.email }}
                 </div>
             </div>
