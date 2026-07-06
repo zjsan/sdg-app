@@ -45,10 +45,17 @@ build-normal:
 deploy:
 	@echo "Pulling changes and building updated layers safely..."
 	$(COMPOSE_PROD) build
-	@echo "Restarting containers with zero downtime..."
-	$(COMPOSE_PROD) up -d --remove-orphans
+	@echo "Restarting containers with zero downtime and recreating MySQL..."
+	$(COMPOSE_PROD) up -d --remove-orphans --force-recreate mysql
 	$(MAKE) optimize
 
+# New targeted command for MySQL environment/credential updates
+deploy-build-mysql:
+	@echo "Warning: Recreating the MySQL container to apply new environment variables..."
+	$(COMPOSE_PROD) up -d --force-recreate mysql
+	@echo "MySQL container recreated successfully."
+	$(MAKE) optimize
+	
 deploy-seed-emails:
 	@echo "Pulling changes and building updated layers safely..."
 	$(COMPOSE_PROD) build
