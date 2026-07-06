@@ -785,16 +785,16 @@ const handleSubmit = async () => {
                 cleanOrgName,
                 cleanOrgPBI,
             );
-            console.log("updated successfully");
+            //console.log("updated successfully");
         } else {
             //create action
-            console.log(cleanOrgName);
-            console.log(cleanOrgPBI);
+            // console.log(cleanOrgName);
+            // console.log(cleanOrgPBI);
             response = await organizationStore.createOrganization(
                 cleanOrgName,
                 cleanOrgPBI,
             );
-            console.log("created successfully.");
+            // console.log("created successfully.");
         }
 
         //Backend Processes Execution Block
