@@ -42,6 +42,7 @@ build-normal:
 
 
 # 2. Config/Dependency Changes and frontend building
+#need to remove the --force-recreate flag after successful deployment to avoid unnecessary downtime
 deploy:
 	@echo "Pulling changes and building updated layers safely..."
 	$(COMPOSE_PROD) build
@@ -55,7 +56,7 @@ deploy-build-mysql:
 	$(COMPOSE_PROD) up -d --force-recreate mysql
 	@echo "MySQL container recreated successfully."
 	$(MAKE) optimize
-	
+
 deploy-seed-emails:
 	@echo "Pulling changes and building updated layers safely..."
 	$(COMPOSE_PROD) build

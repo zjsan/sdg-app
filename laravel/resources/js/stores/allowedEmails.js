@@ -36,7 +36,7 @@ export const useAllowedEmailsStore = defineStore("allowedEmails", {
                 });
 
                 const payload = res.data; //extract response data from the controller
-                console.log("API Response:", payload); // Debugging log
+                // console.log("API Response:", payload); // Debugging log
 
                 // ensure we only update the state if the request wasn't aborted
                 if (!controller.signal.aborted) {
