@@ -117,10 +117,10 @@ export const useOrganizationStore = defineStore("organization", {
                     name: name,
                     pbi_embed_id: embedId,
                 });
-                console.log(
-                    response.message,
-                    `Organization ${id} updated with new PBI Embed ID: ${embedId}`,
-                );
+                // console.log(
+                //     response.message,
+                //     `Organization ${id} updated with new PBI Embed ID: ${embedId}`,
+                // );
                 return response;
             } catch (error) {
                 this.errors =

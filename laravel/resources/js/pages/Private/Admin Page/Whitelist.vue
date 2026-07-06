@@ -819,8 +819,8 @@ const openAddModal = () => {
 };
 
 const openEditModal = (item) => {
-    console.log("Organizations in Store:", dynamicOrganizations.value);
-    console.log("Item being edited:", item);
+    //console.log("Organizations in Store:", dynamicOrganizations.value);
+    //console.log("Item being edited:", item);
 
     const itemOrgId = item.organization?.id || item.organization_id;
     const itemRoleId = item.role?.id || item.role_id;
