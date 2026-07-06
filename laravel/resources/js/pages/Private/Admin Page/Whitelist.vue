@@ -284,8 +284,7 @@
                                                         The record remains
                                                         safely preserved and can
                                                         be restored or
-                                                        re-activated at any
-                                                        time.
+                                                        re-activated later.
                                                     </span>
                                                 </AlertDialogDescription>
                                             </AlertDialogHeader>
