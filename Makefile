@@ -1,5 +1,5 @@
 # Variables
-COMPOSE_PROD = docker compose -f docker-compose.prod.yml --env-file ./laravel/.env
+COMPOSE_PROD = docker compose -f docker-compose.prod.yml
 PHP_CONT = sdg-php
 
 .PHONY: build-fresh deploy seed help
@@ -59,16 +59,14 @@ deploy-build-mysql:
 
 #special command updates everything AND forces MySQL to grab the new .env)
 deploy-all:
-	@echo "Creating root environment symlink for legacy Docker parsers..."
-	@ln -sf ./laravel/.env .env
-	@echo "Building all updated layers..."
-	$(COMPOSE_PROD) build
-	@echo "Bringing up all containers and forcing MySQL to recreate..."
-	$(COMPOSE_PROD) up -d --remove-orphans --force-recreate mysql
-	$(COMPOSE_PROD) up -d
+	@echo "Loading configuration and launching deployment orchestration..."
+	@export $$(cat ./laravel/.env | grep -v '^#' | xargs) && \
+	echo "Building all updated layers..." && \
+	$(COMPOSE_PROD) build && \
+	echo "Bringing up all containers and forcing MySQL to recreate..." && \
+	$(COMPOSE_PROD) up -d --remove-orphans --force-recreate mysql && \
+	$(COMPOSE_PROD) up -d && \
 	$(MAKE) optimize
-	@echo "Cleaning up root environment symlink..."
-	@rm -f .env
 
 deploy-seed-emails:
 	@echo "Pulling changes and building updated layers safely..."
