@@ -6,10 +6,10 @@ services:
     env_file: # Tell Docker Compose to look at Laravel .env file for variable substitution
       - ./laravel/.env
     environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER: ${DB_USERNAME}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: sdg_db
+      MYSQL_USER: sdg_app_user
+      MYSQL_PASSWORD: SDG_App_Db_10F!3kLp@
+      MYSQL_ROOT_PASSWORD: r00tProd_SDG_App_db!@#Xq
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
@@ -21,7 +21,7 @@ services:
       dockerfile: docker/php/Dockerfile.prod # Production Dockerfile
       target: php_env
       args:
-        VITE_API_URL: ${VITE_API_URL}
+        VITE_API_URL: https://sdg-dashboard.ddnsfree.com
     container_name: sdg-php
     restart: unless-stopped
     healthcheck:
