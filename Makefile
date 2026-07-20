@@ -59,14 +59,15 @@ deploy-build-mysql:
 
 #special command updates everything AND forces MySQL to grab the new .env)
 deploy-all:
-	@echo "Loading configuration and launching deployment orchestration..."
-	@export $$(cat ./laravel/.env | grep -v '^#' | xargs) && \
-	echo "Building all updated layers..." && \
-	$(COMPOSE_PROD) build && \
-	echo "Bringing up all containers and forcing MySQL to recreate..." && \
-	$(COMPOSE_PROD) up -d --remove-orphans --force-recreate mysql && \
-	$(COMPOSE_PROD) up -d && \
+	@echo "Ensuring root environment symlink exists for Docker Compose..."
+	@ln -sf ./laravel/.env .env
+	@echo "Building all updated layers..."
+	$(COMPOSE_PROD) build
+	@echo "Bringing up all containers and forcing MySQL to recreate..."
+	$(COMPOSE_PROD) up -d --remove-orphans --force-recreate mysql
+	$(COMPOSE_PROD) up -d
 	$(MAKE) optimize
+	@echo "Deployment cycle complete."
 
 deploy-seed-emails:
 	@echo "Pulling changes and building updated layers safely..."
