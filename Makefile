@@ -1,7 +1,5 @@
 # Variables
-COMPOSE_PROD = docker compose \
-	--env-file ./laravel/.env \
-	-f docker-compose.prod.yml
+COMPOSE_PROD = docker compose --env-file ./laravel/.env -f docker-compose.prod.yml
 PHP_CONT = sdg-php
 
 .PHONY: build-fresh deploy seed help
