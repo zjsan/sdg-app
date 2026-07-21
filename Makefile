@@ -46,8 +46,9 @@ build-normal:
 deploy:
 	@echo "Pulling changes and building updated layers safely..."
 	$(COMPOSE_PROD) build
-	@echo "Restarting containers with zero downtime"
-	$(COMPOSE_PROD) up -d --remove-orphans 
+	@echo "Restarting containers and refreshing public assets..."
+	docker volume rm sdg-app_laravel_public || true
+	$(COMPOSE_PROD) up -d --remove-orphans
 	$(MAKE) optimize
 
 # New targeted command for MySQL environment/credential updates
