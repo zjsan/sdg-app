@@ -147,11 +147,13 @@ export const useAuthStore = defineStore("auth", {
 
                 // Redirect the user to backend route
                 const baseURL = import.meta.env.VITE_API_URL;
+                const frontend_URL = import.meta.env.FRONTEND_URL;
                 console.log(
                     "Redirecting to Google login at:",
                     `${baseURL}/auth/google/redirect`,
                 );
-                window.location.href = `${baseURL}/auth/google/redirect`;
+                console.log("Frontend URL:", frontend_URL);
+                //window.location.href = `${baseURL}/auth/google/redirect`;
             } catch (error) {
                 this.error = "Google login failed to start.";
             } finally {
