@@ -21,7 +21,7 @@ services:
       dockerfile: docker/php/Dockerfile.prod # Production Dockerfile
       target: php_env
       args:
-        VITE_API_URL: https://sdg-dashboard.ddnsfree.com
+        VITE_API_URL: https://sdgph.org
     container_name: sdg-php
     restart: unless-stopped
     healthcheck:
