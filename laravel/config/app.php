@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'https://sdg-dashboard.ddnsfree.com'),
+    'url' => env('APP_URL', 'https://sdgph.org'),
 
     /*
     |--------------------------------------------------------------------------
@@ -123,7 +123,7 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
-    'frontend_url' => env('FRONTEND_URL', 'sdg-dashboard.ddnsfree.com'),
+    'frontend_url' => env('FRONTEND_URL', 'https://sdgph.org'),
 
     'power_bi' => [
         'BASE_URL' => env('POWER_BI_BASE_URL', 'https://app.powerbi.com/view?r='),
