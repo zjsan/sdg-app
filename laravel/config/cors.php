@@ -20,14 +20,14 @@ return [
     'allowed_methods' => ['*'],
 
     'allowed_origins' => [  
-    'http://localhost:5173', // Vue dev server
-    'http://localhost:8080', // Local Nginx
-     // Local Nginx alias
-    'http://local.sdg-dashboard.com',
+        'http://localhost:5173',          // Vue dev server
+        'http://localhost:8080',          // Local Nginx
+        'http://local.sdg-dashboard.com', // Local Nginx alias
 
-     //production ip address
-    #'https://13.251.136.207', // Production URL
-    'https://sdg-dashboard.ddnsfree.com', // Production URL
+        // Production URLs
+        'https://sdgph.org',
+        'https://www.sdgph.org',
+        'https://sdg-dashboard.ddnsfree.com', // Keep temporarily for smooth migration
      ], 
 
     'allowed_origins_patterns' => [],
