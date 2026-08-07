@@ -151,7 +151,7 @@ export const useAuthStore = defineStore("auth", {
                     "Redirecting to Google login at:",
                     `${baseURL}/auth/google/redirect`,
                 );
-                //window.location.href = `${baseURL}/auth/google/redirect`;
+                window.location.href = `${baseURL}/auth/google/redirect`;
             } catch (error) {
                 this.error = "Google login failed to start.";
             } finally {
