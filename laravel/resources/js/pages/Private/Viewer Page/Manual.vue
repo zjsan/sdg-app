@@ -37,8 +37,9 @@
                                     </p>
                                     <p class="text-sm text-slate-500">
                                         Click the menus at the top of the
-                                        dashboard to navigate through the
-                                        different report tabs.
+                                        dashboard to switch between report tabs.
+                                        To close the dropdown without selecting
+                                        anything, simply click the button again.
                                     </p>
                                 </div>
                             </li>
