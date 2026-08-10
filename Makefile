@@ -42,9 +42,10 @@ build-normal:
 
 
 # 2. Config/Dependency Changes and frontend building
-#need to remove the --force-recreate flag after successful deployment to avoid unnecessary downtime
+# normal deployment cycle, but with a build step in the node layer to update dependencies and frontend assets
 deploy:
 	@echo "Pulling changes and building updated layers safely..."
+	$(COMPOSE_PROD) build --no-cache node_build
 	$(COMPOSE_PROD) build
 	@echo "Restarting containers and refreshing public assets..."
 	docker volume rm sdg-app_laravel_public || true
