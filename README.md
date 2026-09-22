@@ -114,13 +114,17 @@ To prevent the `GET /undefined/auth/google/redirect` error in production builds,
     # 1. Build and start containers
     docker compose up -d --build
 
-    # 2. Check containers
+Note: The Node container automatically runs npm install and starts the Vite development server in the background. No need to execute `npm install` or `npm run dev` manually.
+
+    # 2. Verify the development server is running
+    docker compose logs -f node
+
+Success indicator: Look for the Vite startup message showing ➜ Local: `http://localhost:5173/`. Press Ctrl + C to exit the log stream without stopping the container.
+
+    # 3. Check containers
     docker compose ps
 
-    # 3. Start Frontend Hot Module Replacement (HMR)
-    docker exec -it sdg-node npm run dev
-
-**Access via:** http://localhost:8080
+**Access via:** http://local.sdg-dashboard.com
 
 ## 7. Production Deployment Workflow
 
