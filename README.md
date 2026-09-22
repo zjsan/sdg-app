@@ -168,10 +168,22 @@ Before using the automation scripts, you must ensure that the `make` utility is 
 
 ```
 
-**Run full deployment process including pulling updates and rebuilding containers**:
+**Run full deployment process, heavy reset of entire infrastructure from scratch without using Docker cache**:
 
 - Clean Docker rebuild and restart
 - Backend or configuration changes are made
+- New environment variables are added
+- Middleware, routes, or API logic changes
+
+```
+  make deploy-clean
+
+```
+
+**Standard Deployment**:
+
+- Backend or configuration changes are made
+- Frontend and assets changes
 - New environment variables are added
 - Middleware, routes, or API logic changes
 
