@@ -31,14 +31,8 @@ deploy-clean:
 	$(MAKE) optimize
 
 # New targeted command for MySQL environment/credential updates
-deploy-build-mysql:
-	@echo "Warning: Recreating the MySQL container to apply new environment variables..."
-	$(COMPOSE_PROD) up -d --force-recreate mysql
-	@echo "MySQL container recreated successfully."
-	$(MAKE) optimize
-
 #special command updates everything AND forces MySQL to grab the new .env)
-deploy-all:
+deploy-build-mysql:
 	@echo "Building updated images..."
 	$(COMPOSE_PROD) build
 
