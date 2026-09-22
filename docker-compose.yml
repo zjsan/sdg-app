@@ -66,7 +66,7 @@ services:
       - "5173:5173"
     networks:
       - sdgapp_net
-    command: tail -f /dev/null # idle, exec into it manually
+    command: sh -c "npm install && npm run dev -- --host"
 
 networks:
   sdgapp_net:
