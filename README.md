@@ -33,112 +33,63 @@ To access Live Prod: **13.251.136.207** or **sdgph.org**
 
 ## 4. Hosts File Configuration
 
-To make sure the application works correctly during testing and production, you need to map the domain in your system's **hosts file**.  
-There are two simple ways to do this: using **Notepad** or using **PowerShell**.
+To ensure the application functions properly during development, testing, and staging (mimic of the production server), map the target domain in Windows **hosts file**.
 
 ---
 
-### Option 1: Update Using Notepad (Windows)
+### Step-by-Step Guide (Windows Notepad)
+
+#### 1. Add Configuration
 
 1. **Open Notepad as Administrator**
-   - Search for "Notepad" in the Start menu.
-   - Right-click it and select **Run as Administrator**.
+   - Press the **Windows Key**, search for **Notepad**.
+   - Right-click **Notepad** and select **Run as Administrator**.
 
 2. **Open the Hosts File**
    - In Notepad, go to **File > Open**.
    - Navigate to:  
-     `C:\Windows\System32\drivers\etc\hosts`
-   - At the bottom-right, change the dropdown to **All Files** so you can see the file.
-   - Select the file and open it.
+     `C:\Windows\System32\drivers\etc\`
+   - Change the file type dropdown in the bottom-right corner from **Text Documents (\*.txt)** to **All Files (_._)**.
+   - Select `hosts` and click **Open**.
 
-3. **Add Configuration**
-   - Scroll to the bottom and paste one of the following lines:
-     - For testing(mimic production environment using wsl ubuntu):
+3. **Add the Required Entry**
+   - Scroll to the bottom of the file and paste the appropriate entry:
+     - **For Local Testing (WSL / Ubuntu):**
+       ```text
+       127.0.0.1    local.sdg-dashboard.com`
        ```
-       127.0.0.1    sdg-dashboard.ddnsfree.com
-       ```
-     - For live production:
-       ```
-       13.251.136.207    sdg-dashboard.ddnsfree.com
-       ```
-
-4. **Save and Close**
-   - Press **Ctrl + S** to save.
-   - Close Notepad.
-
----
-
-### Option 2: Update Using PowerShell (Windows)
-
-1. **Open PowerShell as Administrator**
-   - Search for "PowerShell" in the Start menu.
-   - Right-click it and select **Run as Administrator**.
-
-2. **Add the Configuration**
-   - Copy and paste one of these commands into PowerShell, then press **Enter**:
-     - For **Live Production**:
-
-       ```
-       $HostEntry = "13.251.136.207`tapp.sdg-dashboard.com"
-       $Path = "$env:windir\System32\drivers\etc\hosts"
-
-       if ((Get-Content $Path) -notcontains $HostEntry) {
-            Add-Content -Path $Path -Value "$([Environment]::NewLine)$HostEntry" -Encoding ASCII
-            Write-Host "Entry added successfully." -ForegroundColor Green
-       } else {
-            Write-Host "Entry already exists. Skipping." -ForegroundColor Yellow
-       }
+     - **For Live Production test (local machine):**
+       ```text
+       13.251.136.207   sdgph.org
        ```
 
-     - For **Testing (local setup)**:
+4. **Save the File**
+   - Press **Ctrl + S** to save, then close Notepad.
 
-       ```
-       $HostEntry = "127.0.0.1`tapp.sdg-dashboard.com"
-       $Path = "$env:windir\System32\drivers\etc\hosts"
-
-       if ((Get-Content $Path) -notcontains $HostEntry) {
-            Add-Content -Path $Path -Value "$([Environment]::NewLine)$HostEntry" -Encoding ASCII
-            Write-Host "Entry added successfully." -ForegroundColor Green
-       } else {
-            Write-Host "Entry already exists. Skipping." -ForegroundColor Yellow
-       }
-       ```
-
-3. **Refresh DNS Cache**
-   - Run this command:
-     ```
+5. **Flush DNS Cache**
+   - Open `powershell` and **run as administrator**.
+   - Run the following command to apply the changes immediately:
+     ```cmd
      ipconfig /flushdns
      ```
 
 ---
 
-### How to Remove the Configuration (PowerShell)
+#### 2. Remove Configuration
 
-For deleting the entry:
+1. **Open Notepad as Administrator**
+   - Right-click **Notepad** in the Start menu and select **Run as Administrator**.
 
-1. **Open PowerShell as Administrator**
-   - Same as above.
+2. **Open the Hosts File**
+   - Go to **File > Open**, navigate to `C:\Windows\System32\drivers\etc\`, select **All Files (_._)**, and open `hosts`.
 
-2. **Run the Removal Command**
-   - Choose one of the following depending on what you want to remove:
-     - To remove **Live Production** entry:
-       ```
-       $hosts = "$env:windir\System32\drivers\etc\hosts"
-       (Get-Content $hosts) |
-         Where-Object { $_ -notmatch '^\s*13\.251\.136\.207\s+app\.sdg-dashboard\.com\s*$' } |
-         Set-Content $hosts
-       ```
-     - To remove **Testing (local setup)** entry:
-       ```
-       $hosts = "$env:windir\System32\drivers\etc\hosts"
-       (Get-Content $hosts) |
-         Where-Object { $_ -notmatch '^\s*127\.0\.0\.1\s+app\.sdg-dashboard\.com\s*$' } |
-         Set-Content $hosts
-       ```
+3. **Delete the Entry**
+   - Locate and delete the line containing `local.sdg-dashboard.com` or `sdgph.org`.
+   - Press **Ctrl + S** to save the changes, then close Notepad.
 
-3. **Refresh DNS Cache Again**
-   - Run:
-     ```
+4. **Flush DNS Cache**
+   - PowerShell and clear the cached DNS entries:
+     ```cmd
      ipconfig /flushdns
      ```
 
