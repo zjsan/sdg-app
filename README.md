@@ -157,17 +157,6 @@ Before using the automation scripts, you must ensure that the `make` utility is 
 
 ```
 
-**Rebuild and refresh frontend assets**:
-
-- Updating Vue components
-- Modifying frontend assets
-- Encountering stale frontend builds
-
-```
-  make frontend-build-fresh
-
-```
-
 **Run full deployment process, heavy reset of entire infrastructure from scratch without using Docker cache**:
 
 - Clean Docker rebuild and restart
