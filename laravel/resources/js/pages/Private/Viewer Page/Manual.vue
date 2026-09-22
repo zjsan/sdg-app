@@ -74,6 +74,23 @@
                                     </p>
                                 </div>
                             </li>
+                            <!-- Newly added Mean to Median Toggle feature -->
+                            <li class="flex gap-3">
+                                <span class="font-mono text-blue-500 font-bold"
+                                    >04.</span
+                                >
+                                <div>
+                                    <p class="font-semibold text-slate-800">
+                                        Mean / Median Toggle
+                                    </p>
+                                    <p class="text-sm text-slate-500">
+                                        Switch between the average (mean) and
+                                        middle value (median) views dynamically
+                                        across supported pages and charts by
+                                        clicking the dedicated toggle button.
+                                    </p>
+                                </div>
+                            </li>
                         </ul>
                     </div>
                 </section>
