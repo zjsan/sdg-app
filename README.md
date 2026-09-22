@@ -142,7 +142,7 @@ The `docker-entrypoint.sh` script is the brain of the container.Attached within 
   - Runs database migrations (`migrate --force`).
   - Pre-caches the application for production performance.
 
-## MakeFile Automated script using Makefile
+## Automated deployment script using Makefile
 
 ## 1. Prerequisites
 
