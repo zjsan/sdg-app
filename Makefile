@@ -4,27 +4,6 @@ PHP_CONT = sdg-php
 
 .PHONY: build-fresh deploy seed help
 
-# 1. Full Frontend/Build Refresh
-frontend-build-fresh:
-	@echo "refreshing frontend volume to ensure a clean slate..."
-	docker volume rm sdg-app_laravel_public || true
-	@echo "building and deploying containers without cache..."
-	$(COMPOSE_PROD) build --no-cache
-	$(COMPOSE_PROD) up -d
-	$(MAKE) optimize
-
-# Full Frontend/Build Refresh + DB Refresh
-frontend-db-fresh:
-	docker volume rm sdg-app_laravel_public || true
-	
-	$(MAKE) seed-fresh
-
-# Full Frontend/Build Refresh + DB seeding
-build-db:
-	docker volume rm sdg-app_laravel_public || true
-	
-	$(MAKE) seed
-
 #Standard daily/production deployment
 deploy:
 	@echo "Pulling changes and building updated layers safely..."
