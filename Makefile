@@ -25,7 +25,18 @@ build-db:
 	
 	$(MAKE) seed
 
+#Standard daily/production deployment
 deploy:
+	@echo "Pulling changes and building updated layers safely..."
+	$(COMPOSE_PROD) build --no-cache node_build
+	$(COMPOSE_PROD) build
+	@echo "Restarting containers and refreshing public assets..."
+	docker volume rm sdg-app_laravel_public || true
+	$(COMPOSE_PROD) up -d --remove-orphans
+	$(MAKE) optimize
+
+# Full clean slate deployment (heavy reset)
+deploy-clean:
 	@echo "Starting full build and deployment cycle..."
 	@echo "Removing existing frontend volume to ensure a clean slate..."
 
@@ -38,18 +49,6 @@ deploy:
 	$(COMPOSE_PROD) up -d
 
 	@echo "optimizing application and clearing caches..."
-	$(MAKE) optimize
-
-
-# 2. Config/Dependency Changes and frontend building
-# normal deployment cycle, but with a build step in the node layer to update dependencies and frontend assets
-frontend-rebuild:
-	@echo "Pulling changes and building updated layers safely..."
-	$(COMPOSE_PROD) build --no-cache node_build
-	$(COMPOSE_PROD) build
-	@echo "Restarting containers and refreshing public assets..."
-	docker volume rm sdg-app_laravel_public || true
-	$(COMPOSE_PROD) up -d --remove-orphans
 	$(MAKE) optimize
 
 # New targeted command for MySQL environment/credential updates

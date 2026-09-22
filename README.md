@@ -164,7 +164,7 @@ Before using the automation scripts, you must ensure that the `make` utility is 
 - Encountering stale frontend builds
 
 ```
-  make build-fresh
+  make frontend-build-fresh
 
 ```
 
