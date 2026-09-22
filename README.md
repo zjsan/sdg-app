@@ -26,10 +26,10 @@ The system consists of:
 ## 3. Infrastructure Overview
 
 - **Production IP**: 13.251.136.207
-- **Production Domain (available through internet)**: https://sdg-dashboard.ddnsfree.com
-- **Testing Domain (Local)**: sdg-dashboard.ddnsfree.com (Mapped to 127.0.0.1)
+- **Production Domain (available through internet)**: https://sdgph.org
+- **Testing Domain (Local)**: local.sdg-dashboard.com (Mapped to 127.0.0.1)
 
-To access Live Prod: **13.251.136.207** or **sdg-dashboard.ddnsfree.com**
+To access Live Prod: **13.251.136.207** or **sdgph.org**
 
 ## 4. Hosts File Configuration
 
