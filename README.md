@@ -206,11 +206,13 @@ Before using the automation scripts, you must ensure that the `make` utility is 
 
 **Advanced Commands**
 
-| Command            | Description                                                                        |
-| ------------------ | ---------------------------------------------------------------------------------- |
-| make build-normal  | Standard up --build without clearing caches or volumes.                            |
-| make nucleus-start | Recovery Mode: Removes all volumes and local images before a fresh seed-migration. |
-| make optimize      | Clears and regenerates Laravel config, route, and view caches.                     |
+| Command                 | Description                                                                        |
+| ----------------------- | ---------------------------------------------------------------------------------- |
+| make deploy-build-mysql | Command for MySQL environment/credential updates                                   |
+| make nucleus-start      | Recovery Mode: Removes all volumes and local images before a fresh seed-migration. |
+| make optimize           | Clears and regenerates Laravel config, route, and view caches.                     |
+
+**Note**: For other command, kindly check the Makefile file.
 
 ## Manual commands
 
