@@ -93,43 +93,7 @@ To ensure the application functions properly during development, testing, and st
      ipconfig /flushdns
      ```
 
-### Checking logs and Fixing potential error
-
-1. **Verify addition - shows the last two lines**
-   - Run:
-     ```
-     Get-Content "$env:windir\System32\drivers\etc\hosts" -Tail 2
-     ```
-
-2. **Run this to fix glued entry error if already appended in the host file**
-   - Run:
-
-   ```
-    $hosts = "$env:windir\System32\drivers\etc\hosts"
-
-    # create backup
-    $backupPath = Join-Path (Split-Path $hosts) "host-backup.bak"
-    Copy-Item -Path $hosts -Destination $backupPath -Force
-    Write-Host "Backup created at $backupPath" -ForegroundColor Cyan
-
-    # read content
-    $content = Get-Content $hosts -Raw
-
-    # use Universal Regex (Compatible with all PowerShell versions)
-    # [ \t]* replaces \h* to avoid "Unrecognized escape sequence" errors
-    $pattern = '([^\s])[ \t]*((?:13\.\s*251\.\s*136\.\s*207)\s*app\.sdg-dashboard\.com)'
-    $replacement = '$1' + "`r`n" + '$2'
-
-    # Apply fix
-    if ($content -match $pattern) {
-        $content = $content -replace $pattern, $replacement
-        Set-Content -Path $hosts -Value $content -Encoding ASCII -Force
-        Write-Host "SUCCESS: Fixed the glued entry." -ForegroundColor Green
-    } else {
-        Write-Host "No problematic entries found or already fixed." -ForegroundColor Yellow
-    }
-
-   ```
+---
 
 ## 5. Environment Variable
 
