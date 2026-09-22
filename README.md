@@ -107,9 +107,7 @@ For developers / operators only
 
 To prevent the `GET /undefined/auth/google/redirect` error in production builds, define the API URL for the frontend:
 
-- Ensure `./laravel/.env.production.localfrontend` exists
 - Ensure the file uses **Unix line endings (LF)**.
-- This variable will be injected into the frontend build process, ensuring that API requests are correctly routed to the backend service.
 
 ## 6. Local Development Workflow
 
