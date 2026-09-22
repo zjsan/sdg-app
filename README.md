@@ -17,11 +17,11 @@ The system consists of:
 
 ## 2. Environment Modes
 
-| Mode                        | URL                     | Purpose               |
-| :-------------------------- | :---------------------- | :-------------------- |
-| **Development**             | `http://localhost:8080` | Active development    |
-| **Production (local test)** | `127.0.0.1`             | Production simulation |
-| **Production (live)**       | `13.251.136.207`        | Real users            |
+| Mode                        | URL                              | Purpose               |
+| :-------------------------- | :------------------------------- | :-------------------- |
+| **Development**             | `http://local.sdg-dashboard.com` | Active development    |
+| **Production (local test)** | `127.0.0.1`                      | Production simulation |
+| **Production (live)**       | `13.251.136.207`                 | Real users            |
 
 ## 3. Infrastructure Overview
 
