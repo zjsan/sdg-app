@@ -84,10 +84,12 @@
                                         Mean / Median Toggle
                                     </p>
                                     <p class="text-sm text-slate-500">
-                                        Switch between the average (mean) and
-                                        middle value (median) views dynamically
-                                        across supported pages and charts by
-                                        clicking the dedicated toggle button.
+                                        Switch between the
+                                        <strong>average (mean)</strong> and
+                                        <strong>middle value (median)</strong>
+                                        views dynamically across supported pages
+                                        and charts by clicking the dedicated
+                                        toggle button.
                                     </p>
                                 </div>
                             </li>
