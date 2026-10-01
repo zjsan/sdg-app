@@ -7,12 +7,16 @@ PHP_CONT = sdg-php
 #Standard daily/production deployment
 deploy:
 	@echo "Pulling changes and building updated layers safely..."
-	$(COMPOSE_PROD) build --no-cache php
+	# One build command handles everything using standard caching
 	$(COMPOSE_PROD) build
+	
 	@echo "Restarting containers and refreshing public assets..."
 	docker volume rm sdg-app_laravel_public || true
 	$(COMPOSE_PROD) up -d --remove-orphans
+	
+	@echo "Optimizing application..."
 	$(MAKE) optimize
+
 
 # Full clean slate deployment (heavy reset)
 deploy-clean:
