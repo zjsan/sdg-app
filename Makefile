@@ -8,6 +8,7 @@ PHP_CONT = sdg-php
 deploy:
 	@echo "Pulling changes and building updated layers safely..."
 	# One build command handles everything using standard caching
+	$(COMPOSE_PROD) build --no-cache node_build
 	$(COMPOSE_PROD) build
 	
 	@echo "Restarting containers and refreshing public assets..."
