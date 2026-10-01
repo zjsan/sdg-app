@@ -56,7 +56,7 @@ To ensure the application functions properly during development, testing, and st
    - Scroll to the bottom of the file and paste the appropriate entry:
      - **For Local Testing (WSL / Ubuntu):**
        ```text
-       127.0.0.1    local.sdg-dashboard.com`
+       127.0.0.1    local.sdg-dashboard.com
        ```
      - **For Live Production test (local machine):**
        ```text
