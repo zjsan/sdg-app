@@ -60,7 +60,7 @@ To ensure the application functions properly during development, testing, and st
        ```
      - **For Live Production test (local machine):**
        ```text
-       13.251.136.207   sdgph.org
+       127.0.0.1   sdgph.org
        ```
 
 4. **Save the File**
